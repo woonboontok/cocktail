@@ -48,7 +48,7 @@ const DEFAULT_INVENTORY = [
   { id: "malibu-rum", name: "Malibu Coconut Rum Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, notes: "Caribbean coconut rum for tropical riffs and Surfer on Acid." },
 
   // --- LIQUEURS (Shopping List / Expansion) ---
-  { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
+  { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
   { id: "maraschino-liqueur", name: "Luxardo Maraschino Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, notes: "Dry cherry pit and herbal liqueur for Aviation, Last Word, and Hemingway Daiquiri." },
   { id: "creme-de-violette", name: "Crème de Violette", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, notes: "Violet flower liqueur that gives Aviation its sky-blue tint." },
   { id: "creme-de-cassis", name: "Crème de Cassis (Blackcurrant)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, notes: "Blackcurrant liqueur for Kir Royale." },
