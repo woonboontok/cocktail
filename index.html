@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boon's Home Bar | Cocktail, Mocktail & Shots Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="logo-brand" id="nav-brand" onclick="location.reload();">
+        <div class="logo-icon">🍸</div>
+        <div class="logo-text">
+          <h1>Boon's Home Bar</h1>
+          <span>Cocktail • Mocktail • Shots</span>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <button class="nav-btn active" data-tab="all">All Drinks</button>
+        <button class="nav-btn" data-tab="cocktails">Cocktails</button>
+        <button class="nav-btn" data-tab="mocktails">Mocktails</button>
+        <button class="nav-btn" data-tab="shots">Shots</button>
+        <button class="nav-btn" data-tab="my-bar" style="color: #34d399;">✨ Can I Make It?</button>
+        <button class="nav-btn" data-tab="glossary">📖 Bar Glossary & Inventory</button>
+        <button class="nav-btn" data-tab="admin" style="color: var(--accent-gold);">⚙ Inventory Admin</button>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <label class="theme-picker" title="Choose a theme, or leave this on automatic">
+          <span aria-hidden="true">◐</span>
+          <select id="theme-select" aria-label="Colour theme">
+            <option value="auto">Theme: Auto</option><option value="morning">Morning</option><option value="afternoon">Afternoon</option><option value="twilight">Twilight</option><option value="evening">Evening</option><option value="night">Night</option><option value="latenight">Late night</option><option value="graveyard">Graveyard</option>
+          </select>
+        </label>
+        <button class="unit-switch-btn" id="btn-unit-toggle" title="Switch measurement display">⚖ Units: <strong>BOTH</strong></button>
+        <button class="btn-primary" id="btn-add-recipe">＋ Log Experiment</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO BANNER ==================== -->
+  <section class="hero-banner">
+    <h2 class="hero-title">The Master <span>Cocktail & Mocktail</span> Guide</h2>
+    <p class="hero-subtitle">
+      Curated home bar recipes, authentic specs, dual measurements (oz/ml), substitution guides, and pro bartending secrets tailored to your home collection.
+    </p>
+    <div class="hero-stats" id="hero-stats">
+      <!-- Injected by app.js -->
+    </div>
+  </section>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-layout">
+
+    <!-- CATALOG VIEW -->
+    <div id="catalog-view">
+      <!-- FILTER & SEARCH PANEL -->
+      <section class="control-panel">
+        <div class="search-sort-row">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-input" class="search-input" placeholder="Search by drink name, alternate name, spirit, or ingredient (e.g. Cointreau, Bourbon, Mint)...">
+          </div>
+
+          <div class="sort-group">
+            <span class="sort-label">Sort:</span>
+            <select id="sort-select" class="custom-select">
+              <option value="popularity-desc">Popularity (Highest First)</option>
+              <option value="name-asc">Name (A → Z)</option>
+              <option value="name-desc">Name (Z → A)</option>
+              <option value="difficulty-asc">Difficulty (Easiest First)</option>
+              <option value="difficulty-desc">Difficulty (Hardest First)</option>
+              <option value="alcohol-desc">Alcohol Strength (High to Low)</option>
+              <option value="ingredients-asc">Fewest Ingredients</option>
+            </select>
+          </div>
+
+          <button class="pill-btn pill-my-bar" id="btn-my-bar-toggle">
+            ✓ In My Bar Only
+          </button>
+        </div>
+
+        <div class="filter-groups-container">
+          <!-- Spirit Filter -->
+          <div class="filter-row">
+            <span class="filter-row-title">Base Spirit</span>
+            <div class="filter-pills" data-filter="spirit">
+              <button class="pill-btn active" data-val="all">All</button>
+              <button class="pill-btn" data-val="Whiskey/Bourbon">Bourbon & Whiskey</button>
+              <button class="pill-btn" data-val="Gin">Gin</button>
+              <button class="pill-btn" data-val="Rum">Rum</button>
+              <button class="pill-btn" data-val="Tequila/Mezcal">Tequila & Mezcal</button>
+              <button class="pill-btn" data-val="Vodka">Vodka</button>
+              <button class="pill-btn" data-val="Liqueur/Wine">Liqueur & Wine</button>
+              <button class="pill-btn" data-val="Non-Alcoholic">Non-Alcoholic</button>
+            </div>
+            <button class="clear-filters-btn" id="btn-clear-filters">Reset Filters</button>
+          </div>
+
+          <!-- Difficulty Filter -->
+          <div class="filter-row">
+            <span class="filter-row-title">Difficulty</span>
+            <div class="filter-pills" data-filter="difficulty">
+              <button class="pill-btn active" data-val="all">All Levels</button>
+              <button class="pill-btn" data-val="1">★☆☆☆☆ Beginner (Build/Pour)</button>
+              <button class="pill-btn" data-val="2">★★☆☆☆ Easy (Standard Shake/Stir)</button>
+              <button class="pill-btn" data-val="3">★★★☆☆ Moderate (Layering/Infusions)</button>
+              <button class="pill-btn" data-val="4">★★★★☆ Advanced (Tiki / Multi-step)</button>
+            </div>
+          </div>
+
+          <!-- Taste Profile Filter -->
+          <div class="filter-row">
+            <span class="filter-row-title">Taste Profile</span>
+            <div class="filter-pills" data-filter="taste">
+              <button class="pill-btn active" data-val="all">All Flavors</button>
+              <button class="pill-btn" data-val="Citrus">Citrus & Tart</button>
+              <button class="pill-btn" data-val="Spirit-Forward">Spirit-Forward</button>
+              <button class="pill-btn" data-val="Sweet">Sweet & Fruity</button>
+              <button class="pill-btn" data-val="Bittersweet">Bittersweet & Herbal</button>
+              <button class="pill-btn" data-val="Coffee">Coffee & Cream</button>
+              <button class="pill-btn" data-val="Tropical">Tropical & Tiki</button>
+              <button class="pill-btn" data-val="Ginger">Ginger & Spicy</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTS COUNT -->
+      <div class="results-header">
+        <div class="results-count" id="results-count">Loading drinks...</div>
+      </div>
+
+      <!-- DRINKS GRID -->
+      <div class="drinks-grid" id="drinks-grid">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+
+    <!-- GLOSSARY & INVENTORY VIEW -->
+    <div id="glossary-view" class="glossary-section">
+      <div class="inventory-header-bar">
+        <div class="inventory-title-group">
+          <h2>Home Bar Inventory & Ingredient Glossary</h2>
+          <p>Organized by category. Check or uncheck items to match what is currently on your shelf; the app automatically updates which drinks you can craft right now!</p>
+        </div>
+        <div class="inventory-stats-box" id="inv-live-stats">
+          <!-- Injected by app.js -->
+        </div>
+      </div>
+
+      <div id="glossary-categories">
+        <!-- Injected by app.js -->
+      </div>
+    </div>
+
+    <!-- ADMINISTRATION VIEW -->
+    <div id="admin-view" class="admin-section">
+      <div class="admin-header-card">
+        <div class="admin-title">
+          <h2>⚙ Bar Inventory & Quantity Manager</h2>
+          <p>Update stock quantities, add new bottles or ingredients, manage low-stock warnings, and backup/restore your bar data.</p>
+        </div>
+        <div class="admin-kpis" id="admin-kpis">
+          <!-- Injected dynamically by app.js -->
+        </div>
+      </div>
+
+      <!-- Admin Toolbar -->
+      <div class="admin-toolbar">
+        <div class="admin-toolbar-left">
+          <input type="text" id="admin-search-input" class="admin-search-input" placeholder="Search bottles or ingredients...">
+          <select id="admin-category-filter" class="custom-select" style="padding: 0.5rem 0.9rem; font-size: 0.82rem;">
+            <option value="all">All Categories</option>
+            <option value="spirits">Base Spirits</option>
+            <option value="liqueurs">Liqueurs & Cordials</option>
+            <option value="fortified">Fortified & Aperitifs</option>
+            <option value="sparkling">Sparkling Wines</option>
+            <option value="mixers_sodas">Mixers & Sodas</option>
+            <option value="bitters_syrups">Bitters & Syrups</option>
+            <option value="fresh_garnishes">Fresh Garnishes</option>
+          </select>
+          <select id="admin-stock-filter" class="custom-select" style="padding: 0.5rem 0.9rem; font-size: 0.82rem;">
+            <option value="all">All Stock Status</option>
+            <option value="in-stock">In Stock Only</option>
+            <option value="out-of-stock">Shopping List / Out of Stock</option>
+            <option value="low-stock">Low Stock (≤ 1)</option>
+          </select>
+        </div>
+
+        <div class="admin-toolbar-actions">
+          <button class="btn-primary" id="btn-admin-add-item">＋ Add New Bottle / Item</button>
+          <button class="btn-secondary" id="btn-admin-export" title="Export bar data as JSON file">📥 Export Backup</button>
+          <button class="btn-secondary" id="btn-admin-import" title="Restore bar data from JSON file">📤 Import Backup</button>
+          <input type="file" id="admin-import-file" style="display: none;" accept=".json">
+          <button class="btn-secondary" id="btn-admin-reset" style="color: #f87171;" title="Reset inventory to initial bar setup">↺ Reset Defaults</button>
+        </div>
+      </div>
+
+      <!-- Inventory Table -->
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width: 70px; text-align: center;">In Stock</th>
+              <th>Item Name & Subcategory</th>
+              <th>Category</th>
+              <th style="width: 175px;">Quantity & Unit</th>
+              <th>Tasting Notes / Details</th>
+              <th style="width: 120px; text-align: center;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-inventory-table-body">
+            <!-- Populated by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== DRINK DETAIL MODAL ==================== -->
+  <div class="modal-backdrop" id="drink-modal-backdrop">
+    <div class="modal-dialog" id="drink-modal-content">
+      <!-- Populated dynamically by openDrinkModal() in app.js -->
+    </div>
+  </div>
+
+  <!-- ==================== ADD RECIPE / EXPERIMENT MODAL ==================== -->
+  <div class="modal-backdrop" id="add-recipe-modal-backdrop">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <button class="modal-close-btn" id="btn-close-add-recipe" title="Close">✕</button>
+        <h2 class="modal-drink-title" style="font-size: 1.6rem;">🧪 Log a Drink Experiment</h2>
+        <div class="modal-drink-aliases">Document your personal cocktail, mocktail, or shot inventions</div>
+      </div>
+      <form id="form-add-recipe" style="padding: 1.5rem 2rem;">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-drink-name">Drink Name *</label>
+            <input type="text" id="form-drink-name" class="form-control" placeholder="e.g. Midnight Speakeasy Sour" required>
+          </div>
+          <div class="form-group">
+            <label for="form-category">Category *</label>
+            <select id="form-category" class="form-control">
+              <option value="Cocktail">Cocktail</option>
+              <option value="Mocktail">Mocktail</option>
+              <option value="Shot">Shot</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-base-spirit">Primary Base Spirit</label>
+            <select id="form-base-spirit" class="form-control">
+              <option value="Whiskey/Bourbon">Whiskey / Bourbon / Scotch</option>
+              <option value="Gin">Gin</option>
+              <option value="Rum">Rum</option>
+              <option value="Tequila/Mezcal">Tequila / Mezcal</option>
+              <option value="Vodka">Vodka</option>
+              <option value="Liqueur/Wine">Liqueur / Wine / Champagne</option>
+              <option value="Non-Alcoholic">Non-Alcoholic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-glassware">Glassware</label>
+            <input type="text" id="form-glassware" class="form-control" placeholder="Coupe, Rocks, Highball, Shot...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-difficulty">Difficulty (1 - 5)</label>
+            <select id="form-difficulty" class="form-control">
+              <option value="1">1 - Beginner (Pour / Stir)</option>
+              <option value="2" selected>2 - Easy (Standard Shake)</option>
+              <option value="3">3 - Moderate (Layering / Muddle)</option>
+              <option value="4">4 - Advanced (Tiki / Multi-tier)</option>
+              <option value="5">5 - Master</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-taste-profile">Taste Profile</label>
+            <input type="text" id="form-taste-profile" class="form-control" placeholder="e.g. Citrusy, Smoky, Bittersweet...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="form-ingredients">Ingredients (One per line with oz / ml & substitutes in brackets)</label>
+          <textarea id="form-ingredients" class="form-control" rows="4" placeholder="2 oz (60 ml) Bourbon [Sub: Rye whiskey]&#10;0.75 oz (22.5 ml) Lemon Juice&#10;0.5 oz (15 ml) Simple Syrup" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="form-instructions">Preparation Instructions (One step per line)</label>
+          <textarea id="form-instructions" class="form-control" rows="4" placeholder="Add all ingredients to a shaker with ice.&#10;Shake vigorously for 12 seconds.&#10;Strain into a chilled coupe glass and garnish." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="form-pro-tip">Pro-Tip / Secret Technique (Optional)</label>
+          <input type="text" id="form-pro-tip" class="form-control" placeholder="e.g. Express an orange peel over the rim for essential citrus aromatics.">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1.2rem;">
+          <button type="button" class="pill-btn" onclick="document.getElementById('add-recipe-modal-backdrop').classList.remove('open');">Cancel</button>
+          <button type="submit" class="btn-primary">Save to My Bar Guide</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== ADD / EDIT INVENTORY ITEM MODAL ==================== -->
+  <div class="modal-backdrop" id="admin-item-modal-backdrop">
+    <div class="modal-dialog" style="max-width: 600px;">
+      <div class="modal-header">
+        <button class="modal-close-btn" id="btn-close-admin-item" title="Close">✕</button>
+        <h2 class="modal-drink-title" id="admin-item-modal-title" style="font-size: 1.5rem;">Add Inventory Item</h2>
+        <div class="modal-drink-aliases">Manage your bottles, mixers, and fresh stock</div>
+      </div>
+      <form id="form-admin-item" style="padding: 1.5rem 2rem;">
+        <input type="hidden" id="form-item-id">
+        <div class="form-group">
+          <label for="form-item-name">Item Name *</label>
+          <input type="text" id="form-item-name" class="form-control" placeholder="e.g. Buffalo Trace Bourbon" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-item-category">Category *</label>
+            <select id="form-item-category" class="form-control">
+              <option value="spirits">Base Spirits</option>
+              <option value="liqueurs">Liqueurs & Cordials</option>
+              <option value="fortified">Fortified Wines & Aperitifs</option>
+              <option value="sparkling">Sparkling Wines</option>
+              <option value="mixers_sodas">Mixers, Sodas & Juices</option>
+              <option value="bitters_syrups">Bitters, Syrups & Sweeteners</option>
+              <option value="fresh_garnishes">Fresh Produce, Dairy & Garnishes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-item-subcategory">Subcategory</label>
+            <input type="text" id="form-item-subcategory" class="form-control" placeholder="e.g. Bourbon & Whiskies">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-item-quantity">Quantity</label>
+            <input type="number" id="form-item-quantity" class="form-control" min="0" step="1" value="1">
+          </div>
+          <div class="form-group">
+            <label for="form-item-unit">Unit</label>
+            <select id="form-item-unit" class="form-control">
+              <option value="bottle">Bottle(s)</option>
+              <option value="can">Can(s)</option>
+              <option value="carton">Carton(s)</option>
+              <option value="pcs">Pieces (pcs)</option>
+              <option value="bunch">Bunch / Sprigs</option>
+              <option value="pack">Pack / Box</option>
+              <option value="ml">ml</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="form-item-notes">Notes / Flavor Profile / Proof</label>
+          <textarea id="form-item-notes" class="form-control" rows="3" placeholder="e.g. Rich caramel notes, 90 proof. Great in Old Fashioned."></textarea>
+        </div>
+
+        <div class="form-group" style="flex-direction: row; align-items: center; gap: 0.8rem; margin-top: 0.5rem;">
+          <input type="checkbox" id="form-item-in-stock" class="inv-checkbox" checked>
+          <label for="form-item-in-stock" style="text-transform: none; color: #fff; cursor: pointer; font-size: 0.9rem;">Mark as In Stock</label>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1.5rem;">
+          <button type="button" class="pill-btn" onclick="document.getElementById('admin-item-modal-backdrop').classList.remove('open');">Cancel</button>
+          <button type="submit" class="btn-primary">Save Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-quote">"There is nothing which has yet been contrived by man, by which so much happiness is produced as by a good tavern or inn."</div>
+    <p>Boon's Home Bar &copy; 2026. Built with precision for home bartenders.</p>
+    <p style="font-size: 0.78rem; opacity: 0.7;">Featuring dual measurements (oz/ml), substitution guides, inventory tracking, and speakeasy pro-tips.</p>
+  </footer>
+
+  <!-- App Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
