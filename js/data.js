@@ -16,23 +16,23 @@ const INVENTORY_CATEGORIES = {
 
 const DEFAULT_INVENTORY = [
   // --- BASE SPIRITS (User In Stock) ---
-  { id: "jd-bonded-rye", name: "Jack Daniel's Bonded Rye Tennessee Whiskey", category: "spirits", subCategory: "Bourbon & Whiskies", inStock: true, notes: "Bold 100-proof rye with cracked pepper, baking spice, and oak." },
-  { id: "jim-beam-black", name: "Jim Beam Black Aged Bourbon", category: "spirits", subCategory: "Bourbon & Whiskies", inStock: true, notes: "Extra-aged Kentucky straight bourbon. Rich caramel and vanilla." },
-  { id: "jw-black-label", name: "Johnnie Walker Black Label Scotch Whisky", category: "spirits", subCategory: "Bourbon & Whiskies", inStock: true, notes: "12-year blended Scotch whisky with balanced fruit and gentle peat smoke." },
-  { id: "bacardi-superior", name: "Bacardi Superior White Rum", category: "spirits", subCategory: "Rum", inStock: true, notes: "Clean, floral light rum. Essential for Mojito and Daiquiri." },
-  { id: "myers-dark-rum", name: "Myers's Original Dark Rum", category: "spirits", subCategory: "Rum", inStock: true, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices." },
-  { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin", inStock: true, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
-  { id: "teremana-tequila", name: "Teremana Tequila", category: "spirits", subCategory: "Tequila", inStock: true, notes: "Small batch 100% blue agave tequila with roasted agave and citrus zest." },
-  { id: "smirnoff-red", name: "Smirnoff Red Vodka", category: "spirits", subCategory: "Vodka", inStock: true, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
-  { id: "absolut-blue", name: "Absolut Vodka Original Blue", category: "spirits", subCategory: "Vodka", inStock: true, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
+  { id: "jd-bonded-rye", name: "Jack Daniel's Bonded Rye Tennessee Whiskey", category: "spirits", subCategory: "Whiskey › Tennessee Rye", spiritFamily: "Whiskey", spiritStyle: "Tennessee Rye", inStock: true, notes: "Bold 100-proof rye with cracked pepper, baking spice, and oak." },
+  { id: "jim-beam-black", name: "Jim Beam Black Aged Bourbon", category: "spirits", subCategory: "Whiskey › Bourbon", spiritFamily: "Whiskey", spiritStyle: "Bourbon", inStock: true, notes: "Extra-aged Kentucky straight bourbon. Rich caramel and vanilla." },
+  { id: "jw-black-label", name: "Johnnie Walker Black Label Scotch Whisky", category: "spirits", subCategory: "Whiskey › Scotch", spiritFamily: "Whiskey", spiritStyle: "Scotch", inStock: true, notes: "12-year blended Scotch whisky with balanced fruit and gentle peat smoke." },
+  { id: "bacardi-superior", name: "Bacardi Superior White Rum", category: "spirits", subCategory: "Rum › White", spiritFamily: "Rum", spiritStyle: "White", inStock: true, notes: "Clean, floral light rum. Essential for Mojito and Daiquiri." },
+  { id: "myers-dark-rum", name: "Myers's Original Dark Rum", category: "spirits", subCategory: "Rum › Dark Jamaican", spiritFamily: "Rum", spiritStyle: "Dark Jamaican", inStock: true, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices." },
+  { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Proof Rum (700 ml)", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: false, incoming: true, quantity: 1, unit: "bottle", proof: "151 proof", notes: "Incoming: high-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
+  { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
+  { id: "teremana-tequila", name: "Teremana Tequila", category: "spirits", subCategory: "Agave › Tequila", spiritFamily: "Agave", spiritStyle: "Tequila", inStock: true, notes: "Small batch 100% blue agave tequila with roasted agave and citrus zest." },
+  { id: "smirnoff-red", name: "Smirnoff Red Vodka", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
+  { id: "absolut-blue", name: "Absolut Vodka Original Blue", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
-  { id: "irish-whiskey", name: "Irish Whiskey (Jameson)", category: "spirits", subCategory: "Bourbon & Whiskies", inStock: false, notes: "Triple distilled smooth whiskey for Irish Coffee & Green Tea Shot." },
-  { id: "cognac-brandy", name: "Cognac / French Brandy", category: "spirits", subCategory: "Brandy & Cognac", inStock: false, notes: "Aged grape spirit for Sidecar, Vieux Carré, and B-54." },
-  { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy & Cognac", inStock: false, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
-  { id: "mezcal", name: "Artisanal Mezcal (Smoky)", category: "spirits", subCategory: "Tequila & Agave", inStock: false, notes: "Earthy smoky agave spirit for Naked and Famous and Mezcal Paloma." },
-  { id: "cachaca", name: "Cachaça", category: "spirits", subCategory: "Rum", inStock: false, notes: "Brazilian fresh pressed sugarcane spirit for Caipirinha." },
-  { id: "overproof-rum", name: "Overproof Rum (151 Proof)", category: "spirits", subCategory: "Rum", inStock: false, notes: "High-proof rum for Zombie." },
+  { id: "irish-whiskey", name: "Irish Whiskey (Jameson)", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: false, notes: "Triple distilled smooth whiskey for Irish Coffee & Green Tea Shot." },
+  { id: "cognac-brandy", name: "Cognac / French Brandy", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: false, notes: "Aged grape spirit for Sidecar, Vieux Carré, and B-54." },
+  { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
+  { id: "mezcal", name: "Artisanal Mezcal (Smoky)", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: false, notes: "Earthy smoky agave spirit for Naked and Famous and Mezcal Paloma." },
+  { id: "cachaca", name: "Cachaça", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, notes: "Brazilian fresh pressed sugarcane spirit for Caipirinha." },
 
   // --- LIQUEURS (User In Stock) ---
   { id: "disaronno-amaretto", name: "Disaronno Originale Amaretto Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, notes: "Italian almond-apricot stone liqueur. Shines in Amaretto Sour and Godfather." },
@@ -56,7 +56,7 @@ const DEFAULT_INVENTORY = [
   { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: false, notes: "Scotch, heather honey, and herbs for Rusty Nail." },
   { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, notes: "130-herb French monk elixir for Last Word." },
   { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
-  { id: "jagermeister", name: "Jägermeister Herbal Liqueur", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, notes: "56 herbs and botanicals German digestif for Jägerbomb and Surfer on Acid." },
+  { id: "jagermeister", name: "Jägermeister Herbal Liqueur (700 ml)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, incoming: true, quantity: 1, unit: "bottle", notes: "Incoming: 56 herbs and botanicals German digestif for Jägerbomb and Surfer on Acid." },
   { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, notes: "Vivid emerald honeydew melon liqueur for Scooby Snack." },
   { id: "fireball", name: "Fireball Cinnamon Whisky", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, notes: "Cinnamon whisky for Fireball Apple Pie Shot." },
   { id: "sambuca", name: "White Sambuca", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, notes: "Italian anise liqueur for Flatliner and Slippery Nipple." },
@@ -80,7 +80,7 @@ const DEFAULT_INVENTORY = [
   { id: "peychaud-bitters", name: "Peychaud's Bitters", category: "bitters_syrups", subCategory: "Bitters", inStock: false, notes: "Gentle anise and floral bitters for Sazerac and Vieux Carré." },
   { id: "pomegranate-grenadine", name: "Pomegranate Grenadine", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Tart-sweet real pomegranate syrup for Tequila Sunrise, Singapore Sling, and Shirley Temple." },
   { id: "raspberry-rhapsody", name: "Raspberry Rhapsody Flavored Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Sweet raspberry syrup for Clover Club, Floradora, and Lemon-Berry Fizz." },
-  { id: "simple-syrup", name: "Simple Syrup (1:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Equal parts sugar and water dissolved. Foundation for all sour and fizz drinks." },
+  { id: "simple-syrup", name: "Premium Syrup (Simple Syrup, 1:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Your premium/simple syrup. Equal parts sugar and water; foundation for sour and fizz drinks." },
   { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
   { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "French sweet almond and orange flower syrup for Mai Tai." },
   { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Liquid clover honey for Penicillin and Bee's Knees." },
@@ -90,7 +90,7 @@ const DEFAULT_INVENTORY = [
   // --- SODAS & MIXERS (User In Stock & Shopping List) ---
   { id: "schweppes-ginger-soda", name: "Schweppes Ginger Soda", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Crisp, lively ginger soda. Essential for Highballs, Dark 'n' Stormy riffs, and Gunner." },
   { id: "schweppes-ginger-ale", name: "Schweppes Ginger Ale Soda (Fulfilled by Ginger Soda)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "schweppes-ginger-soda", notes: "User has Schweppes Ginger Soda in stock." },
-  { id: "chang-soda-water", name: "Chang Soda Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Extra-fizzy high carbonation club soda for Mojitos, Collins, and Spritzes." },
+  { id: "chang-soda-water", name: "Chang Soda Water (24 × 325 ml)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 24, unit: "bottle", notes: "24 bottles of extra-fizzy, high-carbonation club soda for Mojitos, Collins, and Spritzes." },
   { id: "ginger-beer", name: "Ginger Beer (Spicy Fermented)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Spicy cloudy ginger brew for Moscow Mule and Dark 'n' Stormy." },
   { id: "tonic-water", name: "Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Quinine-infused mixer for Gin & Tonic." },
   { id: "cola", name: "Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "For Cuba Libre, Long Island, and Roy Rogers." },
@@ -105,8 +105,8 @@ const DEFAULT_INVENTORY = [
   { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
   { id: "coconut-cream", name: "Coconut Cream (Cream of Coconut)", category: "mixers_sodas", subCategory: "Juices & Creams", inStock: false, notes: "Sweet rich coconut cream for Piña Colada and Coconut Lime Mocktail." },
   { id: "coconut-water", name: "Pure Coconut Water", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Hydrating tropical water for Coconut Lime Mocktail." },
-  { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: false, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
-  { id: "whipped-cream", name: "Aerosol Whipped Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: false, notes: "Fluffy crown for Blowjob shot." },
+  { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
+  { id: "whipped-cream", name: "Whipped Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, notes: "Fluffy crown for the Blowjob shot and dessert-style drinks." },
 
   // --- FRESH PRODUCE & GARNISHES (User In Stock & Shopping List) ---
   { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
@@ -117,13 +117,13 @@ const DEFAULT_INVENTORY = [
   { id: "fresh-rosemary", name: "Fresh Rosemary Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, notes: "Woody aromatic herb for Rosemary Grapefruit Spritzer." },
   { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, notes: "For Virgin Strawberry Daiquiri." },
   { id: "maraschino-cherries", name: "Maraschino Cherries", category: "fresh_garnishes", subCategory: "Garnishes", inStock: false, notes: "Classic garnish for Manhattan, Shirley Temple, and Singapore Sling." },
-  { id: "fresh-espresso", name: "Fresh Hot Espresso", category: "fresh_garnishes", subCategory: "Coffee & Fresh", inStock: false, notes: "Fresh brewed espresso shaken for dense crema on Espresso Martini." },
+  { id: "fresh-espresso", name: "Fresh Espresso Shots (made to order)", category: "fresh_garnishes", subCategory: "Coffee & Fresh", inStock: true, quantity: 1, unit: "on demand", notes: "Readily available fresh espresso for dense crema on Espresso Martinis and coffee drinks." },
   { id: "coffee-beans", name: "Whole Roasted Coffee Beans", category: "fresh_garnishes", subCategory: "Garnishes", inStock: false, notes: "Three floated beans for Espresso Martini." },
-  { id: "egg-white", name: "Egg White (Fresh or Aquafaba)", category: "fresh_garnishes", subCategory: "Cocktail Texture", inStock: false, notes: "Creates silky texture and dense meringue foam on Sours." },
+  { id: "egg-white", name: "Egg White (Fresh or Aquafaba)", category: "fresh_garnishes", subCategory: "Cocktail Texture", inStock: true, notes: "Creates silky texture and dense meringue foam on Sours." },
   { id: "tabasco-sauce", name: "Tabasco Hot Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: false, notes: "Piquant heat for Bloody Mary, Virgin Mary, and Flatliner." },
   { id: "worcestershire-sauce", name: "Worcestershire Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: false, notes: "Savory umami for Bloody Mary and Virgin Mary." },
   { id: "coarse-salt", name: "Coarse Kosher Salt", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, notes: "For glass rims on Margarita, Paloma, and Salty Dog." },
-  { id: "ice", name: "Quality Ice (Cubes & Crushed)", category: "fresh_garnishes", subCategory: "Bar Essentials", inStock: true, notes: "The foundation of temperature and dilution for every drink." }
+  { id: "ice", name: "Ice Cubes (and crushed ice as needed)", category: "fresh_garnishes", subCategory: "Bar Essentials", inStock: true, notes: "Available ice cubes for chilling and dilution; crush as needed for tiki and julep-style drinks." }
 ];
 
 const DEFAULT_DRINKS = [
@@ -1337,7 +1337,7 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum", substitute: "Light Puerto Rican rum", inventoryId: "bacardi-superior" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Myers's Original Dark Rum", substitute: "Jamaican dark rum", inventoryId: "myers-dark-rum" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Overproof 151 Rum (Float)", substitute: "Additional Myers's Dark Rum", inventoryId: "myers-dark-rum" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Goslings Black Seal 151 Proof Rum (Float)", substitute: "Additional Myers's Dark Rum", inventoryId: "goslings-black-seal-151" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grapefruit Juice", substitute: "Pink grapefruit juice", inventoryId: "grapefruit-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" },

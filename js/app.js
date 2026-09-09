@@ -8,6 +8,7 @@
 
   // ==================== STATE MANAGEMENT ====================
   const STORAGE_KEY_INVENTORY = "speakeasy_inventory_v2";
+  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260909_4";
   const STORAGE_KEY_CUSTOM_DRINKS = "speakeasy_custom_drinks_v1";
   const STORAGE_KEY_BOOKMARKS = "speakeasy_bookmarks_v1";
   const STORAGE_KEY_UNIT = "speakeasy_unit_pref_v1";
@@ -29,6 +30,9 @@
   let selectedGlass = "all";
   let filterOnlyMyBar = false;
   let sortBy = "popularity-desc";
+  let glossaryStockFilter = "all";
+  let glossaryView = "list";
+  let glossarySort = { column: "category", direction: "asc" };
 
   // ==================== STORAGE HELPERS ====================
   function getDefaultUnit(item) {
@@ -69,7 +73,7 @@
             const inStock = s.inStock !== undefined ? s.inStock : def.inStock;
             let qty = s.quantity !== undefined ? s.quantity : getDefaultQuantity(def);
             if (inStock && qty <= 0) qty = 1;
-            if (!inStock && qty > 0) qty = 0;
+            if (!inStock && !def.incoming && qty > 0) qty = 0;
             return {
               ...def,
               inStock: inStock,
@@ -87,10 +91,30 @@
         // Preserve any custom items added through admin view
         const defaultIds = new Set(DEFAULT_INVENTORY.map(d => d.id));
         parsed.forEach(item => {
-          if (!defaultIds.has(item.id)) {
+          if (!defaultIds.has(item.id) && item.id !== "overproof-rum") {
             merged.push(item);
           }
         });
+
+        // Apply this bar update once without discarding the user's other saved stock and quantities.
+        if (!localStorage.getItem(STORAGE_KEY_INVENTORY_UPDATE)) {
+          const updates = {
+            "simple-syrup": { inStock: true, quantity: 1 },
+            "chang-soda-water": { inStock: true, quantity: 24, unit: "bottle" },
+            "whipped-cream": { inStock: true, quantity: 1 },
+            "whipping-heavy-cream": { inStock: true, quantity: 1 },
+            "egg-white": { inStock: true, quantity: 1 },
+            "ice": { inStock: true, quantity: 1 },
+            "fresh-espresso": { inStock: true, quantity: 1, unit: "on demand" },
+            "goslings-black-seal-151": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+            "jagermeister": { inStock: false, incoming: true, quantity: 1, unit: "bottle" }
+          };
+          merged.forEach(item => {
+            if (updates[item.id]) Object.assign(item, updates[item.id]);
+          });
+          localStorage.setItem(STORAGE_KEY_INVENTORY, JSON.stringify(merged));
+          localStorage.setItem(STORAGE_KEY_INVENTORY_UPDATE, "true");
+        }
 
         return merged;
       }
@@ -501,13 +525,44 @@
   }
 
   // ==================== GLOSSARY & INVENTORY ====================
+  function getInventoryStatus(item) {
+    return item.inStock ? "in-stock" : item.incoming ? "incoming" : "to-buy";
+  }
+
+  function sortInventoryItems(items) {
+    const statusOrder = { "in-stock": 0, incoming: 1, "to-buy": 2 };
+    const { column, direction } = glossarySort;
+    const multiplier = direction === "asc" ? 1 : -1;
+    return [...items].sort((a, b) => {
+      let left, right;
+      if (column === "status") {
+        left = statusOrder[getInventoryStatus(a)];
+        right = statusOrder[getInventoryStatus(b)];
+      } else if (column === "quantity") {
+        left = a.quantity !== undefined ? a.quantity : getDefaultQuantity(a);
+        right = b.quantity !== undefined ? b.quantity : getDefaultQuantity(b);
+      } else if (column === "type") {
+        left = a.subCategory || "";
+        right = b.subCategory || "";
+      } else if (column === "category") {
+        left = INVENTORY_CATEGORIES[a.category] || a.category || "";
+        right = INVENTORY_CATEGORIES[b.category] || b.category || "";
+      } else {
+        left = a.name || "";
+        right = b.name || "";
+      }
+      return typeof left === "number" ? multiplier * (left - right) : multiplier * String(left).localeCompare(String(right));
+    });
+  }
+
   function renderGlossary() {
     const container = document.getElementById("glossary-categories");
     if (!container) return;
 
     // Count stats
     const inStock = inventory.filter(i => i.inStock).length;
-    const shoppingList = inventory.filter(i => !i.inStock).length;
+    const incoming = inventory.filter(i => i.incoming && !i.inStock).length;
+    const shoppingList = inventory.filter(i => !i.inStock && !i.incoming).length;
 
     const statsEl = document.getElementById("inv-live-stats");
     if (statsEl) {
@@ -520,16 +575,54 @@
           <div class="inv-stat-num" style="color: #fbbf24;">${shoppingList}</div>
           <div class="inv-stat-label">Shopping List</div>
         </div>
+        ${incoming ? `<div class="inv-stat-item">
+          <div class="inv-stat-num" style="color: #60a5fa;">${incoming}</div>
+          <div class="inv-stat-label">Incoming</div>
+        </div>` : ""}
       `;
     }
 
-    // Group inventory by category
+    const visibleItems = sortInventoryItems(inventory.filter(item =>
+      glossaryStockFilter === "all" || getInventoryStatus(item) === glossaryStockFilter
+    ));
+
+    if (glossaryView === "table") {
+      const sortHeader = (label, column) => {
+        const active = glossarySort.column === column;
+        return `<button class="inventory-sort-btn ${active ? "active" : ""}" data-inventory-sort="${column}">${label}${active ? (glossarySort.direction === "asc" ? " ↑" : " ↓") : ""}</button>`;
+      };
+      const statusLabel = status => status === "in-stock" ? "In Stock" : status === "incoming" ? "Incoming" : "To Buy";
+      container.innerHTML = visibleItems.length ? `
+        <div class="inventory-table-wrapper">
+          <table class="inventory-table">
+            <thead><tr>
+              <th>${sortHeader("Item", "name")}</th>
+              <th>${sortHeader("Category", "category")}</th>
+              <th>${sortHeader("Type", "type")}</th>
+              <th>${sortHeader("Status", "status")}</th>
+              <th>${sortHeader("Quantity", "quantity")}</th>
+            </tr></thead>
+            <tbody>${visibleItems.map(item => {
+              const status = getInventoryStatus(item);
+              const quantity = item.quantity !== undefined ? item.quantity : getDefaultQuantity(item);
+              return `<tr>
+                <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span></label></td>
+                <td>${INVENTORY_CATEGORIES[item.category] || item.category || "—"}</td>
+                <td>${item.subCategory || "—"}</td>
+                <td><span class="inv-badge-stock ${status === "in-stock" ? "stock" : status === "incoming" ? "incoming" : "needed"}">${statusLabel(status)}</span></td>
+                <td>${quantity} ${item.unit || getDefaultUnit(item)}</td>
+              </tr>`;
+            }).join("")}</tbody>
+          </table>
+        </div>` : `<div class="inventory-empty-state">No inventory items match this filter.</div>`;
+    } else {
+    // Group visible inventory by category for the list view.
     const grouped = {};
     Object.keys(INVENTORY_CATEGORIES).forEach(cat => {
       grouped[cat] = [];
     });
 
-    inventory.forEach(item => {
+    visibleItems.forEach(item => {
       const cat = item.category || "spirits";
       if (!grouped[cat]) grouped[cat] = [];
       grouped[cat].push(item);
@@ -541,15 +634,16 @@
 
       const title = INVENTORY_CATEGORIES[catKey];
 
-      const itemCards = items.map(item => {
+      const renderItemCard = item => {
+        const stockLabel = item.inStock ? "In Stock" : item.incoming ? "Incoming" : "To Buy";
         return `
           <div class="inventory-item-card ${item.inStock ? "in-stock" : "shopping-list"}" data-item-id="${item.id}">
             <input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}>
             <div class="inv-content">
               <div class="inv-name-row">
                 <span class="inv-name">${item.name}</span>
-                <span class="inv-badge-stock ${item.inStock ? "stock" : "needed"}">
-                  ${item.inStock ? "In Stock" : "To Buy"}
+                <span class="inv-badge-stock ${item.inStock ? "stock" : item.incoming ? "incoming" : "needed"}">
+                  ${stockLabel}
                 </span>
               </div>
               <div class="inv-meta">${item.subCategory || ""} ${item.proof ? "• " + item.proof : ""}</div>
@@ -558,19 +652,39 @@
             </div>
           </div>
         `;
-      }).join("");
+      };
+
+      const itemCards = catKey === "spirits"
+        ? Object.entries(items.reduce((families, item) => {
+            const family = item.spiritFamily || "Other Spirits";
+            const style = item.spiritStyle || item.subCategory || "Other";
+            if (!families[family]) families[family] = {};
+            if (!families[family][style]) families[family][style] = [];
+            families[family][style].push(item);
+            return families;
+          }, {})).map(([family, styles]) => `
+            <section class="spirit-family-group">
+              <h4>${family}</h4>
+              ${Object.entries(styles).map(([style, styleItems]) => `
+                <div class="spirit-style-group">
+                  <h5>${style}</h5>
+                  <div class="inventory-grid inventory-list-grid">${styleItems.map(renderItemCard).join("")}</div>
+                </div>
+              `).join("")}
+            </section>
+          `).join("")
+        : `<div class="inventory-grid inventory-list-grid">${items.map(renderItemCard).join("")}</div>`;
 
       return `
         <div class="inventory-category-group">
           <div class="category-header-title">
             <h3>${title} (${items.filter(i => i.inStock).length}/${items.length} In Stock)</h3>
           </div>
-          <div class="inventory-grid">
-            ${itemCards}
-          </div>
+          ${itemCards}
         </div>
       `;
-    }).join("");
+    }).join("") || `<div class="inventory-empty-state">No inventory items match this filter.</div>`;
+    }
 
     // Add checkbox toggle handlers
     container.querySelectorAll(".inv-checkbox").forEach(cb => {
@@ -584,6 +698,17 @@
           renderGlossary();
           renderHeroStats();
         }
+      });
+    });
+
+    container.querySelectorAll(".inventory-sort-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const column = btn.getAttribute("data-inventory-sort");
+        glossarySort = {
+          column,
+          direction: glossarySort.column === column && glossarySort.direction === "asc" ? "desc" : "asc"
+        };
+        renderGlossary();
       });
     });
 
@@ -601,6 +726,22 @@
           window.scrollTo({ top: 300, behavior: "smooth" });
         }
       });
+    });
+
+    const stockFilter = document.getElementById("inventory-stock-filter");
+    if (stockFilter) {
+      stockFilter.value = glossaryStockFilter;
+      stockFilter.onchange = e => {
+        glossaryStockFilter = e.target.value;
+        renderGlossary();
+      };
+    }
+    document.querySelectorAll(".inventory-view-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-inventory-view") === glossaryView);
+      btn.onclick = () => {
+        glossaryView = btn.getAttribute("data-inventory-view");
+        renderGlossary();
+      };
     });
   }
 

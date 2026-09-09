@@ -159,6 +159,22 @@
         </div>
       </div>
 
+      <div class="inventory-glossary-toolbar" aria-label="Inventory display controls">
+        <div class="inventory-filter-group">
+          <label for="inventory-stock-filter">Show</label>
+          <select id="inventory-stock-filter" class="custom-select">
+            <option value="all">All items</option>
+            <option value="in-stock">In stock</option>
+            <option value="to-buy">To buy</option>
+            <option value="incoming">Incoming</option>
+          </select>
+        </div>
+        <div class="inventory-view-toggle" role="group" aria-label="Inventory view">
+          <button type="button" class="inventory-view-btn active" data-inventory-view="list">☷ List</button>
+          <button type="button" class="inventory-view-btn" data-inventory-view="table">▦ Table</button>
+        </div>
+      </div>
+
       <div id="glossary-categories">
         <!-- Injected by app.js -->
       </div>
