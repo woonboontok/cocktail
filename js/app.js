@@ -8,7 +8,7 @@
 
   // ==================== STATE MANAGEMENT ====================
   const STORAGE_KEY_INVENTORY = "speakeasy_inventory_v2";
-  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260909_4";
+  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260909_5";
   const STORAGE_KEY_CUSTOM_DRINKS = "speakeasy_custom_drinks_v1";
   const STORAGE_KEY_BOOKMARKS = "speakeasy_bookmarks_v1";
   const STORAGE_KEY_UNIT = "speakeasy_unit_pref_v1";
@@ -106,6 +106,7 @@
             "egg-white": { inStock: true, quantity: 1 },
             "ice": { inStock: true, quantity: 1 },
             "fresh-espresso": { inStock: true, quantity: 1, unit: "on demand" },
+            "cranberry-juice": { inStock: true, quantity: 1, unit: "carton" },
             "goslings-black-seal-151": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
             "jagermeister": { inStock: false, incoming: true, quantity: 1, unit: "bottle" }
           };

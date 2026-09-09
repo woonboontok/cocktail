@@ -96,7 +96,7 @@ const DEFAULT_INVENTORY = [
   { id: "cola", name: "Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "For Cuba Libre, Long Island, and Roy Rogers." },
   { id: "lemon-lime-soda", name: "Lemon-Lime Soda (Sprite)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Bubbly citrus soda for Blue Lagoon, Tequila Slammer, and Green Tea Shot." },
   { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "For the Jägerbomb drop." },
-  { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
+  { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
   { id: "orange-juice", name: "Orange Juice (Fresh Navel Oranges)", category: "mixers_sodas", subCategory: "Juices", inStock: true, notes: "Squeezed fresh from your in-stock Navel Oranges for Tequila Sunrise, Mimosa, and Ward 8." },
   { id: "pineapple-juice", name: "Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Fruity foam-building juice for Singapore Sling, Piña Colada, and Pineapple Cooler." },
   { id: "grapefruit-juice", name: "Pink Grapefruit Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "For Paloma, Hemingway Daiquiri, and Sea Breeze." },
