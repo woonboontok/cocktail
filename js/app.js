@@ -284,26 +284,45 @@
     return [...customDrinks, ...DEFAULT_DRINKS];
   }
 
-  function isItemInStock(inventoryId) {
+  function getIngredientGroupId(ingredient) {
+    return ingredient.ingredientGroup || INGREDIENT_GROUP_BY_INVENTORY_ID[ingredient.inventoryId] || `inventory:${ingredient.inventoryId}`;
+  }
+
+  function getIngredientCandidates(ingredient) {
+    const group = INGREDIENT_GROUPS[getIngredientGroupId(ingredient)];
+    return group ? group.inventoryIds : [ingredient.inventoryId];
+  }
+
+  function getInventoryItem(inventoryId) {
+    return inventory.find(item => item.id === inventoryId || (item.aliasOf && item.aliasOf === inventoryId));
+  }
+
+  function isItemInStock(inventoryId, ingredient) {
     if (!inventoryId) return true;
-    const item = inventory.find(i => i.id === inventoryId || (i.aliasOf && i.aliasOf === inventoryId));
-    if (!item) return false;
-    // An item is considered in stock if inStock is true AND quantity is not 0
-    return item.inStock && (item.quantity === undefined || item.quantity > 0);
+    return getIngredientCandidates({ ...(ingredient || {}), inventoryId }).some(candidateId => {
+      const item = getInventoryItem(candidateId);
+      return item && item.inStock && (item.quantity === undefined || item.quantity > 0);
+    });
+  }
+
+  function isPerishableIngredient(ingredient) {
+    return getIngredientCandidates(ingredient).some(candidateId => getInventoryItem(candidateId)?.category === "fresh_garnishes");
   }
 
   function getDrinkStockStatus(drink) {
     let totalStockable = 0;
     let missingCount = 0;
     const missingItems = [];
+    const missingFreshProduce = [];
 
     drink.ingredients.forEach(ing => {
       if (ing.inventoryId) {
         totalStockable++;
-        if (!isItemInStock(ing.inventoryId)) {
+        if (!isItemInStock(ing.inventoryId, ing)) {
           missingCount++;
-          const found = inventory.find(i => i.id === ing.inventoryId);
-          missingItems.push(found ? found.name : ing.item);
+          const group = INGREDIENT_GROUPS[getIngredientGroupId(ing)];
+          missingItems.push(group ? group.label : ing.item);
+          if (isPerishableIngredient(ing)) missingFreshProduce.push(group ? group.label : ing.item);
         }
       }
     });
@@ -312,6 +331,7 @@
       canMake: missingCount === 0,
       missingCount: missingCount,
       missingItems: missingItems,
+      missingFreshProduce,
       totalStockable: totalStockable
     };
   }
@@ -469,6 +489,34 @@
     return `<span class="card-rating-stars" title="Difficulty: ${level}/5">${full}${empty}</span>`;
   }
 
+  function getDrinkVisual(drink) {
+    const glassware = String(drink.glassware || "").toLowerCase();
+    const name = drink.name.toLowerCase();
+    let glassShape = "coupe";
+    if (glassware.includes("shot")) glassShape = "shot";
+    else if (glassware.includes("snifter") || glassware.includes("rocks") || glassware.includes("old fashioned")) glassShape = "rocks";
+    else if (glassware.includes("hurricane") || glassware.includes("highball") || glassware.includes("collins") || glassware.includes("tiki") || glassware.includes("mug")) glassShape = "highball";
+    else if (glassware.includes("champagne") || glassware.includes("flute")) glassShape = "flute";
+    else if (glassware.includes("coupe") || glassware.includes("martini") || glassware.includes("nick & nora")) glassShape = "coupe";
+
+    let color = "var(--accent-gold)";
+    if (name.includes("aperol") || name.includes("sunrise")) color = "#ff9f43";
+    else if (name.includes("negroni") || name.includes("bloody") || name.includes("mary")) color = "#e95d64";
+    else if (drink.category === "Mocktail") color = "#72e0b0";
+    else if (drink.category === "Shot") color = "#ff7a9d";
+    else if (drink.baseSpirit === "Rum") color = "#e6b35a";
+
+    const glassIcons = {
+      coupe: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Coupe glass"}"><path d="M20 20h56L64 42c-4 8-11 13-16 14v17h12v5H36v-5h12V56c-5-1-12-6-16-14L20 20Z"/><path d="M28 27h40"/></svg>`,
+      rocks: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Rocks glass"}"><path d="M23 25h50l-5 46H28l-5-46Z"/><path d="M28 35h40M34 52h28"/></svg>`,
+      highball: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Highball glass"}"><path d="M29 15h38l-5 64H34l-5-64Z"/><path d="M31 27h34M34 58h28"/></svg>`,
+      flute: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Flute glass"}"><path d="M31 15h34L58 48c-2 6-5 10-10 12-5-2-8-6-10-12L31 15Z"/><path d="M48 60v18M38 82h20M35 23h26"/></svg>`,
+      shot: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Shot glass"}"><path d="M30 29h36l-4 40H34l-4-40Z"/><path d="M32 37h32"/></svg>`
+    };
+
+    return { icon: glassIcons[glassShape], color };
+  }
+
   function renderDrinkCards() {
     const drinks = getFilteredAndSortedDrinks();
     const container = document.getElementById("drinks-grid");
@@ -505,6 +553,10 @@
       const stockBadge = stock.canMake
         ? `<span class="bar-stock-indicator status-ready">✓ In Stock</span>`
         : `<span class="bar-stock-indicator status-missing" title="Missing: ${stock.missingItems.slice(0, 2).join(', ')}">Need ${stock.missingCount}</span>`;
+      const freshProduceBadge = stock.missingFreshProduce.length
+        ? `<span class="fresh-produce-indicator" title="Missing: ${stock.missingFreshProduce.join(', ')}">🥬 Missing Fresh Produce</span>`
+        : "";
+      const visual = getDrinkVisual(drink);
 
       // Ingredients preview (up to 4 tags)
       const ingPreview = drink.ingredients.slice(0, 4).map(i => {
@@ -516,8 +568,10 @@
         <div class="drink-card card-${categoryClass}" data-id="${drink.id}">
           <div class="card-top-bar">
             <span class="drink-category-badge badge-${categoryClass}">${drink.category}</span>
-            <div class="card-statuses">${status.tried ? `<span class="drink-status tried">✓ Tried</span>` : ""}${status.constructed ? `<span class="drink-status constructed">⚗ Made</span>` : ""}${stockBadge}</div>
+            <div class="card-statuses">${status.tried ? `<span class="drink-status tried">✓ Tried</span>` : ""}${status.constructed ? `<span class="drink-status constructed">⚗ Made</span>` : ""}${stockBadge}${freshProduceBadge}</div>
           </div>
+
+          <div class="drink-card-visual" style="--drink-accent: ${visual.color};">${visual.icon}</div>
 
           <div class="card-title-block">
             <h3 class="drink-name">${drink.name}</h3>
@@ -650,6 +704,7 @@
       const statusLabel = status => status === "in-stock" ? "In Stock" : status === "incoming" ? "Incoming" : "To Buy";
       container.innerHTML = visibleItems.length ? `
         <div class="inventory-table-wrapper">
+          <div class="inventory-stock-key"><span><i class="stock-key-dot shelf"></i>Shelf-Stable Bottles</span><span><i class="stock-key-dot fresh"></i>Perishables</span></div>
           <table class="inventory-table">
             <thead><tr>
               <th>${sortHeader("Item", "name")}</th>
@@ -667,7 +722,7 @@
               const readyCount = usableRecipes.filter(drink => getDrinkStockStatus(drink).canMake).length;
               const linkLabel = readyCount > 0 ? `${readyCount} ready` : `${usableRecipes.length} recipes`;
               return `<tr>
-                <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span></label></td>
+                <td><label class="inventory-table-item ${item.category === "fresh_garnishes" ? "perishable-item" : "shelf-stable-item"}"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span></label></td>
                 <td>${INVENTORY_CATEGORIES[item.category] || item.category || "—"}</td>
                 <td>${item.subCategory || "—"}</td>
                 <td><span class="inv-badge-stock ${status === "in-stock" ? "stock" : status === "incoming" ? "incoming" : "needed"}">${statusLabel(status)}</span></td>
@@ -696,6 +751,7 @@
       if (items.length === 0) return "";
 
       const title = INVENTORY_CATEGORIES[catKey];
+      const storageLabel = catKey === "fresh_garnishes" ? "Perishables" : "Shelf-Stable Bottles";
 
       const renderItemCard = item => {
         const stockLabel = item.inStock ? "In Stock" : item.incoming ? "Incoming" : "To Buy";
@@ -742,6 +798,7 @@
         <div class="inventory-category-group">
           <div class="category-header-title">
             <h3>${title} (${items.filter(i => i.inStock).length}/${items.length} In Stock)</h3>
+            <span class="inventory-storage-label ${catKey === "fresh_garnishes" ? "perishable" : "shelf-stable"}">${storageLabel}</span>
           </div>
           ${itemCards}
         </div>

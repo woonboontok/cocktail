@@ -462,7 +462,7 @@ a:hover {
 .hero-title {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.4rem;
 }
 
@@ -708,7 +708,7 @@ a:hover {
   color: var(--text-secondary);
 }
 .results-count strong {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .drinks-grid {
@@ -819,8 +819,45 @@ a:hover {
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
+.fresh-produce-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #f5c451;
+  background: rgba(245, 196, 81, 0.12);
+  border: 1px solid rgba(245, 196, 81, 0.32);
+  border-radius: var(--radius-full);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
 .card-title-block {
   margin-bottom: 0.75rem;
+}
+
+.drink-card-visual {
+  display: grid;
+  place-items: center;
+  width: 4.6rem;
+  height: 4.6rem;
+  margin: 0.1rem auto 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--drink-accent) 42%, transparent);
+  border-radius: 1.4rem;
+  background: radial-gradient(circle, color-mix(in srgb, var(--drink-accent) 16%, transparent), transparent 70%);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--drink-accent) 18%, transparent);
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.glass-icon {
+  width: 3.2rem;
+  height: 3.2rem;
+  fill: color-mix(in srgb, var(--drink-accent) 12%, transparent);
+  stroke: var(--drink-accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .drink-name {
@@ -1007,6 +1044,11 @@ a:hover {
 .inventory-view-btn.active, .inventory-sort-btn.active { color: var(--accent-gold); border-color: var(--accent-gold); }
 
 .inventory-table-wrapper { overflow-x: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); }
+.inventory-stock-key { display: flex; gap: 1rem; padding: 0.65rem 1rem; color: var(--text-muted); font-size: 0.7rem; font-family: var(--font-mono); white-space: nowrap; }
+.inventory-stock-key span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.stock-key-dot { width: 0.45rem; height: 0.45rem; border-radius: 50%; display: inline-block; }
+.stock-key-dot.shelf { background: var(--accent-gold); }
+.stock-key-dot.fresh { background: #f5c451; }
 .inventory-table { width: 100%; border-collapse: collapse; min-width: 760px; background: var(--bg-card); }
 .inventory-table th, .inventory-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border-subtle); font-size: 0.82rem; }
 .inventory-table th { background: rgba(255,255,255,0.025); }
@@ -1018,7 +1060,7 @@ a:hover {
 
 .inventory-title-group h2 {
   font-size: 1.6rem;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.3rem;
 }
 .inventory-title-group p {
@@ -1073,6 +1115,16 @@ a:hover {
   align-items: center;
   gap: 0.5rem;
 }
+
+.inventory-storage-label {
+  border-radius: var(--radius-full);
+  padding: 0.2rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+}
+.inventory-storage-label.shelf-stable { color: var(--accent-gold); background: var(--accent-gold-dim); }
+.inventory-storage-label.perishable { color: #f5c451; background: rgba(245, 196, 81, 0.12); }
 
 .inventory-grid {
   display: grid;
@@ -1672,7 +1724,7 @@ a:hover {
 
 .admin-title h2 {
   font-size: 1.7rem;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.3rem;
   display: flex;
   align-items: center;

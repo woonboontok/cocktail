@@ -16,6 +16,24 @@ const INVENTORY_CATEGORIES = {
 
 const INVENTORY_LAST_UPDATED = "10 September 2026";
 
+const INGREDIENT_GROUPS = {
+  "triple-sec": {
+    label: "Triple Sec / Orange Liqueur",
+    inventoryIds: ["cointreau", "grand-marnier", "lumina-triple-sec", "curacao-bleu"]
+  },
+  "fresh-lime": { label: "Fresh Lime", inventoryIds: ["fresh-limes"] },
+  "fresh-lemon": { label: "Fresh Lemon", inventoryIds: ["fresh-lemons"] },
+  "fresh-mint": { label: "Fresh Mint", inventoryIds: ["fresh-mint"] },
+  "white-rum": { label: "White Rum", inventoryIds: ["bacardi-superior"] },
+  "dark-rum": { label: "Dark Rum", inventoryIds: ["myers-dark-rum"] },
+  "overproof-rum": { label: "Overproof Rum", inventoryIds: ["goslings-black-seal-151"] }
+};
+
+const INGREDIENT_GROUP_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
+  group.inventoryIds.forEach(inventoryId => { groups[inventoryId] = groupId; });
+  return groups;
+}, {});
+
 const DEFAULT_INVENTORY = [
   // --- BASE SPIRITS (User In Stock) ---
   { id: "jd-bonded-rye", name: "Jack Daniel's Bonded Rye Tennessee Whiskey", category: "spirits", subCategory: "Whiskey › Tennessee Rye", spiritFamily: "Whiskey", spiritStyle: "Tennessee Rye", inStock: true, abv: 50, notes: "Bold 100-proof rye with cracked pepper, baking spice, and oak." },
