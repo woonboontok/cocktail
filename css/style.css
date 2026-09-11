@@ -1567,10 +1567,19 @@ a:hover {
   .header-container {
     flex-direction: column;
     align-items: stretch;
+    position: relative;
   }
   .mobile-nav-toggle {
     display: inline-flex;
-    align-self: flex-start;
+    position: absolute;
+    top: 0.7rem;
+    right: 0.85rem;
+  }
+  .logo-brand {
+    max-width: calc(100% - 5.5rem);
+  }
+  .logo-text {
+    min-width: 0;
   }
   .nav-links {
     display: none;

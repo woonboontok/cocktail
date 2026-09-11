@@ -220,6 +220,10 @@
     return match ? `${match[1]}% ABV` : "ABV not specified";
   }
 
+  function getDrinkAbvValue(drink) {
+    return parseAbvText(drink && drink.alcoholLevel);
+  }
+
   function parseAbvText(value) {
     if (!value) return null;
     if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -382,8 +386,12 @@
           return (a.difficulty || 1) - (b.difficulty || 1);
         case "difficulty-desc":
           return (b.difficulty || 1) - (a.difficulty || 1);
-        case "alcohol-desc":
-          return (b.alcoholScore || 0) - (a.alcoholScore || 0);
+        case "alcohol-desc": {
+          const aAbv = getDrinkAbvValue(a);
+          const bAbv = getDrinkAbvValue(b);
+          if (aAbv !== null && bAbv !== null && aAbv !== bAbv) return bAbv - aAbv;
+          return (b.alcoholScore || 0) - (a.alcoholScore || 0) || (b.popularity || 0) - (a.popularity || 0);
+        }
         case "ingredients-asc":
           return a.ingredients.length - b.ingredients.length;
         default:
