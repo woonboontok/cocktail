@@ -40,6 +40,8 @@ All data stays in the browser. Inventory changes, custom recipes, bookmarks, dri
 
 The default stock list lives in the `DEFAULT_INVENTORY` array inside `js/data.js`. This is the source of truth for what appears in the inventory glossary and stock filters.
 
+The inventory page displays the `INVENTORY_LAST_UPDATED` value from `js/data.js` so users can tell how current the default stock information is.
+
 ### 1) Edit the correct inventory list
 Open `js/data.js` and find the `DEFAULT_INVENTORY` array near the top of the file.
 
@@ -68,6 +70,8 @@ For incoming bottles, use:
 ```js
 { id: "brand-item-name", name: "Brand Item Name", category: "spirits", subCategory: "Rum › White", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 52, notes: "Incoming purchase." }
 ```
+
+After changing `DEFAULT_INVENTORY`, update `INVENTORY_LAST_UPDATED` near the top of `js/data.js` using a clear date such as `"11 September 2026"`. This date is shown in the inventory header; it does not change automatically when browser local storage is edited.
 
 ### 3) Keep the ABV aligned to official product data
 When changing bottle ABV, prefer the brand’s official product page or a trusted official publication from the producer. Common examples include:

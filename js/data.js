@@ -14,6 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
+const INVENTORY_LAST_UPDATED = "10 September 2026";
+
 const DEFAULT_INVENTORY = [
   // --- BASE SPIRITS (User In Stock) ---
   { id: "jd-bonded-rye", name: "Jack Daniel's Bonded Rye Tennessee Whiskey", category: "spirits", subCategory: "Whiskey › Tennessee Rye", spiritFamily: "Whiskey", spiritStyle: "Tennessee Rye", inStock: true, abv: 50, notes: "Bold 100-proof rye with cracked pepper, baking spice, and oak." },
@@ -3096,14 +3098,14 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "China and Taiwan's most famous nightlife challenge cocktail. Created by marrying equal parts high-proof Rum, Tequila, Whiskey, and an orange liqueur (Cointreau or Grand Marnier). In Chinese clubs, bartenders warm the snifter and ignite the vapors, sprinkling ground cinnamon from above to unleash a starry meteor shower of golden sparks. Always blow out the flame before drinking!",
     ingredients: [
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum (or Myers's Dark)", substitute: "Myers's Original Dark Rum or Overproof Rum", inventoryId: "bacardi-superior" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "100% blue agave blanco or reposado", inventoryId: "teremana-tequila" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon or Johnnie Walker Black", inventoryId: "jd-bonded-rye" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grand Marnier (or Cointreau)", substitute: "Cointreau or Lumina Triple Sec", inventoryId: "grand-marnier" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Ground Cinnamon (for spark flame) & Fresh Orange Peel", substitute: "Navel orange twist", inventoryId: "fresh-oranges" }
     ],
     instructions: [
-      "Pour Bacardi Rum, Teremana Tequila, Jack Daniel's Rye, and Grand Marnier into a heavy-walled brandy snifter or rocks glass.",
+      "Pour Goslings 151 Rum, Teremana Tequila, Jack Daniel's Rye, and Grand Marnier into a heavy-walled brandy snifter or rocks glass.",
       "Swirl gently to marry the high-proof spirits.",
       "Optional Flaming Ritual: Use a long bar lighter to carefully warm the rim and ignite the surface vapors into a dancing blue flame.",
       "Sprinkle a pinch of ground cinnamon high above the flame to create crackling golden sparks (fireworks effect).",
@@ -3125,13 +3127,13 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "The high-potency shooter edition designed to be taken down in one breathless gulp. Using your stocked Bacardi Rum, Teremana Tequila, Jim Beam Bourbon, and Cointreau gives it maximum proof with a surprisingly smooth citrus finish.",
     ingredients: [
-      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Bacardi Superior White Rum", substitute: "Myers's Original Dark Rum", inventoryId: "bacardi-superior" },
+      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Teremana Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Cointreau (or Grand Marnier)", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" }
     ],
     instructions: [
-      "Pour all 4 spirits directly into a heavy shot glass.",
+      "Pour the Goslings 151 Rum and the other 3 spirits directly into a heavy shot glass.",
       "Stir once with a cocktail pick to blend.",
       "Shoot down in one single celebratory swallow."
     ],

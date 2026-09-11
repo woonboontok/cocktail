@@ -29,6 +29,7 @@
   let selectedTaste = "all";
   let selectedGlass = "all";
   let filterOnlyMyBar = false;
+  let inventoryRecipeFilterIds = null;
   let sortBy = "popularity-desc";
   let glossaryStockFilter = "all";
   let glossaryView = "list";
@@ -347,6 +348,10 @@
       drinks = drinks.filter(d => d.tasteProfile && d.tasteProfile.toLowerCase().includes(selectedTaste.toLowerCase()));
     }
 
+    if (inventoryRecipeFilterIds) {
+      drinks = drinks.filter(d => inventoryRecipeFilterIds.includes(d.id));
+    }
+
     // Search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -599,6 +604,9 @@
     const container = document.getElementById("glossary-categories");
     if (!container) return;
 
+    const lastUpdated = document.getElementById("inventory-last-updated");
+    if (lastUpdated) lastUpdated.textContent = `Inventory data last updated: ${INVENTORY_LAST_UPDATED}`;
+
     // Count stats
     const inStock = inventory.filter(i => i.inStock).length;
     const incoming = inventory.filter(i => i.incoming && !i.inStock).length;
@@ -764,10 +772,12 @@
         const itemId = btn.getAttribute("data-inventory-item-id");
         const item = inventory.find(i => i.id === itemId);
         if (!item) return;
+        const recipes = getRecipesUsingItem(itemId);
         currentTab = "all";
-        searchQuery = item.name;
+        inventoryRecipeFilterIds = recipes.map(drink => drink.id);
+        searchQuery = "";
         const searchInput = document.getElementById("search-input");
-        if (searchInput) searchInput.value = searchQuery;
+        if (searchInput) searchInput.value = "";
         renderApp();
         window.scrollTo({ top: 300, behavior: "smooth" });
       });
@@ -1457,6 +1467,7 @@
   // ==================== FILTER RESET ====================
   function resetFilters() {
     searchQuery = "";
+    inventoryRecipeFilterIds = null;
     selectedSpirit = "all";
     selectedDifficulty = "all";
     selectedTaste = "all";
@@ -1480,6 +1491,23 @@
 
   // ==================== EVENT LISTENERS ====================
   function setupEventListeners() {
+    const mobileNavToggle = document.getElementById("mobile-nav-toggle");
+    const primaryNavigation = document.getElementById("primary-navigation");
+    if (mobileNavToggle && primaryNavigation) {
+      mobileNavToggle.addEventListener("click", () => {
+        const isOpen = primaryNavigation.classList.toggle("open");
+        mobileNavToggle.setAttribute("aria-expanded", String(isOpen));
+        mobileNavToggle.querySelector(".mobile-nav-toggle-icon").textContent = isOpen ? "×" : "☰";
+      });
+
+      primaryNavigation.addEventListener("click", event => {
+        if (!event.target.closest(".nav-btn")) return;
+        primaryNavigation.classList.remove("open");
+        mobileNavToggle.setAttribute("aria-expanded", "false");
+        mobileNavToggle.querySelector(".mobile-nav-toggle-icon").textContent = "☰";
+      });
+    }
+
     // Navigation tabs
     document.querySelectorAll(".nav-btn[data-tab]").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -1493,6 +1521,7 @@
     const searchInput = document.getElementById("search-input");
     if (searchInput) {
       searchInput.addEventListener("input", (e) => {
+        inventoryRecipeFilterIds = null;
         searchQuery = e.target.value;
         renderDrinkCards();
       });
