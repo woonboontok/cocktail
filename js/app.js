@@ -8,7 +8,7 @@
 
   // ==================== STATE MANAGEMENT ====================
   const STORAGE_KEY_INVENTORY = "speakeasy_inventory_v2";
-  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260909_5";
+  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260910_1";
   const STORAGE_KEY_CUSTOM_DRINKS = "speakeasy_custom_drinks_v1";
   const STORAGE_KEY_BOOKMARKS = "speakeasy_bookmarks_v1";
   const STORAGE_KEY_UNIT = "speakeasy_unit_pref_v1";
@@ -107,8 +107,12 @@
             "ice": { inStock: true, quantity: 1 },
             "fresh-espresso": { inStock: true, quantity: 1, unit: "on demand" },
             "cranberry-juice": { inStock: true, quantity: 1, unit: "carton" },
-            "goslings-black-seal-151": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
-            "jagermeister": { inStock: false, incoming: true, quantity: 1, unit: "bottle" }
+            "hennessy-vsop-cognac": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+            "premier-french-brandy-napoleon-special-reserve": { inStock: true, quantity: 1, unit: "bottle" },
+            "otard-xo-gold-cognac": { inStock: true, quantity: 1, unit: "bottle" },
+            "goslings-black-seal-151": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+            "topanito-mezcal-artesanal-espadin": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+            "jagermeister": { inStock: true, incoming: false, quantity: 1, unit: "bottle" }
           };
           merged.forEach(item => {
             if (updates[item.id]) Object.assign(item, updates[item.id]);
@@ -213,6 +217,36 @@
   function getAbv(drink) {
     const match = String(drink.alcoholLevel || "").match(/(?:~)?(\d+(?:\.\d+)?)%\s*ABV/i);
     return match ? `${match[1]}% ABV` : "ABV not specified";
+  }
+
+  function parseAbvText(value) {
+    if (!value) return null;
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    const text = String(value).trim();
+    const abvMatch = text.match(/(\d+(?:\.\d+)?)\s*%\s*ABV/i);
+    if (abvMatch) return Number(abvMatch[1]);
+    const proofMatch = text.match(/(\d+(?:\.\d+)?)\s*proof/i);
+    if (proofMatch) return Number(proofMatch[1]) / 2;
+    return null;
+  }
+
+  function getInventoryAbv(item) {
+    if (!item) return "—";
+    const direct = parseAbvText(item.abv || item.proof || item.name);
+    if (direct !== null) {
+      const fixed = Number.isInteger(direct) ? direct.toFixed(0) : direct.toFixed(1);
+      return `${fixed}% ABV`;
+    }
+    return "—";
+  }
+
+  function getRecipesUsingItem(itemId) {
+    return getAllDrinks().filter(drink =>
+      drink.ingredients.some(ing => {
+        if (!ing.inventoryId) return false;
+        return ing.inventoryId === itemId || inventory.some(i => i.id === ing.inventoryId && i.aliasOf === itemId);
+      })
+    );
   }
 
   function getCookie(name) {
@@ -548,6 +582,11 @@
       } else if (column === "category") {
         left = INVENTORY_CATEGORIES[a.category] || a.category || "";
         right = INVENTORY_CATEGORIES[b.category] || b.category || "";
+      } else if (column === "abv") {
+        left = parseAbvText(a.abv || a.proof || a.name);
+        right = parseAbvText(b.abv || b.proof || b.name);
+        if (left === null) left = -1;
+        if (right === null) right = -1;
       } else {
         left = a.name || "";
         right = b.name || "";
@@ -601,17 +640,24 @@
               <th>${sortHeader("Category", "category")}</th>
               <th>${sortHeader("Type", "type")}</th>
               <th>${sortHeader("Status", "status")}</th>
+              <th>${sortHeader("ABV", "abv")}</th>
               <th>${sortHeader("Quantity", "quantity")}</th>
+              <th>Makeable drinks</th>
             </tr></thead>
             <tbody>${visibleItems.map(item => {
               const status = getInventoryStatus(item);
               const quantity = item.quantity !== undefined ? item.quantity : getDefaultQuantity(item);
+              const usableRecipes = getRecipesUsingItem(item.id);
+              const readyCount = usableRecipes.filter(drink => getDrinkStockStatus(drink).canMake).length;
+              const linkLabel = readyCount > 0 ? `${readyCount} ready` : `${usableRecipes.length} recipes`;
               return `<tr>
                 <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span></label></td>
                 <td>${INVENTORY_CATEGORIES[item.category] || item.category || "—"}</td>
                 <td>${item.subCategory || "—"}</td>
                 <td><span class="inv-badge-stock ${status === "in-stock" ? "stock" : status === "incoming" ? "incoming" : "needed"}">${statusLabel(status)}</span></td>
+                <td>${getInventoryAbv(item)}</td>
                 <td>${quantity} ${item.unit || getDefaultUnit(item)}</td>
+                <td>${usableRecipes.length ? `<button class="inventory-drink-link" data-inventory-item-id="${item.id}">${linkLabel}</button>` : "—"}</td>
               </tr>`;
             }).join("")}</tbody>
           </table>
@@ -710,6 +756,20 @@
           direction: glossarySort.column === column && glossarySort.direction === "asc" ? "desc" : "asc"
         };
         renderGlossary();
+      });
+    });
+
+    container.querySelectorAll(".inventory-drink-link").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const itemId = btn.getAttribute("data-inventory-item-id");
+        const item = inventory.find(i => i.id === itemId);
+        if (!item) return;
+        currentTab = "all";
+        searchQuery = item.name;
+        const searchInput = document.getElementById("search-input");
+        if (searchInput) searchInput.value = searchQuery;
+        renderApp();
+        window.scrollTo({ top: 300, behavior: "smooth" });
       });
     });
 
@@ -1128,11 +1188,32 @@
       }
     }
 
-    const ingredientsHtml = drink.ingredients.map(ing => {
+    function splitPreferenceList(value) {
+      if (!value) return [];
+      return String(value)
+        .split(/[\/|]/)
+        .flatMap(part => part.split(/\s+or\s+/i))
+        .map(part => part.replace(/^\[|\]$/g, "").trim())
+        .filter(Boolean);
+    }
+
+    const preferredSubstituteText = ing => {
+      const list = splitPreferenceList(ing.substitute);
+      if (!list.length) return "";
+      return `<span class="ing-substitute"><strong>Substitute order:</strong> ${list.map((item, idx) => idx === 0 ? `[${item}]` : `[${item}]`).join(" → ")}</span>`;
+    };
+
+    const listableIngredients = drink.ingredients.filter(ing => String(ing.amountOz || "").toLowerCase() !== "garnish");
+    const garnishEntries = drink.ingredients.filter(ing => String(ing.amountOz || "").toLowerCase() === "garnish");
+    const garnishText = garnishEntries.length
+      ? garnishEntries.map(ing => ing.item).join("; ")
+      : (drink.garnish ? drink.garnish : "");
+
+    const ingredientsHtml = listableIngredients.map(ing => {
       const inStock = isItemInStock(ing.inventoryId);
       const stockBadge = ing.inventoryId
-        ? (inStock 
-            ? `<span class="ing-stock-badge status-ready">✓ In Bar</span>` 
+        ? (inStock
+            ? `<span class="ing-stock-badge status-ready">✓ In Bar</span>`
             : `<span class="ing-stock-badge status-missing">Need to Buy</span>`)
         : "";
 
@@ -1142,13 +1223,24 @@
             <span class="ing-measure">${formatMeasurement(ing)}</span>
             <div class="ing-details">
               <span class="ing-name">${ing.item}</span>
-              ${ing.substitute ? `<span class="ing-substitute"><strong>Substitute:</strong> [${ing.substitute}]</span>` : ""}
+              ${preferredSubstituteText(ing)}
             </div>
           </div>
           ${stockBadge}
         </li>
       `;
     }).join("");
+
+    const garnishHtml = garnishText ? `
+      <li class="ingredient-row garnish-row">
+        <div class="ing-measure-item">
+          <span class="ing-measure">Garnish</span>
+          <div class="ing-details">
+            <span class="ing-name">${garnishText}</span>
+          </div>
+        </div>
+      </li>
+    ` : "";
 
     const instructionsHtml = drink.instructions.map(step => {
       return `
@@ -1222,7 +1314,7 @@
             </div>
           </div>
           <ul class="ingredients-list">
-            ${ingredientsHtml}
+            ${ingredientsHtml}${garnishHtml}
           </ul>
         </div>
 
