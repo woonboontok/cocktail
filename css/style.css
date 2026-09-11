@@ -287,7 +287,7 @@ a:hover {
 .header-container {
   max-width: 1380px;
   margin: 0 auto;
-  padding: 0.85rem 1.5rem;
+  padding: 0.85rem 1.15rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -299,17 +299,18 @@ a:hover {
   align-items: center;
   gap: 0.85rem;
   cursor: pointer;
+  flex: 0 0 auto;
 }
 
 .logo-icon {
-  width: 42px;
-  height: 42px;
-  background: linear-gradient(135deg, #e5a93c, #96531d);
+  width: 84px;
+  height: 84px;
+  flex: 0 0 84px;
+  aspect-ratio: 1;
   border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
+  object-fit: cover;
+  object-position: center;
+  display: block;
   box-shadow: 0 4px 14px rgba(229, 169, 60, 0.3);
 }
 
@@ -332,6 +333,10 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .mobile-nav-toggle {
@@ -442,7 +447,7 @@ a:hover {
 .hero-banner {
   background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
   border-bottom: 1px solid var(--border-subtle);
-  padding: 2.2rem 1.5rem 1.8rem;
+  padding: 2.2rem 1.15rem 1.8rem;
   text-align: center;
   position: relative;
 }
@@ -506,7 +511,7 @@ a:hover {
 .main-layout {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 1.15rem;
 }
 
 /* ==================== FILTER & SEARCH BAR ==================== */
@@ -1595,7 +1600,7 @@ a:hover {
 .site-footer {
   border-top: 1px solid var(--border-subtle);
   background: var(--bg-secondary);
-  padding: 2.5rem 1.5rem 2rem;
+  padding: 2.5rem 1.15rem 2rem;
   text-align: center;
   color: var(--text-muted);
   font-size: 0.85rem;
@@ -1628,7 +1633,7 @@ a:hover {
     right: 0.85rem;
   }
   .logo-brand {
-    max-width: calc(100% - 5.5rem);
+    max-width: calc(100% - 6.5rem);
   }
   .logo-text {
     min-width: 0;
@@ -1693,7 +1698,7 @@ a:hover {
   .header-container { padding: 0.7rem 0.85rem; }
   .logo-text h1 { font-size: 1.05rem; }
   .nav-btn { padding: 0.45rem 0.7rem; font-size: 0.8rem; white-space: nowrap; }
-  .main-layout { padding-left: 0.85rem; padding-right: 0.85rem; }
+  .main-layout { padding-left: 0.72rem; padding-right: 0.72rem; }
   .drinks-grid { grid-template-columns: 1fr; }
   .modal-backdrop { padding: 0.5rem; }
   .modal-header, .modal-body { padding: 1rem; }
