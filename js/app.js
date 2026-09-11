@@ -8,7 +8,7 @@
 
   // ==================== STATE MANAGEMENT ====================
   const STORAGE_KEY_INVENTORY = "speakeasy_inventory_v2";
-  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260910_1";
+  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260911_2";
   const STORAGE_KEY_CUSTOM_DRINKS = "speakeasy_custom_drinks_v1";
   const STORAGE_KEY_BOOKMARKS = "speakeasy_bookmarks_v1";
   const STORAGE_KEY_UNIT = "speakeasy_unit_pref_v1";
@@ -112,8 +112,11 @@
             "premier-french-brandy-napoleon-special-reserve": { inStock: true, quantity: 1, unit: "bottle" },
             "otard-xo-gold-cognac": { inStock: true, quantity: 1, unit: "bottle" },
             "goslings-black-seal-151": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+            "mount-gay-black-barrel": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
             "topanito-mezcal-artesanal-espadin": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
-            "jagermeister": { inStock: true, incoming: false, quantity: 1, unit: "bottle" }
+            "jagermeister": { inStock: true, incoming: false, quantity: 2, unit: "bottle" },
+            "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+            "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" }
           };
           merged.forEach(item => {
             if (updates[item.id]) Object.assign(item, updates[item.id]);

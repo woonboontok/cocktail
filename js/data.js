@@ -14,18 +14,19 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "10 September 2026";
+const INVENTORY_LAST_UPDATED = "11 September 2026";
 
 const INGREDIENT_GROUPS = {
   "triple-sec": {
     label: "Triple Sec / Orange Liqueur",
     inventoryIds: ["cointreau", "grand-marnier", "lumina-triple-sec", "curacao-bleu"]
   },
+  "hazelnut-liqueur": { label: "Hazelnut Liqueur", inventoryIds: ["frangelico", "disaronno-amaretto"] },
   "fresh-lime": { label: "Fresh Lime", inventoryIds: ["fresh-limes"] },
   "fresh-lemon": { label: "Fresh Lemon", inventoryIds: ["fresh-lemons"] },
   "fresh-mint": { label: "Fresh Mint", inventoryIds: ["fresh-mint"] },
   "white-rum": { label: "White Rum", inventoryIds: ["bacardi-superior"] },
-  "dark-rum": { label: "Dark Rum", inventoryIds: ["myers-dark-rum"] },
+  "dark-rum": { label: "Dark Rum", inventoryIds: ["myers-dark-rum", "mount-gay-black-barrel"] },
   "overproof-rum": { label: "Overproof Rum", inventoryIds: ["goslings-black-seal-151"] }
 };
 
@@ -44,6 +45,7 @@ const DEFAULT_INVENTORY = [
   { id: "otard-xo-gold-cognac", name: "Otard XO Gold Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: true, abv: 40, notes: "Luxurious XO cognac with orange peel, caramel, and oak depth." },
   { id: "bacardi-superior", name: "Bacardi Superior White Rum", category: "spirits", subCategory: "Rum › White", spiritFamily: "Rum", spiritStyle: "White", inStock: true, abv: 37.5, notes: "Clean, floral light rum. Essential for Mojito and Daiquiri." },
   { id: "myers-dark-rum", name: "Myers's Original Dark Rum", category: "spirits", subCategory: "Rum › Dark Jamaican", spiritFamily: "Rum", spiritStyle: "Dark Jamaican", inStock: true, abv: 40, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices." },
+  { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum (75.5% ABV)", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
   { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
   { id: "teremana-tequila", name: "Teremana Tequila", category: "spirits", subCategory: "Agave › Tequila", spiritFamily: "Agave", spiritStyle: "Tequila", inStock: true, abv: 40, notes: "Small batch 100% blue agave tequila with roasted agave and citrus zest." },
@@ -53,9 +55,7 @@ const DEFAULT_INVENTORY = [
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
   { id: "irish-whiskey", name: "Irish Whiskey (Jameson)", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: false, abv: 40, notes: "Triple distilled smooth whiskey for Irish Coffee & Green Tea Shot." },
-  { id: "cognac-brandy", name: "Cognac / French Brandy", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: false, abv: 40, notes: "Aged grape spirit for Sidecar, Vieux Carré, and B-54." },
   { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
-  { id: "mezcal", name: "Artisanal Mezcal (Smoky)", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: false, abv: 40, notes: "Earthy smoky agave spirit for Naked and Famous and Mezcal Paloma." },
   { id: "cachaca", name: "Cachaça", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Brazilian fresh pressed sugarcane spirit for Caipirinha." },
 
   // --- LIQUEURS (User In Stock) ---
@@ -80,13 +80,13 @@ const DEFAULT_INVENTORY = [
   { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: false, abv: 40, notes: "Scotch, heather honey, and herbs for Rusty Nail." },
   { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, notes: "130-herb French monk elixir for Last Word." },
   { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 40, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
-  { id: "jagermeister", name: "Jägermeister Liqueur (35% ABV)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 1, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
+  { id: "jagermeister", name: "Jägermeister Liqueur (35% ABV)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 2, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
   { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 20, notes: "Vivid emerald honeydew melon liqueur for Scooby Snack." },
   { id: "fireball", name: "Fireball Cinnamon Whisky", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, abv: 33, notes: "Cinnamon whisky for Fireball Apple Pie Shot." },
   { id: "sambuca", name: "White Sambuca", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 38, notes: "Italian anise liqueur for Flatliner and Slippery Nipple." },
   { id: "absinthe", name: "Absinthe", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 68, notes: "Aromatic anise rinse for Sazerac and Corpse Reviver No. 2." },
   { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, abv: 15, notes: "Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot." },
-  { id: "frangelico", name: "Frangelico Hazelnut Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, abv: 20, notes: "Hazelnut liqueur for Nutty Irishman and Duck Fart." },
+  { id: "frangelico", name: "Frangelico Hazelnut Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Hazelnut liqueur for Nutty Irishman and Duck Fart." },
 
   // --- FORTIFIED WINES & APERITIFS (User In Stock) ---
   { id: "lillet-blanc", name: "Lillet Blanc", category: "fortified", subCategory: "Fortified Wine", inStock: true, abv: 17, notes: "French wine aperitif with candied orange and honey for Vesper and Corpse Reviver No. 2." },
@@ -106,7 +106,7 @@ const DEFAULT_INVENTORY = [
   { id: "raspberry-rhapsody", name: "Raspberry Rhapsody Flavored Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Sweet raspberry syrup for Clover Club, Floradora, and Lemon-Berry Fizz." },
   { id: "simple-syrup", name: "Premium Syrup (Simple Syrup, 1:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Your premium/simple syrup. Equal parts sugar and water; foundation for sour and fizz drinks." },
   { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
-  { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "French sweet almond and orange flower syrup for Mai Tai." },
+  { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", notes: "French sweet almond and orange flower syrup for Mai Tai." },
   { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Liquid clover honey for Penicillin and Bee's Knees." },
   { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Fresh ginger syrup for Penicillin." },
   { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: false, notes: "For muddling in Old Fashioned and rimming glasses." },
@@ -515,7 +515,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Coconut Cream (Cream of Coconut)", substitute: "Coconut milk + simple syrup", inventoryId: "coconut-cream" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Pineapple Juice", substitute: "Fresh crushed pineapple", inventoryId: "pineapple-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
-      { amountOz: "0.5 oz float", amountMl: "15 ml float", item: "Myers's Original Dark Rum", substitute: "Aged dark rum float", inventoryId: "myers-dark-rum" }
+      { amountOz: "0.5 oz float", amountMl: "15 ml float", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Aged dark rum float", inventoryId: "myers-dark-rum" }
     ],
     instructions: [
       "Add white rum, coconut cream, pineapple juice, lime juice, and a cup of crushed ice into a blender (or shaker).",
@@ -630,7 +630,7 @@ const DEFAULT_DRINKS = [
     proTip: "Mai Tai means 'Out of this world - the best' in Tahitian. Authentic 1944 Mai Tai contains zero pineapple juice or orange juice—only rum, lime, curacao, and almond orgeat.",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum", substitute: "Aged amber rum", inventoryId: "bacardi-superior" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Myers's Original Dark Rum", substitute: "Jamaican pot still dark rum", inventoryId: "myers-dark-rum" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Jamaican pot still dark rum", inventoryId: "myers-dark-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau (or Grand Marnier)", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Orgeat Syrup", substitute: "Disaronno Amaretto + drop of simple syrup", inventoryId: "orgeat-syrup" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" }
@@ -717,7 +717,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Pour ginger beer first, then gently float Myers's Dark Rum over the back of a spoon. It visually resembles a stormy thundercloud hovering over the sea.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Myers's Original Dark Rum", substitute: "Any rich aged black rum", inventoryId: "myers-dark-rum" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Any rich aged black rum", inventoryId: "myers-dark-rum" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Spicy Ginger Beer", substitute: "Schweppes Ginger Ale Soda", inventoryId: "ginger-beer" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime wedge squeezed", inventoryId: "fresh-limes" }
     ],
@@ -1360,7 +1360,7 @@ const DEFAULT_DRINKS = [
     proTip: "Donn Beach famously limited customers to two Zombies per night because 'it makes you walk like the dead.' Pack with crushed ice to manage dilution.",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum", substitute: "Light Puerto Rican rum", inventoryId: "bacardi-superior" },
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Myers's Original Dark Rum", substitute: "Jamaican dark rum", inventoryId: "myers-dark-rum" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Jamaican dark rum", inventoryId: "myers-dark-rum" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Goslings Black Seal 151 Proof Rum (Float)", substitute: "Additional Myers's Dark Rum", inventoryId: "goslings-black-seal-151" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grapefruit Juice", substitute: "Pink grapefruit juice", inventoryId: "grapefruit-juice" },
@@ -2421,7 +2421,7 @@ const DEFAULT_DRINKS = [
     proTip: "Equal parts Baileys Irish Cream and Frangelico (or Disaronno Amaretto). Tastes exactly like hazelnut praline melted in sweet dairy cream.",
     ingredients: [
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Baileys Irish Cream", substitute: "Heavy cream + splash of whiskey", inventoryId: "baileys-irish-cream" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Frangelico Hazelnut (or Disaronno Amaretto)", substitute: "Disaronno Originale Amaretto", inventoryId: "disaronno-amaretto" }
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Frangelico Hazelnut Liqueur (or Disaronno Amaretto)", substitute: "Disaronno Originale Amaretto", inventoryId: "frangelico" }
     ],
     instructions: [
       "Combine Baileys Irish Cream and Disaronno (or Frangelico) in a shaker with ice.",
@@ -2532,6 +2532,212 @@ const DEFAULT_DRINKS = [
       "Shoot and savor the warm holiday bakery flavor."
     ],
     tags: ["shot", "fireball", "cinnamon", "apple", "autumn", "comfort"]
+  },
+
+  // =========================================================================
+  // CASA BLANCA FEATURED COCKTAIL
+  // =========================================================================
+  {
+    id: "casa-blanca-1945",
+    name: "Casa Blanca (1945 Classic)",
+    otherNames: "Casa Blanca Rum Cocktail, Casablanca",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Coupe / Martini",
+    alcoholLevel: "Medium-High (~24% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Citrus, Maraschino Cherry, Orange & Aged Rum",
+    difficulty: 2,
+    popularity: 9.1,
+    proTip: "Mount Gay Black Barrel gives this mid-century rum cocktail a richer Barbados character. Keep the lime fresh and the maraschino dry to preserve its balance.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Bacardi Superior White Rum for a lighter classic style", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Luxardo Maraschino Liqueur", substitute: "Peter Heering Cherry Liqueur, sweeter and fruitier", inventoryId: "maraschino-liqueur" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Maraschino Cherry & Orange Twist", substitute: "Orange peel", inventoryId: "maraschino-cherries" }
+    ],
+    instructions: [
+      "Chill a coupe or martini glass.",
+      "Shake Mount Gay rum, maraschino liqueur, Cointreau, and fresh lime juice with ice.",
+      "Double strain into the chilled glass.",
+      "Garnish with a maraschino cherry and expressed orange twist."
+    ],
+    tags: ["rum", "mount-gay", "casa-blanca", "casablanca", "1945", "maraschino", "classic"]
+  },
+
+  // =========================================================================
+  // FRANGELICO FEATURED COCKTAILS
+  // =========================================================================
+  {
+    id: "nutty-irishman",
+    name: "Nutty Irishman",
+    otherNames: "Frangelico Irish Cream Cocktail",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Rocks / Lowball",
+    alcoholLevel: "Medium (~14% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Hazelnut, Irish Cream, Coffee & Vanilla",
+    difficulty: 1,
+    popularity: 9.2,
+    proTip: "Serve it over one large cube for a short after-dinner drink, or warm the cream gently for a dessert-style winter version.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Frangelico Hazelnut Liqueur", substitute: "Disaronno Amaretto", inventoryId: "frangelico" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Baileys Irish Cream", substitute: "Heavy cream plus simple syrup", inventoryId: "baileys-irish-cream" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Espresso", substitute: "Strong cold brew concentrate", inventoryId: "fresh-espresso" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Coffee Beans & Grated Nutmeg", substitute: "Cocoa powder", inventoryId: "coffee-beans" }
+    ],
+    instructions: [
+      "Add Frangelico, Baileys, and fresh espresso to a shaker with ice.",
+      "Shake briefly until chilled and silky.",
+      "Strain over one large cube in a rocks glass.",
+      "Garnish with coffee beans and a light grate of nutmeg."
+    ],
+    tags: ["frangelico", "hazelnut", "irish-cream", "coffee", "dessert", "after-dinner"]
+  },
+  {
+    id: "frangelico-espresso-martini",
+    name: "Frangelico Espresso Martini",
+    otherNames: "Hazelnut Espresso Martini",
+    category: "Cocktail",
+    baseSpirit: "Vodka",
+    glassware: "Coupe / Martini",
+    alcoholLevel: "Medium-High (~22% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Espresso, Toasted Hazelnut, Vanilla & Cocoa",
+    difficulty: 2,
+    popularity: 9.4,
+    proTip: "Shake hard with fresh espresso to build the signature crema. Frangelico adds hazelnut depth without needing extra syrup.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Frangelico Hazelnut Liqueur", substitute: "Disaronno Amaretto", inventoryId: "frangelico" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Espresso", substitute: "Strong cold brew concentrate", inventoryId: "fresh-espresso" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Three Coffee Beans", substitute: "Cocoa powder dusting", inventoryId: "coffee-beans" }
+    ],
+    instructions: [
+      "Add vodka, Frangelico, fresh espresso, and Kahlúa to a shaker with ice.",
+      "Shake hard for 12 to 15 seconds to create a thick crema.",
+      "Double strain into a chilled coupe or martini glass.",
+      "Float three coffee beans on the crema."
+    ],
+    tags: ["frangelico", "hazelnut", "espresso-martini", "vodka", "coffee"]
+  },
+  {
+    id: "frangelico-brandy-alexander",
+    name: "Frangelico Brandy Alexander",
+    otherNames: "Hazelnut Alexander",
+    category: "Cocktail",
+    baseSpirit: "Brandy",
+    glassware: "Coupe",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Hazelnut, Brandy, Chocolate & Cream",
+    difficulty: 1,
+    popularity: 9.0,
+    proTip: "The classic Alexander is built from equal parts spirit, cacao, and cream; Frangelico replaces the cacao liqueur for a toasted hazelnut finish.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Otard XO Gold Cognac", substitute: "Hennessy VSOP Cognac", inventoryId: "otard-xo-gold-cognac" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Frangelico Hazelnut Liqueur", substitute: "Disaronno Amaretto", inventoryId: "frangelico" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Heavy Whipping Cream", substitute: "Baileys Irish Cream for a sweeter variation", inventoryId: "whipping-heavy-cream" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Freshly Grated Nutmeg", substitute: "Cocoa powder", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Add cognac, Frangelico, and heavy cream to a shaker with ice.",
+      "Shake until thoroughly chilled and lightly aerated.",
+      "Double strain into a chilled coupe.",
+      "Finish with freshly grated nutmeg."
+    ],
+    tags: ["frangelico", "hazelnut", "brandy", "cream", "dessert", "after-dinner"]
+  },
+
+  // =========================================================================
+  // MOUNT GAY FEATURED COCKTAILS
+  // =========================================================================
+  {
+    id: "mount-gay-rum-old-fashioned",
+    name: "Mount Gay Rum Old Fashioned",
+    otherNames: "Barbados Rum Old Fashioned",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "High (~32% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Oak, Molasses, Citrus & Baking Spice",
+    difficulty: 1,
+    popularity: 9.2,
+    proTip: "Black Barrel's bourbon-cask finish gives this spirit-forward build vanilla, toasted oak, and enough structure to replace whiskey in an Old Fashioned.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Premium Simple Syrup", substitute: "Demerara syrup or one sugar cube", inventoryId: "simple-syrup" },
+      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel", substitute: "Orange slice", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Add Mount Gay rum, simple syrup, and Angostura bitters to a mixing glass with ice.",
+      "Stir for 20 to 30 seconds until chilled and diluted.",
+      "Strain over one large cube in a chilled rocks glass.",
+      "Express a fresh orange peel over the drink and place it on top."
+    ],
+    tags: ["rum", "mount-gay", "barbados", "old-fashioned", "spirit-forward", "in-stock"]
+  },
+  {
+    id: "barbados-rum-punch",
+    name: "Barbados Rum Punch",
+    otherNames: "Mount Gay Rum Punch, One of Sour Two of Sweet",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Medium (~16% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Citrus, Tropical Fruit, Grenadine & Aged Rum",
+    difficulty: 1,
+    popularity: 9.3,
+    proTip: "Use the classic island balance: one of sour, two of sweet, three of strong, and four of weak. Mount Gay adds a dry oak and vanilla backbone.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Premium Simple Syrup", substitute: "Pomegranate Grenadine", inventoryId: "simple-syrup" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Fresh Orange Juice", substitute: "Orange juice", inventoryId: "orange-juice" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Slice & Nutmeg", substitute: "Orange wheel", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Fill a highball glass with ice.",
+      "Add Mount Gay rum, fresh lime juice, simple syrup, and orange juice.",
+      "Top with Chang Soda Water and stir gently.",
+      "Garnish with an orange slice and a light grate of nutmeg."
+    ],
+    tags: ["rum", "mount-gay", "barbados", "punch", "citrus", "tropical"]
+  },
+  {
+    id: "mount-gay-rum-sour",
+    name: "Mount Gay Rum Sour",
+    otherNames: "Barbados Rum Sour",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Coupe or Rocks",
+    alcoholLevel: "Medium-High (~22% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Bright Lime, Oak, Vanilla & Balanced Sweetness",
+    difficulty: 2,
+    popularity: 9.1,
+    proTip: "A short shake keeps the aged rum at the center. Add egg white for a silky texture when you want a richer sour.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Premium Simple Syrup", substitute: "Honey syrup", inventoryId: "simple-syrup" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (Optional)", substitute: "Aquafaba or omit", inventoryId: "egg-white" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lime Wheel", substitute: "Fresh orange peel", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Add Mount Gay rum, lime juice, simple syrup, and egg white to a shaker.",
+      "Dry shake without ice, then add ice and shake again until chilled.",
+      "Double strain into a coupe, or strain over fresh ice in a rocks glass.",
+      "Garnish with a fresh lime wheel."
+    ],
+    tags: ["rum", "mount-gay", "barbados", "sour", "lime", "aged-rum"]
   },
 
   // =========================================================================

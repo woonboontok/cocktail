@@ -4,7 +4,7 @@ A polished, browser-based cocktail guide and personal home-bar inventory manager
 
 ## Highlights
 
-- 119 built-in recipes: 71 cocktails, 22 mocktails, and 26 shots
+- 126 built-in recipes: 78 cocktails, 22 mocktails, and 26 shots
 - Search, sort, and filter by base spirit, difficulty, flavour profile, and availability
 - Detailed recipes with method, glassware, substitutions, pro tips, and both oz/ml measurements
 - **Can I Make It?** view that identifies recipes available from the current inventory
