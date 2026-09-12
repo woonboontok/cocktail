@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "12 September 2026";
-const INVENTORY_SYNC_VERSION = "20260912_2";
+const INVENTORY_SYNC_VERSION = "20260912_3";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -40,7 +40,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
   "grapefruit-juice": { inStock: true, quantity: 1, unit: "fruit" },
   "pineapple-juice": { inStock: true, quantity: 1, unit: "fruit" },
-  "tanqueray-gin": { inStock: true, quantity: 1, unit: "bottle" }
+  "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" }
 };
 
 const INGREDIENT_GROUPS = {
@@ -125,6 +125,7 @@ const DEFAULT_INVENTORY = [
 
   // --- SPARKLING WINE (User In Stock) ---
   { id: "gio-prosecco", name: "Gio Prosecco Spumante Extra Dry", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11.5, notes: "Crisp Italian Prosecco with fine bubbles for Aperol Spritz, French 75, Bellini, and Mimosa." },
+  { id: "bottega-spumante-venezia", name: "Bottega Spumante Venezia", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, notes: "Elegant, smooth Italian sparkling blend of Glera & Chardonnay; crisp notes of apple, peach, and almond—ideal premium base for an Aperol Spritz or Mimosa." },
 
   // --- BITTERS & SYRUPS (User In Stock & Shopping List) ---
   { id: "angostura-bitters", name: "Angostura Bitters", category: "bitters_syrups", subCategory: "Bitters", inStock: true, notes: "Trinidad's world-famous aromatic cocktail bitters for Old Fashioned and Manhattan." },
@@ -426,7 +427,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Remember the 3-2-1 rule: 3 parts Prosecco, 2 parts Aperol, 1 splash of soda. Always add Prosecco before Aperol to avoid settling at the bottom.",
     ingredients: [
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "Any crisp sparkling wine", inventoryId: "gio-prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Any crisp sparkling wine", inventoryId: "gio-prosecco" },
       { amountOz: "2 oz", amountMl: "60 ml", item: "Aperol", substitute: "Campari (for a bolder, bitter Spritz)", inventoryId: "aperol" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Slice & Green Olive", substitute: "Orange wheel", inventoryId: "fresh-oranges" }
@@ -629,7 +630,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Cognac (for French 75 classic variant)", inventoryId: "tanqueray-gin" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "Dry Champagne or sparkling wine", inventoryId: "gio-prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Dry Champagne or sparkling wine", inventoryId: "gio-prosecco" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Long Lemon Spiral Twist", substitute: "Lemon peel", inventoryId: "fresh-lemons" }
     ],
     instructions: [
@@ -1642,7 +1643,7 @@ const DEFAULT_DRINKS = [
     proTip: "Giuseppe Cipriani named it after painter Giovanni Bellini because the pink peach color reminded him of a saint's toga in a Bellini painting.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "White Peach Puree (or Hoffmann Peach Liqueur)", substitute: "Hoffmann Peach Liqueur + splash peach juice", inventoryId: "hoffmann-peach" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "Any dry sparkling wine", inventoryId: "gio-prosecco" }
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] →Any dry sparkling wine", inventoryId: "gio-prosecco" }
     ],
     instructions: [
       "Chill a champagne flute.",
@@ -1667,7 +1668,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Always pour Prosecco first, then orange juice! The bubbles will naturally mix with the juice without requiring a spoon that can deflate the bubbles.",
     ingredients: [
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "Dry sparkling wine / Champagne", inventoryId: "gio-prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Dry sparkling wine / Champagne", inventoryId: "gio-prosecco" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Fresh Orange Juice", substitute: "Strained fresh orange juice", inventoryId: "orange-juice" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Grand Marnier (Optional Luxury Float)", substitute: "Cointreau", inventoryId: "grand-marnier" }
     ],
@@ -1695,7 +1696,7 @@ const DEFAULT_DRINKS = [
     proTip: "A little cassis goes a long way. Just half an ounce creates a deep ruby sparkle without burying the crisp wine acidity.",
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Cassis (Blackcurrant)", substitute: "Raspberry Rhapsody syrup or Peter Heering", inventoryId: "raspberry-rhapsody" },
-      { amountOz: "4.5 oz", amountMl: "135 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "Brut Champagne", inventoryId: "gio-prosecco" }
+      { amountOz: "4.5 oz", amountMl: "135 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Brut Champagne", inventoryId: "gio-prosecco" }
     ],
     instructions: [
       "Pour crème de cassis (or raspberry liqueur) into the bottom of a chilled champagne flute.",
@@ -1857,7 +1858,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Demerara or sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "Dry Champagne or sparkling wine", inventoryId: "gio-prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Dry Champagne or sparkling wine", inventoryId: "gio-prosecco" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Twist & Maraschino Cherry", substitute: "Lemon peel", inventoryId: "fresh-lemons" }
     ],
     instructions: [
@@ -2267,7 +2268,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Passion Fruit Puree (or Peach Liqueur)", substitute: "Hoffmann Peach Liqueur", inventoryId: "hoffmann-peach" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (or Vanilla syrup)", substitute: "Sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "1 oz Chaser", amountMl: "30 ml Chaser", item: "Gio Prosecco Spumante Extra Dry", substitute: "Chilled sparkling wine", inventoryId: "gio-prosecco" }
+      { amountOz: "1 oz Chaser", amountMl: "30 ml Chaser", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Chilled sparkling wine", inventoryId: "gio-prosecco" }
     ],
     instructions: [
       "Shake vodka, passion fruit (or peach), lime juice, and syrup with ice for 10 seconds.",
