@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "12 September 2026";
-const INVENTORY_SYNC_VERSION = "20260912_3";
+const INVENTORY_SYNC_VERSION = "20260912_4";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
