@@ -147,7 +147,7 @@ const DEFAULT_INVENTORY = [
   { id: "tonic-water", name: "Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Quinine-infused mixer for Gin & Tonic." },
   { id: "cola", name: "Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "For Cuba Libre, Long Island, and Roy Rogers." },
   { id: "lemon-lime-soda", name: "Lemon-Lime Soda (Sprite)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Bubbly citrus soda for Blue Lagoon, Tequila Slammer, and Green Tea Shot." },
-  { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "For the Jägerbomb drop." },
+  { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "For the Jägerbomb drop." },
   { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
   { id: "orange-juice", name: "Orange Juice (Fresh Navel Oranges)", category: "mixers_sodas", subCategory: "Juices", inStock: true, notes: "Squeezed fresh from your in-stock Navel Oranges for Tequila Sunrise, Mimosa, and Ward 8." },
   { id: "pineapple-juice", name: "Fresh Pineapple / Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh pineapple for juice and garnish; supports Singapore Sling, Piña Colada, and Pineapple Cooler." },
