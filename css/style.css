@@ -399,8 +399,9 @@ a:hover {
 }
 
 .nav-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  background: var(--accent-gold-dim);
+  border-color: var(--border-active);
 }
 
 .nav-btn.active {
