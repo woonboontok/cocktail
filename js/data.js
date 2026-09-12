@@ -15,6 +15,33 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "12 September 2026";
+const INVENTORY_SYNC_VERSION = "20260912_1";
+
+const INVENTORY_UPDATE_OVERRIDES = {
+  "simple-syrup": { inStock: true, quantity: 1 },
+  "chang-soda-water": { inStock: true, quantity: 24, unit: "bottle" },
+  "whipped-cream": { inStock: true, quantity: 1 },
+  "whipping-heavy-cream": { inStock: true, quantity: 1 },
+  "egg-white": { inStock: true, quantity: 1 },
+  "ice": { inStock: true, quantity: 1 },
+  "fresh-espresso": { inStock: true, quantity: 1, unit: "on demand" },
+  "cranberry-juice": { inStock: true, quantity: 1, unit: "carton" },
+  "hennessy-vsop-cognac": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+  "premier-french-brandy-napoleon-special-reserve": { inStock: true, quantity: 1, unit: "bottle" },
+  "otard-xo-gold-cognac": { inStock: true, quantity: 1, unit: "bottle" },
+  "goslings-black-seal-151": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+  "mount-gay-black-barrel": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+  "topanito-mezcal-artesanal-espadin": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+  "jagermeister": { inStock: true, incoming: false, quantity: 2, unit: "bottle" },
+  "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+  "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+  "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" },
+  "fresh-oranges": { inStock: true, quantity: 1, unit: "fruit" },
+  "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
+  "grapefruit-juice": { inStock: true, quantity: 1, unit: "fruit" },
+  "pineapple-juice": { inStock: true, quantity: 1, unit: "fruit" },
+  "tanqueray-gin": { inStock: true, quantity: 1, unit: "bottle" }
+};
 
 const INGREDIENT_GROUPS = {
   "triple-sec": {

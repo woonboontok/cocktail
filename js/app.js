@@ -8,7 +8,7 @@
 
   // ==================== STATE MANAGEMENT ====================
   const STORAGE_KEY_INVENTORY = "speakeasy_inventory_v2";
-  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260912_1";
+  const STORAGE_KEY_INVENTORY_UPDATE = `speakeasy_inventory_update_${INVENTORY_SYNC_VERSION}`;
   const STORAGE_KEY_CUSTOM_DRINKS = "speakeasy_custom_drinks_v1";
   const STORAGE_KEY_BOOKMARKS = "speakeasy_bookmarks_v1";
   const STORAGE_KEY_UNIT = "speakeasy_unit_pref_v1";
@@ -99,33 +99,8 @@
 
         // Apply this bar update once without discarding the user's other saved stock and quantities.
         if (!localStorage.getItem(STORAGE_KEY_INVENTORY_UPDATE)) {
-          const updates = {
-            "simple-syrup": { inStock: true, quantity: 1 },
-            "chang-soda-water": { inStock: true, quantity: 24, unit: "bottle" },
-            "whipped-cream": { inStock: true, quantity: 1 },
-            "whipping-heavy-cream": { inStock: true, quantity: 1 },
-            "egg-white": { inStock: true, quantity: 1 },
-            "ice": { inStock: true, quantity: 1 },
-            "fresh-espresso": { inStock: true, quantity: 1, unit: "on demand" },
-            "cranberry-juice": { inStock: true, quantity: 1, unit: "carton" },
-            "hennessy-vsop-cognac": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
-            "premier-french-brandy-napoleon-special-reserve": { inStock: true, quantity: 1, unit: "bottle" },
-            "otard-xo-gold-cognac": { inStock: true, quantity: 1, unit: "bottle" },
-            "goslings-black-seal-151": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
-            "mount-gay-black-barrel": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
-            "topanito-mezcal-artesanal-espadin": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
-            "jagermeister": { inStock: true, incoming: false, quantity: 2, unit: "bottle" },
-            "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
-            "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
-            "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" },
-            "fresh-oranges": { inStock: true, quantity: 1, unit: "fruit" },
-            "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
-            "grapefruit-juice": { inStock: true, quantity: 1, unit: "fruit" },
-            "pineapple-juice": { inStock: true, quantity: 1, unit: "fruit" },
-            "tanqueray-gin": { inStock: true, quantity: 1, unit: "bottle" }
-          };
           merged.forEach(item => {
-            if (updates[item.id]) Object.assign(item, updates[item.id]);
+            if (INVENTORY_UPDATE_OVERRIDES[item.id]) Object.assign(item, INVENTORY_UPDATE_OVERRIDES[item.id]);
           });
           localStorage.setItem(STORAGE_KEY_INVENTORY, JSON.stringify(merged));
           localStorage.setItem(STORAGE_KEY_INVENTORY_UPDATE, "true");

@@ -38,67 +38,85 @@ All data stays in the browser. Inventory changes, custom recipes, bookmarks, dri
 
 ## Updating the inventory
 
-The default stock list lives in the `DEFAULT_INVENTORY` array inside `js/data.js`. This is the source of truth for what appears in the inventory glossary and stock filters.
+Inventory maintenance uses one data file: `js/data.js`. Edit the data there, increment the sync version, and the app will migrate existing browser storage without deleting custom items or unrelated quantities.
 
-The inventory page displays the `INVENTORY_LAST_UPDATED` value from `js/data.js` so users can tell how current the default stock information is.
+### Quick update checklist
 
-### 1) Edit the correct inventory list
-Open `js/data.js` and find the `DEFAULT_INVENTORY` array near the top of the file.
+1. Edit or add the item in `DEFAULT_INVENTORY`.
+2. Update `INVENTORY_LAST_UPDATED`.
+3. Increment `INVENTORY_SYNC_VERSION`, for example from `20260912_1` to `20260913_1`.
+4. Add the saved-browser change to `INVENTORY_UPDATE_OVERRIDES` when needed.
+5. Run the validation commands below, then commit and push `main`.
 
-Each inventory item is an object with fields like:
+The inventory page displays `INVENTORY_LAST_UPDATED` so users can see when the default stock information was last reviewed.
 
-- `id`: unique key used throughout the app
-- `name`: the brand and product name shown in the UI
-- `category`: one of the bar categories such as `spirits`, `liqueurs`, `fortified`, `sparkling`, or `mixers_sodas`
-- `subCategory`: product type, for example “Rum › White” or “Herbal & Botanical”
+### Inventory item fields
+
+- `id`: stable unique key used by recipes and browser storage
+- `name`: product or ingredient name shown in the UI
+- `category`: such as `spirits`, `liqueurs`, `fortified`, `sparkling`, or `fresh_garnishes`
+- `subCategory`: product type, such as `Rum › White` or `Fresh Citrus & Herbs`
 - `inStock`: whether it is currently on hand
-- `incoming`: true for bottles already ordered but not yet received
+- `incoming`: true for items ordered but not yet received
 - `quantity`: stock count
-- `unit`: bottle, carton, can, etc.
-- `abv`: alcohol by volume value, usually a number such as `40` or `37.5`
-- `notes`: optional notes used in the inventory cards and admin view
+- `unit`: bottle, fruit, carton, pack, and so on
+- `abv`: numeric alcohol by volume for alcoholic products
+- `notes`: optional usage or style notes
 
-### 2) Add or update an item correctly
-Use this pattern when adding or updating a bottle:
+Use a stable ID because recipes refer to it through `inventoryId`. If an ID changes, update every matching recipe reference.
+
+### Add or update an item
 
 ```js
 { id: "brand-item-name", name: "Brand Item Name", category: "spirits", subCategory: "Rum › White", inStock: true, abv: 37.5, quantity: 1, unit: "bottle", notes: "Short note about use or style." }
 ```
 
-For incoming bottles, use:
+For fresh produce, record the actual purchase unit:
 
 ```js
-{ id: "brand-item-name", name: "Brand Item Name", category: "spirits", subCategory: "Rum › White", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 52, notes: "Incoming purchase." }
+{ id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh purchase." }
 ```
 
-After changing `DEFAULT_INVENTORY`, update `INVENTORY_LAST_UPDATED` near the top of `js/data.js` using a clear date such as `"11 September 2026"`. This date is shown in the inventory header; it does not change automatically when browser local storage is edited.
+For incoming bottles, use `inStock: false`, `incoming: true`, and a quantity of `1`.
 
-### 3) Keep the ABV aligned to official product data
-When changing bottle ABV, prefer the brand’s official product page or a trusted official publication from the producer. Common examples include:
+### ABV sourcing
 
-- producer product page
-- brand factsheet
-- verified distillery or winery technical sheet
+Prefer the producer’s official product page, brand factsheet, or verified distillery/winery technical sheet. Store the exact ABV as a number, such as `40`, `47.3`, or `75.5`.
 
-If the product page lists an official ABV in the bottle/specification section, use that exact figure. For generic shopping-list items, match the standard producer ABV for the bottle style you are cataloguing (for example, classic London Dry Gin at 47.3% or standard Green Chartreuse at 55%).
+### Saved-browser synchronization
 
-Keep the value in the `abv` field as a plain number such as `40`, `47.3`, or `75.5`.
+The app stores live inventory in `localStorage`, so changing `DEFAULT_INVENTORY` alone does not overwrite an existing browser’s stock choices. `INVENTORY_UPDATE_OVERRIDES` is the one-time migration list for changes that should reach saved inventories.
 
-### 4) Refresh the saved browser inventory if needed
-Because the app stores the live inventory in browser local storage, the inventory may persist between edits. If you want to reset everything to the latest defaults:
+```js
+const INVENTORY_SYNC_VERSION = "20260913_1";
 
-1. Open the app in the browser.
-2. Go to the admin/inventory view.
-3. Use the reset or import/export tools as needed.
-4. Or clear browser storage for the site if you want a clean reset.
+const INVENTORY_UPDATE_OVERRIDES = {
+    "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
+    "new-bottle": { inStock: true, quantity: 1, unit: "bottle" }
+};
+```
 
-### 5) Validate after editing
-After updating the inventory data, refresh the browser and check:
+When the version changes, each browser applies the overrides once. Existing custom items and unrelated saved quantities are preserved. Never reuse an old version after changing the override list; create a new version instead.
 
-- the inventory glossary shows the updated item names
-- the ABV column displays the right values
-- the stock status is correct
-- the “can I make it?” calculations reflect your current stock
+To restore the complete defaults manually, use **Inventory Admin → Reset Inventory to Defaults**. Export a backup first if the current browser inventory must be preserved.
+
+### Validate and publish
+
+From the project directory, run:
+
+```bash
+node --check js/app.js
+node --check js/data.js
+git diff --check
+```
+
+Then refresh the app and check the inventory date, item status, ABV column, and “Can I Make It?” results. Publish with:
+
+```bash
+git add js/data.js js/app.js README.md
+git commit -m "Update inventory"
+git push origin main
+```
 
 ## Project structure
 
