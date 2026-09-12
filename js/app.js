@@ -8,7 +8,7 @@
 
   // ==================== STATE MANAGEMENT ====================
   const STORAGE_KEY_INVENTORY = "speakeasy_inventory_v2";
-  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260911_3";
+  const STORAGE_KEY_INVENTORY_UPDATE = "speakeasy_inventory_update_20260912_1";
   const STORAGE_KEY_CUSTOM_DRINKS = "speakeasy_custom_drinks_v1";
   const STORAGE_KEY_BOOKMARKS = "speakeasy_bookmarks_v1";
   const STORAGE_KEY_UNIT = "speakeasy_unit_pref_v1";
@@ -117,7 +117,12 @@
             "jagermeister": { inStock: true, incoming: false, quantity: 2, unit: "bottle" },
             "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
             "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
-            "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" }
+            "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" },
+            "fresh-oranges": { inStock: true, quantity: 1, unit: "fruit" },
+            "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
+            "grapefruit-juice": { inStock: true, quantity: 1, unit: "fruit" },
+            "pineapple-juice": { inStock: true, quantity: 1, unit: "fruit" },
+            "tanqueray-gin": { inStock: true, quantity: 1, unit: "bottle" }
           };
           merged.forEach(item => {
             if (updates[item.id]) Object.assign(item, updates[item.id]);

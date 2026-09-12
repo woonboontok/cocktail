@@ -14,7 +14,7 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "11 September 2026";
+const INVENTORY_LAST_UPDATED = "12 September 2026";
 
 const INGREDIENT_GROUPS = {
   "triple-sec": {
@@ -122,8 +122,8 @@ const DEFAULT_INVENTORY = [
   { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "For the Jägerbomb drop." },
   { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
   { id: "orange-juice", name: "Orange Juice (Fresh Navel Oranges)", category: "mixers_sodas", subCategory: "Juices", inStock: true, notes: "Squeezed fresh from your in-stock Navel Oranges for Tequila Sunrise, Mimosa, and Ward 8." },
-  { id: "pineapple-juice", name: "Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Fruity foam-building juice for Singapore Sling, Piña Colada, and Pineapple Cooler." },
-  { id: "grapefruit-juice", name: "Pink Grapefruit Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "For Paloma, Hemingway Daiquiri, and Sea Breeze." },
+  { id: "pineapple-juice", name: "Fresh Pineapple / Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh pineapple for juice and garnish; supports Singapore Sling, Piña Colada, and Pineapple Cooler." },
+  { id: "grapefruit-juice", name: "Fresh Grapefruit / Pink Grapefruit Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh grapefruit for juice and garnish; supports Paloma, Hemingway Daiquiri, and Sea Breeze." },
   { id: "apple-juice", name: "Apple Juice / Cider", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Crisp apple juice for Spiced Apple Cider, Washington Apple, and Apple Martini." },
   { id: "mango-juice", name: "Mango Puree / Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Lush tropical puree for Mango Mule." },
   { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
@@ -134,8 +134,8 @@ const DEFAULT_INVENTORY = [
 
   // --- FRESH PRODUCE & GARNISHES (User In Stock & Shopping List) ---
   { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
-  { id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, notes: "Core citrus for Margarita, Daiquiri, Moscow Mule, Mojito, Southside, and Gimlet." },
-  { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, notes: "Fresh sweet navel juice and fragrant peel oils for Old Fashioned, Negroni, Boulevardier, and Ward 8." },
+  { id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh limes for juice and wheels; core citrus for Margarita, Daiquiri, Moscow Mule, Mojito, Southside, and Gimlet." },
+  { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh navel oranges for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
   { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, notes: "Aromatic sprigs for Mojito, Mint Julep, and Hugo Spritz." },
   { id: "fresh-cucumber", name: "Fresh Cucumber", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, notes: "Crisp cucumber slices for Cucumber Mint Cooler and Gimlet." },
   { id: "fresh-rosemary", name: "Fresh Rosemary Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, notes: "Woody aromatic herb for Rosemary Grapefruit Spritzer." },
