@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "12 September 2026";
-const INVENTORY_SYNC_VERSION = "20260912_1";
+const INVENTORY_SYNC_VERSION = "20260912_2";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -134,7 +134,7 @@ const DEFAULT_INVENTORY = [
   { id: "simple-syrup", name: "Premium Syrup (Simple Syrup, 1:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Your premium/simple syrup. Equal parts sugar and water; foundation for sour and fizz drinks." },
   { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
   { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", notes: "French sweet almond and orange flower syrup for Mai Tai." },
-  { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Liquid clover honey for Penicillin and Bee's Knees." },
+  { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", notes: "Liquid clover honey for Penicillin and Bee's Knees." },
   { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Fresh ginger syrup for Penicillin." },
   { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: false, notes: "For muddling in Old Fashioned and rimming glasses." },
 
