@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "12 September 2026";
-const INVENTORY_SYNC_VERSION = "20260912_4";
+const INVENTORY_LAST_UPDATED = "13 September 2026";
+const INVENTORY_SYNC_VERSION = "20260913_1";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -126,6 +126,7 @@ const DEFAULT_INVENTORY = [
   // --- SPARKLING WINE (User In Stock) ---
   { id: "gio-prosecco", name: "Gio Prosecco Spumante Extra Dry", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11.5, notes: "Crisp Italian Prosecco with fine bubbles for Aperol Spritz, French 75, Bellini, and Mimosa." },
   { id: "bottega-spumante-venezia", name: "Bottega Spumante Venezia", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, notes: "Elegant, smooth Italian sparkling blend of Glera & Chardonnay; crisp notes of apple, peach, and almond—ideal premium base for an Aperol Spritz or Mimosa." },
+  { id: "zonin-prosecco-brut", name: "Zonin Prosecco Brut", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, notes: "Crisp, dry authentic Italian Prosecco DOC with lively bubbles and bright notes of green apple and citrus—the ultimate classic base for any Spritz, Bellini, or Mimosa." },
 
   // --- BITTERS & SYRUPS (User In Stock & Shopping List) ---
   { id: "angostura-bitters", name: "Angostura Bitters", category: "bitters_syrups", subCategory: "Bitters", inStock: true, notes: "Trinidad's world-famous aromatic cocktail bitters for Old Fashioned and Manhattan." },
