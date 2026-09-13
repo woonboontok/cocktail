@@ -798,6 +798,11 @@
         const item = inventory.find(i => i.id === id);
         if (item) {
           item.inStock = checked;
+          // Recipe availability requires both the stock flag and a positive quantity.
+          // Restore a usable quantity when an item is checked back into stock.
+          if (checked && (item.quantity === undefined || item.quantity <= 0)) {
+            item.quantity = 1;
+          }
           saveInventory();
           renderGlossary();
           renderHeroStats();
