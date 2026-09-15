@@ -269,7 +269,7 @@
   }
 
   function getIngredientGroupId(ingredient) {
-    return ingredient.ingredientGroup || INGREDIENT_GROUP_BY_INVENTORY_ID[ingredient.inventoryId] || `inventory:${ingredient.inventoryId}`;
+    return ingredient.ingredientGroup || INGREDIENT_GROUPS_BY_INVENTORY_ID[ingredient.inventoryId] || `inventory:${ingredient.inventoryId}`;
   }
 
   function getIngredientCandidates(ingredient) {

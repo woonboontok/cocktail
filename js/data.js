@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "15 September 2026";
-const INVENTORY_SYNC_VERSION = "20260915_2";
+const INVENTORY_SYNC_VERSION = "20260915_5";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -42,7 +42,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
   "grapefruit-juice": { inStock: true, quantity: 1, unit: "fruit" },
   "pineapple-juice": { inStock: true, quantity: 1, unit: "fruit" },
-  "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" }
+  "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
+  "tabasco-sauce": { inStock: true, quantity: 1, unit: "bottle" }
 };
 
 const INGREDIENT_GROUPS = {
@@ -218,6 +219,14 @@ const INGREDIENT_GROUPS = {
     label: "Amaro",
     inventoryIds: ["amaro-nonino"]
   },
+  "ginger-beer": {
+    label: "Ginger Beer",
+    inventoryIds: ["fever-tree-ginger-beer", "bundaberg-ginger-beer"]
+  },
+  "tonic-water": {
+    label: "Tonic Water",
+    inventoryIds: ["fever-tree-indian-tonic"]
+  },
   "fresh-lime": { label: "Fresh Lime", inventoryIds: ["fresh-limes"] },
   "fresh-lemon": { label: "Fresh Lemon", inventoryIds: ["fresh-lemons"] },
   "fresh-mint": { label: "Fresh Mint", inventoryIds: ["fresh-mint"] },
@@ -228,6 +237,14 @@ const INGREDIENT_GROUPS = {
 const INGREDIENT_GROUP_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
   group.inventoryIds.forEach(inventoryId => {
     if (!groups[inventoryId]) groups[inventoryId] = groupId;
+  });
+  return groups;
+}, {});
+// Optimized multi-group mapping configuration
+const INGREDIENT_GROUPS_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
+  group.inventoryIds.forEach(inventoryId => {
+    if (!groups[inventoryId]) groups[inventoryId] = [];
+    groups[inventoryId].push(groupId);
   });
   return groups;
 }, {});
@@ -309,6 +326,9 @@ const DEFAULT_INVENTORY = [
   { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", notes: "Liquid clover honey for Penicillin and Bee's Knees." },
   { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Fresh ginger syrup for Penicillin." },
   { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: false, notes: "For muddling in Old Fashioned and rimming glasses." },
+  { id: "fever-tree-indian-tonic", name: "Fever-Tree Premium Indian Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Premium tonic water with botanical oils and high-quality quinine. Perfect upgrade for a crisp G&T." },
+  { id: "fever-tree-ginger-beer", name: "Fever-Tree Premium Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Brewed with a blend of three natural gingers. Deep, spicy flavor profile that beautifully mimics alcohol proof." },
+  { id: "bundaberg-ginger-beer", name: "Bundaberg Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Classic craft-brewed Australian ginger beer, rich and sweet." },
 
   // --- SODAS & MIXERS (User In Stock & Shopping List) ---
   { id: "schweppes-ginger-soda", name: "Schweppes Ginger Soda", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Crisp, lively ginger soda. Essential for Highballs, Dark 'n' Stormy riffs, and Gunner." },
@@ -343,7 +363,7 @@ const DEFAULT_INVENTORY = [
   { id: "fresh-espresso", name: "Fresh Espresso Shots (made to order)", category: "fresh_garnishes", subCategory: "Coffee & Fresh", inStock: true, quantity: 1, unit: "on demand", notes: "Readily available fresh espresso for dense crema on Espresso Martinis and coffee drinks." },
   { id: "coffee-beans", name: "Whole Roasted Coffee Beans", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "Three floated beans for Espresso Martini and coffee cocktail garnishes." },
   { id: "egg-white", name: "Egg White (Fresh or Aquafaba)", category: "fresh_garnishes", subCategory: "Cocktail Texture", inStock: true, notes: "Creates silky texture and dense meringue foam on Sours." },
-  { id: "tabasco-sauce", name: "Tabasco Hot Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: false, notes: "Piquant heat for Bloody Mary, Virgin Mary, and Flatliner." },
+  { id: "tabasco-sauce", name: "Tabasco Hot Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: true, notes: "Piquant heat for Bloody Mary, Virgin Mary, and Flatliner." },
   { id: "worcestershire-sauce", name: "Worcestershire Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: false, notes: "Savory umami for Bloody Mary and Virgin Mary." },
   { id: "coarse-salt", name: "Coarse Kosher Salt", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, notes: "For glass rims on Margarita, Paloma, and Salty Dog." },
   { id: "ice", name: "Ice Cubes (and crushed ice as needed)", category: "fresh_garnishes", subCategory: "Bar Essentials", inStock: true, notes: "Available ice cubes for chilling and dilution; crush as needed for tiki and julep-style drinks." }
@@ -3323,7 +3343,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.3,
     proTip: "Bruise juniper berries and a sprig of fresh rosemary directly into premium tonic water. The botanicals infuse instantly with zero alcohol.",
     ingredients: [
-      { amountOz: "5 oz", amountMl: "150 ml", item: "Indian Tonic Water", substitute: "Chilled premium tonic", inventoryId: "tonic-water" },
+      { amountOz: "5 oz", amountMl: "150 ml", item: "Tonic Water", substitute: "Chilled premium tonic", inventoryId: "tonic-water", ingredientGroup: "tonic-water"  },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
       { amountOz: "1 sprig", amountMl: "1 sprig", item: "Fresh Rosemary", substitute: "Fresh thyme or juniper berries", inventoryId: "fresh-rosemary" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wheel & Juniper Berries", substitute: "Grapefruit peel", inventoryId: "fresh-limes" }
@@ -3870,6 +3890,334 @@ const DEFAULT_DRINKS = [
       "Garnish with a fresh lemon wheel and a spearmint sprig."
     ],
     tags: ["mocktail", "arnold-palmer", "tea", "lemonade", "classic", "zero-proof"]
+  },
+  {
+    id: "air-mail",
+    name: "Air Mail",
+    otherNames: "The Tropical French 75",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Champagne Flute / Coupe",
+    alcoholLevel: "Medium-High (~18% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Effervescent, Honeyed Oak, Tart Lime & Sugarcane",
+    difficulty: 2,
+    popularity: 9.4,
+    proTip: "The rum cousin of the French 75. Shaking rich honey syrup with gold/dark rum and lime juice creates an incredible flavor anchor before being stretched out by bubbly Prosecco.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Mount Gay Barbados Rum Black Barrel", substitute: "Bacardi Carta Blanca Superior White Rum", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime juice", inventoryId: "fresh-limes" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Honey Syrup (3:1)", substitute: "Premium Simple Syrup", inventoryId: "honey-syrup" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Zonin Prosecco Brut or dry sparkling wine", inventoryId: "gio-prosecco" }
+    ],
+    instructions: [
+      "Chill a champagne flute or coupe glass.",
+      "Combine Mount Gay rum, fresh lime juice, and honey syrup in a cocktail shaker filled with ice.",
+      "Shake vigorously for 10–12 seconds until frosty cold.",
+      "Strain into your chilled glass.",
+      "Slowly top with cold Prosecco to lift the tropical and rich honey aromas.",
+      "Garnish with a sleek lime wheel or discardable lime twist."
+    ],
+    tags: ["rum", "mount-gay", "honey", "prosecco", "bubbly", "classic", "in-stock"]
+  },
+  {
+    id: "raspberry-lime-rickey",
+    name: "Raspberry Lime Rickey",
+    otherNames: "New England Soda Classic",
+    category: "Mocktail",
+    baseSpirit: "Non-Alcoholic",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Zero-Proof (0% ABV)",
+    alcoholScore: 0,
+    tasteProfile: "Tart Lime, Sweet Raspberry & High Carbonation",
+    difficulty: 1,
+    popularity: 9.6,
+    proTip: "Highlighting your stocked Raspberry Rhapsody syrup! Pouring the soda down a bar spoon ensures the carbonation stays extra hot, lifting the heavy berry sweetness.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Raspberry Rhapsody Flavored Syrup", substitute: "Pomegranate Grenadine", inventoryId: "raspberry-rhapsody" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice (Half a lime)", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Fever-Tree Premium Tonic Water for a bitter twist", inventoryId: "chang-soda-water" }
+    ],
+    instructions: [
+      "Fill a tall highball glass to the brim with clean ice cubes.",
+      "Add your Raspberry Rhapsody syrup and squeeze in the fresh lime juice.",
+      "Top slowly with crisp, high-carbonation Chang Soda Water.",
+      "Stir gently from the bottom up exactly twice to swirl the beautiful magenta layers together without deflating the fizz.",
+      "Garnish with a fresh lime wheel and drop a couple of fresh raspberries into the ice glass."
+    ],
+    tags: ["mocktail", "raspberry", "lime", "soda-water", "refreshing", "easy", "in-stock"]
+  },
+    // =========================================================================
+  // POPULAR CLASSICS & NEW SHOTS (Newly Added)
+  // =========================================================================
+  {
+    id: "classic-gin-and-tonic",
+    name: "Classic Gin & Tonic",
+    otherNames: "G&T, The Botanical Highball",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Copa / Highball",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Crisp, Bitter Quinine, Botanical & Effervescent",
+    difficulty: 1,
+    popularity: 9.9,
+    proTip: "Pairing your Tanqueray London Dry with Fever-Tree Indian Tonic is an elite tier match. Rub the lime wheel along the rim of the glass before dropping it in to distribute essential citrus oils.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Indian Tonic Water", substitute: "Any quality tonic water", ingredientGroup: "tonic-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lime Wheels", substitute: "Lemon or grapefruit twist", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a large Copa (balloon) wine glass or tall highball glass completely with dense ice cubes.",
+      "Pour Tanqueray gin over the ice.",
+      "Slowly pour Fever-Tree Indian Tonic Water down the inside of the glass to keep the carbonation sharp.",
+      "Stir gently once from the bottom to blend without losing the fizz.",
+      "Garnish with two fresh lime wheels slid into the ice stack."
+    ],
+    tags: ["gin", "tonic", "classic", "refreshing", "summer", "in-stock"]
+  },
+  {
+    id: "dark-n-stormy-fever-tree",
+    name: "Dark 'n' Stormy (Premium Style)",
+    otherNames: "Bermuda Highball, Spicy Storm",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Highball",
+    alcoholLevel: "Medium (~15% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Spicy Ginger, Dark Molasses, Lime & Rich Fizz",
+    difficulty: 1,
+    popularity: 9.7,
+    proTip: "Using Fever-Tree Premium Ginger Beer elevates this drink tremendously. Its 3-ginger blend mimics alcohol burn, providing a deep, robust background to the molasses-heavy Myers's rum.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Myers's Original Dark Rum", substitute: "Mount Gay Barbados Rum", inventoryId: "myers-dark-rum" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", ingredientGroup: "ginger-beer" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime wedge", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a tall highball glass with clean ice cubes.",
+      "Add fresh lime juice and top with Fever-Tree ginger beer, leaving 1.5 inches of space at the top.",
+      "Slowly float your Myers's Dark Rum over the back of a bar spoon to form a dark, stormy layer.",
+      "Garnish with a lime wheel and serve unstrained for visual drama."
+    ],
+    tags: ["rum", "ginger-beer", "dark-rum", "classic", "layered", "in-stock"]
+  },
+  {
+    id: "classic-moscow-mule",
+    name: "Classic Moscow Mule (Premium Brew)",
+    otherNames: "Vodka Buck",
+    category: "Cocktail",
+    baseSpirit: "Vodka",
+    glassware: "Copper Mug / Highball",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Zesty, Fiery Ginger, Crisp & Shockingly Chilled",
+    difficulty: 1,
+    popularity: 9.8,
+    proTip: "Your original Moscow Mule recipe lacked the group configuration! Now, using either Bundaberg (sweeter) or Fever-Tree (spicier) will satisfy the drink perfectly based on your mood.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka (or Smirnoff Red)", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime juice", inventoryId: "fresh-limes" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", ingredientGroup: "ginger-beer" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wheel & Mint Sprig", substitute: "Expressed lime zest", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Pack a copper mug or highball glass with crushed ice.",
+      "Pour in Absolut vodka and fresh lime juice.",
+      "Top with your in-stock premium ginger beer.",
+      "Give it a single gentle stir to lift the citrus.",
+      "Garnish with a lime wheel and a slapped sprig of spearmint."
+    ],
+    tags: ["vodka", "ginger-beer", "mule", "refreshing", "copper-mug", "in-stock"]
+  },
+  {
+    id: "rum-and-tonic",
+    name: "Rum & Tonic",
+    otherNames: "The Havana Highball",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Highball",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Sugarcane, Crisp Quinine, Dry & Tropical Citrus",
+    difficulty: 1,
+    popularity: 9.1,
+    proTip: "While vodka and gin rule the tonic world, crisp Bacardi Superior White Rum paired with Fever-Tree tonic creates a shockingly refreshing, highly underutilized beach highball.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Carta Blanca White Rum", substitute: "Mount Gay Barbados Rum", inventoryId: "bacardi-superior" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Indian Tonic Water", substitute: "Any quality tonic water", ingredientGroup: "tonic-water" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Lime wedge squeeze", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a highball glass with large ice blocks.",
+      "Squeeze in a lime wedge, then drop the hull into the glass.",
+      "Add white rum and top up entirely with chilled Fever-Tree tonic water.",
+      "Stir gracefully once and serve immediately."
+    ],
+    tags: ["rum", "tonic", "refreshing", "easy", "caribbean", "in-stock"]
+  },
+  {
+    id: "vodka-tonic",
+    name: "Vodka Tonic",
+    otherNames: "The Clean Slate",
+    category: "Cocktail",
+    baseSpirit: "Vodka",
+    glassware: "Highball",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Ultra-Clean, Effervescent, Crisp Bitterness & Bright Lemon",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "Because vodka is neutral, the quality of your tonic water is 80% of the drink. Fever-Tree's real fruit oils shine beautifully against Absolut's winter wheat base.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Indian Tonic Water", substitute: "Any quality tonic water", ingredientGroup: "tonic-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon or Lime Wedge", substitute: "Lemon twist", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Store your vodka bottle in the freezer beforehand for ultimate coldness.",
+      "Fill a tall highball glass with ice.",
+      "Add vodka, top with Fever-Tree tonic water, and squeeze a fresh lemon wedge right over the top.",
+      "Stir once to consolidate."
+    ],
+    tags: ["vodka", "tonic", "clean", "classic", "simple", "in-stock"]
+  },
+  {
+    id: "bourbon-and-ginger",
+    name: "Bourbon & Ginger",
+    otherNames: "Kentucky Buck Riff, Whiskey Ginger",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Rocks / Highball",
+    alcoholLevel: "Low-Medium (~13% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Sweet Caramel Oak, Warm Vanilla, Fiery Ginger & Spice",
+    difficulty: 1,
+    popularity: 9.6,
+    proTip: "The rich vanilla and charred oak sweetness of Jim Beam Black acts as a beautiful counterweight to the fiery snap of Fever-Tree ginger beer.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", ingredientGroup: "ginger-beer" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel Twist", substitute: "Lime wheel", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Fill a rocks or highball glass with large ice blocks.",
+      "Pour your aged bourbon over the ice.",
+      "Top up with premium fiery ginger beer.",
+      "Stir gently and express a fresh orange peel across the rim to introduce aromatic citrus oils."
+    ],
+    tags: ["bourbon", "whiskey", "ginger-beer", "highball", "comfort", "in-stock"]
+  },
+  {
+    id: "turbo-flatliner-shot",
+    name: "Turbo Flatliner Shot",
+    otherNames: "Premium Fiery Heartbeat Shooter",
+    category: "Shot",
+    baseSpirit: "Tequila/Mezcal",
+    glassware: "Shot Glass",
+    alcoholLevel: "High (~35% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Intense Herbal Anise, Sweet Ginger Bite, Blazing Heat & Agave",
+    difficulty: 3,
+    popularity: 9.2,
+    proTip: "An elite party variant of the Flatliner. By adding a barspoon of Fever-Tree ginger beer to your White Sambuca base, you create a complex, fizzy barrier that suspends the hot Tabasco sauce spectacularly before the tequila float.",
+    ingredients: [
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Vaccari Sambuca", substitute: "White Sambuca", inventoryId: "sambuca" },
+      { amountOz: "1 tsp", amountMl: "5 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", ingredientGroup: "ginger-beer" },
+      { amountOz: "5 drops", amountMl: "5 drops", item: "Tabasco Hot Sauce", substitute: "Spicy red chili sauce", inventoryId: "tabasco-sauce" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Topanito Mezcal", inventoryId: "teremana-tequila" }
+    ],
+    instructions: [
+      "Pour your sweet Vaccari Sambuca directly into the base of a heavy shot glass.",
+      "Gently layer a teaspoon of Fever-Tree ginger beer on top using a spoon back.",
+      "Drop 5 precise beads of red Tabasco hot sauce across the surface; they will float suspended in the ginger tier.",
+      "Slowly float your Teremana Tequila over the top as the final crystal clear layer. Gulp down in one breathless go."
+    ],
+    tags: ["shot", "tequila", "sambuca", "spicy", "tabasco", "layered", "in-stock"]
+  },
+  {
+    id: "classic-tom-collins",
+    name: "Classic Tom Collins",
+    otherNames: "The Sparkling Gin Lemonade",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Collins / Highball",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Crisp, Sparkling Lemonade & Sharp Botanical",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "Think of this as the ultimate adult sparkling lemonade. Shaking the gin, lemon, and syrup before adding soda prevents the sugar from settling at the base. Tanqueray's bold juniper easily stands up to the heavy fizz.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon wedges", inventoryId: "fresh-lemons" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Premium Simple Syrup", substitute: "Sugar syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", ingredientGroup: "soda-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Wheel & Mint Sprig", substitute: "Lemon slice", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Combine Tanqueray gin, fresh lemon juice, and simple syrup in a cocktail shaker with ice.",
+      "Shake quickly for 10 seconds to chill.",
+      "Strain into a tall Collins glass packed with clean ice blocks.",
+      "Top up with icy Chang Soda Water.",
+      "Stir gently once from the bottom up to lift the citrus, and garnish with a lemon wheel."
+    ],
+    tags: ["gin", "citrus", "collins", "summer", "refreshing", "in-stock"]
+  },
+  {
+    id: "classic-southside",
+    name: "Classic Southside",
+    otherNames: "The Gin Mojito, Al Capone's Chicago Club Classic",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe",
+    alcoholLevel: "Medium-High (~22% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Crisp Botanical Juniper, Spearmint & Sharp Fresh Lime",
+    difficulty: 2,
+    popularity: 9.7,
+    proTip: "Regarded as the Mojito's refined, high-society cousin served 'up' in a coupe glass. Shaking fresh mint leaves directly with ice bruises the herbs gently and blankets the gin in refreshing essential oils without shredding them.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", ingredientGroup: "fresh-lime" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Premium Simple Syrup", substitute: "Rich simple syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "6-8 leaves", amountMl: "6-8 leaves", item: "Fresh Spearmint Leaves", substitute: "Fresh mint sprigs", ingredientGroup: "fresh-mint" }
+    ],
+    instructions: [
+      "Add fresh mint leaves, Tanqueray gin, fresh lime juice, and simple syrup to a cocktail shaker.",
+      "Fill with plenty of ice cubes.",
+      "Shake with maximum power for 12 seconds until the shaker exterior frosts over.",
+      "Double strain through a fine mesh strainer into a chilled coupe glass to filter out fine mint flecks.",
+      "Float a single pristine fresh mint leaf on the surface as an aromatic crown."
+    ],
+    tags: ["gin", "mint", "sour", "classic", "prohibition", "in-stock"]
+  },
+  {
+    id: "classic-gin-gimlet",
+    name: "Classic Gin Gimlet",
+    otherNames: "The Royal Navy Sour",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe",
+    alcoholLevel: "Medium-High (~24% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Zesty, Crisp, Sweet-Tart & Botanical",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "Historically made with Rose's Lime Cordial to prevent scurvy in the navy. Modern craft bars favor fresh lime juice paired with simple syrup, which creates a far brighter, cleaner flavor anchor against the gin.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Absolut Vodka (for a Vodka Gimlet)", inventoryId: "tanqueray-gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh squeezed lime only", ingredientGroup: "fresh-lime" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Premium Simple Syrup", substitute: "Agave syrup", ingredientGroup: "simple-syrup" }
+    ],
+    instructions: [
+      "Chill a coupe glass in your freezer for 5 minutes.",
+      "Add Tanqueray gin, fresh lime juice, and simple syrup into a shaker filled with plenty of ice.",
+      "Shake with energy for 12 seconds until ice-cold.",
+      "Fine strain into the chilled coupe, and garnish with a thin lime wheel floating on top."
+    ],
+    tags: ["gin", "lime", "sour", "classic", "sharp", "in-stock"]
   }
 ];
 
