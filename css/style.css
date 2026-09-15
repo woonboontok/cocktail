@@ -1448,6 +1448,109 @@ a:hover {
   gap: 1rem;
 }
 
+.ingredient-row-expandable {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ingredient-row-toggle {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ingredient-row-toggle:hover,
+.ingredient-row-toggle:focus-visible {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ingredient-row-toggle:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: -2px;
+}
+
+.ingredient-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.ingredient-options-trigger {
+  color: var(--accent-gold);
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ingredient-row-toggle[aria-expanded="true"] .ingredient-options-trigger span {
+  display: inline-block;
+  transform: rotate(180deg);
+}
+
+.ingredient-options {
+  border-top: 1px solid var(--border-subtle);
+  padding: 0.7rem 1rem 0.85rem;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.ingredient-options-heading {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.45rem;
+}
+
+.ingredient-options-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.ingredient-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.82rem;
+}
+
+.ingredient-option-name {
+  color: #fff;
+  font-weight: 600;
+}
+
+.ingredient-option-meta {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.ingredient-option-status {
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.14rem 0.45rem;
+  white-space: nowrap;
+}
+
+.ingredient-option-status.in-stock { background: rgba(52, 211, 153, 0.16); color: #6ee7b7; }
+.ingredient-option-status.out-of-stock { background: rgba(248, 113, 113, 0.15); color: #fca5a5; }
+.ingredient-option-status.incoming { background: rgba(251, 191, 36, 0.15); color: #fcd34d; }
+
 .ing-measure-item {
   display: flex;
   align-items: baseline;
@@ -1685,6 +1788,23 @@ a:hover {
   }
   .ingredient-row {
     flex-direction: column;
+  }
+  .ingredient-row-toggle {
+    flex-direction: column;
+  }
+  .ingredient-row-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .ingredient-option {
+    grid-template-columns: 1fr auto;
+  }
+  .ingredient-option-meta {
+    grid-column: 1;
+  }
+  .ingredient-option-status {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
   .ing-measure {
     min-width: unset;

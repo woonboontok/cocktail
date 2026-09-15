@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "13 September 2026";
-const INVENTORY_SYNC_VERSION = "20260913_1";
+const INVENTORY_LAST_UPDATED = "15 September 2026";
+const INVENTORY_SYNC_VERSION = "20260915_2";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -26,12 +26,14 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "ice": { inStock: true, quantity: 1 },
   "fresh-espresso": { inStock: true, quantity: 1, unit: "on demand" },
   "cranberry-juice": { inStock: true, quantity: 1, unit: "carton" },
-  "hennessy-vsop-cognac": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+  "hennessy-vsop-cognac": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "premier-french-brandy-napoleon-special-reserve": { inStock: true, quantity: 1, unit: "bottle" },
   "otard-xo-gold-cognac": { inStock: true, quantity: 1, unit: "bottle" },
+  "bacardi-superior": { inStock: true, quantity: 2, unit: "bottle" },
+  "sambuca": { inStock: true, quantity: 1, unit: "bottle" },
   "goslings-black-seal-151": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "mount-gay-black-barrel": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
-  "topanito-mezcal-artesanal-espadin": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+  "topanito-mezcal-artesanal-espadin": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "jagermeister": { inStock: true, incoming: false, quantity: 2, unit: "bottle" },
   "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
@@ -44,21 +46,189 @@ const INVENTORY_UPDATE_OVERRIDES = {
 };
 
 const INGREDIENT_GROUPS = {
+  "prosecco": {
+    label: "Prosecco",
+    inventoryIds: ["gio-prosecco", "zonin-prosecco-brut", "bottega-spumante-venezia"]
+  },
+  "white-rum": {
+    label: "White Rum",
+    inventoryIds: ["bacardi-superior"]
+  },
+  "dark-rum": {
+    label: "Dark Rum",
+    inventoryIds: ["myers-dark-rum", "mount-gay-black-barrel"]
+  },
+  "overproof-rum": {
+    label: "Overproof Rum",
+    inventoryIds: ["goslings-black-seal-151"]
+  },
+  "cachaca": {
+    label: "Cachaça",
+    inventoryIds: ["cachaca"]
+  },
+  "gin": {
+    label: "London Dry Gin",
+    inventoryIds: ["tanqueray-gin"]
+  },
+  "vodka": {
+    label: "Vodka",
+    inventoryIds: ["absolut-blue", "smirnoff-red"]
+  },
+  "bourbon": {
+    label: "Bourbon Whiskey",
+    inventoryIds: ["jim-beam-black"]
+  },
+  "rye-whiskey": {
+    label: "Rye Whiskey",
+    inventoryIds: ["jd-bonded-rye"]
+  },
+  "scotch": {
+    label: "Scotch Whisky",
+    inventoryIds: ["jw-black-label"]
+  },
+  "irish-whiskey": {
+    label: "Irish Whiskey",
+    inventoryIds: ["irish-whiskey"]
+  },
+  "tequila": {
+    label: "Tequila",
+    inventoryIds: ["teremana-tequila"]
+  },
+  "mezcal": {
+    label: "Mezcal",
+    inventoryIds: ["topanito-mezcal-artesanal-espadin"]
+  },
+  "brandy-cognac": {
+    label: "Cognac / French Brandy",
+    inventoryIds: ["hennessy-vsop-cognac", "otard-xo-gold-cognac", "premier-french-brandy-napoleon-special-reserve"]
+  },
+  "pisco": {
+    label: "Pisco",
+    inventoryIds: ["pisco"]
+  },
   "triple-sec": {
     label: "Triple Sec / Orange Liqueur",
     inventoryIds: ["cointreau", "grand-marnier", "lumina-triple-sec", "curacao-bleu"]
   },
-  "hazelnut-liqueur": { label: "Hazelnut Liqueur", inventoryIds: ["frangelico", "disaronno-amaretto"] },
+  "coffee-liqueur": {
+    label: "Coffee Liqueur",
+    inventoryIds: ["kahlua", "walcher-coffee"]
+  },
+  "sambuca": {
+    label: "White Sambuca",
+    inventoryIds: ["sambuca"]
+  },
+  "amaretto": {
+    label: "Amaretto",
+    inventoryIds: ["disaronno-amaretto"]
+  },
+  "hazelnut-liqueur": {
+    label: "Hazelnut Liqueur",
+    inventoryIds: ["frangelico", "disaronno-amaretto"]
+  },
+  "irish-cream": {
+    label: "Irish Cream",
+    inventoryIds: ["baileys-irish-cream"]
+  },
+  "peach-liqueur": {
+    label: "Peach Liqueur",
+    inventoryIds: ["hoffmann-peach"]
+  },
+  "cherry-liqueur": {
+    label: "Cherry Liqueur",
+    inventoryIds: ["cherry-heering"]
+  },
+  "elderflower-liqueur": {
+    label: "Elderflower Liqueur",
+    inventoryIds: ["st-germain"]
+  },
+  "coconut-rum": {
+    label: "Coconut Rum",
+    inventoryIds: ["malibu-rum"]
+  },
+  "herbal-liqueur": {
+    label: "Herbal Liqueur",
+    inventoryIds: ["jagermeister"]
+  },
+  "maraschino": {
+    label: "Maraschino Liqueur",
+    inventoryIds: ["maraschino-liqueur"]
+  },
+  "creme-de-violette": {
+    label: "Crème de Violette",
+    inventoryIds: ["creme-de-violette"]
+  },
+  "creme-de-cassis": {
+    label: "Crème de Cassis",
+    inventoryIds: ["creme-de-cassis"]
+  },
+  "creme-de-mure": {
+    label: "Crème de Mûre",
+    inventoryIds: ["creme-de-mure"]
+  },
+  "drambuie": {
+    label: "Drambuie",
+    inventoryIds: ["drambuie"]
+  },
+  "green-chartreuse": {
+    label: "Green Chartreuse",
+    inventoryIds: ["green-chartreuse"]
+  },
+  "yellow-chartreuse": {
+    label: "Yellow Chartreuse",
+    inventoryIds: ["yellow-chartreuse"]
+  },
+  "midori": {
+    label: "Midori Melon Liqueur",
+    inventoryIds: ["midori"]
+  },
+  "fireball": {
+    label: "Cinnamon Whisky",
+    inventoryIds: ["fireball"]
+  },
+  "absinthe": {
+    label: "Absinthe",
+    inventoryIds: ["absinthe"]
+  },
+  "tequila-rose": {
+    label: "Strawberry Cream Liqueur",
+    inventoryIds: ["tequila-rose"]
+  },
+  "dry-vermouth": {
+    label: "Dry Vermouth",
+    inventoryIds: ["martini-extra-dry"]
+  },
+  "sweet-vermouth": {
+    label: "Sweet Vermouth",
+    inventoryIds: ["martini-rosso"]
+  },
+  "aperol": {
+    label: "Aperol",
+    inventoryIds: ["aperol"]
+  },
+  "campari": {
+    label: "Campari",
+    inventoryIds: ["campari"]
+  },
+  "lillet-blanc": {
+    label: "Lillet Blanc",
+    inventoryIds: ["lillet-blanc"]
+  },
+  "amaro": {
+    label: "Amaro",
+    inventoryIds: ["amaro-nonino"]
+  },
   "fresh-lime": { label: "Fresh Lime", inventoryIds: ["fresh-limes"] },
   "fresh-lemon": { label: "Fresh Lemon", inventoryIds: ["fresh-lemons"] },
   "fresh-mint": { label: "Fresh Mint", inventoryIds: ["fresh-mint"] },
-  "white-rum": { label: "White Rum", inventoryIds: ["bacardi-superior"] },
-  "dark-rum": { label: "Dark Rum", inventoryIds: ["myers-dark-rum", "mount-gay-black-barrel"] },
-  "overproof-rum": { label: "Overproof Rum", inventoryIds: ["goslings-black-seal-151"] }
+  "soda-water": { label: "Soda Water", inventoryIds: ["chang-soda-water"] },
+  "simple-syrup": { label: "Simple Syrup", inventoryIds: ["simple-syrup"] }
 };
 
 const INGREDIENT_GROUP_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
-  group.inventoryIds.forEach(inventoryId => { groups[inventoryId] = groupId; });
+  group.inventoryIds.forEach(inventoryId => {
+    if (!groups[inventoryId]) groups[inventoryId] = groupId;
+  });
   return groups;
 }, {});
 
@@ -67,16 +237,16 @@ const DEFAULT_INVENTORY = [
   { id: "jd-bonded-rye", name: "Jack Daniel's Bonded Rye Tennessee Whiskey", category: "spirits", subCategory: "Whiskey › Tennessee Rye", spiritFamily: "Whiskey", spiritStyle: "Tennessee Rye", inStock: true, abv: 50, notes: "Bold 100-proof rye with cracked pepper, baking spice, and oak." },
   { id: "jim-beam-black", name: "Jim Beam Black Aged Bourbon", category: "spirits", subCategory: "Whiskey › Bourbon", spiritFamily: "Whiskey", spiritStyle: "Bourbon", inStock: true, abv: 43, notes: "Extra-aged Kentucky straight bourbon. Rich caramel and vanilla." },
   { id: "jw-black-label", name: "Johnnie Walker Black Label Scotch Whisky", category: "spirits", subCategory: "Whiskey › Scotch", spiritFamily: "Whiskey", spiritStyle: "Scotch", inStock: true, abv: 40, notes: "12-year blended Scotch whisky with balanced fruit and gentle peat smoke." },
-  { id: "hennessy-vsop-cognac", name: "Hennessy VSOP Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: rich VSOP cognac with orchard fruit, vanilla, and toasted oak." },
+  { id: "hennessy-vsop-cognac", name: "Hennessy VSOP Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Rich VSOP cognac with orchard fruit, vanilla, and toasted oak." },
   { id: "premier-french-brandy-napoleon-special-reserve", name: "Premier French Brandy Napoléon Special Reserve", category: "spirits", subCategory: "Brandy › French Brandy", spiritFamily: "Brandy", spiritStyle: "French Brandy", inStock: true, abv: 40, notes: "Classic French brandy with warm spice, dried fruit, and vanilla." },
   { id: "otard-xo-gold-cognac", name: "Otard XO Gold Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: true, abv: 40, notes: "Luxurious XO cognac with orange peel, caramel, and oak depth." },
-  { id: "bacardi-superior", name: "Bacardi Superior White Rum", category: "spirits", subCategory: "Rum › White", spiritFamily: "Rum", spiritStyle: "White", inStock: true, abv: 37.5, notes: "Clean, floral light rum. Essential for Mojito and Daiquiri." },
+  { id: "bacardi-superior", name: "Bacardi Carta Blanca Superior White Rum", category: "spirits", subCategory: "Rum › White", spiritFamily: "Rum", spiritStyle: "White", inStock: true, quantity: 2, unit: "bottle", abv: 37.5, notes: "Clean, floral light rum (700ml). Essential for Mojito and Daiquiri." },
   { id: "myers-dark-rum", name: "Myers's Original Dark Rum", category: "spirits", subCategory: "Rum › Dark Jamaican", spiritFamily: "Rum", spiritStyle: "Dark Jamaican", inStock: true, abv: 40, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices." },
   { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum (75.5% ABV)", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
   { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
   { id: "teremana-tequila", name: "Teremana Tequila", category: "spirits", subCategory: "Agave › Tequila", spiritFamily: "Agave", spiritStyle: "Tequila", inStock: true, abv: 40, notes: "Small batch 100% blue agave tequila with roasted agave and citrus zest." },
-  { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: false, incoming: true, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Incoming: artisanal mezcal with smoky agave, mineral lift, and citrus." },
+  { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
 
@@ -97,6 +267,7 @@ const DEFAULT_INVENTORY = [
   { id: "cherry-heering", name: "Peter Heering Cherry Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, abv: 15, notes: "Danish ruby cherry liqueur since 1818. Backbone of Singapore Sling and Blood and Sand." },
   { id: "st-germain", name: "St-Germain Elderflower Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, abv: 15, notes: "Handpicked wild elderflowers with lychee, pear, and grapefruit notes. Key for Hugo Spritz." },
   { id: "malibu-rum", name: "Malibu Coconut Rum Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, abv: 21, notes: "Caribbean coconut rum for tropical riffs and Surfer on Acid." },
+  { id: "sambuca", name: "Vaccari Sambuca", category: "liqueurs", subCategory: "Anise & Herbal", inStock: true, quantity: 1, unit: "bottle", abv: 38, notes: "Authentic Italian anise liqueur (700ml) distilled with Mediterranean star anise. Essential for Flatliner, Slippery Nipple, and Sambuca shooters." },
 
   // --- LIQUEURS (Shopping List / Expansion) ---
   { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, abv: 17, notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
@@ -110,7 +281,6 @@ const DEFAULT_INVENTORY = [
   { id: "jagermeister", name: "Jägermeister Liqueur (35% ABV)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 2, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
   { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 20, notes: "Vivid emerald honeydew melon liqueur for Scooby Snack." },
   { id: "fireball", name: "Fireball Cinnamon Whisky", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, abv: 33, notes: "Cinnamon whisky for Fireball Apple Pie Shot." },
-  { id: "sambuca", name: "White Sambuca", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 38, notes: "Italian anise liqueur for Flatliner and Slippery Nipple." },
   { id: "absinthe", name: "Absinthe", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 68, notes: "Aromatic anise rinse for Sazerac and Corpse Reviver No. 2." },
   { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, abv: 15, notes: "Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot." },
   { id: "frangelico", name: "Frangelico Hazelnut Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Hazelnut liqueur for Nutty Irishman and Duck Fart." },
@@ -370,15 +540,15 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Press mint leaves gently—do not shred or pulverize them! Shredding releases bitter chlorophyll; a light muddle releases pure essential oils.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Superior White Rum", substitute: "Any crisp light rum", inventoryId: "bacardi-superior" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Half a fresh lime cut into wedges", inventoryId: "fresh-limes" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup (or 2 tsp sugar)", substitute: "Granulated sugar or agave", inventoryId: "simple-syrup" },
-      { amountOz: "8-10 leaves", amountMl: "8-10 leaves", item: "Fresh Spearmint Leaves", substitute: "Fresh mint sprigs", inventoryId: "fresh-mint" },
-      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water" }
+      { amountOz: "2 oz", amountMl: "60 ml", item: "White Rum", substitute: "Any crisp light rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Half a fresh lime cut into wedges", inventoryId: "fresh-limes", ingredientGroup: "fresh-lime" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup (or 2 tsp sugar)", substitute: "Granulated sugar or agave", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "8-10 leaves", amountMl: "8-10 leaves", item: "Fresh Spearmint Leaves", substitute: "Fresh mint sprigs", inventoryId: "fresh-mint", ingredientGroup: "fresh-mint" },
+      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" }
     ],
     instructions: [
       "In a tall highball glass, gently press mint leaves with simple syrup and lime juice using a muddler.",
-      "Add Bacardi Superior white rum and fill the glass halfway with crushed ice.",
+      "Add white rum and fill the glass halfway with crushed ice.",
       "Stir with a bar spoon to bring the mint and spirit together.",
       "Pack the glass to the top with more crushed ice and top with Chang Soda Water.",
       "Slap a mint sprig against your palm to awaken aromatics, and nestle it beside a lime wheel."
@@ -428,14 +598,14 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Remember the 3-2-1 rule: 3 parts Prosecco, 2 parts Aperol, 1 splash of soda. Always add Prosecco before Aperol to avoid settling at the bottom.",
     ingredients: [
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Any crisp sparkling wine", inventoryId: "gio-prosecco" },
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Aperol", substitute: "Campari (for a bolder, bitter Spritz)", inventoryId: "aperol" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Any crisp dry sparkling wine or Champagne", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Aperol", substitute: "Campari (for a bolder, bitter Spritz)", inventoryId: "aperol", ingredientGroup: "aperol" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Slice & Green Olive", substitute: "Orange wheel", inventoryId: "fresh-oranges" }
     ],
     instructions: [
       "Fill a large wine glass generously with ice cubes.",
-      "Pour in Gio Prosecco first.",
+      "Pour in Prosecco first.",
       "Add Aperol in a circular motion to naturally blend.",
       "Top with a splash of Chang Soda Water.",
       "Stir gently once with a bar spoon so you do not break the bubbles.",
@@ -457,9 +627,9 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "The ultimate bartender test of balance: exactly 2:1:0.75 (Rum, Lime, Sugar). Shake as hard as humanly possible for 10 seconds to create tiny ice shards.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Superior White Rum", substitute: "Any quality light rum", inventoryId: "bacardi-superior" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh lime only", inventoryId: "fresh-limes" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Demerara syrup or superfine sugar", inventoryId: "simple-syrup" }
+      { amountOz: "2 oz", amountMl: "60 ml", item: "White Rum", substitute: "Any quality light rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh lime only", inventoryId: "fresh-limes", ingredientGroup: "fresh-lime" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Demerara syrup or superfine sugar", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" }
     ],
     instructions: [
       "Chill a coupe glass in the freezer.",
@@ -628,18 +798,18 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Named after the French 75mm field artillery cannon because it hits with punch! Always use brut or extra dry sparkling wine to keep it crisp.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Cognac (for French 75 classic variant)", inventoryId: "tanqueray-gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "London Dry Gin", substitute: "Cognac (for French 75 classic variant)", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Dry Champagne or sparkling wine", inventoryId: "gio-prosecco" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Long Lemon Spiral Twist", substitute: "Lemon peel", inventoryId: "fresh-lemons" }
     ],
     instructions: [
       "Chill a champagne flute.",
-      "In a shaker filled with ice, combine Tanqueray gin, fresh lemon juice, and simple syrup.",
+      "In a shaker filled with ice, combine gin, fresh lemon juice, and simple syrup.",
       "Shake vigorously for 10 seconds.",
       "Strain into the chilled flute.",
-      "Slowly top with cold Gio Prosecco.",
+      "Slowly top with cold Prosecco.",
       "Garnish with an elegant spiral lemon twist draped inside the flute."
     ],
     tags: ["gin", "prosecco", "champagne", "bubbly", "celebration", "classic"]
@@ -1643,13 +1813,13 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Giuseppe Cipriani named it after painter Giovanni Bellini because the pink peach color reminded him of a saint's toga in a Bellini painting.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "White Peach Puree (or Hoffmann Peach Liqueur)", substitute: "Hoffmann Peach Liqueur + splash peach juice", inventoryId: "hoffmann-peach" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] →Any dry sparkling wine", inventoryId: "gio-prosecco" }
+      { amountOz: "2 oz", amountMl: "60 ml", item: "White Peach Puree (or Hoffmann Peach Liqueur)", substitute: "Hoffmann Peach Liqueur + splash peach juice", inventoryId: "hoffmann-peach", ingredientGroup: "peach-liqueur" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Prosecco", substitute: "Any dry sparkling wine or Champagne", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Chill a champagne flute.",
       "Add peach puree (or Hoffmann peach liqueur) to the flute.",
-      "Slowly pour Gio Prosecco, tilting the glass to preserve carbonation.",
+      "Slowly pour Prosecco, tilting the glass to preserve carbonation.",
       "Stir very gently with a long spoon to incorporate.",
       "Garnish with a fresh peach slice if in season."
     ],
@@ -1669,13 +1839,13 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Always pour Prosecco first, then orange juice! The bubbles will naturally mix with the juice without requiring a spoon that can deflate the bubbles.",
     ingredients: [
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Dry sparkling wine / Champagne", inventoryId: "gio-prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry sparkling wine / Champagne", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Fresh Orange Juice", substitute: "Strained fresh orange juice", inventoryId: "orange-juice" },
-      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Grand Marnier (Optional Luxury Float)", substitute: "Cointreau", inventoryId: "grand-marnier" }
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Grand Marnier (Optional Luxury Float)", substitute: "Cointreau", inventoryId: "grand-marnier", ingredientGroup: "triple-sec" }
     ],
     instructions: [
       "Hold a chilled champagne flute at a 45-degree angle.",
-      "Pour in cold Gio Prosecco first.",
+      "Pour in cold Prosecco first.",
       "Top gently with fresh orange juice.",
       "Optionally float a splash of Grand Marnier for a Grand Mimosa.",
       "Garnish with a strawberry or small orange wedge on the rim."
@@ -1696,12 +1866,12 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "A little cassis goes a long way. Just half an ounce creates a deep ruby sparkle without burying the crisp wine acidity.",
     ingredients: [
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Cassis (Blackcurrant)", substitute: "Raspberry Rhapsody syrup or Peter Heering", inventoryId: "raspberry-rhapsody" },
-      { amountOz: "4.5 oz", amountMl: "135 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Brut Champagne", inventoryId: "gio-prosecco" }
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Cassis (Blackcurrant)", substitute: "Raspberry Rhapsody syrup or Peter Heering", inventoryId: "raspberry-rhapsody", ingredientGroup: "creme-de-cassis" },
+      { amountOz: "4.5 oz", amountMl: "135 ml", item: "Prosecco", substitute: "Brut Champagne or dry sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Pour crème de cassis (or raspberry liqueur) into the bottom of a chilled champagne flute.",
-      "Slowly fill with ice-cold Gio Prosecco.",
+      "Slowly fill with ice-cold Prosecco.",
       "The dark liqueur will swirl upward, turning the drink into a sparkling jewel.",
       "Garnish with a fresh raspberry or blackberry dropped into the glass."
     ],
@@ -1856,17 +2026,17 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "A glorious twist on the French 75 where bourbon replaces gin. The oak and caramel notes of Jim Beam Black pair shockingly well with sparkling Prosecco.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bourbon Whiskey", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "bourbon" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Demerara or sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Dry Champagne or sparkling wine", inventoryId: "gio-prosecco" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Demerara or sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Twist & Maraschino Cherry", substitute: "Lemon peel", inventoryId: "fresh-lemons" }
     ],
     instructions: [
       "Chill a champagne flute.",
-      "In a shaker with ice, shake Jim Beam Black bourbon, lemon juice, and simple syrup for 10 seconds.",
+      "In a shaker with ice, shake bourbon, lemon juice, and simple syrup for 10 seconds.",
       "Strain into the flute.",
-      "Top with chilled Gio Prosecco.",
+      "Top with chilled Prosecco.",
       "Garnish with a lemon peel spiral and drop in a cherry."
     ],
     tags: ["bourbon", "prosecco", "french-75", "bubbly", "celebration"]
@@ -2002,13 +2172,13 @@ const DEFAULT_DRINKS = [
     popularity: 9.3,
     proTip: "Replacing the orange liqueur with White Sambuca (or Vodka) gives this layered shot an intense aromatic punch.",
     ingredients: [
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Baileys Irish Cream", substitute: "Disaronno Amaretto + cream", inventoryId: "baileys-irish-cream" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "White Sambuca (or Vodka)", substitute: "Absolut Vodka Original Blue", inventoryId: "sambuca" }
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua", ingredientGroup: "coffee-liqueur" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Irish Cream", substitute: "Disaronno Amaretto + cream", inventoryId: "baileys-irish-cream", ingredientGroup: "irish-cream" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "White Sambuca", substitute: "Vodka", inventoryId: "sambuca", ingredientGroup: "sambuca" }
     ],
     instructions: [
-      "Pour Kahlúa into the bottom of a shot glass.",
-      "Gently layer Baileys over the back of a bar spoon.",
+      "Pour coffee liqueur into the bottom of a shot glass.",
+      "Gently layer Irish cream over the back of a bar spoon.",
       "Slowly layer White Sambuca (or vodka) as the clear top tier.",
       "Shoot immediately."
     ],
@@ -2263,18 +2433,18 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Passion Fruit, Vanilla, Tangy & Sparkling Prosecco",
     difficulty: 2,
     popularity: 9.8,
-    proTip: "Serve alongside a tiny shot of cold Gio Prosecco! Take the tropical fruity shot first, then chase with effervescent Prosecco.",
+    proTip: "Serve alongside a tiny shot of cold Prosecco! Take the tropical fruity shot first, then chase with effervescent Prosecco.",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Absolut Vodka Original Blue (Vanilla / Wheat)", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Passion Fruit Puree (or Peach Liqueur)", substitute: "Hoffmann Peach Liqueur", inventoryId: "hoffmann-peach" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Vodka", substitute: "Vanilla or wheat vodka", inventoryId: "absolut-blue", ingredientGroup: "vodka" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Passion Fruit Puree (or Peach Liqueur)", substitute: "Hoffmann Peach Liqueur", inventoryId: "hoffmann-peach", ingredientGroup: "peach-liqueur" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
-      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (or Vanilla syrup)", substitute: "Sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "1 oz Chaser", amountMl: "30 ml Chaser", item: "Gio Prosecco Spumante Extra Dry", substitute: "[Bottega Spumante Venezia] → Chilled sparkling wine", inventoryId: "gio-prosecco" }
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (or Vanilla syrup)", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "1 oz Chaser", amountMl: "30 ml Chaser", item: "Prosecco", substitute: "Chilled dry sparkling wine or Champagne", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Shake vodka, passion fruit (or peach), lime juice, and syrup with ice for 10 seconds.",
       "Strain into a shooter glass.",
-      "Pour 1 oz of cold Gio Prosecco into a side shot or mini flute.",
+      "Pour 1 oz of cold Prosecco into a side shot or mini flute.",
       "Shoot the fruity vodka shooter, followed immediately by the bubbly Prosecco."
     ],
     tags: ["shot", "prosecco", "party", "modern", "chaser"]
@@ -2293,14 +2463,14 @@ const DEFAULT_DRINKS = [
     popularity: 9.1,
     proTip: "The Tabasco drops must stay suspended between the sweet Sambuca on the bottom and the fiery Tequila on top like an EKG line on a heart monitor.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "White Sambuca (or Simple Syrup)", substitute: "Disaronno Amaretto (for a sweeter base)", inventoryId: "sambuca" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "White Sambuca", substitute: "Disaronno Amaretto (for a sweeter base)", inventoryId: "sambuca", ingredientGroup: "sambuca" },
       { amountOz: "5-6 drops", amountMl: "5-6 drops", item: "Tabasco Hot Sauce", substitute: "Spicy hot sauce", inventoryId: "tabasco-sauce" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Teremana Tequila (Gold or Blanco)", substitute: "100% agave tequila", inventoryId: "teremana-tequila" }
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tequila", substitute: "100% agave tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" }
     ],
     instructions: [
-      "Pour White Sambuca (or Disaronno) into the bottom of a shot glass.",
+      "Pour White Sambuca into the bottom of a shot glass.",
       "Gently drop 5 to 6 dashes of red Tabasco hot sauce across the surface so it forms a crimson suspended middle barrier.",
-      "Carefully float Teremana tequila on top using the back of a bar spoon.",
+      "Carefully float tequila on top using the back of a bar spoon.",
       "Gulp down in one shot and brace for the sweet-to-fiery rollercoaster."
     ],
     tags: ["shot", "spicy", "tabasco", "tequila", "dare", "potent"]
@@ -2423,13 +2593,13 @@ const DEFAULT_DRINKS = [
     popularity: 9.3,
     proTip: "Pour White Sambuca on bottom, float Baileys in middle, then drop a single drop of red Grenadine in the center. The heavy grenadine sinks to create the namesake look.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "White Sambuca (or Disaronno Amaretto)", substitute: "Disaronno Originale Amaretto", inventoryId: "sambuca" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Baileys Irish Cream", substitute: "Heavy cream + touch of whiskey", inventoryId: "baileys-irish-cream" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "White Sambuca", substitute: "Disaronno Originale Amaretto", inventoryId: "sambuca", ingredientGroup: "sambuca" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Irish Cream", substitute: "Heavy cream + touch of whiskey", inventoryId: "baileys-irish-cream", ingredientGroup: "irish-cream" },
       { amountOz: "1 drop", amountMl: "1 drop", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" }
     ],
     instructions: [
-      "Pour White Sambuca (or Disaronno) into the shot glass.",
-      "Float Baileys Irish Cream gently over the back of a bar spoon.",
+      "Pour White Sambuca into the shot glass.",
+      "Float Irish cream gently over the back of a bar spoon.",
       "Using a dropper or straw, carefully drop one drop of red Grenadine into the dead center of the cream; it sinks through to the bottom.",
       "Shoot immediately."
     ],

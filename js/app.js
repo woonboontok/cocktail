@@ -281,6 +281,20 @@
     return inventory.find(item => item.id === inventoryId || (item.aliasOf && item.aliasOf === inventoryId));
   }
 
+  function getIngredientInventoryOptions(ingredient) {
+    const candidateIds = [...new Set(getIngredientCandidates(ingredient).filter(Boolean))];
+    return candidateIds
+      .map(candidateId => getInventoryItem(candidateId))
+      .filter(Boolean);
+  }
+
+  function getInventoryOptionStatus(item) {
+    if (item.inStock && (item.quantity === undefined || item.quantity > 0)) {
+      return { label: "In stock", className: "in-stock" };
+    }
+    return { label: item.incoming ? "Incoming" : "Out of stock", className: item.incoming ? "incoming" : "out-of-stock" };
+  }
+
   function isItemInStock(inventoryId, ingredient) {
     if (!inventoryId) return true;
     return getIngredientCandidates({ ...(ingredient || {}), inventoryId }).some(candidateId => {
@@ -1273,24 +1287,53 @@
       ? garnishEntries.map(ing => ing.item).join("; ")
       : (drink.garnish ? drink.garnish : "");
 
-    const ingredientsHtml = listableIngredients.map(ing => {
-      const inStock = isItemInStock(ing.inventoryId);
+    const ingredientsHtml = listableIngredients.map((ing, index) => {
+      const inStock = isItemInStock(ing.inventoryId, ing);
       const stockBadge = ing.inventoryId
         ? (inStock
             ? `<span class="ing-stock-badge status-ready">✓ In Bar</span>`
             : `<span class="ing-stock-badge status-missing">Need to Buy</span>`)
         : "";
 
-      return `
-        <li class="ingredient-row">
-          <div class="ing-measure-item">
-            <span class="ing-measure">${formatMeasurement(ing)}</span>
-            <div class="ing-details">
-              <span class="ing-name">${ing.item}</span>
-              ${preferredSubstituteText(ing)}
-            </div>
+      const inventoryOptions = ing.inventoryId ? getIngredientInventoryOptions(ing) : [];
+      const optionsId = `ingredient-options-${drink.id}-${index}`;
+      const inventoryOptionsHtml = inventoryOptions.length ? `
+        <div class="ingredient-options" id="${optionsId}" hidden>
+          <div class="ingredient-options-heading">Your inventory options</div>
+          <ul class="ingredient-options-list">
+            ${inventoryOptions.map(item => {
+              const optionStatus = getInventoryOptionStatus(item);
+              const quantity = item.quantity !== undefined ? `${item.quantity} ${item.unit || getDefaultUnit(item)}` : "Quantity not tracked";
+              return `
+                <li class="ingredient-option">
+                  <span class="ingredient-option-name">${item.name}</span>
+                  <span class="ingredient-option-meta">${quantity}</span>
+                  <span class="ingredient-option-status ${optionStatus.className}">${optionStatus.label}</span>
+                </li>
+              `;
+            }).join("")}
+          </ul>
+        </div>
+      ` : "";
+
+      const rowContent = `
+        <div class="ing-measure-item">
+          <span class="ing-measure">${formatMeasurement(ing)}</span>
+          <div class="ing-details">
+            <span class="ing-name">${ing.item}</span>
+            ${preferredSubstituteText(ing)}
           </div>
+        </div>
+        <div class="ingredient-row-actions">
           ${stockBadge}
+          ${inventoryOptions.length ? `<span class="ingredient-options-trigger">Options <span aria-hidden="true">⌄</span></span>` : ""}
+        </div>
+      `;
+
+      return `
+        <li class="ingredient-row ${inventoryOptions.length ? "ingredient-row-expandable" : ""}">
+          ${inventoryOptions.length ? `<button type="button" class="ingredient-row-toggle" aria-expanded="false" aria-controls="${optionsId}">${rowContent}</button>` : rowContent}
+          ${inventoryOptionsHtml}
         </li>
       `;
     }).join("");
@@ -1420,6 +1463,16 @@
       button.addEventListener("click", () => {
         toggleDrinkStatus(drinkId, button.dataset.status);
         openDrinkModal(drinkId);
+      });
+    });
+
+    modalContent.querySelectorAll(".ingredient-row-toggle").forEach(button => {
+      button.addEventListener("click", () => {
+        const options = document.getElementById(button.getAttribute("aria-controls"));
+        if (!options) return;
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        button.setAttribute("aria-expanded", String(!expanded));
+        options.hidden = expanded;
       });
     });
 
