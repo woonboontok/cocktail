@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "17 September 2026";
-const INVENTORY_SYNC_VERSION = "20260917_1";
+const INVENTORY_SYNC_VERSION = "20260917_2";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -48,7 +48,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "bundaberg-ginger-beer": { inStock: true },
   "ginger-beer": { inStock: true, aliasOf: "fever-tree-ginger-beer" },
   "fever-tree-indian-tonic": { inStock: true, quantity: 6, unit: "pack" },
-  "tonic-water": { inStock: true, aliasOf: "fever-tree-indian-tonic" }
+  "tonic-water": { inStock: true, aliasOf: "fever-tree-indian-tonic" },
+  "energy-drink": { inStock: true, quantity: 4, unit: "can" }
 };
 
 const INGREDIENT_GROUPS = {
