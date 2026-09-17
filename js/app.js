@@ -232,8 +232,10 @@
   function getRecipesUsingItem(itemId) {
     return getAllDrinks().filter(drink =>
       drink.ingredients.some(ing => {
-        if (!ing.inventoryId) return false;
-        return ing.inventoryId === itemId || inventory.some(i => i.id === ing.inventoryId && i.aliasOf === itemId);
+        if (!ing.inventoryId && !ing.ingredientGroup) return false;
+        return ing.inventoryId === itemId ||
+          inventory.some(i => i.id === ing.inventoryId && i.aliasOf === itemId) ||
+          getIngredientCandidates(ing).includes(itemId);
       })
     );
   }
@@ -269,12 +271,17 @@
   }
 
   function getIngredientGroupId(ingredient) {
-    return ingredient.ingredientGroup || INGREDIENT_GROUPS_BY_INVENTORY_ID[ingredient.inventoryId] || `inventory:${ingredient.inventoryId}`;
+    if (ingredient.ingredientGroup) return ingredient.ingredientGroup;
+    if (INGREDIENT_GROUPS[ingredient.inventoryId]) return ingredient.inventoryId;
+    if (INGREDIENT_GROUP_BY_INVENTORY_ID[ingredient.inventoryId]) return INGREDIENT_GROUP_BY_INVENTORY_ID[ingredient.inventoryId];
+    if (INGREDIENT_GROUPS_BY_INVENTORY_ID[ingredient.inventoryId]?.length) return INGREDIENT_GROUPS_BY_INVENTORY_ID[ingredient.inventoryId][0];
+    return `inventory:${ingredient.inventoryId}`;
   }
 
   function getIngredientCandidates(ingredient) {
-    const group = INGREDIENT_GROUPS[getIngredientGroupId(ingredient)];
-    return group ? group.inventoryIds : [ingredient.inventoryId];
+    const groupId = getIngredientGroupId(ingredient);
+    const group = INGREDIENT_GROUPS[groupId];
+    return group && group.inventoryIds && group.inventoryIds.length ? group.inventoryIds : [ingredient.inventoryId].filter(Boolean);
   }
 
   function getInventoryItem(inventoryId) {
@@ -387,7 +394,8 @@
           (ing.substitute && ing.substitute.toLowerCase().includes(q))
         );
         const tagsMatch = d.tags && d.tags.some(t => t.toLowerCase().includes(q));
-        return nameMatch || aliasMatch || spiritMatch || tasteMatch || ingMatch || tagsMatch;
+        const proTipMatch = d.proTip && d.proTip.toLowerCase().includes(q);
+        return nameMatch || aliasMatch || spiritMatch || tasteMatch || ingMatch || tagsMatch || proTipMatch;
       });
     }
 

@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "15 September 2026";
-const INVENTORY_SYNC_VERSION = "20260915_5";
+const INVENTORY_LAST_UPDATED = "17 September 2026";
+const INVENTORY_SYNC_VERSION = "20260917_1";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -43,7 +43,12 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "grapefruit-juice": { inStock: true, quantity: 1, unit: "fruit" },
   "pineapple-juice": { inStock: true, quantity: 1, unit: "fruit" },
   "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
-  "tabasco-sauce": { inStock: true, quantity: 1, unit: "bottle" }
+  "tabasco-sauce": { inStock: true, quantity: 1, unit: "bottle" },
+  "fever-tree-ginger-beer": { inStock: true, quantity: 6, unit: "pack" },
+  "bundaberg-ginger-beer": { inStock: true },
+  "ginger-beer": { inStock: true, aliasOf: "fever-tree-ginger-beer" },
+  "fever-tree-indian-tonic": { inStock: true, quantity: 6, unit: "pack" },
+  "tonic-water": { inStock: true, aliasOf: "fever-tree-indian-tonic" }
 };
 
 const INGREDIENT_GROUPS = {
@@ -221,11 +226,11 @@ const INGREDIENT_GROUPS = {
   },
   "ginger-beer": {
     label: "Ginger Beer",
-    inventoryIds: ["fever-tree-ginger-beer", "bundaberg-ginger-beer"]
+    inventoryIds: ["fever-tree-ginger-beer", "bundaberg-ginger-beer", "ginger-beer"]
   },
   "tonic-water": {
     label: "Tonic Water",
-    inventoryIds: ["fever-tree-indian-tonic"]
+    inventoryIds: ["fever-tree-indian-tonic", "tonic-water"]
   },
   "fresh-lime": { label: "Fresh Lime", inventoryIds: ["fresh-limes"] },
   "fresh-lemon": { label: "Fresh Lemon", inventoryIds: ["fresh-lemons"] },
@@ -334,8 +339,8 @@ const DEFAULT_INVENTORY = [
   { id: "schweppes-ginger-soda", name: "Schweppes Ginger Soda", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Crisp, lively ginger soda. Essential for Highballs, Dark 'n' Stormy riffs, and Gunner." },
   { id: "schweppes-ginger-ale", name: "Schweppes Ginger Ale Soda (Fulfilled by Ginger Soda)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "schweppes-ginger-soda", notes: "User has Schweppes Ginger Soda in stock." },
   { id: "chang-soda-water", name: "Chang Soda Water (24 × 325 ml)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 24, unit: "bottle", notes: "24 bottles of extra-fizzy, high-carbonation club soda for Mojitos, Collins, and Spritzes." },
-  { id: "ginger-beer", name: "Ginger Beer (Spicy Fermented)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Spicy cloudy ginger brew for Moscow Mule and Dark 'n' Stormy." },
-  { id: "tonic-water", name: "Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Quinine-infused mixer for Gin & Tonic." },
+  { id: "ginger-beer", name: "Ginger Beer (Fever-Tree / Bundaberg)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-ginger-beer", notes: "In stock (Fulfilled by Fever-Tree Premium Ginger Beer and Bundaberg Ginger Beer)." },
+  { id: "tonic-water", name: "Tonic Water (Fever-Tree)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-indian-tonic", notes: "In stock (Fulfilled by Fever-Tree Premium Indian Tonic Water)." },
   { id: "cola", name: "Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "For Cuba Libre, Long Island, and Roy Rogers." },
   { id: "lemon-lime-soda", name: "Lemon-Lime Soda (Sprite)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Bubbly citrus soda for Blue Lagoon, Tequila Slammer, and Green Tea Shot." },
   { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "For the Jägerbomb drop." },
@@ -408,7 +413,7 @@ const DEFAULT_DRINKS = [
   {
     id: "old-fashioned",
     name: "Old Fashioned",
-    otherNames: "Whiskey Cocktail, The Original",
+    otherNames: "Whiskey Cocktail, Rum Old Fashioned, Oaxaca Old Fashioned",
     category: "Cocktail",
     baseSpirit: "Whiskey/Bourbon",
     glassware: "Rocks / Old Fashioned",
@@ -417,20 +422,20 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Spirit-Forward, Rich, Caramel & Aromatic",
     difficulty: 2,
     popularity: 9.9,
-    proTip: "Never muddle cherries or orange pulp into the drink. Only express the essential oils from the orange peel over the top to avoid muddying the bourbon.",
+    proTip: "Never muddle cherries or orange pulp into the drink. Only express the essential oils from the orange peel over the top to avoid muddying the spirit.\n\nClassic 1-Ingredient Spirit Variants:\n• Rum Old Fashioned: Swap whiskey for 2 oz Mount Gay Black Barrel (or Myers's Dark Rum) for rich molasses, baking spices, and toasted bourbon-cask oak.\n• Oaxaca Old Fashioned: Split the base with 1.5 oz Reposado Tequila and 0.5 oz Topanito Mezcal with agave syrup.\n• Brandy Old Fashioned: Swap whiskey for Hennessy VSOP Cognac or French Brandy.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Mount Gay Black Barrel (Rum Old Fashioned) or Jim Beam Black", inventoryId: "jd-bonded-rye" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (or 1 sugar cube)", substitute: "Rich demerara syrup or brown sugar", inventoryId: "simple-syrup" },
       { amountOz: "3 dashes", amountMl: "3 dashes", item: "Angostura Bitters", substitute: "Orange bitters + aromatic bitters", inventoryId: "angostura-bitters" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel & Maraschino Cherry", substitute: "Expressed orange twist", inventoryId: "fresh-oranges" }
     ],
     instructions: [
       "In a rocks glass or mixing glass, combine simple syrup and 3 healthy dashes of Angostura bitters.",
-      "Add half the whiskey and 1 large ice cube; stir 15 seconds to initiate chill and dilution.",
-      "Add the remaining whiskey and fill with fresh ice. Stir smoothly for another 20 seconds.",
+      "Add half the whiskey (or rum) and 1 large ice cube; stir 15 seconds to initiate chill and dilution.",
+      "Add the remaining spirit and fill with fresh ice. Stir smoothly for another 20 seconds.",
       "Express an orange peel over the glass, rub the rim with the peel, and drop it into the glass with a brandied cherry."
     ],
-    tags: ["whiskey", "bourbon", "rye", "classic", "spirit-forward", "speakeasy"]
+    tags: ["whiskey", "bourbon", "rye", "rum", "classic", "spirit-forward", "speakeasy", "in-stock"]
   },
   {
     id: "margarita",
@@ -520,7 +525,7 @@ const DEFAULT_DRINKS = [
   {
     id: "espresso-martini",
     name: "Espresso Martini",
-    otherNames: "Vodka Espresso",
+    otherNames: "Vodka Espresso, Hazelnut Espresso Martini (Frangelico)",
     category: "Cocktail",
     baseSpirit: "Vodka",
     glassware: "Coupe / Martini",
@@ -529,22 +534,22 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Roasty, Rich, Coffee Crema & Velvety",
     difficulty: 2,
     popularity: 9.9,
-    proTip: "Freshly pulled hot espresso produces the thickest crema! The temperature contrast against ice shocks the oils into creating a luxuriant, velvety froth.",
+    proTip: "Freshly pulled hot espresso produces the thickest crema! The temperature contrast against ice shocks the oils into creating a luxuriant, velvety froth. Float 3 coffee beans for health, wealth, and happiness.\n\nClassic 1-Ingredient Variants:\n• Hazelnut Espresso Martini: Add or swap 0.75 oz of Frangelico Hazelnut Liqueur for a toasted nutty, Nutella-like finish.\n• Mezcal Espresso Martini: Swap vodka for Topanito Mezcal for an astonishing pairing of smoke, roasted agave, and espresso.",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Frangelico Hazelnut Liqueur (Hazelnut Martini) or Walcher Coffee", inventoryId: "kahlua" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Espresso (Hot or Room Temp)", substitute: "Strong cold brew concentrate", inventoryId: "fresh-espresso" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup", substitute: "Agave or Demerara syrup", inventoryId: "simple-syrup" },
       { amountOz: "3 beans", amountMl: "3 beans", item: "Whole Coffee Beans (Garnish)", substitute: "Cocoa powder dusting", inventoryId: "coffee-beans" }
     ],
     instructions: [
       "Pull a fresh shot of rich espresso.",
-      "Add vodka, Kahlúa, simple syrup, and espresso into a cocktail shaker.",
+      "Add vodka, Kahlúa (or Frangelico), simple syrup, and espresso into a cocktail shaker.",
       "Fill shaker with dense ice and shake aggressively for 15 seconds.",
       "Double strain through a fine mesh strainer into a chilled coupe or martini glass.",
       "Carefully float 3 coffee beans on the center of the dense crema foam (health, wealth, happiness)."
     ],
-    tags: ["vodka", "kahlua", "coffee", "espresso", "modern-classic", "after-dinner"]
+    tags: ["vodka", "kahlua", "frangelico", "coffee", "espresso", "modern-classic", "after-dinner", "in-stock"]
   },
   {
     id: "mojito",
@@ -578,7 +583,7 @@ const DEFAULT_DRINKS = [
   {
     id: "whiskey-sour",
     name: "Whiskey Sour",
-    otherNames: "Boston Sour (with egg white)",
+    otherNames: "Boston Sour (with egg white), Rum Sour, New York Sour",
     category: "Cocktail",
     baseSpirit: "Whiskey/Bourbon",
     glassware: "Coupe or Rocks",
@@ -587,22 +592,22 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Tart, Velvety, Citrus & Oak",
     difficulty: 2,
     popularity: 9.7,
-    proTip: "Perform a 'dry shake' (shake all liquid ingredients without ice first) to emulsify the egg white, followed by a 'wet shake' with ice for chilling.",
+    proTip: "Perform a 'dry shake' (shake all liquid ingredients without ice first) to emulsify the egg white, followed by a 'wet shake' with ice. Drop 2-3 drops of Angostura bitters atop the white foam.\n\nClassic 1-Ingredient Sour Variants:\n• Rum Sour: Swap bourbon for 2 oz Mount Gay Black Barrel Barbados Rum (or Bacardi Superior) for a bright, tropical, sugarcane-rich sour.\n• New York Sour: Gently float 0.5 oz of dry red wine over the top of the foam.\n• Amaretto Sour: Swap bourbon for Disaronno Amaretto (or use 1.5 oz amaretto + 0.75 oz bourbon).",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Bourbon (or JD Bonded Rye)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh pressed lemon juice", inventoryId: "fresh-lemons" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Bourbon (or JD Bonded Rye)", substitute: "Mount Gay Black Barrel Rum (for Rum Sour) or Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh pressed lemon or lime juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Agave or honey syrup", inventoryId: "simple-syrup" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (or Aquafaba)", substitute: "Omit for classic non-foamy sour", inventoryId: "egg-white" },
       { amountOz: "2 drops", amountMl: "2 drops", item: "Angostura Bitters", substitute: "Aromatic bitters on foam", inventoryId: "angostura-bitters" }
     ],
     instructions: [
-      "Add bourbon, lemon juice, simple syrup, and egg white to a shaker without ice.",
+      "Add spirit (bourbon or rum), citrus juice, simple syrup, and egg white to a shaker without ice.",
       "Dry shake vigorously for 10 seconds to create an emulsion.",
       "Add ice cubes and wet shake hard for 12 seconds until frosty.",
       "Fine strain into a chilled coupe or rocks glass over fresh ice.",
       "Gently place 2-3 drops of Angostura bitters atop the white foam, dragging a toothpick through to create hearts."
     ],
-    tags: ["whiskey", "sour", "egg-white", "classic", "velvety"]
+    tags: ["whiskey", "sour", "rum", "egg-white", "classic", "velvety", "in-stock"]
   },
   {
     id: "aperol-spritz",
@@ -691,7 +696,7 @@ const DEFAULT_DRINKS = [
   {
     id: "moscow-mule",
     name: "Moscow Mule",
-    otherNames: "Vodka Buck",
+    otherNames: "Vodka Buck, Kentucky Mule, Bourbon & Ginger, London Mule, Mexican Mule",
     category: "Cocktail",
     baseSpirit: "Vodka",
     glassware: "Copper Mug / Highball",
@@ -700,21 +705,21 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Zesty, Spicy Ginger & Ice Cold",
     difficulty: 1,
     popularity: 9.8,
-    proTip: "A copper mug is not just aesthetic—copper conducts cold immediately, frosting the rim so every sip is shockingly refreshing.",
+    proTip: "A copper mug conducts cold immediately, frosting the rim so every sip is shockingly refreshing. Both in-stock ginger beers shine here: Fever-Tree brings a dry, punchy fiery snap, while Bundaberg offers a richer, sweet craft-brewed depth.\n\nClassic 1-Ingredient Mule / Buck Variants:\n• Kentucky Mule (Bourbon & Ginger): Swap vodka for 2 oz Jim Beam Black Bourbon with an expressed orange peel for warm oak, caramel, and spicy ginger heat.\n• Dark 'n' Stormy (Bermuda Mule): Swap vodka for Myers's Original Dark Rum.\n• London Mule (Gin Buck): Swap vodka for Tanqueray London Dry Gin.\n• Mexican Mule: Swap vodka for Teremana Tequila or Topanito Mezcal.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime juice", inventoryId: "fresh-limes" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Ginger Beer", substitute: "Schweppes Ginger Ale Soda", inventoryId: "ginger-beer" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer (or Bundaberg)", substitute: "Bundaberg Ginger Beer or Schweppes Ginger Ale", inventoryId: "fever-tree-ginger-beer", ingredientGroup: "ginger-beer" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wheel & Mint Sprig", substitute: "Candied ginger", inventoryId: "fresh-limes" }
     ],
     instructions: [
       "Fill a copper mug or highball glass with crushed ice.",
       "Add vodka and fresh lime juice.",
-      "Top with spicy ginger beer (or Schweppes ginger ale).",
+      "Top with premium fiery ginger beer (Fever-Tree or Bundaberg).",
       "Stir gently with a bar spoon to combine.",
-      "Garnish with a lime wheel and a fresh sprig of mint."
+      "Garnish with a lime wheel and a fresh sprig of slapped mint."
     ],
-    tags: ["vodka", "ginger", "refreshing", "mule", "copper-mug"]
+    tags: ["vodka", "ginger", "ginger-beer", "refreshing", "mule", "copper-mug", "in-stock"]
   },
   {
     id: "pina-colada",
@@ -807,7 +812,7 @@ const DEFAULT_DRINKS = [
   {
     id: "french-75",
     name: "French 75",
-    otherNames: "Soixante-Quinze",
+    otherNames: "Soixante-Quinze, French 95 (Bourbon), French 76 (Vodka)",
     category: "Cocktail",
     baseSpirit: "Gin",
     glassware: "Champagne Flute / Coupe",
@@ -816,9 +821,9 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Effervescent, Crisp, Botanical & Citrus",
     difficulty: 2,
     popularity: 9.6,
-    proTip: "Named after the French 75mm field artillery cannon because it hits with punch! Always use brut or extra dry sparkling wine to keep it crisp.",
+    proTip: "Named after the French 75mm field artillery cannon because it hits with surprising punch! Chill the flute beforehand and pour the cold Prosecco slowly down a spiral bar spoon to keep the carbonation lively.\n\nFamous 1-Ingredient Bubbly Variants:\n• French 95: Swap London Dry Gin for 1.5 oz Jim Beam Black Bourbon for a richer, oaky, caramel-and-vanilla sparkling cocktail.\n• French 76: Swap Gin for Absolut Vodka for a crisp, citrus-driven sparkling cocktail.\n• French 75 (Cognac Style): Swap Gin for Hennessy VSOP Cognac for the historic 1915 Paris original.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "London Dry Gin", substitute: "Cognac (for French 75 classic variant)", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "London Dry Gin", substitute: "Jim Beam Black Bourbon (French 95) or Hennessy VSOP Cognac", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
@@ -826,13 +831,13 @@ const DEFAULT_DRINKS = [
     ],
     instructions: [
       "Chill a champagne flute.",
-      "In a shaker filled with ice, combine gin, fresh lemon juice, and simple syrup.",
+      "In a shaker filled with ice, combine gin (or bourbon/cognac), fresh lemon juice, and simple syrup.",
       "Shake vigorously for 10 seconds.",
       "Strain into the chilled flute.",
       "Slowly top with cold Prosecco.",
       "Garnish with an elegant spiral lemon twist draped inside the flute."
     ],
-    tags: ["gin", "prosecco", "champagne", "bubbly", "celebration", "classic"]
+    tags: ["gin", "bourbon", "prosecco", "champagne", "bubbly", "celebration", "classic", "in-stock"]
   },
   {
     id: "mai-tai",
@@ -895,7 +900,7 @@ const DEFAULT_DRINKS = [
   {
     id: "paloma",
     name: "Paloma",
-    otherNames: "The National Drink of Mexico",
+    otherNames: "The National Drink of Mexico, Smoky Mezcal Paloma",
     category: "Cocktail",
     baseSpirit: "Tequila/Mezcal",
     glassware: "Highball / Collins",
@@ -904,55 +909,55 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Grapefruit, Citrus, Tart, Salty & Fizzy",
     difficulty: 1,
     popularity: 9.8,
-    proTip: "A tiny pinch of sea salt directly inside the drink cuts through the bitterness of the grapefruit and heightens the sweet agave notes of Teremana.",
+    proTip: "A tiny pinch of sea salt directly inside the drink cuts through the bitterness of the grapefruit and heightens the sweet agave notes of Teremana. Salt only half the rim so you have the choice of salted or crisp sips.\n\nClassic 1-Ingredient Variant:\n• Smoky Mezcal Paloma: Swap Teremana Tequila for 2 oz Topanito Mezcal Artesanal Espadín (52% ABV) for an incredible earthy campfire smoke and mineral depth that cuts through the tart grapefruit.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Artisanal Mezcal (for smoky Paloma)", inventoryId: "teremana-tequila" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Topanito Mezcal (for Smoky Mezcal Paloma)", inventoryId: "teremana-tequila" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime", inventoryId: "fresh-limes" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Agave Syrup", substitute: "Simple syrup", inventoryId: "agave-syrup" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Pink Grapefruit Juice", substitute: "Grapefruit soda (Jarritos / Squirt)", inventoryId: "grapefruit-juice" },
       { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water" },
-      { amountOz: "Rim", amountMl: "Rim", item: "Salt Rim & Grapefruit Wedge", substitute: "Tajin rim", inventoryId: "coarse-salt" }
+      { amountOz: "Rim", amountMl: "Rim", item: "Salt Rim & Grapefruit Wedge", substitute: "Tajin or smoked chili salt rim", inventoryId: "coarse-salt" }
     ],
     instructions: [
       "Rim half of a highball glass with coarse salt.",
       "Fill the glass with ice cubes.",
-      "Add Teremana tequila, fresh lime juice, and agave syrup.",
+      "Add Teremana tequila (or Mezcal), fresh lime juice, and agave syrup.",
       "Add grapefruit juice and top with Chang Soda Water.",
       "Stir gently to combine, and garnish with a fresh grapefruit slice."
     ],
-    tags: ["tequila", "grapefruit", "mexico", "refreshing", "summer"]
+    tags: ["tequila", "mezcal", "grapefruit", "mexico", "refreshing", "summer", "in-stock"]
   },
   {
     id: "dark-n-stormy",
     name: "Dark 'n' Stormy",
-    otherNames: "Bermuda Highball",
+    otherNames: "Bermuda Highball, Spicy Storm, Rum Buck",
     category: "Cocktail",
     baseSpirit: "Rum",
     glassware: "Highball",
     alcoholLevel: "Medium (~15% ABV)",
     alcoholScore: 3,
-    tasteProfile: "Spicy Ginger, Dark Molasses, Lime & Fizz",
+    tasteProfile: "Spicy Ginger, Dark Molasses, Lime & Rich Fizz",
     difficulty: 1,
     popularity: 9.7,
-    proTip: "Pour ginger beer first, then gently float Myers's Dark Rum over the back of a spoon. It visually resembles a stormy thundercloud hovering over the sea.",
+    proTip: "Pour ginger beer and fresh lime juice first, then gently float Myers's Dark Rum (or Mount Gay Black Barrel) over the back of a spoon to create the ominous dark storm-cloud layer. Fever-Tree's 3-ginger blend provides the fiery ginger snap that balances the sweet molasses of the dark rum. For a lighter, sweeter highball, substitute with Schweppes Ginger Ale.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Any rich aged black rum", inventoryId: "myers-dark-rum" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Spicy Ginger Beer", substitute: "Schweppes Ginger Ale Soda", inventoryId: "ginger-beer" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Mount Gay Barbados Rum Black Barrel", inventoryId: "myers-dark-rum" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer (or Bundaberg)", substitute: "Bundaberg Ginger Beer or Schweppes Ginger Ale", inventoryId: "fever-tree-ginger-beer", ingredientGroup: "ginger-beer" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime wedge squeezed", inventoryId: "fresh-limes" }
     ],
     instructions: [
-      "Fill a tall highball glass with ice.",
-      "Add ginger beer and fresh lime juice; stir once.",
+      "Fill a tall highball glass with clean ice cubes.",
+      "Add in-stock Fever-Tree ginger beer and fresh lime juice; stir once.",
       "Using the back of a bar spoon against the inside edge of the glass, slowly float Myers's Dark Rum on top.",
       "Do not stir before serving to preserve the dramatic two-tone layer.",
       "Garnish with a lime wheel on the rim."
     ],
-    tags: ["dark-rum", "ginger", "bermuda", "refreshing", "layered"]
+    tags: ["dark-rum", "rum", "ginger", "ginger-beer", "bermuda", "refreshing", "layered", "in-stock"]
   },
   {
     id: "tom-collins",
     name: "Tom Collins",
-    otherNames: "The Great Hoax of 1874",
+    otherNames: "The Sparkling Gin Lemonade, John Collins (Vodka), Colonel Collins (Bourbon)",
     category: "Cocktail",
     baseSpirit: "Gin",
     glassware: "Collins / Highball",
@@ -961,13 +966,13 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Crisp, Sparkling Lemonade & Botanical",
     difficulty: 1,
     popularity: 9.5,
-    proTip: "Think of this as the ultimate adult sparkling lemonade. Tanqueray's bold juniper easily stands up to the lemon and fizzy soda.",
+    proTip: "Think of this as the ultimate adult sparkling lemonade. Shaking the Tanqueray gin, fresh lemon, and simple syrup before adding soda prevents sugar from settling at the base. Tanqueray's bold juniper easily stands up to the heavy fizz of Chang Soda Water.\n\nClassic 1-Ingredient Collins Variants:\n• John Collins (Vodka Collins): Swap gin for 2 oz Absolut Vodka for a clean, sparkling citrus cooler.\n• Colonel Collins: Swap gin for 2 oz Jim Beam Black Bourbon for a refreshing whiskey fizz.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Old Tom Gin or Vodka (John Collins)", inventoryId: "tanqueray-gin" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon", inventoryId: "fresh-lemons" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Rich simple syrup", inventoryId: "simple-syrup" },
-      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water" },
-      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Wheel & Maraschino Cherry", substitute: "Lemon slice", inventoryId: "fresh-lemons" }
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Absolut Vodka (John Collins) or Jim Beam Black (Colonel Collins)", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Rich simple syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Wheel & Maraschino Cherry", substitute: "Lemon slice & mint sprig", inventoryId: "fresh-lemons" }
     ],
     instructions: [
       "Combine Tanqueray gin, fresh lemon juice, and simple syrup in a shaker with ice.",
@@ -976,12 +981,12 @@ const DEFAULT_DRINKS = [
       "Stir gently with a bar spoon to mix carbonation.",
       "Garnish with a lemon wheel and a maraschino cherry."
     ],
-    tags: ["gin", "citrus", "collins", "summer", "refreshing"]
+    tags: ["gin", "citrus", "collins", "summer", "refreshing", "in-stock"]
   },
   {
     id: "gimlet",
     name: "Classic Gimlet",
-    otherNames: "Gin Sour",
+    otherNames: "The Royal Navy Sour, Vodka Gimlet",
     category: "Cocktail",
     baseSpirit: "Gin",
     glassware: "Coupe",
@@ -990,20 +995,20 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Zesty, Crisp, Sweet-Tart & Botanical",
     difficulty: 1,
     popularity: 9.5,
-    proTip: "Fresh lime juice + simple syrup produces a far crisper, brighter cocktail than artificial bottled lime cordial (Rose's).",
+    proTip: "Fresh lime juice paired with simple syrup produces a far crisper, brighter cocktail than artificial bottled lime cordial. Shake hard with plenty of ice for 12 seconds to achieve proper chilling and dilution.\n\nClassic 1-Ingredient Variants:\n• Vodka Gimlet: Swap Tanqueray London Dry Gin for 2 oz Absolut Vodka Original Blue.\n• Southside: Add 6–8 fresh mint leaves directly to the shaker for Al Capone's classic.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Absolut Vodka (Vodka Gimlet)", inventoryId: "tanqueray-gin" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Lime cordial", inventoryId: "fresh-limes" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Agave syrup", inventoryId: "simple-syrup" }
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Absolut Vodka (for a Vodka Gimlet)", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh squeezed lime only", inventoryId: "fresh-limes", ingredientGroup: "fresh-lime" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Agave syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" }
     ],
     instructions: [
-      "Chill a coupe glass.",
-      "Add gin, lime juice, and simple syrup into a shaker filled with ice.",
-      "Shake with energy for 12 seconds.",
+      "Chill a coupe glass in your freezer for 5 minutes.",
+      "Add Tanqueray gin, fresh lime juice, and simple syrup into a shaker filled with plenty of ice.",
+      "Shake with energy for 12 seconds until ice-cold.",
       "Fine strain into the chilled coupe.",
       "Garnish with a thin lime wheel floating on top."
     ],
-    tags: ["gin", "lime", "sour", "classic", "sharp"]
+    tags: ["gin", "lime", "sour", "classic", "sharp", "in-stock"]
   },
   {
     id: "sazerac",
@@ -1038,7 +1043,7 @@ const DEFAULT_DRINKS = [
   {
     id: "sidecar",
     name: "Sidecar",
-    otherNames: "The Paris Ritz Classic",
+    otherNames: "The Paris Ritz Classic, White Lady (Chelsea Sidecar), Between the Sheets",
     category: "Cocktail",
     baseSpirit: "Liqueur/Wine",
     glassware: "Coupe",
@@ -1047,21 +1052,21 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Oak, Orange, Sweet-Tart & Rich",
     difficulty: 2,
     popularity: 9.5,
-    proTip: "Apply a light sugar rim to half the glass. The crunchy sweetness cuts through the tart lemon and rich cognac/brandy.",
+    proTip: "Sugar only half the coupe rim so the crunchy sweetness is optional. The classic 2 : 0.75 : 0.75 ratio strikes an ideal balance between rich grape spirit and tart citrus.\n\nFamous 1-Ingredient Sour / Daisy Family Variants:\n• White Lady (Chelsea Sidecar): Swap Cognac for 1.5 oz Tanqueray London Dry Gin (and optionally add 0.5 oz egg white) for a crisp, floral, porcelain-foamed classic.\n• Between the Sheets: Split the base with 1 oz Bacardi Superior White Rum and 1 oz Cognac/Bourbon with Cointreau and lemon juice for a drier, prohibition-era twist.\n• Margarita: Swap Cognac for Tequila and lemon for fresh lime juice!",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Cognac / French Brandy (or Bourbon)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Grand Marnier (for Grand Sidecar) or Lumina", inventoryId: "cointreau" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Cognac / French Brandy (or Bourbon)", substitute: "Tanqueray Gin (White Lady), Bacardi White Rum (Between the Sheets), or Jim Beam Black", inventoryId: "hennessy-vsop-cognac", ingredientGroup: "brandy-cognac" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Grand Marnier (Grand Sidecar) or Lumina Triple Sec", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons", ingredientGroup: "fresh-lemon" },
       { amountOz: "Rim", amountMl: "Rim", item: "Granulated Sugar", substitute: "Superfine sugar rim", inventoryId: "granulated-sugar" }
     ],
     instructions: [
       "Wet half the rim of a coupe glass with a lemon wedge and dip into granulated sugar.",
-      "Combine brandy/bourbon, Cointreau, and fresh lemon juice in a shaker with ice.",
+      "Combine spirit (cognac, gin, or rum), Cointreau, and fresh lemon juice in a shaker with ice.",
       "Shake with vigor for 12 seconds until frosty.",
       "Double strain into the prepared coupe glass.",
-      "Garnish with an orange twist."
+      "Garnish with an expressed orange or lemon twist."
     ],
-    tags: ["brandy", "bourbon", "cointreau", "sour", "classic", "paris"]
+    tags: ["brandy", "cognac", "gin", "rum", "cointreau", "sour", "classic", "paris", "in-stock"]
   },
   {
     id: "penicillin",
@@ -1124,7 +1129,7 @@ const DEFAULT_DRINKS = [
   {
     id: "long-island-iced-tea",
     name: "Long Island Iced Tea",
-    otherNames: "LIIT",
+    otherNames: "LIIT, Adios Motherfucker (AMF), Tokyo Tea, Long Beach Iced Tea",
     category: "Cocktail",
     baseSpirit: "Vodka",
     glassware: "Highball / Collins",
@@ -1133,26 +1138,26 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Boozy, Sweet-Tart Lemon Tea & Refreshing",
     difficulty: 2,
     popularity: 9.7,
-    proTip: "Despite containing five spirits and zero tea, it tastes miraculously like iced tea! Just a splash of cola is needed for the amber color.",
+    proTip: "Despite containing five spirits and zero tea, it tastes miraculously like refreshing iced tea! Shake all spirits with lemon juice and simple syrup, strain over fresh ice, and finish with just a splash of cola for color.\n\nFamous 1-Ingredient Riffs with Fancy Names:\n• Adios Motherfucker (AMF): Swap Cointreau for 0.5 oz Curaçao Bleu and cola for lemon-lime soda (or Chang Soda Water) for an electric blue, high-octane citrus centerpiece.\n• Tokyo Tea: Swap Cointreau for Midori Melon Liqueur and cola for lemon-lime soda for a neon green melon refresher.\n• Long Beach Iced Tea: Swap cola for cranberry juice.",
     ingredients: [
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Smirnoff Red Vodka", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum", substitute: "Any light rum", inventoryId: "bacardi-superior" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry gin", inventoryId: "tanqueray-gin" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Blanco tequila", inventoryId: "teremana-tequila" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau (or Lumina Triple Sec)", substitute: "Lumina Triple Sec Liqueur", inventoryId: "cointreau" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh sour mix", inventoryId: "fresh-lemons" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "Splash", amountMl: "Splash", item: "Cola (for color)", substitute: "Coca-Cola or Pepsi", inventoryId: "cola" }
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Smirnoff Red Vodka", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum", substitute: "Any light rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Blanco tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau (or Curaçao Bleu for AMF)", substitute: "Curaçao Bleu (for AMF) or Lumina Triple Sec", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh sour mix", inventoryId: "fresh-lemons", ingredientGroup: "fresh-lemon" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "Splash", amountMl: "Splash", item: "Cola (or Lemon-Lime Soda for AMF)", substitute: "Coca-Cola, Pepsi, or lemon-lime soda / Chang Soda", inventoryId: "cola" }
     ],
     instructions: [
       "Fill a tall highball or hurricane glass with ice.",
-      "Add vodka, rum, gin, tequila, Cointreau, lemon juice, and simple syrup to a shaker with ice.",
+      "Add vodka, rum, gin, tequila, Cointreau (or Curaçao Bleu), lemon juice, and simple syrup to a shaker with ice.",
       "Shake quickly for 8 seconds to chill.",
       "Strain into the tall glass over fresh ice.",
-      "Top with a splash of cola (about 1-2 oz) to give it an iced tea hue.",
-      "Garnish with a lemon wedge."
+      "Top with a splash of cola (or lemon-lime soda for AMF) to achieve the signature hue.",
+      "Garnish with a lemon wedge and maraschino cherry."
     ],
-    tags: ["vodka", "rum", "gin", "tequila", "triple-sec", "party", "potent"]
+    tags: ["vodka", "rum", "gin", "tequila", "triple-sec", "curacao-bleu", "party", "potent", "in-stock"]
   },
   {
     id: "tequila-sunrise",
@@ -1214,7 +1219,7 @@ const DEFAULT_DRINKS = [
   {
     id: "white-russian",
     name: "White Russian",
-    otherNames: "The Dude's Drink (The Big Lebowski)",
+    otherNames: "The Dude's Drink (The Big Lebowski), Black Russian, Mudslide",
     category: "Cocktail",
     baseSpirit: "Vodka",
     glassware: "Rocks / Old Fashioned",
@@ -1223,44 +1228,19 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Decadent Coffee, Creamy Vanilla & Smooth",
     difficulty: 1,
     popularity: 9.8,
-    proTip: "Gently float heavy cream over the back of a spoon onto the vodka/Kahlúa base. Don't stir right away—admire the swirling marble effect first!",
+    proTip: "Gently float heavy cream over the back of a spoon onto the vodka/Kahlúa base. Don't stir right away—admire the swirling marble cascade!\n\n1-Ingredient Variants:\n• Black Russian: Simply omit the heavy whipping cream (2 oz Absolut Vodka + 1 oz Kahlúa over ice) for the original 1949 dark, potent, coffee-forward nightcap.\n• Mudslide: Add 1 oz Baileys Irish Cream alongside the Kahlúa and cream for an ultra-rich dessert cocktail.\n• White Belgian: Swap cream for chocolate liqueur.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Heavy Whipping Cream", substitute: "Whole milk, half-and-half, or oat milk", inventoryId: "whipping-heavy-cream" }
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "vodka" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua", ingredientGroup: "coffee-liqueur" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Heavy Whipping Cream (or omit for Black Russian)", substitute: "Omit for Black Russian, or use whole milk / half-and-half / oat milk", inventoryId: "whipping-heavy-cream" }
     ],
     instructions: [
       "Fill a rocks glass with ice cubes.",
       "Pour in Absolut vodka and Kahlúa; stir briefly to chill.",
-      "Carefully pour heavy cream over the back of a bar spoon so it floats on top.",
+      "Carefully pour heavy cream over the back of a bar spoon so it floats on top (or omit cream for a Black Russian).",
       "Serve with a straw or enjoy watching the cream cascade down into the dark coffee layer."
     ],
-    tags: ["vodka", "kahlua", "cream", "dessert", "classic", "movie"]
-  },
-  {
-    id: "black-russian",
-    name: "Black Russian",
-    otherNames: "The Dark Predecessor",
-    category: "Cocktail",
-    baseSpirit: "Vodka",
-    glassware: "Rocks / Lowball",
-    alcoholLevel: "High (~26% ABV)",
-    alcoholScore: 4,
-    tasteProfile: "Robust Coffee, Dark Sugar & Crisp Spirit",
-    difficulty: 1,
-    popularity: 9.3,
-    proTip: "The parent of the White Russian created in Brussels in 1949. Use Walcher Premium Coffee Liqueur for a deeper, less sugary espresso profile.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua" }
-    ],
-    instructions: [
-      "Fill an Old Fashioned rocks glass with ice.",
-      "Pour vodka and Kahlúa directly over the ice.",
-      "Stir gently for 15 seconds to chill and dilute.",
-      "Optionally drop in a maraschino cherry."
-    ],
-    tags: ["vodka", "kahlua", "coffee", "spirit-forward", "classic"]
+    tags: ["vodka", "kahlua", "cream", "dessert", "classic", "movie", "in-stock"]
   },
   {
     id: "caipirinha",
