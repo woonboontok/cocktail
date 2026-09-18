@@ -4312,6 +4312,60 @@ const DEFAULT_DRINKS = [
       "Garnish creatively with a fresh pineapple wedge and a slapped mint sprig nestled in the froth head."
     ],
     tags: ["vodka", "midori", "cointreau", "pineapple", "tropical", "summer", "in-stock"]
+  },
+  {
+    id: "black-widower-cocktail",
+    name: "Black Widower",
+    otherNames: "Anise Gin Sour",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe",
+    alcoholLevel: "Medium-High (~24% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Botanical, Intense Anise, Sharp Citrus & Complex",
+    difficulty: 2,
+    popularity: 9.2,
+    proTip: "White Sambuca functions exactly like a high-proof absinthe or pastis modifier here. The heavy, sweet licorice profile coats the mouth, while your high-proof Tanqueray Gin and fresh lemon juice slice cleanly through it so it never feels cloying. Shake vigorously with sharp ice to get maximum dilution.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Vaccari Sambuca", substitute: "White Sambuca", inventoryId: "sambuca" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "1 dash", amountMl: "1 dash", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" }
+    ],
+    instructions: [
+      "Chill a coupe glass in the freezer for 5 minutes.",
+      "Add Tanqueray gin, Vaccari Sambuca, fresh lemon juice, and a healthy dash of Angostura bitters into a shaker.",
+      "Pack tightly with clean ice cubes and wet shake with maximum speed for 12 seconds.",
+      "Double strain through a fine mesh strainer into the chilled coupe.",
+      "Garnish cleanly with a thin lemon twist expressed over the surface."
+    ],
+    tags: ["gin", "sambuca", "anise", "sour", "classic", "complex", "in-stock"]
+  },
+  {
+    id: "sambuca-con-mosca",
+    name: "Sambuca con Mosca",
+    otherNames: "Sambuca with Flies, Traditional Flaming Sambuca",
+    category: "Shot",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Shot Glass or Snifter",
+    alcoholLevel: "High (~38% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Sweet Star Anise, Roasty Coffee & Warm Heat",
+    difficulty: 2,
+    popularity: 9.6,
+    proTip: "The definitive Italian digestif ritual. The three coffee beans represent health, wealth, and prosperity. Chewing the roasted coffee beans directly alongside the sweet anise liqueur creates a marvelous, unexpected dark mocha harmony on the palate. Always blow out the flame completely before shooting!",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Vaccari Sambuca", substitute: "Any premium White Sambuca", inventoryId: "sambuca" },
+      { amountOz: "3 whole", amountMl: "3 whole", item: "Whole Roasted Coffee Beans", substitute: "Dark chocolate espresso beans", inventoryId: "coffee-beans" }
+    ],
+    instructions: [
+      "Pour your Vaccari Sambuca directly into a heavy-walled shot glass or small brandy snifter.",
+      "Drop exactly three whole roasted coffee beans cleanly into the liquid.",
+      "Optional Flaming Ritual: Use a long bar lighter to carefully ignite the surface vapors; let the blue flame toast the coffee oils for 5 seconds.",
+      "Place your hand firmly over the glass rim to extinguish the flame instantly.",
+      "Shoot down the warm liquid in one gulp, then chew the toasted coffee beans."
+    ],
+    tags: ["shot", "sambuca", "coffee", "traditional", "flaming", "digestif", "in-stock"]
   }
 ];
 
