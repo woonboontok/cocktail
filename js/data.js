@@ -302,7 +302,7 @@ const DEFAULT_INVENTORY = [
   { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, notes: "130-herb French monk elixir for Last Word." },
   { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 40, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
   { id: "jagermeister", name: "Jägermeister Liqueur (35% ABV)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 2, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
-  { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 20, notes: "Vivid emerald honeydew melon liqueur for Scooby Snack." },
+  { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Vivid neon-green Japanese muskmelon and yubari melon liqueur. Sweet and fragrant."},
   { id: "fireball", name: "Fireball Cinnamon Whisky", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, abv: 33, notes: "Cinnamon whisky for Fireball Apple Pie Shot." },
   { id: "absinthe", name: "Absinthe", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 68, notes: "Aromatic anise rinse for Sazerac and Corpse Reviver No. 2." },
   { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, abv: 15, notes: "Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot." },
@@ -1130,35 +1130,36 @@ const DEFAULT_DRINKS = [
   {
     id: "long-island-iced-tea",
     name: "Long Island Iced Tea",
-    otherNames: "LIIT, Adios Motherfucker (AMF), Tokyo Tea, Long Beach Iced Tea",
+    otherNames: "LIIT, Tokyo Tea (Melon Variant), Adios Motherfucker / AMF (Blue Variant)",
     category: "Cocktail",
     baseSpirit: "Vodka",
-    glassware: "Highball / Collins",
+    glassware: "Highball / Collins / Hurricane",
     alcoholLevel: "High (~22% ABV)",
     alcoholScore: 5,
-    tasteProfile: "Boozy, Sweet-Tart Lemon Tea & Refreshing",
+    tasteProfile: "Boozy, Sweet-Tart Citrus Lemon & Deceptively Smooth",
     difficulty: 2,
-    popularity: 9.7,
-    proTip: "Despite containing five spirits and zero tea, it tastes miraculously like refreshing iced tea! Shake all spirits with lemon juice and simple syrup, strain over fresh ice, and finish with just a splash of cola for color.\n\nFamous 1-Ingredient Riffs with Fancy Names:\n• Adios Motherfucker (AMF): Swap Cointreau for 0.5 oz Curaçao Bleu and cola for lemon-lime soda (or Chang Soda Water) for an electric blue, high-octane citrus centerpiece.\n• Tokyo Tea: Swap Cointreau for Midori Melon Liqueur and cola for lemon-lime soda for a neon green melon refresher.\n• Long Beach Iced Tea: Swap cola for cranberry juice.",
+    popularity: 9.8,
+    proTip: "The ultimate five-spirit highball alchemy. Despite containing zero tea, the combination of white spirits, citrus, and sweet elements perfectly mimics refreshing iced tea. To ensure the drink remains crisp rather than heavy, flash-shake the spirits with citrus and sugar first, strain over raw ice, and treat the soda topper as a coloring agent rather than a mixer.\n\nFamous 1-Ingredient Riffs with Fancy Names:\n• Tokyo Tea: A vibrant neon-green twist. Swap out the orange Triple Sec/Cointreau entirely for 0.5 oz Midori Melon Liqueur, and trade the dark cola for bubbly lemon-lime soda (Sprite). The Midori functions as both the primary color identity and a lush, honeydew sweetener, eliminating the chemical baseline burn of the underlying spirits.\n• Adios Motherfucker (AMF): An electric blue party showstopper. Retain the underlying four clear base spirits, but substitute the orange Triple Sec/Cointreau for 0.5 oz Curaçao Bleu Liqueur, and top up with lemon-lime soda. The blue curaçao provides a punchy, candied-orange citrus profile that clashes visually and flavor-wise with the traditional cola build.",
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Smirnoff Red Vodka", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum", substitute: "Any light rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Blanco tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau (or Curaçao Bleu for AMF)", substitute: "Curaçao Bleu (for AMF) or Lumina Triple Sec", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh sour mix", inventoryId: "fresh-lemons", ingredientGroup: "fresh-lemon" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
-      { amountOz: "Splash", amountMl: "Splash", item: "Cola (or Lemon-Lime Soda for AMF)", substitute: "Coca-Cola, Pepsi, or lemon-lime soda / Chang Soda", inventoryId: "cola" }
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum", substitute: "Any quality light white rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau / Midori (Tokyo Tea) / Curaçao Bleu (AMF)", substitute: "Swap out Cointreau for Midori Melon Liqueur when building a Tokyo Tea, or Curaçao Bleu Liqueur when building an AMF", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh house-made sour mix", inventoryId: "fresh-lemons", ingredientGroup: "fresh-lemon" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Premium sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "Top up", amountMl: "Top up", item: "Cola / Lemon-Lime Soda (Tokyo Tea & AMF)", substitute: "Use Coca-Cola for the standard classic, or swap completely for Sprite/Lemon-Lime Soda when crafting a Tokyo Tea or an AMF", inventoryId: "cola" }
     ],
     instructions: [
-      "Fill a tall highball or hurricane glass with ice.",
-      "Add vodka, rum, gin, tequila, Cointreau (or Curaçao Bleu), lemon juice, and simple syrup to a shaker with ice.",
-      "Shake quickly for 8 seconds to chill.",
-      "Strain into the tall glass over fresh ice.",
-      "Top with a splash of cola (or lemon-lime soda for AMF) to achieve the signature hue.",
-      "Garnish with a lemon wedge and maraschino cherry."
+      "Fill a tall highball, Collins, or hurricane glass to the absolute brim with large ice blocks.",
+      "Add your vodka, white rum, gin, tequila, and your choice of modifier liqueur (Cointreau for classic, Midori for Tokyo Tea, or Curaçao Bleu for AMF) into a shaker with ice.",
+      "Add the fresh pressed lemon juice and premium simple syrup.",
+      "Shake with maximum speed for exactly 6 to 8 seconds to drop the temperature without over-diluting the spirits.",
+      "Strain into your prepared glass over the raw ice stack.",
+      "Slowly float your top-up soda layer over the crown (Cola for classic, Lemon-Lime Soda for Tokyo Tea/AMF) to complete the color profile.",
+      "Garnish elegantly with a fresh lemon wheel on the rim and a maraschino cherry."
     ],
-    tags: ["vodka", "rum", "gin", "tequila", "triple-sec", "curacao-bleu", "party", "potent", "in-stock"]
+    tags: ["vodka", "rum", "gin", "tequila", "cointreau", "midori", "curacao-bleu", "party", "potent", "layered", "in-stock"]
   },
   {
     id: "tequila-sunrise",
@@ -4199,6 +4200,118 @@ const DEFAULT_DRINKS = [
       "Fine strain into the chilled coupe, and garnish with a thin lime wheel floating on top."
     ],
     tags: ["gin", "lime", "sour", "classic", "sharp", "in-stock"]
+  },
+  {
+    id: "midori-sour",
+    name: "Classic Midori Sour",
+    otherNames: "Melon Sour",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Rocks or Coupe",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Sweet Melon, Bright Citrus & Perfectly Tart",
+    difficulty: 2,
+    popularity: 9.7,
+    proTip: "The original 1980s recipe relied heavily on artificial sweet-and-sour mix, which made it cloying. Using equal parts fresh lemon and lime juice transforms it into a beautifully balanced craft masterpiece. Adding an egg white delivers a striking, velvety foam crown.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice only", inventoryId: "fresh-lemons" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice only", inventoryId: "fresh-limes" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (Optional for foam)", substitute: "Aquafaba or omit", inventoryId: "egg-white" },
+      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" }
+    ],
+    instructions: [
+      "Combine Midori, fresh lemon juice, fresh lime juice, and egg white in a shaker without ice.",
+      "Dry shake vigorously for 10 seconds to fully emulsify and fluff up the egg white.",
+      "Fill the shaker with ice blocks and wet shake hard for 12 seconds until frosty cold.",
+      "Strain into a rocks glass over fresh ice (or up in a chilled coupe).",
+      "Gently splash a top-up of crisp Chang Soda Water through the foam layer.",
+      "Garnish with a fresh lime wheel and a maraschino cherry."
+    ],
+    tags: ["midori", "melon", "sour", "egg-white", "classic", "neon-green", "in-stock"]
+  },
+  {
+    id: "japanese-slipper",
+    name: "Japanese Slipper",
+    otherNames: "1980s Melbourne Classic",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Coupe / Cocktail Glass",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Sweet Muskmelon, Candied Orange & Crisp Citrus",
+    difficulty: 1,
+    popularity: 9.4,
+    proTip: "Created in 1984 by Jean-Paul Bourguignon at Mietta's in Melbourne. It features a perfect 1:1:1 equal-parts build where the sharpness of fresh lemon and the clean orange of Cointreau carve right through the sweet honeydew base.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Chill a coupe or martini glass in the freezer for 5 minutes.",
+      "Add equal parts Midori, Cointreau, and fresh pressed lemon juice into a cocktail shaker.",
+      "Pack with dense ice cubes and shake with power for 12 seconds.",
+      "Double strain into your frosty chilled glass.",
+      "Garnish cleanly by dropping a maraschino cherry right into the center of the radiant emerald green liquid."
+    ],
+    tags: ["midori", "cointreau", "equal-parts", "australian", "modern-classic", "in-stock"]
+  },
+  {
+    id: "melon-ball-highball",
+    name: "Melon Ball",
+    otherNames: "Melon Baller Highball",
+    category: "Cocktail",
+    baseSpirit: "Vodka",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Lush Honeydew, Sweet Orange Citrus & Clean Polish",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "The ultimate effortless summer highball. The neutral profile of Absolut Vodka allows the vibrant fruit notes to stretch out beautifully. Layer the orange juice carefully over the melon-vodka base to create a stunning sunset aesthetic.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "vodka" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Orange Juice", substitute: "Freshly squeezed navel oranges", inventoryId: "orange-juice" }
+    ],
+    instructions: [
+      "Fill a tall highball glass completely with fresh ice blocks.",
+      "Pour your Absolut vodka and Midori directly into the glass over the ice; stir once.",
+      "Slowly pour fresh orange juice over the back of a bar spoon to float it on top.",
+      "Observe the striking green-to-orange gradient layer profile before serving with a straw."
+    ],
+    tags: ["vodka", "midori", "orange", "highball", "sweet", "layered", "in-stock"]
+  },
+  {
+    id: "midori-illusion",
+    name: "Midori Illusion",
+    otherNames: "Illusion Shaker Highball",
+    category: "Cocktail",
+    baseSpirit: "Vodka",
+    glassware: "Hurricane / Highball",
+    alcoholLevel: "Medium (~15% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Tropical Pineapple, Lush Melon & Candied Sweetness",
+    difficulty: 2,
+    popularity: 9.5,
+    proTip: "A staple of beach resorts and highball bars. Shaking pineapple juice with vodka and citrus creates an intensely frothy, silky textures head. Using Cointreau rather than cheap triple sec binds the orange and melon oils beautifully.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "vodka" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Pineapple Juice", substitute: "Fresh pressed pineapple juice", inventoryId: "pineapple-juice" }
+    ],
+    instructions: [
+      "Pre-chill a hurricane glass with ice cubes.",
+      "Combine Absolut vodka, Midori, Cointreau, fresh lemon juice, and pineapple juice in a cocktail shaker.",
+      "Pack with abundant ice blocks and shake vigorously for a full 12 seconds to generate a thick, frothy pineapple head.",
+      "Strain cleanly into the prepared glass over fresh ice.",
+      "Garnish creatively with a fresh pineapple wedge and a slapped mint sprig nestled in the froth head."
+    ],
+    tags: ["vodka", "midori", "cointreau", "pineapple", "tropical", "summer", "in-stock"]
   }
 ];
 
