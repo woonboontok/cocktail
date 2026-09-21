@@ -83,6 +83,10 @@
     radial-gradient(circle at 15% 10%, rgba(8, 127, 115, 0.08) 0%, transparent 45%),
     radial-gradient(circle at 85% 60%, rgba(214, 90, 58, 0.06) 0%, transparent 50%);
 }
+/* Fix visibility for Pro-Tip container text in light morning theme */
+[data-theme="morning"] .pro-tip-content {
+  color: var(--text-primary) !important;
+}
 
 /* 2. AFTERNOON (12:00 - 16:59): Solar blue, lime pulse, high visibility */
 [data-theme="afternoon"] {
