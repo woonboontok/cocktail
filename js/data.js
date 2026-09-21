@@ -4366,6 +4366,35 @@ const DEFAULT_DRINKS = [
       "Shoot down the warm liquid in one gulp, then chew the toasted coffee beans."
     ],
     tags: ["shot", "sambuca", "coffee", "traditional", "flaming", "digestif", "in-stock"]
+  },
+  {
+    id: "jungle-bird",
+    name: "Jungle Bird",
+    otherNames: "Kuala Lumpur Hilton Classic (1973)",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Rocks or Double Old Fashioned",
+    alcoholLevel: "Medium (~15% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Tropical, Bittersweet, Citrus & Complex",
+    difficulty: 2,
+    popularity: 9.7,
+    proTip: "The definitive tropical bittersweet masterpiece. While most Tiki drinks use triple sec or almond orgeat for sweetness, the Jungle Bird uses Campari. Aggressive shaking is essential because the pineapple juice transforms under high aeration into a gorgeous, frothy, velvety head.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Myers's Original Dark Rum (or Mount Gay Black Barrel)", substitute: "Mount Gay Barbados Rum Black Barrel Blend", inventoryId: "myers-dark-rum" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Campari", substitute: "Aperol for a lighter, sweeter bird", inventoryId: "campari" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Pineapple Juice", substitute: "Fresh pressed pineapple juice", inventoryId: "pineapple-juice" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime only", inventoryId: "fresh-limes" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Premium Simple Syrup", substitute: "Rich demerara or molasses syrup", inventoryId: "simple-syrup" }
+    ],
+    instructions: [
+      "Combine dark rum, Campari, pineapple juice, fresh lime juice, and simple syrup in a cocktail shaker.",
+      "Fill the shaker completely with clean ice cubes.",
+      "Shake with high velocity for 12 to 15 seconds until the shaker exterior forms a thick frost.",
+      "Strain over fresh crushed ice (or a single large clear cube) into a rocks glass.",
+      "Garnish extravagantly by skewering a fresh pineapple wedge and a maraschino cherry to look like a tropical bird, flanked by slapped mint fronds."
+    ],
+    tags: ["rum", "campari", "pineapple", "tiki", "tropical", "bittersweet", "classic", "in-stock"]
   }
 ];
 
