@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "17 September 2026";
-const INVENTORY_SYNC_VERSION = "20260917_2";
+const INVENTORY_LAST_UPDATED = "21 September 2026";
+const INVENTORY_SYNC_VERSION = "20260921_1";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
