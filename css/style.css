@@ -1344,6 +1344,7 @@ a:hover {
 [data-theme="morning"] .modal-drink-title,
 [data-theme="morning"] .specs-table td,
 [data-theme="morning"] .ing-name,
+[data-theme="morning"] .inv-name,
 [data-theme="morning"] .form-control { color: var(--text-primary); }
 
 .modal-body {
