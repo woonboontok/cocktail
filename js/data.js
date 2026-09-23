@@ -7,15 +7,15 @@
 const INVENTORY_CATEGORIES = {
   spirits: "Base Spirits",
   liqueurs: "Liqueurs & Cordials",
-  fortified: "Fortified Wines & Aperitifs",
+  fortified: "Fortified Wines, Aperitifs & Digestifs",
   sparkling: "Sparkling Wines",
   mixers_sodas: "Mixers, Sodas & Juices",
   bitters_syrups: "Bitters, Syrups & Sweeteners",
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "21 September 2026";
-const INVENTORY_SYNC_VERSION = "20260921_1";
+const INVENTORY_LAST_UPDATED = "23 September 2026";
+const INVENTORY_SYNC_VERSION = "20260923_1";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -49,6 +49,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "ginger-beer": { inStock: true, aliasOf: "fever-tree-ginger-beer" },
   "fever-tree-indian-tonic": { inStock: true, quantity: 6, unit: "pack" },
   "tonic-water": { inStock: true, aliasOf: "fever-tree-indian-tonic" },
+  "midori": { inStock: true, quantity: 1, unit: "bottle" },
   "energy-drink": { inStock: true, quantity: 4, unit: "can" }
 };
 
@@ -314,7 +315,10 @@ const DEFAULT_INVENTORY = [
   { id: "martini-rosso", name: "Martini Rosso Red Vermouth", category: "fortified", subCategory: "Vermouth", inStock: true, abv: 16, notes: "Sweet Italian red vermouth for Negroni, Manhattan, Boulevardier, and Americano." },
   { id: "aperol", name: "Aperol", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 11, notes: "Bittersweet orange, rhubarb, and gentian aperitivo for Aperol Spritz and Paper Plane." },
   { id: "campari", name: "Campari", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 25, notes: "Iconic red bitter aperitif with chinotto citrus and herbs for Negroni and Boulevardier." },
-  { id: "amaro-nonino", name: "Amaro Nonino Quintessentia", category: "fortified", subCategory: "Amaro", inStock: false, abv: 16, notes: "Grappa-based alpine amaro for Paper Plane." },
+  { id: "amaro-nonino", name: "Amaro Nonino Quintessentia", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 16, notes: "Grappa-based alpine amaro for Paper Plane." },
+  { id: "fernet-branca", name: "Fernet-Branca", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 39, notes: "Intensely herbal Italian digestif with mint, saffron, and bitter myrrh. Classic after-dinner bitter." },
+  { id: "amaro-averna", name: "Averna Amaro Siciliano", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 29, notes: "Bittersweet Sicilian amaro with orange peel, herbs, and pomegranate. Smooth and versatile digestif." },
+  { id: "amaro-montenegro", name: "Amaro Montenegro", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 23, notes: "Elegant Bologna amaro with 40 botanicals. Balanced, floral, and approachable digestif." },
 
   // --- SPARKLING WINE (User In Stock) ---
   { id: "gio-prosecco", name: "Gio Prosecco Spumante Extra Dry", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11.5, notes: "Crisp Italian Prosecco with fine bubbles for Aperol Spritz, French 75, Bellini, and Mimosa." },

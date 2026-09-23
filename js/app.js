@@ -761,6 +761,10 @@
 
       const renderItemCard = item => {
         const stockLabel = item.inStock ? "In Stock" : item.incoming ? "Incoming" : "To Buy";
+        const quantity = item.quantity !== undefined ? item.quantity : getDefaultQuantity(item);
+        const unit = item.unit || getDefaultUnit(item);
+        const abvDisplay = getInventoryAbv(item);
+        const showAbv = abvDisplay !== "—" && (item.category === "spirits" || item.category === "liqueurs" || item.category === "fortified" || item.category === "sparkling");
         return `
           <div class="inventory-item-card ${item.inStock ? "in-stock" : "shopping-list"}" data-item-id="${item.id}">
             <input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}>
@@ -771,7 +775,7 @@
                   ${stockLabel}
                 </span>
               </div>
-              <div class="inv-meta">${item.subCategory || ""} ${item.proof ? "• " + item.proof : ""}</div>
+              <div class="inv-meta">${item.subCategory || ""}${showAbv ? " • " + abvDisplay : ""}${item.inStock ? " • " + quantity + " " + unit : ""}${item.proof ? " • " + item.proof : ""}</div>
               ${item.notes ? `<div class="inv-notes">${item.notes}</div>` : ""}
               <button class="inv-used-in-btn" data-filter-ing="${item.id}">See drinks using this →</button>
             </div>
@@ -779,8 +783,20 @@
         `;
       };
 
-      const itemCards = catKey === "spirits"
-        ? Object.entries(items.reduce((families, item) => {
+      // Group items by subCategory for categories that benefit from it
+      const groupBySubCategory = (items) => {
+        const groups = {};
+        items.forEach(item => {
+          const sub = item.subCategory || "Other";
+          if (!groups[sub]) groups[sub] = [];
+          groups[sub].push(item);
+        });
+        return groups;
+      };
+
+      let itemCards;
+      if (catKey === "spirits") {
+        itemCards = Object.entries(items.reduce((families, item) => {
             const family = item.spiritFamily || "Other Spirits";
             const style = item.spiritStyle || item.subCategory || "Other";
             if (!families[family]) families[family] = {};
@@ -797,8 +813,18 @@
                 </div>
               `).join("")}
             </section>
-          `).join("")
-        : `<div class="inventory-grid inventory-list-grid">${items.map(renderItemCard).join("")}</div>`;
+          `).join("");
+      } else if (catKey === "liqueurs" || catKey === "fortified" || catKey === "mixers_sodas") {
+        const subGroups = groupBySubCategory(items);
+        itemCards = Object.entries(subGroups).map(([subCat, subItems]) => `
+          <div class="spirit-style-group">
+            <h5>${subCat}</h5>
+            <div class="inventory-grid inventory-list-grid">${subItems.map(renderItemCard).join("")}</div>
+          </div>
+        `).join("");
+      } else {
+        itemCards = `<div class="inventory-grid inventory-list-grid">${items.map(renderItemCard).join("")}</div>`;
+      }
 
       return `
         <div class="inventory-category-group">
