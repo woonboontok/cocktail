@@ -14,10 +14,11 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "23 September 2026";
-const INVENTORY_SYNC_VERSION = "20260923_1";
+const INVENTORY_LAST_UPDATED = "24 September 2026";
+const INVENTORY_SYNC_VERSION = "20260924_2";
 
 const INVENTORY_UPDATE_OVERRIDES = {
+  "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
   "simple-syrup": { inStock: true, quantity: 1 },
   "chang-soda-water": { inStock: true, quantity: 24, unit: "bottle" },
   "whipped-cream": { inStock: true, quantity: 1 },
@@ -96,7 +97,7 @@ const INGREDIENT_GROUPS = {
   },
   "irish-whiskey": {
     label: "Irish Whiskey",
-    inventoryIds: ["irish-whiskey"]
+    inventoryIds: ["irish-whiskey", "jim-beam-black"]
   },
   "tequila": {
     label: "Tequila",
@@ -294,47 +295,47 @@ const DEFAULT_INVENTORY = [
   { id: "sambuca", name: "Vaccari Sambuca", category: "liqueurs", subCategory: "Anise & Herbal", inStock: true, quantity: 1, unit: "bottle", abv: 38, notes: "Authentic Italian anise liqueur (700ml) distilled with Mediterranean star anise. Essential for Flatliner, Slippery Nipple, and Sambuca shooters." },
 
   // --- LIQUEURS (Shopping List / Expansion) ---
-  { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, abv: 17, notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
+  { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, abv: 17, refrigerate: true, notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
   { id: "maraschino-liqueur", name: "Luxardo Maraschino Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 32, notes: "Dry cherry pit and herbal liqueur for Aviation, Last Word, and Hemingway Daiquiri." },
   { id: "creme-de-violette", name: "Crème de Violette", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Violet flower liqueur that gives Aviation its sky-blue tint." },
   { id: "creme-de-cassis", name: "Crème de Cassis (Blackcurrant)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Blackcurrant liqueur for Kir Royale." },
   { id: "creme-de-mure", name: "Crème de Mûre (Blackberry)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Blackberry liqueur drizzled on the Bramble." },
-  { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: false, abv: 40, notes: "Scotch, heather honey, and herbs for Rusty Nail." },
-  { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, notes: "130-herb French monk elixir for Last Word." },
-  { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 40, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
+  { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: false, abv: 40, refrigerate: false, notes: "Scotch, heather honey, and herbs for Rusty Nail." },
+  { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, refrigerate: false, notes: "130-herb French monk elixir for Last Word." },
+  { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 40, refrigerate: false, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
   { id: "jagermeister", name: "Jägermeister Liqueur (35% ABV)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 2, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
   { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Vivid neon-green Japanese muskmelon and yubari melon liqueur. Sweet and fragrant."},
   { id: "fireball", name: "Fireball Cinnamon Whisky", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, abv: 33, notes: "Cinnamon whisky for Fireball Apple Pie Shot." },
-  { id: "absinthe", name: "Absinthe", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 68, notes: "Aromatic anise rinse for Sazerac and Corpse Reviver No. 2." },
-  { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, abv: 15, notes: "Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot." },
+  { id: "absinthe", name: "Absinthe", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 68, refrigerate: false, notes: "Aromatic anise rinse for Sazerac and Corpse Reviver No. 2." },
+  { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, abv: 15, refrigerate: true, notes: "Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot." },
   { id: "frangelico", name: "Frangelico Hazelnut Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Hazelnut liqueur for Nutty Irishman and Duck Fart." },
 
   // --- FORTIFIED WINES & APERITIFS (User In Stock) ---
-  { id: "lillet-blanc", name: "Lillet Blanc", category: "fortified", subCategory: "Fortified Wine", inStock: true, abv: 17, notes: "French wine aperitif with candied orange and honey for Vesper and Corpse Reviver No. 2." },
-  { id: "martini-extra-dry", name: "Martini Extra Dry Vermouth", category: "fortified", subCategory: "Vermouth", inStock: true, abv: 18, notes: "Crisp dry Italian vermouth scented with Florentine Orris for Dry Martini." },
-  { id: "martini-rosso", name: "Martini Rosso Red Vermouth", category: "fortified", subCategory: "Vermouth", inStock: true, abv: 16, notes: "Sweet Italian red vermouth for Negroni, Manhattan, Boulevardier, and Americano." },
-  { id: "aperol", name: "Aperol", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 11, notes: "Bittersweet orange, rhubarb, and gentian aperitivo for Aperol Spritz and Paper Plane." },
-  { id: "campari", name: "Campari", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 25, notes: "Iconic red bitter aperitif with chinotto citrus and herbs for Negroni and Boulevardier." },
-  { id: "amaro-nonino", name: "Amaro Nonino Quintessentia", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 16, notes: "Grappa-based alpine amaro for Paper Plane." },
-  { id: "fernet-branca", name: "Fernet-Branca", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 39, notes: "Intensely herbal Italian digestif with mint, saffron, and bitter myrrh. Classic after-dinner bitter." },
-  { id: "amaro-averna", name: "Averna Amaro Siciliano", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 29, notes: "Bittersweet Sicilian amaro with orange peel, herbs, and pomegranate. Smooth and versatile digestif." },
-  { id: "amaro-montenegro", name: "Amaro Montenegro", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 23, notes: "Elegant Bologna amaro with 40 botanicals. Balanced, floral, and approachable digestif." },
+  { id: "lillet-blanc", name: "Lillet Blanc", category: "fortified", subCategory: "Fortified Wine", inStock: true, abv: 17, refrigerate: true, notes: "French wine aperitif with candied orange and honey for Vesper and Corpse Reviver No. 2." },
+  { id: "martini-extra-dry", name: "Martini Extra Dry Vermouth", category: "fortified", subCategory: "Vermouth", inStock: true, abv: 18, refrigerate: true, notes: "Crisp dry Italian vermouth scented with Florentine Orris for Dry Martini." },
+  { id: "martini-rosso", name: "Martini Rosso Red Vermouth", category: "fortified", subCategory: "Vermouth", inStock: true, abv: 16, refrigerate: true, notes: "Sweet Italian red vermouth for Negroni, Manhattan, Boulevardier, and Americano." },
+  { id: "aperol", name: "Aperol", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 11, refrigerate: true, notes: "Bittersweet orange, rhubarb, and gentian aperitivo for Aperol Spritz and Paper Plane." },
+  { id: "campari", name: "Campari", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 25, refrigerate: true, notes: "Iconic red bitter aperitif with chinotto citrus and herbs for Negroni and Boulevardier." },
+  { id: "amaro-nonino", name: "Amaro Nonino Quintessentia", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 16, refrigerate: true, notes: "Grappa-based alpine amaro for Paper Plane." },
+  { id: "fernet-branca", name: "Fernet-Branca", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 39, refrigerate: true, notes: "Intensely herbal Italian digestif with mint, saffron, and bitter myrrh. Classic after-dinner bitter." },
+  { id: "amaro-averna", name: "Averna Amaro Siciliano", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 29, refrigerate: true, notes: "Bittersweet Sicilian amaro with orange peel, herbs, and pomegranate. Smooth and versatile digestif." },
+  { id: "amaro-montenegro", name: "Amaro Montenegro", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 23, refrigerate: true, notes: "Elegant Bologna amaro with 40 botanicals. Balanced, floral, and approachable digestif." },
 
   // --- SPARKLING WINE (User In Stock) ---
-  { id: "gio-prosecco", name: "Gio Prosecco Spumante Extra Dry", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11.5, notes: "Crisp Italian Prosecco with fine bubbles for Aperol Spritz, French 75, Bellini, and Mimosa." },
-  { id: "bottega-spumante-venezia", name: "Bottega Spumante Venezia", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, notes: "Elegant, smooth Italian sparkling blend of Glera & Chardonnay; crisp notes of apple, peach, and almond—ideal premium base for an Aperol Spritz or Mimosa." },
-  { id: "zonin-prosecco-brut", name: "Zonin Prosecco Brut", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, notes: "Crisp, dry authentic Italian Prosecco DOC with lively bubbles and bright notes of green apple and citrus—the ultimate classic base for any Spritz, Bellini, or Mimosa." },
+  { id: "gio-prosecco", name: "Gio Prosecco Spumante Extra Dry", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11.5, refrigerate: true, notes: "Crisp Italian Prosecco with fine bubbles for Aperol Spritz, French 75, Bellini, and Mimosa." },
+  { id: "bottega-spumante-venezia", name: "Bottega Spumante Venezia", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, refrigerate: true, notes: "Elegant, smooth Italian sparkling blend of Glera & Chardonnay; crisp notes of apple, peach, and almond—ideal premium base for an Aperol Spritz or Mimosa." },
+  { id: "zonin-prosecco-brut", name: "Zonin Prosecco Brut", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, refrigerate: true, notes: "Crisp, dry authentic Italian Prosecco DOC with lively bubbles and bright notes of green apple and citrus—the ultimate classic base for any Spritz, Bellini, or Mimosa." },
 
   // --- BITTERS & SYRUPS (User In Stock & Shopping List) ---
   { id: "angostura-bitters", name: "Angostura Bitters", category: "bitters_syrups", subCategory: "Bitters", inStock: true, notes: "Trinidad's world-famous aromatic cocktail bitters for Old Fashioned and Manhattan." },
   { id: "peychaud-bitters", name: "Peychaud's Bitters", category: "bitters_syrups", subCategory: "Bitters", inStock: false, notes: "Gentle anise and floral bitters for Sazerac and Vieux Carré." },
-  { id: "pomegranate-grenadine", name: "Pomegranate Grenadine", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Tart-sweet real pomegranate syrup for Tequila Sunrise, Singapore Sling, and Shirley Temple." },
-  { id: "raspberry-rhapsody", name: "Raspberry Rhapsody Flavored Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Sweet raspberry syrup for Clover Club, Floradora, and Lemon-Berry Fizz." },
-  { id: "simple-syrup", name: "Premium Syrup (Simple Syrup, 1:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, notes: "Your premium/simple syrup. Equal parts sugar and water; foundation for sour and fizz drinks." },
-  { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
-  { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", notes: "French sweet almond and orange flower syrup for Mai Tai." },
-  { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", notes: "Liquid clover honey for Penicillin and Bee's Knees." },
-  { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, notes: "Fresh ginger syrup for Penicillin." },
+  { id: "pomegranate-grenadine", name: "Pomegranate Grenadine", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Tart-sweet real pomegranate syrup for Tequila Sunrise, Singapore Sling, and Shirley Temple." },
+  { id: "raspberry-rhapsody", name: "Raspberry Rhapsody Flavored Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Sweet raspberry syrup for Clover Club, Floradora, and Lemon-Berry Fizz." },
+  { id: "simple-syrup", name: "Premium Syrup (Simple Syrup, 1:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Your premium/simple syrup. Equal parts sugar and water; foundation for sour and fizz drinks." },
+  { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: false, refrigerate: true, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
+  { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "French sweet almond and orange flower syrup for Mai Tai." },
+  { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Liquid clover honey for Penicillin and Bee's Knees." },
+  { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, refrigerate: true, notes: "Fresh ginger syrup for Penicillin." },
   { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: false, notes: "For muddling in Old Fashioned and rimming glasses." },
   { id: "fever-tree-indian-tonic", name: "Fever-Tree Premium Indian Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Premium tonic water with botanical oils and high-quality quinine. Perfect upgrade for a crisp G&T." },
   { id: "fever-tree-ginger-beer", name: "Fever-Tree Premium Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Brewed with a blend of three natural gingers. Deep, spicy flavor profile that beautifully mimics alcohol proof." },
@@ -349,34 +350,34 @@ const DEFAULT_INVENTORY = [
   { id: "cola", name: "Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "can", notes: "For Cuba Libre, Long Island, and Roy Rogers." },
   { id: "lemon-lime-soda", name: "Lemon-Lime Soda (Sprite)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Bubbly citrus soda for Blue Lagoon, Tequila Slammer, and Green Tea Shot." },
   { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "For the Jägerbomb drop." },
-  { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
-  { id: "orange-juice", name: "Orange Juice (Fresh Navel Oranges)", category: "mixers_sodas", subCategory: "Juices", inStock: true, notes: "Squeezed fresh from your in-stock Navel Oranges for Tequila Sunrise, Mimosa, and Ward 8." },
-  { id: "pineapple-juice", name: "Fresh Pineapple / Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh pineapple for juice and garnish; supports Singapore Sling, Piña Colada, and Pineapple Cooler." },
-  { id: "grapefruit-juice", name: "Fresh Grapefruit / Pink Grapefruit Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh grapefruit for juice and garnish; supports Paloma, Hemingway Daiquiri, and Sea Breeze." },
-  { id: "apple-juice", name: "Apple Juice / Cider", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Crisp apple juice for Spiced Apple Cider, Washington Apple, and Apple Martini." },
-  { id: "mango-juice", name: "Mango Puree / Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Lush tropical puree for Mango Mule." },
-  { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
-  { id: "coconut-cream", name: "Coconut Cream (Cream of Coconut)", category: "mixers_sodas", subCategory: "Juices & Creams", inStock: false, notes: "Sweet rich coconut cream for Piña Colada and Coconut Lime Mocktail." },
-  { id: "coconut-water", name: "Pure Coconut Water", category: "mixers_sodas", subCategory: "Juices", inStock: false, notes: "Hydrating tropical water for Coconut Lime Mocktail." },
-  { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
-  { id: "whipped-cream", name: "Whipped Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, notes: "Fluffy crown for the Blowjob shot and dessert-style drinks." },
+  { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, refrigerate: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
+  { id: "orange-juice", name: "Orange Juice (Fresh Navel Oranges)", category: "mixers_sodas", subCategory: "Juices", inStock: true, refrigerate: true, notes: "Squeezed fresh from your in-stock Navel Oranges for Tequila Sunrise, Mimosa, and Ward 8." },
+  { id: "pineapple-juice", name: "Fresh Pineapple / Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh pineapple for juice and garnish; supports Singapore Sling, Piña Colada, and Pineapple Cooler." },
+  { id: "grapefruit-juice", name: "Fresh Grapefruit / Pink Grapefruit Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh grapefruit for juice and garnish; supports Paloma, Hemingway Daiquiri, and Sea Breeze." },
+  { id: "apple-juice", name: "Apple Juice / Cider", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Crisp apple juice for Spiced Apple Cider, Washington Apple, and Apple Martini." },
+  { id: "mango-juice", name: "Mango Puree / Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Lush tropical puree for Mango Mule." },
+  { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
+  { id: "coconut-cream", name: "Coconut Cream (Cream of Coconut)", category: "mixers_sodas", subCategory: "Juices & Creams", inStock: false, refrigerate: true, notes: "Sweet rich coconut cream for Piña Colada and Coconut Lime Mocktail." },
+  { id: "coconut-water", name: "Pure Coconut Water", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Hydrating tropical water for Coconut Lime Mocktail." },
+  { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
+  { id: "whipped-cream", name: "Whipped Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Fluffy crown for the Blowjob shot and dessert-style drinks." },
 
   // --- FRESH PRODUCE & GARNISHES (User In Stock & Shopping List) ---
-  { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
-  { id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh limes for juice and wheels; core citrus for Margarita, Daiquiri, Moscow Mule, Mojito, Southside, and Gimlet." },
-  { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh navel oranges for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
-  { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, notes: "Aromatic sprigs for Mojito, Mint Julep, and Hugo Spritz." },
-  { id: "fresh-cucumber", name: "Fresh Cucumber", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, notes: "Crisp cucumber slices for Cucumber Mint Cooler and Gimlet." },
-  { id: "fresh-rosemary", name: "Fresh Rosemary Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, notes: "Woody aromatic herb for Rosemary Grapefruit Spritzer." },
-  { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, notes: "For Virgin Strawberry Daiquiri." },
-  { id: "maraschino-cherries", name: "Maraschino Cherries", category: "fresh_garnishes", subCategory: "Garnishes", inStock: false, notes: "Classic garnish for Manhattan, Shirley Temple, and Singapore Sling." },
+  { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, refrigerate: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
+  { id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh limes for juice and wheels; core citrus for Margarita, Daiquiri, Moscow Mule, Mojito, Southside, and Gimlet." },
+  { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh navel oranges for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
+  { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, refrigerate: true, notes: "Aromatic sprigs for Mojito, Mint Julep, and Hugo Spritz." },
+  { id: "fresh-cucumber", name: "Fresh Cucumber", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Crisp cucumber slices for Cucumber Mint Cooler and Gimlet." },
+  { id: "fresh-rosemary", name: "Fresh Rosemary Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Woody aromatic herb for Rosemary Grapefruit Spritzer." },
+  { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "For Virgin Strawberry Daiquiri." },
+  { id: "maraschino-cherries", name: "Maraschino Cherries", category: "fresh_garnishes", subCategory: "Garnishes", inStock: false, refrigerate: true, notes: "Classic garnish for Manhattan, Shirley Temple, and Singapore Sling." },
   { id: "fresh-espresso", name: "Fresh Espresso Shots (made to order)", category: "fresh_garnishes", subCategory: "Coffee & Fresh", inStock: true, quantity: 1, unit: "on demand", notes: "Readily available fresh espresso for dense crema on Espresso Martinis and coffee drinks." },
   { id: "coffee-beans", name: "Whole Roasted Coffee Beans", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "Three floated beans for Espresso Martini and coffee cocktail garnishes." },
-  { id: "egg-white", name: "Egg White (Fresh or Aquafaba)", category: "fresh_garnishes", subCategory: "Cocktail Texture", inStock: true, notes: "Creates silky texture and dense meringue foam on Sours." },
+  { id: "egg-white", name: "Egg White (Fresh or Aquafaba)", category: "fresh_garnishes", subCategory: "Cocktail Texture", inStock: true, refrigerate: true, notes: "Creates silky texture and dense meringue foam on Sours." },
   { id: "tabasco-sauce", name: "Tabasco Hot Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: true, notes: "Piquant heat for Bloody Mary, Virgin Mary, and Flatliner." },
   { id: "worcestershire-sauce", name: "Worcestershire Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: false, notes: "Savory umami for Bloody Mary and Virgin Mary." },
-  { id: "coarse-salt", name: "Coarse Kosher Salt", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, notes: "For glass rims on Margarita, Paloma, and Salty Dog." },
-  { id: "ice", name: "Ice Cubes (and crushed ice as needed)", category: "fresh_garnishes", subCategory: "Bar Essentials", inStock: true, notes: "Available ice cubes for chilling and dilution; crush as needed for tiki and julep-style drinks." }
+  { id: "coarse-salt", name: "Coarse Kosher Salt", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "For glass rims on Margarita, Paloma, and Salty Dog." },
+  { id: "ice", name: "Ice Cubes (and crushed ice as needed)", category: "fresh_garnishes", subCategory: "Bar Essentials", inStock: true, refrigerate: true, notes: "Available ice cubes for chilling and dilution; crush as needed for tiki and julep-style drinks." }
 ];
 
 const DEFAULT_DRINKS = [
@@ -1116,7 +1117,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Lightly whip heavy cream just until it forms soft ribbons—do NOT whip to stiff peaks. Pour it gently over the back of a warm spoon so it floats on hot coffee.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Irish Whiskey (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Irish Whiskey (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black", ingredientGroup: "irish-whiskey" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Hot Fresh Brewed Coffee", substitute: "Fresh Americano / espresso + hot water", inventoryId: "fresh-espresso" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Brown Sugar / Demerara Syrup", substitute: "Granulated sugar", inventoryId: "granulated-sugar" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Heavy Whipping Cream (Lightly whipped)", substitute: "Chilled fresh heavy cream", inventoryId: "whipping-heavy-cream" }
@@ -2361,7 +2362,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Despite the name, there is zero tea in this shot! It looks luminous green-yellow like green tea and goes down remarkably smooth.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Irish Whiskey (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Irish Whiskey (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black", ingredientGroup: "irish-whiskey" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Hoffmann Peach Liqueur", substitute: "Peach schnapps", inventoryId: "hoffmann-peach" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Sweet & Sour Mix (or Lemon+Simple)", substitute: "Equal parts lemon juice and simple syrup", inventoryId: "fresh-lemons" },
       { amountOz: "Splash", amountMl: "Splash", item: "Lemon-Lime Soda (Sprite)", substitute: "Chang Soda Water", inventoryId: "lemon-lime-soda" }
@@ -4403,5 +4404,5 @@ const DEFAULT_DRINKS = [
 ];
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { INVENTORY_CATEGORIES, DEFAULT_INVENTORY, DEFAULT_DRINKS };
+  module.exports = { INVENTORY_CATEGORIES, DEFAULT_INVENTORY, DEFAULT_DRINKS, INGREDIENT_GROUPS };
 }

@@ -79,7 +79,8 @@
               ...def,
               inStock: inStock,
               quantity: qty,
-              unit: s.unit || getDefaultUnit(def)
+              unit: s.unit || getDefaultUnit(def),
+              refrigerate: s.refrigerate !== undefined ? s.refrigerate : def.refrigerate
             };
           }
           return {
@@ -633,6 +634,35 @@
   }
 
   // ==================== GLOSSARY & INVENTORY ====================
+  function itemNeedsRefrigeration(item) {
+    return Boolean(item && item.refrigerate);
+  }
+
+  function renderRefrigerateBadge(item) {
+    if (!itemNeedsRefrigeration(item)) return "";
+    return `
+      <span class="inv-badge-refrigerate" title="Keep Refrigerated" aria-label="Keep Refrigerated">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="2" x2="12" y2="22"></line>
+          <line x1="12" y1="6" x2="9" y2="3"></line>
+          <line x1="12" y1="6" x2="15" y2="3"></line>
+          <line x1="12" y1="18" x2="9" y2="21"></line>
+          <line x1="12" y1="18" x2="15" y2="21"></line>
+          <line x1="3.34" y1="7" x2="20.66" y2="17"></line>
+          <line x1="6.8" y1="9" x2="3.8" y2="10.73"></line>
+          <line x1="6.8" y1="9" x2="5.07" y2="6"></line>
+          <line x1="17.2" y1="15" x2="20.2" y2="13.27"></line>
+          <line x1="17.2" y1="15" x2="18.93" y2="18"></line>
+          <line x1="3.34" y1="17" x2="20.66" y2="7"></line>
+          <line x1="6.8" y1="15" x2="5.07" y2="18"></line>
+          <line x1="6.8" y1="15" x2="3.8" y2="13.27"></line>
+          <line x1="17.2" y1="9" x2="18.93" y2="6"></line>
+          <line x1="17.2" y1="9" x2="20.2" y2="10.73"></line>
+        </svg>
+      </span>`;
+  }
+
+
   function getInventoryStatus(item) {
     return item.inStock ? "in-stock" : item.incoming ? "incoming" : "to-buy";
   }
@@ -710,7 +740,10 @@
       const statusLabel = status => status === "in-stock" ? "In Stock" : status === "incoming" ? "Incoming" : "To Buy";
       container.innerHTML = visibleItems.length ? `
         <div class="inventory-table-wrapper">
-          <div class="inventory-stock-key"><span><i class="stock-key-dot shelf"></i>Shelf-Stable Bottles</span><span><i class="stock-key-dot fresh"></i>Perishables</span></div>
+          <div class="inventory-stock-key">
+            <span><i class="stock-key-dot shelf"></i>Shelf-Stable Bottles</span>
+            <span><span class="stock-key-refrigerate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="12" y1="6" x2="9" y2="3"></line><line x1="12" y1="6" x2="15" y2="3"></line><line x1="12" y1="18" x2="9" y2="21"></line><line x1="12" y1="18" x2="15" y2="21"></line><line x1="3.34" y1="7" x2="20.66" y2="17"></line><line x1="6.8" y1="9" x2="3.8" y2="10.73"></line><line x1="6.8" y1="9" x2="5.07" y2="6"></line><line x1="17.2" y1="15" x2="20.2" y2="13.27"></line><line x1="17.2" y1="15" x2="18.93" y2="18"></line><line x1="3.34" y1="17" x2="20.66" y2="7"></line><line x1="6.8" y1="15" x2="5.07" y2="18"></line><line x1="6.8" y1="15" x2="3.8" y2="13.27"></line><line x1="17.2" y1="9" x2="18.93" y2="6"></line><line x1="17.2" y1="9" x2="20.2" y2="10.73"></line></svg></span>Keep Refrigerated</span>
+          </div>
           <table class="inventory-table">
             <thead><tr>
               <th>${sortHeader("Item", "name")}</th>
@@ -727,8 +760,8 @@
               const usableRecipes = getRecipesUsingItem(item.id);
               const readyCount = usableRecipes.filter(drink => getDrinkStockStatus(drink).canMake).length;
               const linkLabel = readyCount > 0 ? `${readyCount} ready` : `${usableRecipes.length} recipes`;
-              return `<tr>
-                <td><label class="inventory-table-item ${item.category === "fresh_garnishes" ? "perishable-item" : "shelf-stable-item"}"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span></label></td>
+              return `<tr class="${itemNeedsRefrigeration(item) ? 'needs-refrigeration' : ''}">
+                <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span>${renderRefrigerateBadge(item)}</label></td>
                 <td>${INVENTORY_CATEGORIES[item.category] || item.category || "—"}</td>
                 <td>${item.subCategory || "—"}</td>
                 <td><span class="inv-badge-stock ${status === "in-stock" ? "stock" : status === "incoming" ? "incoming" : "needed"}">${statusLabel(status)}</span></td>
@@ -771,9 +804,12 @@
             <div class="inv-content">
               <div class="inv-name-row">
                 <span class="inv-name">${item.name}</span>
-                <span class="inv-badge-stock ${item.inStock ? "stock" : item.incoming ? "incoming" : "needed"}">
-                  ${stockLabel}
-                </span>
+                <div class="inv-badges-wrap">
+                  ${renderRefrigerateBadge(item)}
+                  <span class="inv-badge-stock ${item.inStock ? "stock" : item.incoming ? "incoming" : "needed"}">
+                    ${stockLabel}
+                  </span>
+                </div>
               </div>
               <div class="inv-meta">${item.subCategory || ""}${showAbv ? " • " + abvDisplay : ""}${item.inStock ? " • " + quantity + " " + unit : ""}${item.proof ? " • " + item.proof : ""}</div>
               ${item.notes ? `<div class="inv-notes">${item.notes}</div>` : ""}
@@ -892,7 +928,12 @@
         const found = inventory.find(i => i.id === ingId);
         if (found) {
           currentTab = "all";
-          searchQuery = found.name.split(" ")[0];
+          inventoryRecipeFilterIds = null;
+          if (found.id === "irish-whiskey" || found.name.toLowerCase().startsWith("irish whiskey")) {
+            searchQuery = "irish whiskey";
+          } else {
+            searchQuery = found.name.split(" ")[0];
+          }
           const searchInput = document.getElementById("search-input");
           if (searchInput) searchInput.value = searchQuery;
           renderApp();
@@ -998,7 +1039,7 @@
       const isLowStock = isStocked && qty <= 1;
 
       return `
-        <tr data-id="${item.id}">
+        <tr data-id="${item.id}" class="${itemNeedsRefrigeration(item) ? 'needs-refrigeration' : ''}">
           <td style="text-align: center;">
             <label class="switch-container" title="${isStocked ? "In Stock (Click to mark Out of Stock)" : "Out of Stock (Click to mark In Stock)"}">
               <input type="checkbox" class="admin-stock-toggle" data-id="${item.id}" ${isStocked ? "checked" : ""}>
@@ -1008,7 +1049,10 @@
 
           <td>
             <div class="item-meta-cell">
-              <span class="item-title-text">${item.name}</span>
+              <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                <span class="item-title-text">${item.name}</span>
+                ${renderRefrigerateBadge(item)}
+              </div>
               <span class="item-subtext">${item.subCategory || ""} ${item.brand ? "• " + item.brand : ""}</span>
             </div>
           </td>
@@ -1140,6 +1184,8 @@
     document.getElementById("form-item-unit").value = "bottle";
     document.getElementById("form-item-notes").value = "";
     document.getElementById("form-item-in-stock").checked = true;
+    const refrigEl = document.getElementById("form-item-refrigerate");
+    if (refrigEl) refrigEl.checked = false;
 
     const modal = document.getElementById("admin-item-modal-backdrop");
     if (modal) modal.classList.add("open");
@@ -1158,6 +1204,8 @@
     document.getElementById("form-item-unit").value = item.unit || getDefaultUnit(item);
     document.getElementById("form-item-notes").value = item.notes || "";
     document.getElementById("form-item-in-stock").checked = item.inStock !== false && (item.quantity === undefined || item.quantity > 0);
+    const refrigEl = document.getElementById("form-item-refrigerate");
+    if (refrigEl) refrigEl.checked = Boolean(item.refrigerate);
 
     const modal = document.getElementById("admin-item-modal-backdrop");
     if (modal) modal.classList.add("open");
@@ -1180,6 +1228,8 @@
     const unit = document.getElementById("form-item-unit").value;
     const notes = document.getElementById("form-item-notes").value.trim();
     const inStock = document.getElementById("form-item-in-stock").checked && quantity > 0;
+    const refrigEl = document.getElementById("form-item-refrigerate");
+    const refrigerate = refrigEl ? refrigEl.checked : false;
 
     if (id) {
       // Edit existing
@@ -1192,6 +1242,7 @@
         item.unit = unit;
         item.notes = notes;
         item.inStock = inStock;
+        item.refrigerate = refrigerate;
       }
     } else {
       // Add new
@@ -1204,7 +1255,8 @@
         quantity: quantity,
         unit: unit,
         notes: notes,
-        inStock: inStock
+        inStock: inStock,
+        refrigerate: refrigerate
       });
     }
 

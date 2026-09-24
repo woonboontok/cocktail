@@ -1059,13 +1059,46 @@ a:hover {
 .stock-key-dot { width: 0.45rem; height: 0.45rem; border-radius: 50%; display: inline-block; }
 .stock-key-dot.shelf { background: var(--accent-gold); }
 .stock-key-dot.fresh { background: #f5c451; }
+.stock-key-refrigerate-icon { display: inline-flex; align-items: center; justify-content: center; color: #38bdf8; }
+.stock-key-refrigerate-icon svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2.2; }
 .inventory-table { width: 100%; border-collapse: collapse; min-width: 760px; background: var(--bg-card); }
 .inventory-table th, .inventory-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--border-subtle); font-size: 0.82rem; }
 .inventory-table th { background: rgba(255,255,255,0.025); }
 .inventory-table tbody tr:last-child td { border-bottom: 0; }
 .inventory-sort-btn { padding: 0; border: 0; background: transparent; font: inherit; font-weight: 700; color: var(--text-secondary); }
-.inventory-table-item { display: flex; align-items: center; gap: 0.65rem; color: var(--text-primary); font-weight: 600; }
+.inventory-table-item { display: flex; align-items: center; gap: 0.55rem; color: var(--text-primary); font-weight: 600; flex-wrap: wrap; }
 .inventory-table-item .inv-checkbox { margin: 0; flex: 0 0 auto; }
+.inv-badges-wrap { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+/* 1. Subtle ice-blue glowing rows for items requiring refrigeration */
+.inventory-table tbody tr.needs-refrigeration {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.04) 0%, transparent 60%);
+  border-left: 2px solid rgba(56, 189, 248, 0.45);
+}
+/* 2. Compact, layout-safe high-density micro highlight tag */
+.inv-badge-refrigerate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  background: rgba(56, 189, 248, 0.16);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+/* 3. Ensure the inner icon remains sharp and centralized */
+.inv-badge-refrigerate svg {
+  width: 11px;
+  height: 11px;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  display: block;
+}
+
 .inventory-empty-state { padding: 2.5rem 1rem; text-align: center; color: var(--text-muted); background: var(--bg-card); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md); }
 
 .inventory-title-group h2 {
