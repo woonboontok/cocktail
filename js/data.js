@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "24 September 2026";
-const INVENTORY_SYNC_VERSION = "20260924_2";
+const INVENTORY_LAST_UPDATED = "30 September 2026";
+const INVENTORY_SYNC_VERSION = "20260930_1";
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
@@ -41,8 +41,9 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" },
   "fresh-oranges": { inStock: true, quantity: 1, unit: "fruit" },
   "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
-  "grapefruit-juice": { inStock: true, quantity: 1, unit: "fruit" },
-  "pineapple-juice": { inStock: true, quantity: 1, unit: "fruit" },
+  "grapefruit-juice": { inStock: true, quantity: 1, unit: "carton" },
+  "pineapple-juice": { inStock: true, quantity: 1, unit: "carton" },
+  "orange-juice": { inStock: true, quantity: 1, unit: "carton" },
   "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
   "tabasco-sauce": { inStock: true, quantity: 1, unit: "bottle" },
   "fever-tree-ginger-beer": { inStock: true, quantity: 6, unit: "pack" },
@@ -51,7 +52,15 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "fever-tree-indian-tonic": { inStock: true, quantity: 6, unit: "pack" },
   "tonic-water": { inStock: true, aliasOf: "fever-tree-indian-tonic" },
   "midori": { inStock: true, quantity: 1, unit: "bottle" },
-  "energy-drink": { inStock: true, quantity: 4, unit: "can" }
+  "energy-drink": { inStock: true, quantity: 4, unit: "can" },
+  "jameson-irish-whiskey": { inStock: true, quantity: 1, unit: "bottle" },
+  "laphroaig-10-year": { inStock: true, quantity: 1, unit: "bottle" },
+  "the-botanist-gin": { inStock: true, quantity: 1, unit: "bottle" },
+  "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
+  "kawashima-sake": { inStock: true, quantity: 1, unit: "bottle" },
+  "chang-lime-soda": { inStock: true, quantity: 2, unit: "bottle" },
+  "cola": { inStock: true, quantity: 6, unit: "can" },
+  "demerara-syrup": { inStock: true, quantity: 1, unit: "bottle" }
 };
 
 const INGREDIENT_GROUPS = {
@@ -77,7 +86,7 @@ const INGREDIENT_GROUPS = {
   },
   "gin": {
     label: "London Dry Gin",
-    inventoryIds: ["tanqueray-gin"]
+    inventoryIds: ["tanqueray-gin", "the-botanist-gin"]
   },
   "vodka": {
     label: "Vodka",
@@ -93,11 +102,11 @@ const INGREDIENT_GROUPS = {
   },
   "scotch": {
     label: "Scotch Whisky",
-    inventoryIds: ["jw-black-label"]
+    inventoryIds: ["jw-black-label", "laphroaig-10-year"]
   },
   "irish-whiskey": {
     label: "Irish Whiskey",
-    inventoryIds: ["irish-whiskey", "jim-beam-black"]
+    inventoryIds: ["jameson-irish-whiskey", "irish-whiskey", "jim-beam-black"]
   },
   "tequila": {
     label: "Tequila",
@@ -197,7 +206,7 @@ const INGREDIENT_GROUPS = {
   },
   "absinthe": {
     label: "Absinthe",
-    inventoryIds: ["absinthe"]
+    inventoryIds: ["absinthe", "pere-kermanns-absinthe"]
   },
   "tequila-rose": {
     label: "Strawberry Cream Liqueur",
@@ -239,7 +248,10 @@ const INGREDIENT_GROUPS = {
   "fresh-lemon": { label: "Fresh Lemon", inventoryIds: ["fresh-lemons"] },
   "fresh-mint": { label: "Fresh Mint", inventoryIds: ["fresh-mint"] },
   "soda-water": { label: "Soda Water", inventoryIds: ["chang-soda-water"] },
-  "simple-syrup": { label: "Simple Syrup", inventoryIds: ["simple-syrup"] }
+  "simple-syrup": { label: "Simple Syrup", inventoryIds: ["simple-syrup"] },
+  "demerara-syrup": { label: "Demerara Syrup", inventoryIds: ["demerara-syrup"] },
+  "sake": { label: "Sake", inventoryIds: ["kawashima-sake"] },
+  "lime-soda": { label: "Lime Soda", inventoryIds: ["chang-lime-soda"] }
 };
 
 const INGREDIENT_GROUP_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
@@ -274,9 +286,13 @@ const DEFAULT_INVENTORY = [
   { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
+  { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Iconic triple-distilled blended Irish whiskey. Smooth, approachable, and endlessly versatile — classic for Irish Coffee, Cameron's Kick, and Green Tea Shot." },
+  { id: "laphroaig-10-year", name: "Laphroaig 10 Year Old Single Malt Scotch Whisky (1 Litre)", category: "spirits", subCategory: "Whiskey › Scotch › Islay Single Malt", spiritFamily: "Whiskey", spiritStyle: "Islay Single Malt", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Legendary heavily peated Islay single malt. Medicinal smoke, seaweed, and sweet vanilla finish. Outstanding for peated Scotch cocktails and sipping neat." },
+  { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
+  { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
-  { id: "irish-whiskey", name: "Irish Whiskey (Jameson)", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: false, abv: 40, notes: "Triple distilled smooth whiskey for Irish Coffee & Green Tea Shot." },
+  { id: "irish-whiskey", name: "Irish Whiskey (Generic)", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: false, abv: 40, notes: "Generic Irish Whiskey placeholder. Use Jameson Irish Whiskey (in stock) for all Irish whiskey recipes." },
   { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
   { id: "cachaca", name: "Cachaça", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Brazilian fresh pressed sugarcane spirit for Caipirinha." },
 
@@ -306,7 +322,8 @@ const DEFAULT_INVENTORY = [
   { id: "jagermeister", name: "Jägermeister Liqueur (35% ABV)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 2, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
   { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Vivid neon-green Japanese muskmelon and yubari melon liqueur. Sweet and fragrant."},
   { id: "fireball", name: "Fireball Cinnamon Whisky", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, abv: 33, notes: "Cinnamon whisky for Fireball Apple Pie Shot." },
-  { id: "absinthe", name: "Absinthe", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 68, refrigerate: false, notes: "Aromatic anise rinse for Sazerac and Corpse Reviver No. 2." },
+  { id: "absinthe", name: "Absinthe (Generic)", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 68, refrigerate: false, notes: "Generic absinthe placeholder. Use Père Kermann's Absinthe (in stock) for all absinthe rinses and cocktails." },
+  { id: "pere-kermanns-absinthe", name: "Père Kermann's Absinthe 700ml", category: "liqueurs", subCategory: "Anise & Herbal", inStock: true, quantity: 1, unit: "bottle", abv: 55, refrigerate: false, notes: "Classic French-style absinthe with anise, fennel, and grand wormwood. Essential for the Sazerac rinse, Corpse Reviver No. 2, and Death in the Afternoon." },
   { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, abv: 15, refrigerate: true, notes: "Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot." },
   { id: "frangelico", name: "Frangelico Hazelnut Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Hazelnut liqueur for Nutty Irishman and Duck Fart." },
 
@@ -337,6 +354,7 @@ const DEFAULT_INVENTORY = [
   { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Liquid clover honey for Penicillin and Bee's Knees." },
   { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, refrigerate: true, notes: "Fresh ginger syrup for Penicillin." },
   { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: false, notes: "For muddling in Old Fashioned and rimming glasses." },
+  { id: "demerara-syrup", name: "Demerara Syrup (2:1 Rich Syrup)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Rich 2:1 raw Demerara sugar syrup. Deeper molasses-caramel sweetness than plain simple syrup; ideal for Old Fashioned, Penicillin, and Whiskey Sours." },
   { id: "fever-tree-indian-tonic", name: "Fever-Tree Premium Indian Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Premium tonic water with botanical oils and high-quality quinine. Perfect upgrade for a crisp G&T." },
   { id: "fever-tree-ginger-beer", name: "Fever-Tree Premium Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Brewed with a blend of three natural gingers. Deep, spicy flavor profile that beautifully mimics alcohol proof." },
   { id: "bundaberg-ginger-beer", name: "Bundaberg Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Classic craft-brewed Australian ginger beer, rich and sweet." },
@@ -347,13 +365,14 @@ const DEFAULT_INVENTORY = [
   { id: "chang-soda-water", name: "Chang Soda Water (24 × 325 ml)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 24, unit: "bottle", notes: "24 bottles of extra-fizzy, high-carbonation club soda for Mojitos, Collins, and Spritzes." },
   { id: "ginger-beer", name: "Ginger Beer (Fever-Tree / Bundaberg)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-ginger-beer", notes: "In stock (Fulfilled by Fever-Tree Premium Ginger Beer and Bundaberg Ginger Beer)." },
   { id: "tonic-water", name: "Tonic Water (Fever-Tree)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-indian-tonic", notes: "In stock (Fulfilled by Fever-Tree Premium Indian Tonic Water)." },
-  { id: "cola", name: "Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "can", notes: "For Cuba Libre, Long Island, and Roy Rogers." },
+  { id: "cola", name: "Coca-Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "can", notes: "6 cans of Coca-Cola for Cuba Libre, Long Island Iced Tea, and Roy Rogers." },
+  { id: "chang-lime-soda", name: "Chang Lime Soda (2 Bottles)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 2, unit: "bottle", notes: "Refreshing lime-flavored carbonated soda. Crisp and citrusy for casual highball mixing and lime cocktail riffs." },
   { id: "lemon-lime-soda", name: "Lemon-Lime Soda (Sprite)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Bubbly citrus soda for Blue Lagoon, Tequila Slammer, and Green Tea Shot." },
   { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "For the Jägerbomb drop." },
   { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, refrigerate: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
-  { id: "orange-juice", name: "Orange Juice (Fresh Navel Oranges)", category: "mixers_sodas", subCategory: "Juices", inStock: true, refrigerate: true, notes: "Squeezed fresh from your in-stock Navel Oranges for Tequila Sunrise, Mimosa, and Ward 8." },
-  { id: "pineapple-juice", name: "Fresh Pineapple / Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh pineapple for juice and garnish; supports Singapore Sling, Piña Colada, and Pineapple Cooler." },
-  { id: "grapefruit-juice", name: "Fresh Grapefruit / Pink Grapefruit Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh grapefruit for juice and garnish; supports Paloma, Hemingway Daiquiri, and Sea Breeze." },
+  { id: "orange-juice", name: "Orange Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "In stock (carton). For Tequila Sunrise, Mimosa, Ward 8, and Screwdriver." },
+  { id: "pineapple-juice", name: "Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "In stock (carton). Supports Singapore Sling, Piña Colada, and Pineapple Cooler." },
+  { id: "grapefruit-juice", name: "Grapefruit Juice / Pink Grapefruit Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "In stock (carton). Supports Paloma, Hemingway Daiquiri, and Sea Breeze." },
   { id: "apple-juice", name: "Apple Juice / Cider", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Crisp apple juice for Spiced Apple Cider, Washington Apple, and Apple Martini." },
   { id: "mango-juice", name: "Mango Puree / Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Lush tropical puree for Mango Mule." },
   { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
@@ -1086,22 +1105,22 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Smoky Peat, Spicy Ginger, Honey & Citrus",
     difficulty: 3,
     popularity: 9.8,
-    proTip: "The Johnnie Walker Black Label brings sweet malt and subtle smoke to the base. If you have an Islay single malt, float a barspoon on top for an unforgettable smoky nose.",
+    proTip: "The Johnnie Walker Black Label brings sweet malt and subtle smoke to the base. Float a barspoon of Laphroaig 10 Year on top for the iconic smoky nose — now that it's in stock, this is the definitive version! The smoke hits your nostrils before every sip, transforming a great drink into an unforgettable one.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Any blended Scotch whisky", inventoryId: "jw-black-label" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Honey Syrup (3:1 honey/water)", substitute: "Simple syrup with honey", inventoryId: "honey-syrup" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Spicy Ginger Syrup", substitute: "Schweppes Ginger Ale reduction or muddled fresh ginger", inventoryId: "ginger-syrup" },
-      { amountOz: "0.25 oz float", amountMl: "7.5 ml float", item: "Johnnie Walker Black (or Islay Peated)", substitute: "Smoky Scotch float", inventoryId: "jw-black-label" }
+      { amountOz: "0.25 oz float", amountMl: "7.5 ml float", item: "Laphroaig 10 Year (Islay Peat Float)", substitute: "Any peated Islay single malt", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" }
     ],
     instructions: [
       "Add blended Scotch, lemon juice, honey syrup, and ginger syrup into a shaker with ice.",
       "Shake vigorously for 12 seconds.",
       "Strain over a large single ice cube in a rocks glass.",
-      "Carefully float a barspoon of smoky Scotch on top.",
-      "Garnish with candied ginger or a fresh lemon wheel."
+      "Carefully float a barspoon of Laphroaig 10 Year on top by pouring it slowly over the back of the spoon.",
+      "Garnish with candied ginger or a fresh lemon wheel. Do not stir — the smoke should greet every sip."
     ],
-    tags: ["scotch", "ginger", "honey", "smoky", "modern-classic"]
+    tags: ["scotch", "laphroaig", "ginger", "honey", "smoky", "modern-classic", "in-stock"]
   },
   {
     id: "irish-coffee",
@@ -1117,9 +1136,9 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Lightly whip heavy cream just until it forms soft ribbons—do NOT whip to stiff peaks. Pour it gently over the back of a warm spoon so it floats on hot coffee.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Irish Whiskey (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black", ingredientGroup: "irish-whiskey" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jameson Irish Whiskey", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Hot Fresh Brewed Coffee", substitute: "Fresh Americano / espresso + hot water", inventoryId: "fresh-espresso" },
-      { amountOz: "1 tsp", amountMl: "5 ml", item: "Brown Sugar / Demerara Syrup", substitute: "Granulated sugar", inventoryId: "granulated-sugar" },
+      { amountOz: "1 tsp", amountMl: "5 ml", item: "Brown Sugar / Demerara Syrup", substitute: "Granulated sugar", inventoryId: "demerara-syrup" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Heavy Whipping Cream (Lightly whipped)", substitute: "Chilled fresh heavy cream", inventoryId: "whipping-heavy-cream" }
     ],
     instructions: [
@@ -2362,7 +2381,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Despite the name, there is zero tea in this shot! It looks luminous green-yellow like green tea and goes down remarkably smooth.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Irish Whiskey (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black", ingredientGroup: "irish-whiskey" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jameson Irish Whiskey", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Hoffmann Peach Liqueur", substitute: "Peach schnapps", inventoryId: "hoffmann-peach" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Sweet & Sour Mix (or Lemon+Simple)", substitute: "Equal parts lemon juice and simple syrup", inventoryId: "fresh-lemons" },
       { amountOz: "Splash", amountMl: "Splash", item: "Lemon-Lime Soda (Sprite)", substitute: "Chang Soda Water", inventoryId: "lemon-lime-soda" }
@@ -4400,6 +4419,251 @@ const DEFAULT_DRINKS = [
       "Garnish extravagantly by skewering a fresh pineapple wedge and a maraschino cherry to look like a tropical bird, flanked by slapped mint fronds."
     ],
     tags: ["rum", "campari", "pineapple", "tiki", "tropical", "bittersweet", "classic", "in-stock"]
+  },
+  {
+    id: "camerons-kick",
+    name: "Cameron's Kick",
+    otherNames: "The Whisky Sour Twist, Scotch-Irish Sour",
+    category: "Cocktail",
+    baseSpirit: "Whiskey",
+    glassware: "Coupe / Nick & Nora",
+    alcoholLevel: "Medium-High (~24% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Peaty Smoke, Smooth Irish, Nutty Almond & Bright Citrus",
+    difficulty: 2,
+    popularity: 8.8,
+    proTip: "The magic of Cameron's Kick lies in the unlikely marriage of two whisky traditions: the smoky, medicinal peat of Laphroaig meets the silky, triple-distilled smoothness of Jameson, bridged by the rich almond sweetness of orgeat. Use equal parts of both whiskies and resist the temptation to alter the ratio. If you prefer a silkier mouthfeel, add a small egg white and dry shake first for a classic sour foam.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Jameson Irish Whiskey", substitute: "Any smooth Irish whiskey", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Laphroaig 10 Year Single Malt Scotch Whisky", substitute: "Any blended or peated Scotch whisky", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Orgeat Syrup", substitute: "Demerara Syrup + few drops of almond extract", inventoryId: "orgeat-syrup" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Twist", substitute: "Maraschino cherry", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Chill a coupe or Nick & Nora glass in the freezer for at least 10 minutes.",
+      "Combine Jameson Irish Whiskey, Laphroaig Scotch, fresh lemon juice, and orgeat syrup in a cocktail shaker.",
+      "Fill the shaker with clean ice cubes.",
+      "Shake vigorously for 12–15 seconds until the shaker exterior is thoroughly frosted.",
+      "Fine strain into the chilled coupe.",
+      "Express a lemon twist over the surface to release the citrus oils and place it on the rim as a garnish."
+    ],
+    tags: ["whiskey", "scotch", "irish-whiskey", "laphroaig", "jameson", "orgeat", "sour", "classic", "in-stock"]
+  },
+
+  // =========================================================================
+  // JAMESON & LAPHROAIG COCKTAILS (New additions — 30 September 2026)
+  // =========================================================================
+  {
+    id: "irish-mule",
+    name: "Irish Mule",
+    otherNames: "Jameson Mule, Celtic Mule",
+    category: "Cocktail",
+    baseSpirit: "Whiskey",
+    glassware: "Copper Mug or Highball",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Spicy Ginger, Smooth Irish Whiskey, Citrus & Refreshing Fizz",
+    difficulty: 1,
+    popularity: 9.2,
+    proTip: "The Irish Mule is essentially a Moscow Mule with Jameson swapped for vodka — and the result is arguably better. Jameson's vanilla and orchard-fruit sweetness pairs beautifully with the fiery ginger snap of Fever-Tree. If you have a copper mug, chill it in the freezer beforehand for the full theatric chill effect.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jameson Irish Whiskey", substitute: "Any smooth Irish whiskey", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime wedge squeezed", inventoryId: "fresh-limes" },
+      { amountOz: "4–5 oz", amountMl: "120–150 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer or Schweppes Ginger Soda", inventoryId: "fever-tree-ginger-beer", ingredientGroup: "ginger-beer" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wedge & Fresh Mint Sprig", substitute: "Lime wheel", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a copper mug (or highball glass) to the brim with clean ice cubes.",
+      "Pour in Jameson Irish Whiskey and fresh lime juice.",
+      "Top with ice-cold Fever-Tree Ginger Beer.",
+      "Gently stir once or twice with a bar spoon — just enough to mix without losing the carbonation.",
+      "Garnish with a fresh lime wedge squeezed over the top and a slapped mint sprig to release its aroma.",
+      "Serve immediately while ice cold."
+    ],
+    tags: ["irish-whiskey", "jameson", "ginger-beer", "mule", "refreshing", "summer", "easy", "in-stock"]
+  },
+  {
+    id: "jameson-ginger-lime",
+    name: "Jameson, Ginger & Lime",
+    otherNames: "Jameson & Ginger, The Classic Jameson Serve",
+    category: "Cocktail",
+    baseSpirit: "Whiskey",
+    glassware: "Highball",
+    alcoholLevel: "Low (~10% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Light, Smooth Whiskey, Sweet Ginger & Crisp Citrus",
+    difficulty: 1,
+    popularity: 9.0,
+    proTip: "This is the signature, official Jameson serve — the drink Jameson recommends above all others. Use ginger ale (or Schweppes Ginger Soda) rather than ginger beer for a gentler, sweeter flavour than the spikier Irish Mule. A generous squeeze of fresh lime juice cuts through the sweetness and lifts the whole drink. The ratio is 1 part Jameson to 2 parts ginger — keep it light!",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jameson Irish Whiskey", substitute: "Any smooth Irish whiskey", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Schweppes Ginger Soda (Ginger Ale)", substitute: "Fever-Tree Ginger Beer for extra spice", inventoryId: "schweppes-ginger-soda" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice (half a lime)", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wedge", substitute: "Lemon wedge", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a tall highball glass generously with ice cubes.",
+      "Pour in Jameson Irish Whiskey.",
+      "Top with Schweppes Ginger Soda, pouring slowly down the side of the glass to preserve the fizz.",
+      "Squeeze half a fresh lime directly into the glass and stir gently once.",
+      "Garnish with a lime wedge hooked on the rim.",
+      "Serve immediately — the colder, the better."
+    ],
+    tags: ["irish-whiskey", "jameson", "ginger", "highball", "easy", "refreshing", "session", "in-stock"]
+  },
+  {
+    id: "irish-maid",
+    name: "Irish Maid",
+    otherNames: "The Garden Irish, Jameson Elderflower Cocktail",
+    category: "Cocktail",
+    baseSpirit: "Whiskey",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Floral Elderflower, Smooth Irish Whiskey, Fresh Cucumber & Bright Citrus",
+    difficulty: 2,
+    popularity: 9.1,
+    proTip: "Created by mixologist Kevin Diedrich, the Irish Maid is a garden-in-a-glass cocktail. The cucumber must be muddled gently — aggressive muddling releases bitter compounds from the skin. Strain through a fine-mesh sieve to remove all pulp for a crystal-clear, elegant presentation. Fresh cucumber is ideal but if unavailable, 3 drops of cucumber essence or a cucumber-infused simple syrup works beautifully.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jameson Irish Whiskey", substitute: "Any smooth Irish whiskey", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "St-Germain Elderflower Liqueur", substitute: "Elderflower cordial + splash of vodka", inventoryId: "st-germain" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Honey syrup for floral depth", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "2–3 slices", amountMl: "2–3 slices", item: "Fresh Cucumber (for muddling)", substitute: "3 drops cucumber essence or cucumber water", inventoryId: "fresh-cucumber" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Cucumber Slice", substitute: "Fresh lemon wheel", inventoryId: "fresh-cucumber" }
+    ],
+    instructions: [
+      "Place 2–3 slices of fresh cucumber in the bottom of a cocktail shaker.",
+      "Muddle gently 4–5 times — just enough to release the juice without pulverizing the skin.",
+      "Add Jameson, St-Germain, fresh lemon juice, and simple syrup.",
+      "Fill the shaker with ice and shake vigorously for 12–15 seconds.",
+      "Double-strain through a fine-mesh sieve into a rocks glass filled with fresh ice to remove all cucumber pulp.",
+      "Garnish with a fresh cucumber slice perched on the rim."
+    ],
+    tags: ["irish-whiskey", "jameson", "st-germain", "elderflower", "cucumber", "floral", "refreshing", "modern-classic"]
+  },
+  {
+    id: "smoky-scotch-sour",
+    name: "Smoky Scotch Sour",
+    otherNames: "Islay Sour, Laphroaig Sour, Peated Whisky Sour",
+    category: "Cocktail",
+    baseSpirit: "Whiskey",
+    glassware: "Coupe or Rocks",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Bold Peat Smoke, Silky Citrus, Medicinal Honey & Velvety Foam",
+    difficulty: 2,
+    popularity: 9.0,
+    proTip: "Using Laphroaig as the sole base in a sour is a bold, polarising move — and utterly magnificent for peat lovers. The egg white foam softens the aggressive medicinal smokiness and the honey syrup bridges between the whisky's natural sweetness and the tart lemon. A tiny pinch of sea salt added to the shaker amplifies the Laphroaig's coastal brine character. Always dry shake first to build the foam before adding ice.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Laphroaig 10 Year Single Malt", substitute: "Any heavily peated Islay Scotch", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice only", inventoryId: "fresh-lemons" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Honey Syrup (3:1)", substitute: "Demerara syrup for deeper sweetness", inventoryId: "honey-syrup" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (or Aquafaba)", substitute: "Omit for no-foam version", inventoryId: "egg-white" },
+      { amountOz: "2 drops", amountMl: "2 drops", item: "Angostura Bitters (atop foam)", substitute: "Peychaud's bitters", inventoryId: "angostura-bitters" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Wheel or Orange Peel", substitute: "Lemon twist", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Add Laphroaig, fresh lemon juice, honey syrup, and egg white to a cocktail shaker — NO ice yet.",
+      "Dry shake vigorously for 10–12 seconds to emulsify the egg white into a dense, creamy foam.",
+      "Add ice to the shaker and wet shake hard for another 12 seconds until the exterior is frosted.",
+      "Fine strain into a chilled coupe (up) or over a single large ice cube in a rocks glass.",
+      "Allow the foam to settle and rise to the surface.",
+      "Carefully place 2 drops of Angostura bitters on the foam and drag a toothpick to create a pattern.",
+      "Garnish with a fresh lemon wheel or expressed orange peel."
+    ],
+    tags: ["scotch", "laphroaig", "sour", "peated", "smoky", "egg-white", "islay", "in-stock"]
+  },
+  {
+    id: "laphroaig-peated-old-fashioned",
+    name: "Laphroaig Peated Old Fashioned",
+    otherNames: "Islay Old Fashioned, Smoky Old Fashioned",
+    category: "Cocktail",
+    baseSpirit: "Whiskey",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "High (~33% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Intense Peat Smoke, Rich Caramel, Dark Chocolate & Coastal Brine",
+    difficulty: 2,
+    popularity: 8.9,
+    proTip: "This is not a cocktail for the faint-hearted — it's a monument to Laphroaig's raw, medicinal power, tamed just enough by the sweet demerara and aromatic bitters to be wildly drinkable. Use a 2:1 demerara syrup instead of plain simple syrup — its molasses-caramel depth is the perfect counterweight to the whisky's sea spray and antiseptic smoke. A crystal-clear ice sphere or single large cube slows dilution, allowing the complex aromatics to evolve as you sip.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Laphroaig 10 Year Single Malt", substitute: "Any peated Islay single malt", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Demerara Syrup (2:1)", substitute: "Simple syrup or honey syrup", inventoryId: "demerara-syrup", ingredientGroup: "demerara-syrup" },
+      { amountOz: "3 dashes", amountMl: "3 dashes", item: "Angostura Bitters", substitute: "Orange bitters or chocolate bitters", inventoryId: "angostura-bitters" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Orange Peel", substitute: "Lemon twist", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Place a large, single clear ice cube into a rocks glass.",
+      "In a mixing glass filled with ice, combine Laphroaig, demerara syrup, and Angostura bitters.",
+      "Stir smoothly and continuously for 25–30 seconds until well-chilled and perfectly diluted.",
+      "Strain over the ice cube in the rocks glass.",
+      "Hold a large orange peel over the glass, peel-side down, and snap it sharply to express the citrus oils across the surface. Rub the peel around the rim.",
+      "Drape or drop the orange peel into the glass and serve immediately."
+    ],
+    tags: ["scotch", "laphroaig", "old-fashioned", "spirit-forward", "smoky", "peated", "islay", "in-stock"]
+  },
+  {
+    id: "laphroaig-paloma",
+    name: "Laphroaig Paloma",
+    otherNames: "Smoky Islay Paloma, Peated Grapefruit Highball",
+    category: "Cocktail",
+    baseSpirit: "Whiskey",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Low-Medium (~14% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Peaty Smoke, Tart Pink Grapefruit, Citrus & Refreshing Fizz",
+    difficulty: 1,
+    popularity: 8.8,
+    proTip: "This is the official Laphroaig serve straight from the distillery website and one of the most unexpected flavour pairings in whisky cocktails. The bitter grapefruit oils strip back the most aggressive medicinal notes of the Laphroaig, leaving only the gorgeous campfire smoke and coastal mineral character. A smoked salt rim is optional but elevates the whole drink by echoing the whisky's brine. Try both salted and unsalted sips!",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Laphroaig 10 Year Single Malt", substitute: "Any peated Islay Scotch", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Pink Grapefruit Juice", substitute: "Fresh squeezed grapefruit juice", inventoryId: "grapefruit-juice" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup", substitute: "Demerara syrup or honey syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Premium club soda", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" },
+      { amountOz: "Optional rim", amountMl: "Optional rim", item: "Coarse Salt Rim (optional)", substitute: "Smoked salt or Tajin", inventoryId: "coarse-salt" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Grapefruit Wedge or Wheel", substitute: "Lime wheel", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Optional: rim half of a highball glass with coarse salt — run a lime wedge along the rim and dip in salt.",
+      "Fill the glass with ice cubes.",
+      "Add Laphroaig, grapefruit juice, fresh lime juice, and simple syrup.",
+      "Top with Chang Soda Water and stir gently once to combine.",
+      "Garnish with a grapefruit wedge or wheel on the rim.",
+      "Serve immediately — the carbonation amplifies the smoke aromas beautifully."
+    ],
+    tags: ["scotch", "laphroaig", "grapefruit", "paloma", "smoky", "citrus", "highball", "refreshing", "in-stock"]
+  },
+  {
+    id: "irish-whiskey-highball",
+    name: "Irish Whiskey Highball",
+    otherNames: "Jameson & Soda, The Clean Irish Serve",
+    category: "Cocktail",
+    baseSpirit: "Whiskey",
+    glassware: "Highball",
+    alcoholLevel: "Low (~10% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Clean, Crisp, Smooth Irish Whiskey with Pure Effervescence",
+    difficulty: 1,
+    popularity: 8.7,
+    proTip: "The highball is the Japanese way of elevating whisky — and it works brilliantly with Jameson. The purist 1:4 ratio (1 part whisky to 4 parts soda) is the gold standard. The key is temperature: glass, soda, and whisky should all be ice cold. Pour the soda in one steady stream straight down the centre of the glass — never stir horizontally or you'll destroy the carbonation. One single slow vertical stir is all you need. Serve with the first sip being undiluted whisky-and-soda perfection.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jameson Irish Whiskey", substitute: "Any smooth Irish whiskey", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
+      { amountOz: "4–5 oz", amountMl: "120–150 ml", item: "Chang Soda Water (ice cold)", substitute: "Any premium club soda or sparkling water", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Twist", substitute: "Orange peel or lime wheel", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Store the highball glass and Chang Soda Water in the fridge or freezer beforehand — cold glassware is non-negotiable.",
+      "Fill the glass with 4–5 large, clean ice cubes.",
+      "Pour in the Jameson Irish Whiskey.",
+      "Slowly pour ice-cold Chang Soda Water straight down the centre of the glass in one continuous stream.",
+      "Using a bar spoon, give a single, slow stir from the bottom up — just one revolution to integrate.",
+      "Express a lemon twist over the surface to release citrus oils and drape it over the rim.",
+      "Serve immediately."
+    ],
+    tags: ["irish-whiskey", "jameson", "highball", "soda", "easy", "session", "clean", "in-stock"]
   }
 ];
 
