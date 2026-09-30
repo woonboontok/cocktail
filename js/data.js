@@ -4664,6 +4664,92 @@ const DEFAULT_DRINKS = [
       "Serve immediately."
     ],
     tags: ["irish-whiskey", "jameson", "highball", "soda", "easy", "session", "clean", "in-stock"]
+  },
+  {
+    id: "corpse-reviver-no-2-botanist",
+    name: "Corpse Reviver No. 2 (The Botanist Edition)",
+    otherNames: "Savoy Gin & Absinthe Classic",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe",
+    alcoholLevel: "Medium-High (~24% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Crisp Botanical, Delicate Honey, Citrus & Ethereal Anise",
+    difficulty: 2,
+    popularity: 9.7,
+    proTip: "The 22 hand-foraged Islay botanicals in The Botanist gin bloom beautifully when met with the whispering anise aroma of the Père Kermann's absinthe rinse. Ensure the glass is freezing cold so the rinse grips the walls properly.",
+    ingredients: [
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Lillet Blanc", substitute: "Dry Vermouth", inventoryId: "lillet-blanc" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "1 dash", amountMl: "1 dash", item: "Père Kermann's Absinthe (Rinse)", substitute: "Generic Absinthe", inventoryId: "pere-kermanns-absinthe" }
+    ],
+    instructions: [
+      "Chill a coupe glass in the freezer for 5 minutes.",
+      "Add a dash of Père Kermann's Absinthe to the chilled glass, roll it smoothly to coat the inner walls completely, and discard any excess liquid.",
+      "Combine The Botanist gin, Cointreau, Lillet Blanc, and fresh lemon juice in a cocktail shaker filled with clean ice blocks.",
+      "Shake with high energy for 12 seconds until frosty cold.",
+      "Double strain through a fine mesh strainer into the absinthe-scented coupe.",
+      "Garnish with a clean lemon peel twist expressed over the surface."
+    ],
+    tags: ["gin", "the-botanist", "absinthe", "cointreau", "lillet", "sour", "classic", "in-stock"]
+  },
+  {
+    id: "monkey-gland-botanist",
+    name: "Monkey Gland",
+    otherNames: "Harry's New York Bar Classic (1920s)",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe / Martini",
+    alcoholLevel: "Medium (~16% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Fruity, Citrusy, Botanical & Herbaceous Anise Kiss",
+    difficulty: 2,
+    popularity: 9.2,
+    proTip: "Named mockingly after a 1920s medical craze. The combination of sweet orange juice and rich pomegranate grenadine acts as a smooth blanket, allowing the bold, complex herbal notes of The Botanist and Père Kermann's Absinthe to surface cleanly without a harsh alcohol burn.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Fresh Orange Juice", substitute: "Blood orange juice", inventoryId: "orange-juice" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" },
+      { amountOz: "1 tsp", amountMl: "5 ml", item: "Père Kermann's Absinthe", substitute: "Generic Absinthe", inventoryId: "pere-kermanns-absinthe" }
+    ],
+    instructions: [
+      "Chill a coupe or martini glass with ice.",
+      "Combine The Botanist gin, fresh orange juice, pomegranate grenadine, and a teaspoon of Père Kermann's Absinthe in a cocktail shaker.",
+      "Fill with plenty of ice blocks and shake vigorously for 12 seconds to aerate the orange juice.",
+      "Double strain into the chilled glass.",
+      "Garnish with a fresh orange wheel or a brandied cherry."
+    ],
+    tags: ["gin", "the-botanist", "absinthe", "orange", "grenadine", "prohibition", "classic", "in-stock"]
+  },
+  {
+    id: "obituary-cocktail",
+    name: "Obituary Cocktail",
+    otherNames: "The Smoky Martini Twist, Arsenic & Old Lace Riff",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Martini / Nick & Nora",
+    alcoholLevel: "High (~34% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Bone-Dry, Heavy Botanical, Complex Licorice & Icy Clean",
+    difficulty: 2,
+    popularity: 9.0,
+    proTip: "A legendary, spirit-forward variant of the Dry Martini. The Botanist's complex floral profile pairs spectacularly with the crisp dryness of Martini vermouth, while a precise quarter-ounce of Père Kermann's Absinthe introduces a haunting anise finish.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Martini Extra Dry Vermouth", substitute: "Lillet Blanc", inventoryId: "martini-extra-dry" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Père Kermann's Absinthe", substitute: "Generic Absinthe", inventoryId: "pere-kermanns-absinthe" }
+    ],
+    instructions: [
+      "Store your martini or Nick & Nora glass in the freezer for 15 minutes before mixing.",
+      "Fill a mixing glass generously with clean, dense ice cubes.",
+      "Pour in The Botanist gin, Martini Extra Dry vermouth, and Père Kermann's Absinthe.",
+      "Stir gracefully and continuously for 30 to 40 seconds until the vessel is shockingly cold and frosted.",
+      "Fine strain cleanly into your frozen glass.",
+      "Express a fresh lemon peel twist over the surface to discard, or garnish cleanly with a single green olive."
+    ],
+    tags: ["gin", "the-botanist", "vermouth", "absinthe", "martini", "spirit-forward", "dry", "in-stock"]
   }
 ];
 
