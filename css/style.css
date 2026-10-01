@@ -1366,24 +1366,28 @@ a:hover {
 }
 
 .modal-close-btn {
-  position: absolute;
-  top: 1.2rem;
-  right: 1.2rem;
+  position: sticky;
+  top: 0.65rem;
+  align-self: flex-end;
+  flex: 0 0 36px;
+  margin: 0.65rem 0.75rem -2.9rem 0;
   width: 36px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card-hover);
   border: 1px solid var(--border-subtle);
-  color: #fff;
+  color: var(--text-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 20;
   transition: all var(--transition-fast);
 }
 .modal-close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--accent-gold-dim);
+  border-color: var(--border-active);
+  color: var(--accent-gold);
   transform: rotate(90deg);
 }
 

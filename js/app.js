@@ -1490,8 +1490,8 @@
     }).join("");
 
     modalContent.innerHTML = `
+      <button class="modal-close-btn" id="modal-close-x" title="Close (Esc)" aria-label="Close recipe">✕</button>
       <div class="modal-header">
-        <button class="modal-close-btn" id="modal-close-x" title="Close (Esc)">✕</button>
         <div class="modal-pretitle">
           <span class="drink-category-badge badge-${categoryClass}">${drink.category}</span>
           <span class="spec-val gold" style="font-size: 0.85rem; font-weight: 600;">Base: ${drink.baseSpirit || "Cocktail"}</span>
