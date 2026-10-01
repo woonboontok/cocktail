@@ -14,8 +14,10 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "30 September 2026";
-const INVENTORY_SYNC_VERSION = "20260930_1";
+const INVENTORY_LAST_UPDATED = "1 October 2026";
+const INVENTORY_SYNC_VERSION = "20261001_1";
+
+const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
@@ -106,7 +108,7 @@ const INGREDIENT_GROUPS = {
   },
   "irish-whiskey": {
     label: "Irish Whiskey",
-    inventoryIds: ["jameson-irish-whiskey", "irish-whiskey", "jim-beam-black"]
+    inventoryIds: ["jameson-irish-whiskey"]
   },
   "tequila": {
     label: "Tequila",
@@ -206,7 +208,7 @@ const INGREDIENT_GROUPS = {
   },
   "absinthe": {
     label: "Absinthe",
-    inventoryIds: ["absinthe", "pere-kermanns-absinthe"]
+    inventoryIds: ["pere-kermanns-absinthe"]
   },
   "tequila-rose": {
     label: "Strawberry Cream Liqueur",
@@ -292,7 +294,6 @@ const DEFAULT_INVENTORY = [
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
-  { id: "irish-whiskey", name: "Irish Whiskey (Generic)", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: false, abv: 40, notes: "Generic Irish Whiskey placeholder. Use Jameson Irish Whiskey (in stock) for all Irish whiskey recipes." },
   { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
   { id: "cachaca", name: "Cachaça", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Brazilian fresh pressed sugarcane spirit for Caipirinha." },
 
@@ -322,7 +323,6 @@ const DEFAULT_INVENTORY = [
   { id: "jagermeister", name: "Jägermeister Liqueur (35% ABV)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 2, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
   { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Vivid neon-green Japanese muskmelon and yubari melon liqueur. Sweet and fragrant."},
   { id: "fireball", name: "Fireball Cinnamon Whisky", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, abv: 33, notes: "Cinnamon whisky for Fireball Apple Pie Shot." },
-  { id: "absinthe", name: "Absinthe (Generic)", category: "liqueurs", subCategory: "Anise & Herbal", inStock: false, abv: 68, refrigerate: false, notes: "Generic absinthe placeholder. Use Père Kermann's Absinthe (in stock) for all absinthe rinses and cocktails." },
   { id: "pere-kermanns-absinthe", name: "Père Kermann's Absinthe 700ml", category: "liqueurs", subCategory: "Anise & Herbal", inStock: true, quantity: 1, unit: "bottle", abv: 55, refrigerate: false, notes: "Classic French-style absinthe with anise, fennel, and grand wormwood. Essential for the Sazerac rinse, Corpse Reviver No. 2, and Death in the Afternoon." },
   { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, abv: 15, refrigerate: true, notes: "Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot." },
   { id: "frangelico", name: "Frangelico Hazelnut Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Hazelnut liqueur for Nutty Irishman and Duck Fart." },

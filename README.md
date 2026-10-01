@@ -87,8 +87,11 @@ Prefer the producer’s official product page, brand factsheet, or verified dist
 
 The app stores live inventory in `localStorage`, so changing `DEFAULT_INVENTORY` alone does not overwrite an existing browser’s stock choices. `INVENTORY_UPDATE_OVERRIDES` is the one-time migration list for changes that should reach saved inventories.
 
+When removing a generic or duplicate item, also add its ID to `INVENTORY_UPDATE_REMOVE_IDS`. Otherwise older browsers may preserve it as a custom item after it disappears from `DEFAULT_INVENTORY`.
+
 ```js
 const INVENTORY_SYNC_VERSION = "20260913_1";
+const INVENTORY_UPDATE_REMOVE_IDS = ["old-generic-item-id"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
     "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },

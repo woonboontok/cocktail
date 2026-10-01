@@ -95,7 +95,7 @@
         // Preserve any custom items added through admin view
         const defaultIds = new Set(DEFAULT_INVENTORY.map(d => d.id));
         parsed.forEach(item => {
-          if (!defaultIds.has(item.id) && item.id !== "overproof-rum") {
+          if (!defaultIds.has(item.id) && item.id !== "overproof-rum" && !INVENTORY_UPDATE_REMOVE_IDS.includes(item.id)) {
             merged.push(item);
           }
         });
