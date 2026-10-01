@@ -15,9 +15,9 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "1 October 2026";
-const INVENTORY_SYNC_VERSION = "20261001_1";
+const INVENTORY_SYNC_VERSION = "20261001_3";
 
-const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe"];
+const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
@@ -56,7 +56,6 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "midori": { inStock: true, quantity: 1, unit: "bottle" },
   "energy-drink": { inStock: true, quantity: 4, unit: "can" },
   "jameson-irish-whiskey": { inStock: true, quantity: 1, unit: "bottle" },
-  "laphroaig-10-year": { inStock: true, quantity: 1, unit: "bottle" },
   "the-botanist-gin": { inStock: true, quantity: 1, unit: "bottle" },
   "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
   "kawashima-sake": { inStock: true, quantity: 1, unit: "bottle" },
@@ -104,7 +103,7 @@ const INGREDIENT_GROUPS = {
   },
   "scotch": {
     label: "Scotch Whisky",
-    inventoryIds: ["jw-black-label", "laphroaig-10-year"]
+    inventoryIds: ["jw-black-label"]
   },
   "irish-whiskey": {
     label: "Irish Whiskey",
@@ -289,7 +288,6 @@ const DEFAULT_INVENTORY = [
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
   { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Iconic triple-distilled blended Irish whiskey. Smooth, approachable, and endlessly versatile — classic for Irish Coffee, Cameron's Kick, and Green Tea Shot." },
-  { id: "laphroaig-10-year", name: "Laphroaig 10 Year Old Single Malt Scotch Whisky (1 Litre)", category: "spirits", subCategory: "Whiskey › Scotch › Islay Single Malt", spiritFamily: "Whiskey", spiritStyle: "Islay Single Malt", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Legendary heavily peated Islay single malt. Medicinal smoke, seaweed, and sweet vanilla finish. Outstanding for peated Scotch cocktails and sipping neat." },
   { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
 
@@ -1102,25 +1100,23 @@ const DEFAULT_DRINKS = [
     glassware: "Rocks",
     alcoholLevel: "Medium-High (~22% ABV)",
     alcoholScore: 4,
-    tasteProfile: "Smoky Peat, Spicy Ginger, Honey & Citrus",
+    tasteProfile: "Malted Scotch, Spicy Ginger, Honey & Citrus",
     difficulty: 3,
     popularity: 9.8,
-    proTip: "The Johnnie Walker Black Label brings sweet malt and subtle smoke to the base. Float a barspoon of Laphroaig 10 Year on top for the iconic smoky nose — now that it's in stock, this is the definitive version! The smoke hits your nostrils before every sip, transforming a great drink into an unforgettable one.",
+    proTip: "Johnnie Walker Black Label brings sweet malt and gentle smoke to the base. The traditional Penicillin uses a peated Scotch float, but this accessible version skips the extra bottle and lets the honey-ginger balance shine.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Any blended Scotch whisky", inventoryId: "jw-black-label" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Honey Syrup (3:1 honey/water)", substitute: "Simple syrup with honey", inventoryId: "honey-syrup" },
-      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Spicy Ginger Syrup", substitute: "Schweppes Ginger Ale reduction or muddled fresh ginger", inventoryId: "ginger-syrup" },
-      { amountOz: "0.25 oz float", amountMl: "7.5 ml float", item: "Laphroaig 10 Year (Islay Peat Float)", substitute: "Any peated Islay single malt", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" }
+      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Spicy Ginger Syrup", substitute: "Schweppes Ginger Ale reduction or muddled fresh ginger", inventoryId: "ginger-syrup" }
     ],
     instructions: [
       "Add blended Scotch, lemon juice, honey syrup, and ginger syrup into a shaker with ice.",
       "Shake vigorously for 12 seconds.",
       "Strain over a large single ice cube in a rocks glass.",
-      "Carefully float a barspoon of Laphroaig 10 Year on top by pouring it slowly over the back of the spoon.",
-      "Garnish with candied ginger or a fresh lemon wheel. Do not stir — the smoke should greet every sip."
+      "Garnish with candied ginger or a fresh lemon wheel."
     ],
-    tags: ["scotch", "laphroaig", "ginger", "honey", "smoky", "modern-classic", "in-stock"]
+    tags: ["scotch", "ginger", "honey", "modern-classic", "in-stock"]
   },
   {
     id: "irish-coffee",
@@ -4429,30 +4425,30 @@ const DEFAULT_DRINKS = [
     glassware: "Coupe / Nick & Nora",
     alcoholLevel: "Medium-High (~24% ABV)",
     alcoholScore: 4,
-    tasteProfile: "Peaty Smoke, Smooth Irish, Nutty Almond & Bright Citrus",
+    tasteProfile: "Malted Scotch, Smooth Irish, Nutty Almond & Bright Citrus",
     difficulty: 2,
     popularity: 8.8,
-    proTip: "The magic of Cameron's Kick lies in the unlikely marriage of two whisky traditions: the smoky, medicinal peat of Laphroaig meets the silky, triple-distilled smoothness of Jameson, bridged by the rich almond sweetness of orgeat. Use equal parts of both whiskies and resist the temptation to alter the ratio. If you prefer a silkier mouthfeel, add a small egg white and dry shake first for a classic sour foam.",
+    proTip: "Cameron's Kick pairs blended Scotch with the silky, triple-distilled smoothness of Jameson, bridged by the rich almond sweetness of orgeat. Johnnie Walker Black Label keeps this classic approachable without requiring a costly peated single malt. If you prefer a silkier mouthfeel, add a small egg white and dry shake first.",
     ingredients: [
       { amountOz: "1 oz", amountMl: "30 ml", item: "Jameson Irish Whiskey", substitute: "Any smooth Irish whiskey", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Laphroaig 10 Year Single Malt Scotch Whisky", substitute: "Any blended or peated Scotch whisky", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Johnnie Walker Black Label Scotch Whisky", substitute: "Any blended Scotch whisky", inventoryId: "jw-black-label", ingredientGroup: "scotch" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Orgeat Syrup", substitute: "Demerara Syrup + few drops of almond extract", inventoryId: "orgeat-syrup" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Twist", substitute: "Maraschino cherry", inventoryId: "fresh-lemons" }
     ],
     instructions: [
       "Chill a coupe or Nick & Nora glass in the freezer for at least 10 minutes.",
-      "Combine Jameson Irish Whiskey, Laphroaig Scotch, fresh lemon juice, and orgeat syrup in a cocktail shaker.",
+      "Combine Jameson Irish Whiskey, Johnnie Walker Black Label Scotch, fresh lemon juice, and orgeat syrup in a cocktail shaker.",
       "Fill the shaker with clean ice cubes.",
       "Shake vigorously for 12–15 seconds until the shaker exterior is thoroughly frosted.",
       "Fine strain into the chilled coupe.",
       "Express a lemon twist over the surface to release the citrus oils and place it on the rim as a garnish."
     ],
-    tags: ["whiskey", "scotch", "irish-whiskey", "laphroaig", "jameson", "orgeat", "sour", "classic", "in-stock"]
+    tags: ["whiskey", "scotch", "irish-whiskey", "jameson", "orgeat", "sour", "classic", "in-stock"]
   },
 
   // =========================================================================
-  // JAMESON & LAPHROAIG COCKTAILS (New additions — 30 September 2026)
+  // JAMESON COCKTAILS (New additions — 30 September 2026)
   // =========================================================================
   {
     id: "irish-mule",
@@ -4542,99 +4538,6 @@ const DEFAULT_DRINKS = [
       "Garnish with a fresh cucumber slice perched on the rim."
     ],
     tags: ["irish-whiskey", "jameson", "st-germain", "elderflower", "cucumber", "floral", "refreshing", "modern-classic"]
-  },
-  {
-    id: "smoky-scotch-sour",
-    name: "Smoky Scotch Sour",
-    otherNames: "Islay Sour, Laphroaig Sour, Peated Whisky Sour",
-    category: "Cocktail",
-    baseSpirit: "Whiskey",
-    glassware: "Coupe or Rocks",
-    alcoholLevel: "Medium (~18% ABV)",
-    alcoholScore: 3,
-    tasteProfile: "Bold Peat Smoke, Silky Citrus, Medicinal Honey & Velvety Foam",
-    difficulty: 2,
-    popularity: 9.0,
-    proTip: "Using Laphroaig as the sole base in a sour is a bold, polarising move — and utterly magnificent for peat lovers. The egg white foam softens the aggressive medicinal smokiness and the honey syrup bridges between the whisky's natural sweetness and the tart lemon. A tiny pinch of sea salt added to the shaker amplifies the Laphroaig's coastal brine character. Always dry shake first to build the foam before adding ice.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Laphroaig 10 Year Single Malt", substitute: "Any heavily peated Islay Scotch", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice only", inventoryId: "fresh-lemons" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Honey Syrup (3:1)", substitute: "Demerara syrup for deeper sweetness", inventoryId: "honey-syrup" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (or Aquafaba)", substitute: "Omit for no-foam version", inventoryId: "egg-white" },
-      { amountOz: "2 drops", amountMl: "2 drops", item: "Angostura Bitters (atop foam)", substitute: "Peychaud's bitters", inventoryId: "angostura-bitters" },
-      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Wheel or Orange Peel", substitute: "Lemon twist", inventoryId: "fresh-lemons" }
-    ],
-    instructions: [
-      "Add Laphroaig, fresh lemon juice, honey syrup, and egg white to a cocktail shaker — NO ice yet.",
-      "Dry shake vigorously for 10–12 seconds to emulsify the egg white into a dense, creamy foam.",
-      "Add ice to the shaker and wet shake hard for another 12 seconds until the exterior is frosted.",
-      "Fine strain into a chilled coupe (up) or over a single large ice cube in a rocks glass.",
-      "Allow the foam to settle and rise to the surface.",
-      "Carefully place 2 drops of Angostura bitters on the foam and drag a toothpick to create a pattern.",
-      "Garnish with a fresh lemon wheel or expressed orange peel."
-    ],
-    tags: ["scotch", "laphroaig", "sour", "peated", "smoky", "egg-white", "islay", "in-stock"]
-  },
-  {
-    id: "laphroaig-peated-old-fashioned",
-    name: "Laphroaig Peated Old Fashioned",
-    otherNames: "Islay Old Fashioned, Smoky Old Fashioned",
-    category: "Cocktail",
-    baseSpirit: "Whiskey",
-    glassware: "Rocks / Old Fashioned",
-    alcoholLevel: "High (~33% ABV)",
-    alcoholScore: 5,
-    tasteProfile: "Intense Peat Smoke, Rich Caramel, Dark Chocolate & Coastal Brine",
-    difficulty: 2,
-    popularity: 8.9,
-    proTip: "This is not a cocktail for the faint-hearted — it's a monument to Laphroaig's raw, medicinal power, tamed just enough by the sweet demerara and aromatic bitters to be wildly drinkable. Use a 2:1 demerara syrup instead of plain simple syrup — its molasses-caramel depth is the perfect counterweight to the whisky's sea spray and antiseptic smoke. A crystal-clear ice sphere or single large cube slows dilution, allowing the complex aromatics to evolve as you sip.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Laphroaig 10 Year Single Malt", substitute: "Any peated Islay single malt", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" },
-      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Demerara Syrup (2:1)", substitute: "Simple syrup or honey syrup", inventoryId: "demerara-syrup", ingredientGroup: "demerara-syrup" },
-      { amountOz: "3 dashes", amountMl: "3 dashes", item: "Angostura Bitters", substitute: "Orange bitters or chocolate bitters", inventoryId: "angostura-bitters" },
-      { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Orange Peel", substitute: "Lemon twist", inventoryId: "fresh-oranges" }
-    ],
-    instructions: [
-      "Place a large, single clear ice cube into a rocks glass.",
-      "In a mixing glass filled with ice, combine Laphroaig, demerara syrup, and Angostura bitters.",
-      "Stir smoothly and continuously for 25–30 seconds until well-chilled and perfectly diluted.",
-      "Strain over the ice cube in the rocks glass.",
-      "Hold a large orange peel over the glass, peel-side down, and snap it sharply to express the citrus oils across the surface. Rub the peel around the rim.",
-      "Drape or drop the orange peel into the glass and serve immediately."
-    ],
-    tags: ["scotch", "laphroaig", "old-fashioned", "spirit-forward", "smoky", "peated", "islay", "in-stock"]
-  },
-  {
-    id: "laphroaig-paloma",
-    name: "Laphroaig Paloma",
-    otherNames: "Smoky Islay Paloma, Peated Grapefruit Highball",
-    category: "Cocktail",
-    baseSpirit: "Whiskey",
-    glassware: "Highball / Collins",
-    alcoholLevel: "Low-Medium (~14% ABV)",
-    alcoholScore: 3,
-    tasteProfile: "Peaty Smoke, Tart Pink Grapefruit, Citrus & Refreshing Fizz",
-    difficulty: 1,
-    popularity: 8.8,
-    proTip: "This is the official Laphroaig serve straight from the distillery website and one of the most unexpected flavour pairings in whisky cocktails. The bitter grapefruit oils strip back the most aggressive medicinal notes of the Laphroaig, leaving only the gorgeous campfire smoke and coastal mineral character. A smoked salt rim is optional but elevates the whole drink by echoing the whisky's brine. Try both salted and unsalted sips!",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Laphroaig 10 Year Single Malt", substitute: "Any peated Islay Scotch", inventoryId: "laphroaig-10-year", ingredientGroup: "scotch" },
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Pink Grapefruit Juice", substitute: "Fresh squeezed grapefruit juice", inventoryId: "grapefruit-juice" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
-      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup", substitute: "Demerara syrup or honey syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
-      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Premium club soda", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" },
-      { amountOz: "Optional rim", amountMl: "Optional rim", item: "Coarse Salt Rim (optional)", substitute: "Smoked salt or Tajin", inventoryId: "coarse-salt" },
-      { amountOz: "Garnish", amountMl: "Garnish", item: "Grapefruit Wedge or Wheel", substitute: "Lime wheel", inventoryId: "fresh-oranges" }
-    ],
-    instructions: [
-      "Optional: rim half of a highball glass with coarse salt — run a lime wedge along the rim and dip in salt.",
-      "Fill the glass with ice cubes.",
-      "Add Laphroaig, grapefruit juice, fresh lime juice, and simple syrup.",
-      "Top with Chang Soda Water and stir gently once to combine.",
-      "Garnish with a grapefruit wedge or wheel on the rim.",
-      "Serve immediately — the carbonation amplifies the smoke aromas beautifully."
-    ],
-    tags: ["scotch", "laphroaig", "grapefruit", "paloma", "smoky", "citrus", "highball", "refreshing", "in-stock"]
   },
   {
     id: "irish-whiskey-highball",
