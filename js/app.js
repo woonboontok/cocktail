@@ -14,6 +14,7 @@
   const STORAGE_KEY_UNIT = "speakeasy_unit_pref_v1";
   const STORAGE_KEY_DRINK_STATUS = "speakeasy_drink_status_v1";
   const STORAGE_KEY_THEME = "speakeasy_theme_pref_v1";
+  const STORAGE_KEY_FILTERS_COLLAPSED = "speakeasy_filters_collapsed_v1";
   const THEME_COOKIE = "speakeasy_theme";
 
   let inventory = loadInventory();
@@ -21,6 +22,7 @@
   let bookmarks = loadBookmarks();
   let drinkStatuses = loadDrinkStatuses();
   let unitPreference = localStorage.getItem(STORAGE_KEY_UNIT) || "both"; // "both", "oz", "ml"
+  let filtersCollapsed = localStorage.getItem(STORAGE_KEY_FILTERS_COLLAPSED) !== "false"; // default to collapsed to save space
 
   let currentTab = "all"; // "all", "cocktails", "mocktails", "shots", "glossary", "my-bar"
   let searchQuery = "";
@@ -343,6 +345,33 @@
   }
 
   // ==================== FILTER & SORT LOGIC ====================
+  function matchesSpirit(drink, spiritVal) {
+    if (!spiritVal || spiritVal === "all") return true;
+    const base = String(drink.baseSpirit || "");
+    if (spiritVal === "Whiskey/Bourbon") {
+      return /whiskey|bourbon|scotch|rye/i.test(base);
+    }
+    if (spiritVal === "Tequila/Mezcal") {
+      return /tequila|mezcal/i.test(base);
+    }
+    if (spiritVal === "Liqueur/Wine") {
+      return /liqueur|wine|brandy|cognac|champagne|pisco|amaro|vermouth/i.test(base);
+    }
+    if (spiritVal === "Non-Alcoholic") {
+      return base === "Non-Alcoholic" || drink.category === "Mocktail";
+    }
+    if (spiritVal === "Gin") {
+      return /gin/i.test(base);
+    }
+    if (spiritVal === "Vodka") {
+      return /vodka/i.test(base);
+    }
+    if (spiritVal === "Rum") {
+      return /rum|cachaça|cachaca/i.test(base);
+    }
+    return base.toLowerCase().includes(spiritVal.toLowerCase());
+  }
+
   function getFilteredAndSortedDrinks() {
     let drinks = getAllDrinks();
 
@@ -363,7 +392,7 @@
     }
 
     if (selectedSpirit !== "all") {
-      drinks = drinks.filter(d => d.baseSpirit === selectedSpirit);
+      drinks = drinks.filter(d => matchesSpirit(d, selectedSpirit));
     }
 
     if (selectedDifficulty !== "all") {
@@ -385,18 +414,29 @@
     // Search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
+      const tokens = q.split(/\s+/).filter(t => t.length > 0);
+
       drinks = drinks.filter(d => {
-        const nameMatch = d.name.toLowerCase().includes(q);
-        const aliasMatch = d.otherNames && d.otherNames.toLowerCase().includes(q);
-        const spiritMatch = d.baseSpirit && d.baseSpirit.toLowerCase().includes(q);
-        const tasteMatch = d.tasteProfile && d.tasteProfile.toLowerCase().includes(q);
-        const ingMatch = d.ingredients.some(ing => 
-          ing.item.toLowerCase().includes(q) || 
-          (ing.substitute && ing.substitute.toLowerCase().includes(q))
-        );
-        const tagsMatch = d.tags && d.tags.some(t => t.toLowerCase().includes(q));
-        const proTipMatch = d.proTip && d.proTip.toLowerCase().includes(q);
-        return nameMatch || aliasMatch || spiritMatch || tasteMatch || ingMatch || tagsMatch || proTipMatch;
+        const searchableFields = [
+          d.name,
+          d.otherNames || "",
+          d.baseSpirit || "",
+          d.category || "",
+          d.tasteProfile || "",
+          ...(d.tags || []),
+          ...d.ingredients.map(ing => ing.item),
+          ...d.ingredients.map(ing => {
+            if (!ing.inventoryId) return "";
+            const inv = getInventoryItem(ing.inventoryId);
+            return inv ? inv.name : "";
+          }),
+          ...d.ingredients.map(ing => {
+            if (!ing.ingredientGroup || !INGREDIENT_GROUPS[ing.ingredientGroup]) return "";
+            return INGREDIENT_GROUPS[ing.ingredientGroup].label;
+          })
+        ].map(s => s.toLowerCase());
+
+        return tokens.every(token => searchableFields.some(field => field.includes(token)));
       });
     }
 
@@ -407,8 +447,16 @@
           return a.name.localeCompare(b.name);
         case "name-desc":
           return b.name.localeCompare(a.name);
-        case "popularity-desc":
+        case "popularity-desc": {
+          if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase().trim();
+            const aNameMatch = a.name.toLowerCase().includes(q) || (a.otherNames && a.otherNames.toLowerCase().includes(q));
+            const bNameMatch = b.name.toLowerCase().includes(q) || (b.otherNames && b.otherNames.toLowerCase().includes(q));
+            if (aNameMatch && !bNameMatch) return -1;
+            if (!aNameMatch && bNameMatch) return 1;
+          }
           return (b.popularity || 0) - (a.popularity || 0);
+        }
         case "difficulty-asc":
           return (a.difficulty || 1) - (b.difficulty || 1);
         case "difficulty-desc":
@@ -455,6 +503,7 @@
       if (glossaryView) glossaryView.style.display = "none";
       if (adminView) adminView.style.display = "none";
       renderDrinkCards();
+      updateFilterCollapseState();
     }
   }
 
@@ -927,15 +976,12 @@
         const ingId = btn.getAttribute("data-filter-ing");
         const found = inventory.find(i => i.id === ingId);
         if (found) {
+          const recipes = getRecipesUsingItem(ingId);
           currentTab = "all";
-          inventoryRecipeFilterIds = null;
-          if (found.id === "irish-whiskey" || found.name.toLowerCase().startsWith("irish whiskey")) {
-            searchQuery = "irish whiskey";
-          } else {
-            searchQuery = found.name.split(" ")[0];
-          }
+          inventoryRecipeFilterIds = recipes.map(drink => drink.id);
+          searchQuery = "";
           const searchInput = document.getElementById("search-input");
-          if (searchInput) searchInput.value = searchQuery;
+          if (searchInput) searchInput.value = "";
           renderApp();
           window.scrollTo({ top: 300, behavior: "smooth" });
         }
@@ -1657,6 +1703,67 @@
     openDrinkModal(newDrink.id);
   }
 
+  // ==================== FILTER COLLAPSE & STATE ====================
+  function updateFilterCollapseState() {
+    const container = document.getElementById("filter-groups-container");
+    const controlPanel = document.querySelector(".control-panel");
+    const toggleBtn = document.getElementById("btn-toggle-filters");
+    const badge = document.getElementById("filter-active-count");
+
+    if (!container || !toggleBtn) return;
+
+    if (filtersCollapsed) {
+      container.classList.add("collapsed");
+      if (controlPanel) controlPanel.classList.add("filters-collapsed");
+      toggleBtn.setAttribute("aria-expanded", "false");
+    } else {
+      container.classList.remove("collapsed");
+      if (controlPanel) controlPanel.classList.remove("filters-collapsed");
+      toggleBtn.setAttribute("aria-expanded", "true");
+    }
+
+    let activeCount = 0;
+    if (selectedSpirit !== "all") activeCount++;
+    if (selectedDifficulty !== "all") activeCount++;
+    if (selectedTaste !== "all") activeCount++;
+    if (selectedGlass !== "all") activeCount++;
+
+    if (badge) {
+      if (activeCount > 0) {
+        badge.textContent = activeCount;
+        badge.style.display = "inline-flex";
+        toggleBtn.classList.add("has-active-filters");
+      } else {
+        badge.style.display = "none";
+        toggleBtn.classList.remove("has-active-filters");
+      }
+    }
+  }
+
+  // ==================== BACK TO TOP ====================
+  function setupBackToTop() {
+    const backToTopBtn = document.getElementById("btn-back-to-top");
+    if (!backToTopBtn) return;
+
+    const toggleVisibility = () => {
+      if (window.scrollY > window.innerHeight) {
+        backToTopBtn.classList.add("visible");
+      } else {
+        backToTopBtn.classList.remove("visible");
+      }
+    };
+
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
+    toggleVisibility();
+
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  }
+
   // ==================== FILTER RESET ====================
   function resetFilters() {
     searchQuery = "";
@@ -1680,6 +1787,7 @@
     });
 
     renderApp();
+    updateFilterCollapseState();
   }
 
   // ==================== EVENT LISTENERS ====================
@@ -1710,6 +1818,19 @@
       });
     });
 
+    // Toggle collapsible filters button
+    const toggleFiltersBtn = document.getElementById("btn-toggle-filters");
+    if (toggleFiltersBtn) {
+      toggleFiltersBtn.addEventListener("click", () => {
+        filtersCollapsed = !filtersCollapsed;
+        localStorage.setItem(STORAGE_KEY_FILTERS_COLLAPSED, filtersCollapsed);
+        updateFilterCollapseState();
+      });
+    }
+
+    // Setup Back to top button listener
+    setupBackToTop();
+
     // Search input
     const searchInput = document.getElementById("search-input");
     if (searchInput) {
@@ -1732,30 +1853,75 @@
     // Filter pills (Spirit)
     document.querySelectorAll(".filter-pills[data-filter='spirit'] .pill-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-pills[data-filter='spirit'] .pill-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        selectedSpirit = btn.getAttribute("data-val");
+        inventoryRecipeFilterIds = null;
+        const val = btn.getAttribute("data-val");
+
+        if (selectedSpirit === val && val !== "all") {
+          selectedSpirit = "all";
+          document.querySelectorAll(".filter-pills[data-filter='spirit'] .pill-btn").forEach(b => {
+            b.classList.toggle("active", b.getAttribute("data-val") === "all");
+          });
+        } else {
+          document.querySelectorAll(".filter-pills[data-filter='spirit'] .pill-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          selectedSpirit = val;
+        }
+
+        // Auto-switch conflicting tabs
+        if (selectedSpirit === "Non-Alcoholic" && currentTab === "cocktails") {
+          currentTab = "mocktails";
+          renderTabButtons();
+        } else if (selectedSpirit !== "all" && selectedSpirit !== "Non-Alcoholic" && currentTab === "mocktails") {
+          currentTab = "all";
+          renderTabButtons();
+        }
+
         renderDrinkCards();
+        updateFilterCollapseState();
       });
     });
 
     // Filter pills (Difficulty)
     document.querySelectorAll(".filter-pills[data-filter='difficulty'] .pill-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-pills[data-filter='difficulty'] .pill-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        selectedDifficulty = btn.getAttribute("data-val");
+        inventoryRecipeFilterIds = null;
+        const val = btn.getAttribute("data-val");
+
+        if (selectedDifficulty === val && val !== "all") {
+          selectedDifficulty = "all";
+          document.querySelectorAll(".filter-pills[data-filter='difficulty'] .pill-btn").forEach(b => {
+            b.classList.toggle("active", b.getAttribute("data-val") === "all");
+          });
+        } else {
+          document.querySelectorAll(".filter-pills[data-filter='difficulty'] .pill-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          selectedDifficulty = val;
+        }
+
         renderDrinkCards();
+        updateFilterCollapseState();
       });
     });
 
     // Filter pills (Taste)
     document.querySelectorAll(".filter-pills[data-filter='taste'] .pill-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-pills[data-filter='taste'] .pill-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        selectedTaste = btn.getAttribute("data-val");
+        inventoryRecipeFilterIds = null;
+        const val = btn.getAttribute("data-val");
+
+        if (selectedTaste === val && val !== "all") {
+          selectedTaste = "all";
+          document.querySelectorAll(".filter-pills[data-filter='taste'] .pill-btn").forEach(b => {
+            b.classList.toggle("active", b.getAttribute("data-val") === "all");
+          });
+        } else {
+          document.querySelectorAll(".filter-pills[data-filter='taste'] .pill-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          selectedTaste = val;
+        }
+
         renderDrinkCards();
+        updateFilterCollapseState();
       });
     });
 

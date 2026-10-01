@@ -623,6 +623,57 @@ a:hover {
   border-color: var(--border-active);
 }
 
+/* Filter Toggle Button */
+.filter-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  user-select: none;
+  cursor: pointer;
+}
+
+.filter-toggle-btn:hover {
+  border-color: var(--border-active);
+  color: #fff;
+}
+
+.filter-toggle-btn.has-active-filters {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.filter-toggle-btn .filter-toggle-icon {
+  flex-shrink: 0;
+}
+
+.filter-toggle-btn .filter-chevron {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.filter-toggle-btn[aria-expanded="true"] .filter-chevron {
+  transform: rotate(180deg);
+}
+
+.filter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-gold);
+  color: #121214;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  min-width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 0.35rem;
+  line-height: 1;
+}
+
+.control-panel.filters-collapsed .search-sort-row {
+  margin-bottom: 0;
+}
+
 /* Filter Tags / Pills */
 .filter-groups-container {
   display: flex;
@@ -630,6 +681,10 @@ a:hover {
   gap: 0.75rem;
   border-top: 1px solid var(--border-subtle);
   padding-top: 0.9rem;
+}
+
+.filter-groups-container.collapsed {
+  display: none;
 }
 
 .filter-row {
@@ -2178,3 +2233,54 @@ input:checked + .switch-slider:before {
   margin-left: 0.4rem;
   display: inline-block;
 }
+
+/* ==================== BACK TO TOP BUTTON ==================== */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border-active);
+  color: var(--accent-gold);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 90;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease, background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top-btn:hover {
+  background: var(--accent-gold);
+  color: #121214;
+  border-color: var(--accent-gold);
+  box-shadow: 0 6px 22px rgba(212, 175, 55, 0.35);
+  transform: translateY(-2px);
+}
+
+.back-to-top-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .back-to-top-btn {
+    bottom: 1.5rem;
+    right: 1.25rem;
+    width: 42px;
+    height: 42px;
+  }
+}
+
