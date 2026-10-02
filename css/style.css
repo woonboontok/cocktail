@@ -88,6 +88,14 @@
   color: var(--text-primary) !important;
 }
 
+[data-theme="morning"] .search-input {
+  color: var(--text-primary);
+}
+
+[data-theme="morning"] .search-input::placeholder {
+  color: var(--text-muted);
+}
+
 /* 2. AFTERNOON (12:00 - 16:59): Solar blue, lime pulse, high visibility */
 [data-theme="afternoon"] {
   --bg-primary: #0d2027;

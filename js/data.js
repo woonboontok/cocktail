@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "1 October 2026";
-const INVENTORY_SYNC_VERSION = "20261001_3";
+const INVENTORY_LAST_UPDATED = "2 October 2026";
+const INVENTORY_SYNC_VERSION = "20261002_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -47,6 +47,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "pineapple-juice": { inStock: true, quantity: 1, unit: "carton" },
   "orange-juice": { inStock: true, quantity: 1, unit: "carton" },
   "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
+  "teremana-tequila": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Blanco, 40% ABV, 1000ml. In stock." },
+  "teremana-tequila-anejo": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Añejo, 40% ABV, 1000ml. Purchased; due after 15 Oct." },
   "tabasco-sauce": { inStock: true, quantity: 1, unit: "bottle" },
   "fever-tree-ginger-beer": { inStock: true, quantity: 6, unit: "pack" },
   "bundaberg-ginger-beer": { inStock: true },
@@ -111,7 +113,7 @@ const INGREDIENT_GROUPS = {
   },
   "tequila": {
     label: "Tequila",
-    inventoryIds: ["teremana-tequila"]
+    inventoryIds: ["teremana-tequila", "teremana-tequila-anejo"]
   },
   "mezcal": {
     label: "Mezcal",
@@ -283,7 +285,8 @@ const DEFAULT_INVENTORY = [
   { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum (75.5% ABV)", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
   { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
-  { id: "teremana-tequila", name: "Teremana Tequila", category: "spirits", subCategory: "Agave › Tequila", spiritFamily: "Agave", spiritStyle: "Tequila", inStock: true, abv: 40, notes: "Small batch 100% blue agave tequila with roasted agave and citrus zest." },
+  { id: "teremana-tequila", name: "Teremana Tequila Blanco 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Blanco", spiritFamily: "Agave", spiritStyle: "Blanco Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Blanco at 40% ABV; crisp agave, citrus peel, and a clean finish ideal for margaritas, Palomas, and tequila-forward cocktails." },
+  { id: "teremana-tequila-anejo", name: "Teremana Tequila Añejo 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Añejo", spiritFamily: "Agave", spiritStyle: "Añejo Tequila", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Purchased: 1000ml Teremana Tequila Añejo at 40% ABV; due to arrive after 15 Oct. Ideal for sipping and richer tequila-forward cocktails." },
   { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
@@ -436,7 +439,7 @@ const DEFAULT_DRINKS = [
   {
     id: "old-fashioned",
     name: "Old Fashioned",
-    otherNames: "Whiskey Cocktail, Rum Old Fashioned, Oaxaca Old Fashioned",
+    otherNames: "Whiskey Cocktail, Rum Old Fashioned, Oaxaca Old Fashioned, Añejo Tequila Old Fashioned",
     category: "Cocktail",
     baseSpirit: "Whiskey/Bourbon",
     glassware: "Rocks / Old Fashioned",
@@ -445,7 +448,7 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Spirit-Forward, Rich, Caramel & Aromatic",
     difficulty: 2,
     popularity: 9.9,
-    proTip: "Never muddle cherries or orange pulp into the drink. Only express the essential oils from the orange peel over the top to avoid muddying the spirit.\n\nClassic 1-Ingredient Spirit Variants:\n• Rum Old Fashioned: Swap whiskey for 2 oz Mount Gay Black Barrel (or Myers's Dark Rum) for rich molasses, baking spices, and toasted bourbon-cask oak.\n• Oaxaca Old Fashioned: Split the base with 1.5 oz Reposado Tequila and 0.5 oz Topanito Mezcal with agave syrup.\n• Brandy Old Fashioned: Swap whiskey for Hennessy VSOP Cognac or French Brandy.",
+    proTip: "Never muddle cherries or orange pulp into the drink. Only express the essential oils from the orange peel over the top to avoid muddying the spirit.\n\nClassic 1-Ingredient Spirit Variants:\n• Rum Old Fashioned: Swap whiskey for 2 oz Mount Gay Black Barrel (or Myers's Dark Rum) for rich molasses, baking spices, and toasted bourbon-cask oak.\n• Oaxaca Old Fashioned: Split the base with 1.5 oz Reposado Tequila and 0.5 oz Topanito Mezcal with agave syrup.\n• Añejo Tequila Old Fashioned: Use 2 oz Teremana Añejo and demerara syrup for vanilla, toasted oak, and a richer agave finish.\n• Brandy Old Fashioned: Swap whiskey for Hennessy VSOP Cognac or French Brandy.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Mount Gay Black Barrel (Rum Old Fashioned) or Jim Beam Black", inventoryId: "jd-bonded-rye" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (or 1 sugar cube)", substitute: "Rich demerara syrup or brown sugar", inventoryId: "simple-syrup" },
@@ -463,7 +466,7 @@ const DEFAULT_DRINKS = [
   {
     id: "margarita",
     name: "Classic Margarita",
-    otherNames: "Cadillac Margarita (when Grand Marnier used)",
+    otherNames: "Cadillac Margarita (when Grand Marnier used), Añejo Margarita",
     category: "Cocktail",
     baseSpirit: "Tequila/Mezcal",
     glassware: "Coupe or Rocks",
@@ -472,7 +475,7 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Crisp, Citrusy, Tart & Saline",
     difficulty: 2,
     popularity: 9.9,
-    proTip: "Salt only half the rim! That allows the drinker to choose between salted and unsalted sips and prevents salt from dissolving prematurely into the drink.",
+    proTip: "Salt only half the rim! That allows the drinker to choose between salted and unsalted sips and prevents salt from dissolving prematurely into the drink.\n\nAñejo Margarita variant: Use 1.5 oz Teremana Añejo plus 0.5 oz blanco or reposado to keep the lime brightness while adding vanilla, caramel, and a subtler toasted-agave finish.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Any 100% blue agave blanco or reposado", inventoryId: "teremana-tequila" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Cointreau", substitute: "Grand Marnier (Cadillac style) or Lumina Triple Sec", inventoryId: "cointreau" },
@@ -923,7 +926,7 @@ const DEFAULT_DRINKS = [
   {
     id: "paloma",
     name: "Paloma",
-    otherNames: "The National Drink of Mexico, Smoky Mezcal Paloma",
+    otherNames: "The National Drink of Mexico, Añejo Paloma, Smoky Mezcal Paloma",
     category: "Cocktail",
     baseSpirit: "Tequila/Mezcal",
     glassware: "Highball / Collins",
@@ -932,9 +935,9 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Grapefruit, Citrus, Tart, Salty & Fizzy",
     difficulty: 1,
     popularity: 9.8,
-    proTip: "A tiny pinch of sea salt directly inside the drink cuts through the bitterness of the grapefruit and heightens the sweet agave notes of Teremana. Salt only half the rim so you have the choice of salted or crisp sips.\n\nClassic 1-Ingredient Variant:\n• Smoky Mezcal Paloma: Swap Teremana Tequila for 2 oz Topanito Mezcal Artesanal Espadín (52% ABV) for an incredible earthy campfire smoke and mineral depth that cuts through the tart grapefruit.",
+    proTip: "A tiny pinch of sea salt directly inside the drink cuts through the bitterness of the grapefruit and heightens the sweet agave notes of Teremana. Salt only half the rim so you have the choice of salted or crisp sips.\n\nClassic 1-Ingredient Variants:\n• Añejo Paloma: Use 1.5 oz Teremana Añejo plus 0.5 oz blanco tequila; the oak and vanilla make the grapefruit feel richer and more layered while keeping the drink bright.\n• Smoky Mezcal Paloma: Swap Teremana Tequila for 2 oz Topanito Mezcal Artesanal Espadín (52% ABV) for an incredible earthy campfire smoke and mineral depth that cuts through the tart grapefruit.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Topanito Mezcal (for Smoky Mezcal Paloma)", inventoryId: "teremana-tequila" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Topanito Mezcal or Teremana Añejo (for Smoky Mezcal or Añejo Paloma variants)", inventoryId: "teremana-tequila" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime", inventoryId: "fresh-limes" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Agave Syrup", substitute: "Simple syrup", inventoryId: "agave-syrup" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Pink Grapefruit Juice", substitute: "Grapefruit soda (Jarritos / Squirt)", inventoryId: "grapefruit-juice" },
@@ -1710,7 +1713,7 @@ const DEFAULT_DRINKS = [
   {
     id: "corpse-reviver-no-2",
     name: "Corpse Reviver No. 2",
-    otherNames: "Harry Craddock Savoy Cocktail Book (1930)",
+    otherNames: "Harry Craddock Savoy Cocktail Book (1930), The Botanist Edition, Añejo Corpse Reviver, Mezcal Corpse Reviver",
     category: "Cocktail",
     baseSpirit: "Gin",
     glassware: "Coupe",
@@ -1719,9 +1722,9 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Crisp Botanical, Lillet Honey, Orange & Whispering Anise",
     difficulty: 2,
     popularity: 9.7,
-    proTip: "Equal parts: Gin, Cointreau, Lillet Blanc, and Lemon Juice, rinsed with Absinthe. 'Four of these taken in swift succession will unrevive the corpse again.'",
+    proTip: "Equal parts: Gin, Cointreau, Lillet Blanc, and Lemon Juice, rinsed with Absinthe. 'Four of these taken in swift succession will unrevive the corpse again.'\n\nVariant notes: The Botanist Edition swaps in The Botanist Islay gin for a more floral, herbal Islay profile; for an Añejo twist, replace the gin with 0.75 oz Teremana Añejo for vanilla, oak, and a warmer finish; for a smoky version, swap in 0.75 oz Topanito Mezcal for earthy smoke and mineral depth.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin, Teremana Añejo, or Topanito Mezcal (for variant builds)", inventoryId: "tanqueray-gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Lillet Blanc", substitute: "Cocchi Americano or dry vermouth", inventoryId: "lillet-blanc" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
@@ -1729,12 +1732,12 @@ const DEFAULT_DRINKS = [
     ],
     instructions: [
       "Rinse the inside of a chilled coupe with a dash of absinthe and discard the excess.",
-      "Combine Tanqueray gin, Cointreau, Lillet Blanc, and fresh lemon juice in a cocktail shaker filled with ice.",
+      "Combine Tanqueray gin (or Botanist gin / Añejo / Mezcal variant), Cointreau, Lillet Blanc, and fresh lemon juice in a cocktail shaker filled with ice.",
       "Shake with vigor for 12 seconds.",
       "Fine strain into the prepared absinthe-scented coupe.",
       "Garnish with an expressed lemon peel twist."
     ],
-    tags: ["gin", "cointreau", "lillet", "absinthe", "savoy", "classic"]
+    tags: ["gin", "cointreau", "lillet", "absinthe", "savoy", "classic", "the-botanist", "anejo", "mezcal"]
   },
   {
     id: "vieux-carre",
@@ -4567,36 +4570,6 @@ const DEFAULT_DRINKS = [
       "Serve immediately."
     ],
     tags: ["irish-whiskey", "jameson", "highball", "soda", "easy", "session", "clean", "in-stock"]
-  },
-  {
-    id: "corpse-reviver-no-2-botanist",
-    name: "Corpse Reviver No. 2 (The Botanist Edition)",
-    otherNames: "Savoy Gin & Absinthe Classic",
-    category: "Cocktail",
-    baseSpirit: "Gin",
-    glassware: "Coupe",
-    alcoholLevel: "Medium-High (~24% ABV)",
-    alcoholScore: 4,
-    tasteProfile: "Crisp Botanical, Delicate Honey, Citrus & Ethereal Anise",
-    difficulty: 2,
-    popularity: 9.7,
-    proTip: "The 22 hand-foraged Islay botanicals in The Botanist gin bloom beautifully when met with the whispering anise aroma of the Père Kermann's absinthe rinse. Ensure the glass is freezing cold so the rinse grips the walls properly.",
-    ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Lillet Blanc", substitute: "Dry Vermouth", inventoryId: "lillet-blanc" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
-      { amountOz: "1 dash", amountMl: "1 dash", item: "Père Kermann's Absinthe (Rinse)", substitute: "Generic Absinthe", inventoryId: "pere-kermanns-absinthe" }
-    ],
-    instructions: [
-      "Chill a coupe glass in the freezer for 5 minutes.",
-      "Add a dash of Père Kermann's Absinthe to the chilled glass, roll it smoothly to coat the inner walls completely, and discard any excess liquid.",
-      "Combine The Botanist gin, Cointreau, Lillet Blanc, and fresh lemon juice in a cocktail shaker filled with clean ice blocks.",
-      "Shake with high energy for 12 seconds until frosty cold.",
-      "Double strain through a fine mesh strainer into the absinthe-scented coupe.",
-      "Garnish with a clean lemon peel twist expressed over the surface."
-    ],
-    tags: ["gin", "the-botanist", "absinthe", "cointreau", "lillet", "sour", "classic", "in-stock"]
   },
   {
     id: "monkey-gland-botanist",
