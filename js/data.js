@@ -14,13 +14,15 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "2 October 2026";
-const INVENTORY_SYNC_VERSION = "20261002_1";
+const INVENTORY_LAST_UPDATED = "3 October 2026";
+const INVENTORY_SYNC_VERSION = "20261003_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
+  "agave-syrup": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true },
+  "granulated-sugar": { inStock: true, quantity: 1, unit: "bag" },
   "simple-syrup": { inStock: true, quantity: 1 },
   "chang-soda-water": { inStock: true, quantity: 24, unit: "bottle" },
   "whipped-cream": { inStock: true, quantity: 1 },
@@ -350,11 +352,11 @@ const DEFAULT_INVENTORY = [
   { id: "pomegranate-grenadine", name: "Pomegranate Grenadine", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Tart-sweet real pomegranate syrup for Tequila Sunrise, Singapore Sling, and Shirley Temple." },
   { id: "raspberry-rhapsody", name: "Raspberry Rhapsody Flavored Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Sweet raspberry syrup for Clover Club, Floradora, and Lemon-Berry Fizz." },
   { id: "simple-syrup", name: "Premium Syrup (Simple Syrup, 1:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Your premium/simple syrup. Equal parts sugar and water; foundation for sour and fizz drinks." },
-  { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: false, refrigerate: true, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
+  { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
   { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "French sweet almond and orange flower syrup for Mai Tai." },
   { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Liquid clover honey for Penicillin and Bee's Knees." },
   { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, refrigerate: true, notes: "Fresh ginger syrup for Penicillin." },
-  { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: false, notes: "For muddling in Old Fashioned and rimming glasses." },
+  { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: true, notes: "For muddling in Old Fashioned and rimming glasses." },
   { id: "demerara-syrup", name: "Demerara Syrup (2:1 Rich Syrup)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Rich 2:1 raw Demerara sugar syrup. Deeper molasses-caramel sweetness than plain simple syrup; ideal for Old Fashioned, Penicillin, and Whiskey Sours." },
   { id: "fever-tree-indian-tonic", name: "Fever-Tree Premium Indian Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Premium tonic water with botanical oils and high-quality quinine. Perfect upgrade for a crisp G&T." },
   { id: "fever-tree-ginger-beer", name: "Fever-Tree Premium Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Brewed with a blend of three natural gingers. Deep, spicy flavor profile that beautifully mimics alcohol proof." },
