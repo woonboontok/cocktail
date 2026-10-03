@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "3 October 2026";
-const INVENTORY_SYNC_VERSION = "20261003_1";
+const INVENTORY_LAST_UPDATED = "4 October 2026";
+const INVENTORY_SYNC_VERSION = "20261004_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -49,8 +49,10 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "pineapple-juice": { inStock: true, quantity: 1, unit: "carton" },
   "orange-juice": { inStock: true, quantity: 1, unit: "carton" },
   "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
+  "monkey-47-dry-gin": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
   "teremana-tequila": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Blanco, 40% ABV, 1000ml. In stock." },
   "teremana-tequila-anejo": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Añejo, 40% ABV, 1000ml. Purchased; due after 15 Oct." },
+  "codigo-1530-reposado-cristalino": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
   "tabasco-sauce": { inStock: true, quantity: 1, unit: "bottle" },
   "fever-tree-ginger-beer": { inStock: true, quantity: 6, unit: "pack" },
   "bundaberg-ginger-beer": { inStock: true },
@@ -90,8 +92,8 @@ const INGREDIENT_GROUPS = {
     inventoryIds: ["cachaca"]
   },
   "gin": {
-    label: "London Dry Gin",
-    inventoryIds: ["tanqueray-gin", "the-botanist-gin"]
+    label: "Dry & Botanical Gin",
+    inventoryIds: ["tanqueray-gin", "the-botanist-gin", "monkey-47-dry-gin"]
   },
   "vodka": {
     label: "Vodka",
@@ -105,6 +107,30 @@ const INGREDIENT_GROUPS = {
     label: "Rye Whiskey",
     inventoryIds: ["jd-bonded-rye"]
   },
+  "old-fashioned-base": {
+    label: "Old Fashioned Base Spirit",
+    inventoryIds: [
+      "jd-bonded-rye",
+      "jim-beam-black",
+      "mount-gay-black-barrel",
+      "myers-dark-rum",
+      "teremana-tequila",
+      "teremana-tequila-anejo",
+      "codigo-1530-reposado-cristalino",
+      "topanito-mezcal-artesanal-espadin",
+      "hennessy-vsop-cognac",
+      "otard-xo-gold-cognac",
+      "premier-french-brandy-napoleon-special-reserve"
+    ]
+  },
+  "old-fashioned-sweetener": {
+    label: "Old Fashioned Sweetener",
+    inventoryIds: ["simple-syrup", "demerara-syrup", "agave-syrup", "granulated-sugar"]
+  },
+  "long-island-topper": {
+    label: "Long Island / AMF Topper",
+    inventoryIds: ["cola", "lemon-lime-soda", "chang-soda-water", "schweppes-ginger-soda"]
+  },
   "scotch": {
     label: "Scotch Whisky",
     inventoryIds: ["jw-black-label"]
@@ -115,7 +141,7 @@ const INGREDIENT_GROUPS = {
   },
   "tequila": {
     label: "Tequila",
-    inventoryIds: ["teremana-tequila", "teremana-tequila-anejo"]
+    inventoryIds: ["teremana-tequila", "teremana-tequila-anejo", "codigo-1530-reposado-cristalino"]
   },
   "mezcal": {
     label: "Mezcal",
@@ -287,8 +313,10 @@ const DEFAULT_INVENTORY = [
   { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum (75.5% ABV)", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
   { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
+  { id: "monkey-47-dry-gin", name: "Monkey 47 Schwarzwald Dry Gin (500ml)", category: "spirits", subCategory: "Gin › Dry Gin", spiritFamily: "Gin", spiritStyle: "Dry Gin", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 47, notes: "Incoming 500ml bottle at 47% ABV. Complex Black Forest gin with citrus, spice, and herbal notes; expressive in honey-lemon sours, Gin & Tonic, and Negroni." },
   { id: "teremana-tequila", name: "Teremana Tequila Blanco 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Blanco", spiritFamily: "Agave", spiritStyle: "Blanco Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Blanco at 40% ABV; crisp agave, citrus peel, and a clean finish ideal for margaritas, Palomas, and tequila-forward cocktails." },
   { id: "teremana-tequila-anejo", name: "Teremana Tequila Añejo 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Añejo", spiritFamily: "Agave", spiritStyle: "Añejo Tequila", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Purchased: 1000ml Teremana Tequila Añejo at 40% ABV; due to arrive after 15 Oct. Ideal for sipping and richer tequila-forward cocktails." },
+  { id: "codigo-1530-reposado-cristalino", name: "Codigo 1530 Reposado Cristalino Tequila (750ml)", category: "spirits", subCategory: "Agave › Tequila Reposado Cristalino", spiritFamily: "Agave", spiritStyle: "Reposado Cristalino", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming 750ml bottle at 40% ABV. Oak-aged reposado tequila charcoal-filtered to a clear spirit; its agave, vanilla, and oak notes suit Margaritas, Palomas, and spirit-forward tequila cocktails." },
   { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
@@ -441,7 +469,7 @@ const DEFAULT_DRINKS = [
   {
     id: "old-fashioned",
     name: "Old Fashioned",
-    otherNames: "Whiskey Cocktail, Rum Old Fashioned, Oaxaca Old Fashioned, Añejo Tequila Old Fashioned",
+    otherNames: "Whiskey Cocktail, Rum Old Fashioned, Mount Gay Rum Old Fashioned, Oaxaca Old Fashioned, Anejo Tequila Old Fashioned, Cristalino Tequila Old Fashioned, Brandy Old Fashioned",
     category: "Cocktail",
     baseSpirit: "Whiskey/Bourbon",
     glassware: "Rocks / Old Fashioned",
@@ -450,25 +478,25 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Spirit-Forward, Rich, Caramel & Aromatic",
     difficulty: 2,
     popularity: 9.9,
-    proTip: "Never muddle cherries or orange pulp into the drink. Only express the essential oils from the orange peel over the top to avoid muddying the spirit.\n\nClassic 1-Ingredient Spirit Variants:\n• Rum Old Fashioned: Swap whiskey for 2 oz Mount Gay Black Barrel (or Myers's Dark Rum) for rich molasses, baking spices, and toasted bourbon-cask oak.\n• Oaxaca Old Fashioned: Split the base with 1.5 oz Reposado Tequila and 0.5 oz Topanito Mezcal with agave syrup.\n• Añejo Tequila Old Fashioned: Use 2 oz Teremana Añejo and demerara syrup for vanilla, toasted oak, and a richer agave finish.\n• Brandy Old Fashioned: Swap whiskey for Hennessy VSOP Cognac or French Brandy.",
+    proTip: "Keep the classic build spirit-forward: use 2 oz rye or bourbon, 0.25 oz syrup, and 3 dashes of bitters. Never muddle fruit; express the orange peel oils over the drink.\n\nVariants use the same bitters and orange garnish, with the base spirit and syrup creating the change:\n- Mount Gay Rum Old Fashioned: use 2 oz Mount Gay Black Barrel and 0.25 oz simple syrup. Its bourbon-cask finish adds vanilla and toasted oak, while the rum brings molasses and baking spice. Demerara deepens caramel; Myers's Dark Rum makes the result richer and more molasses-forward.\n- Oaxaca Old Fashioned: split the base into 1.5 oz reposado tequila and 0.5 oz mezcal, then use agave syrup. The mezcal adds smoke and the tequila keeps the agave core.\n- Anejo Tequila Old Fashioned: use 2 oz Teremana Anejo with demerara syrup for vanilla, caramel, and toasted oak.\n- Cristalino Tequila Old Fashioned: use 2 oz Codigo 1530 Reposado Cristalino with demerara syrup for soft oak and vanilla over agave, while the filtered spirit keeps the drink clear.\n- Brandy Old Fashioned: use 2 oz Hennessy VSOP or French brandy for rounder dried-fruit and spice notes.\nUse simple syrup for a cleaner classic; demerara deepens the caramel notes, while agave syrup keeps the Oaxaca version focused on agave.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Mount Gay Black Barrel (Rum Old Fashioned) or Jim Beam Black", inventoryId: "jd-bonded-rye" },
-      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (or 1 sugar cube)", substitute: "Rich demerara syrup or brown sugar", inventoryId: "simple-syrup" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Bourbon | Mount Gay Barbados Rum Black Barrel (Mount Gay Rum Old Fashioned) | Myers's Dark Rum (richer rum variant) | 1.5 oz reposado tequila + 0.5 oz mezcal (Oaxaca Old Fashioned) | Teremana Anejo (Anejo Tequila Old Fashioned) | Codigo 1530 Reposado Cristalino (Cristalino Tequila Old Fashioned) | Hennessy VSOP Cognac (Brandy Old Fashioned)", inventoryId: "jd-bonded-rye", ingredientGroup: "old-fashioned-base" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (or 1 sugar cube)", substitute: "Rich demerara syrup for rum and aged tequila variants | Agave syrup for the Oaxaca Old Fashioned | Brown sugar", inventoryId: "simple-syrup", ingredientGroup: "old-fashioned-sweetener" },
       { amountOz: "3 dashes", amountMl: "3 dashes", item: "Angostura Bitters", substitute: "Orange bitters + aromatic bitters", inventoryId: "angostura-bitters" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel & Maraschino Cherry", substitute: "Expressed orange twist", inventoryId: "fresh-oranges" }
     ],
     instructions: [
-      "In a rocks glass or mixing glass, combine simple syrup and 3 healthy dashes of Angostura bitters.",
-      "Add half the whiskey (or rum) and 1 large ice cube; stir 15 seconds to initiate chill and dilution.",
+      "In a rocks glass or mixing glass, combine the selected syrup and 3 healthy dashes of Angostura bitters.",
+      "Add half the selected base spirit and 1 large ice cube; stir for 15 seconds to start chilling and dilution.",
       "Add the remaining spirit and fill with fresh ice. Stir smoothly for another 20 seconds.",
       "Express an orange peel over the glass, rub the rim with the peel, and drop it into the glass with a brandied cherry."
     ],
-    tags: ["whiskey", "bourbon", "rye", "rum", "classic", "spirit-forward", "speakeasy", "in-stock"]
+    tags: ["whiskey", "bourbon", "rye", "rum", "tequila", "mezcal", "brandy", "classic", "spirit-forward", "speakeasy", "in-stock"]
   },
   {
     id: "margarita",
     name: "Classic Margarita",
-    otherNames: "Cadillac Margarita (when Grand Marnier used), Añejo Margarita",
+    otherNames: "Cadillac Margarita (when Grand Marnier used), Anejo Margarita",
     category: "Cocktail",
     baseSpirit: "Tequila/Mezcal",
     glassware: "Coupe or Rocks",
@@ -477,7 +505,7 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Crisp, Citrusy, Tart & Saline",
     difficulty: 2,
     popularity: 9.9,
-    proTip: "Salt only half the rim! That allows the drinker to choose between salted and unsalted sips and prevents salt from dissolving prematurely into the drink.\n\nAñejo Margarita variant: Use 1.5 oz Teremana Añejo plus 0.5 oz blanco or reposado to keep the lime brightness while adding vanilla, caramel, and a subtler toasted-agave finish.",
+    proTip: "Salt only half the rim! That allows the drinker to choose between salted and unsalted sips and prevents salt from dissolving prematurely into the drink.\n\nAnejo Margarita variant: Use 1.5 oz Teremana Anejo plus 0.5 oz blanco or reposado to keep the lime brightness while adding vanilla, caramel, and a subtler toasted-agave finish.\n\nCristalino variant: Use Codigo 1530 Reposado Cristalino for a clear, softly oaked Margarita; reduce the agave syrup slightly if your orange liqueur is sweet.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Any 100% blue agave blanco or reposado", inventoryId: "teremana-tequila" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Cointreau", substitute: "Grand Marnier (Cadillac style) or Lumina Triple Sec", inventoryId: "cointreau" },
@@ -1155,7 +1183,7 @@ const DEFAULT_DRINKS = [
   {
     id: "long-island-iced-tea",
     name: "Long Island Iced Tea",
-    otherNames: "LIIT, Tokyo Tea (Melon Variant), Adios Motherfucker / AMF (Blue Variant)",
+    otherNames: "LIIT, Tokyo Tea (Melon Variant), Adios Motherfucker / AMF (Blue Variant), Blue Motorcycle",
     category: "Cocktail",
     baseSpirit: "Vodka",
     glassware: "Highball / Collins / Hurricane",
@@ -1164,24 +1192,24 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Boozy, Sweet-Tart Citrus Lemon & Deceptively Smooth",
     difficulty: 2,
     popularity: 9.8,
-    proTip: "The ultimate five-spirit highball alchemy. Despite containing zero tea, the combination of white spirits, citrus, and sweet elements perfectly mimics refreshing iced tea. To ensure the drink remains crisp rather than heavy, flash-shake the spirits with citrus and sugar first, strain over raw ice, and treat the soda topper as a coloring agent rather than a mixer.\n\nFamous 1-Ingredient Riffs with Fancy Names:\n• Tokyo Tea: A vibrant neon-green twist. Swap out the orange Triple Sec/Cointreau entirely for 0.5 oz Midori Melon Liqueur, and trade the dark cola for bubbly lemon-lime soda (Sprite). The Midori functions as both the primary color identity and a lush, honeydew sweetener, eliminating the chemical baseline burn of the underlying spirits.\n• Adios Motherfucker (AMF): An electric blue party showstopper. Retain the underlying four clear base spirits, but substitute the orange Triple Sec/Cointreau for 0.5 oz Curaçao Bleu Liqueur, and top up with lemon-lime soda. The blue curaçao provides a punchy, candied-orange citrus profile that clashes visually and flavor-wise with the traditional cola build.",
+    proTip: "The classic Long Island combines four clear spirits, orange liqueur, lemon, simple syrup, and cola. Flash-shake briefly, strain over fresh ice, and use the soda mainly to finish the flavor and color.\n\nVariants keep the same four-spirit base and change the liqueur, lemon balance, and topper:\n- Tokyo Tea: replace Cointreau with 0.5 oz Midori and use lemon-lime soda instead of cola. Midori adds sweet honeydew and a vivid green color.\n- Adios Motherfucker (AMF): replace Cointreau with 0.5 oz blue Curacao, increase lemon juice from 0.75 oz to 1 oz, and top with lemon-lime soda instead of cola. Blue Curacao brings candied-orange notes and an electric blue color; the extra lemon and citrus soda make the finish brighter and tarter than the cola classic.",
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Smirnoff Red Vodka", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum", substitute: "Any quality light white rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau / Midori (Tokyo Tea) / Curaçao Bleu (AMF)", substitute: "Swap out Cointreau for Midori Melon Liqueur when building a Tokyo Tea, or Curaçao Bleu Liqueur when building an AMF", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh house-made sour mix", inventoryId: "fresh-lemons", ingredientGroup: "fresh-lemon" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau (Classic) / Midori (Tokyo Tea) / Blue Curacao (AMF)", substitute: "Cointreau for the classic | Midori for Tokyo Tea (sweet honeydew and green color) | Curacao Bleu for AMF (candied orange and blue color)", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "1 oz for AMF (brighter and tarter) | Fresh house-made sour mix", inventoryId: "fresh-lemons", ingredientGroup: "fresh-lemon" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Premium sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
-      { amountOz: "Top up", amountMl: "Top up", item: "Cola / Lemon-Lime Soda (Tokyo Tea & AMF)", substitute: "Use Coca-Cola for the standard classic, or swap completely for Sprite/Lemon-Lime Soda when crafting a Tokyo Tea or an AMF", inventoryId: "cola" }
+      { amountOz: "Top up", amountMl: "Top up", item: "Cola (Classic) / Lemon-Lime Soda (Tokyo Tea & AMF)", substitute: "Coca-Cola for the classic | Lemon-Lime Soda for Tokyo Tea and AMF | Chang Soda Water for a drier finish | Schweppes Ginger Soda for a ginger-forward riff", inventoryId: "cola", ingredientGroup: "long-island-topper" }
     ],
     instructions: [
       "Fill a tall highball, Collins, or hurricane glass to the absolute brim with large ice blocks.",
-      "Add your vodka, white rum, gin, tequila, and your choice of modifier liqueur (Cointreau for classic, Midori for Tokyo Tea, or Curaçao Bleu for AMF) into a shaker with ice.",
-      "Add the fresh pressed lemon juice and premium simple syrup.",
+      "Add vodka, white rum, gin, tequila, and the selected liqueur (Cointreau for classic, Midori for Tokyo Tea, or blue Curacao for AMF) to a shaker with ice.",
+      "Add fresh lemon juice (0.75 oz for classic or Tokyo Tea; 1 oz for AMF) and simple syrup.",
       "Shake with maximum speed for exactly 6 to 8 seconds to drop the temperature without over-diluting the spirits.",
       "Strain into your prepared glass over the raw ice stack.",
-      "Slowly float your top-up soda layer over the crown (Cola for classic, Lemon-Lime Soda for Tokyo Tea/AMF) to complete the color profile.",
+      "Top with cola for the classic, lemon-lime soda for Tokyo Tea or AMF, or club soda for a drier finish.",
       "Garnish elegantly with a fresh lemon wheel on the rim and a maraschino cherry."
     ],
     tags: ["vodka", "rum", "gin", "tequila", "cointreau", "midori", "curacao-bleu", "party", "potent", "layered", "in-stock"]
@@ -2882,33 +2910,6 @@ const DEFAULT_DRINKS = [
   // MOUNT GAY FEATURED COCKTAILS
   // =========================================================================
   {
-    id: "mount-gay-rum-old-fashioned",
-    name: "Mount Gay Rum Old Fashioned",
-    otherNames: "Barbados Rum Old Fashioned",
-    category: "Cocktail",
-    baseSpirit: "Rum",
-    glassware: "Rocks / Old Fashioned",
-    alcoholLevel: "High (~32% ABV)",
-    alcoholScore: 5,
-    tasteProfile: "Oak, Molasses, Citrus & Baking Spice",
-    difficulty: 1,
-    popularity: 9.2,
-    proTip: "Black Barrel's bourbon-cask finish gives this spirit-forward build vanilla, toasted oak, and enough structure to replace whiskey in an Old Fashioned.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel" },
-      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Premium Simple Syrup", substitute: "Demerara syrup or one sugar cube", inventoryId: "simple-syrup" },
-      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
-      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel", substitute: "Orange slice", inventoryId: "fresh-oranges" }
-    ],
-    instructions: [
-      "Add Mount Gay rum, simple syrup, and Angostura bitters to a mixing glass with ice.",
-      "Stir for 20 to 30 seconds until chilled and diluted.",
-      "Strain over one large cube in a chilled rocks glass.",
-      "Express a fresh orange peel over the drink and place it on top."
-    ],
-    tags: ["rum", "mount-gay", "barbados", "old-fashioned", "spirit-forward", "in-stock"]
-  },
-  {
     id: "barbados-rum-punch",
     name: "Barbados Rum Punch",
     otherNames: "Mount Gay Rum Punch, One of Sour Two of Sweet",
@@ -3590,39 +3591,6 @@ const DEFAULT_DRINKS = [
     tags: ["shot", "tonight-not-going-home", "jin-ye-bu-hui-jia", "potent", "in-stock"]
   },
   {
-    id: "amf",
-    name: "Adios Motherfucker (AMF)",
-    otherNames: "Blue Motorcycle, Electric Long Island Iced Tea",
-    category: "Cocktail",
-    baseSpirit: "Vodka",
-    glassware: "Hurricane / Highball",
-    alcoholLevel: "High (~22% ABV)",
-    alcoholScore: 5,
-    tasteProfile: "Electric Blue Citrus, Sweet-Tart Lemon & High Octane",
-    difficulty: 2,
-    popularity: 9.8,
-    proTip: "The vibrant blue sibling of the Long Island Iced Tea. Swapping triple sec for Curaçao Bleu and cola for citrus soda turns this into the ultimate party centerpiece.",
-    ingredients: [
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum", substitute: "Any light white rum", inventoryId: "bacardi-superior" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Blanco tequila", inventoryId: "teremana-tequila" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Curaçao Bleu Liqueur", substitute: "Blue Curaçao", inventoryId: "curacao-bleu" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Sweet & sour mix", inventoryId: "fresh-lemons" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "Top up", amountMl: "Top up", item: "Lemon-Lime Soda (or Chang Soda Water)", substitute: "Chang Soda Water or Schweppes Ginger Soda", inventoryId: "lemon-lime-soda" }
-    ],
-    instructions: [
-      "Fill a hurricane or tall highball glass with ice cubes.",
-      "Combine vodka, rum, tequila, gin, Curaçao Bleu, lemon juice, and simple syrup in a shaker with ice.",
-      "Shake with vigor for 8 seconds.",
-      "Strain into the tall glass over fresh ice.",
-      "Top with lemon-lime soda (or Chang Soda Water).",
-      "Garnish with a fresh lemon wheel and a maraschino cherry."
-    ],
-    tags: ["vodka", "rum", "tequila", "gin", "blue-curacao", "party", "potent", "in-stock"]
-  },
-  {
     id: "southside",
     name: "Southside",
     otherNames: "The Gin Mojito, Al Capone's Chicago Club Classic",
@@ -3653,7 +3621,7 @@ const DEFAULT_DRINKS = [
   {
     id: "bees-knees",
     name: "Bee's Knees",
-    otherNames: "Prohibition Honey Gin Sour (1920s)",
+    otherNames: "Prohibition Honey Gin Sour (1920s), Monkey 47 Bee's Knees, Black Forest Bee's Knees",
     category: "Cocktail",
     baseSpirit: "Gin",
     glassware: "Coupe",
@@ -3662,15 +3630,15 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Floral Wildflower Honey, Tart Lemon & Juniper Gin",
     difficulty: 1,
     popularity: 9.7,
-    proTip: "Make honey syrup by mixing 3 parts pure honey to 1 part warm water so it pours and dissolves effortlessly when shaken with ice. The honey coats Tanqueray's bold juniper with velvety warmth.",
+    proTip: "Make honey syrup by mixing 3 parts pure honey to 1 part warm water so it pours and dissolves easily. With this rich 3:1 syrup, use 0.75 oz for the classic, softer honey-and-juniper sour. For Monkey 47's 47% ABV and intense citrus-spice botanicals, use 0.5 oz: the drier balance keeps the gin prominent and makes a brighter, more spirit-forward Bee's Knees variant. Shake either build hard with fresh lemon; adjust the honey in small increments.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Monkey 47 Schwarzwald Dry Gin (Monkey 47 Bee's Knees, extra citrus and spice) | The Botanist Islay Dry Gin | Any dry botanical gin", inventoryId: "tanqueray-gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Honey Syrup (3:1 honey to warm water)", substitute: "Simple syrup with honey", inventoryId: "honey-syrup" }
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Honey Syrup (3:1 honey to warm water)", substitute: "0.5 oz for the Monkey 47 variant (balances its 47% ABV) | Simple syrup with honey", inventoryId: "honey-syrup" }
     ],
     instructions: [
       "Chill a coupe glass in the freezer.",
-      "Add Tanqueray gin, fresh lemon juice, and honey syrup into a shaker with ice.",
+      "Add the selected gin, fresh lemon juice, and honey syrup into a shaker with ice.",
       "Shake vigorously for 12 seconds.",
       "Fine strain into the chilled coupe.",
       "Garnish with an elegant lemon peel twist."
