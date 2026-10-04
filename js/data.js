@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "4 October 2026";
-const INVENTORY_SYNC_VERSION = "20261004_1";
+const INVENTORY_SYNC_VERSION = "20261004_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -48,6 +48,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "grapefruit-juice": { inStock: true, quantity: 1, unit: "carton" },
   "pineapple-juice": { inStock: true, quantity: 1, unit: "carton" },
   "orange-juice": { inStock: true, quantity: 1, unit: "carton" },
+  "lemon-lime-soda": { inStock: true, name: "Schweppes Manao Soda Mini - Lemon Lime", notes: "Lemon-lime-flavoured carbonated soda for cocktails and highballs." },
   "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
   "monkey-47-dry-gin": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
   "teremana-tequila": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Blanco, 40% ABV, 1000ml. In stock." },
@@ -398,7 +399,7 @@ const DEFAULT_INVENTORY = [
   { id: "tonic-water", name: "Tonic Water (Fever-Tree)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-indian-tonic", notes: "In stock (Fulfilled by Fever-Tree Premium Indian Tonic Water)." },
   { id: "cola", name: "Coca-Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "can", notes: "6 cans of Coca-Cola for Cuba Libre, Long Island Iced Tea, and Roy Rogers." },
   { id: "chang-lime-soda", name: "Chang Lime Soda (2 Bottles)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 2, unit: "bottle", notes: "Refreshing lime-flavored carbonated soda. Crisp and citrusy for casual highball mixing and lime cocktail riffs." },
-  { id: "lemon-lime-soda", name: "Lemon-Lime Soda (Sprite)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: false, notes: "Bubbly citrus soda for Blue Lagoon, Tequila Slammer, and Green Tea Shot." },
+  { id: "lemon-lime-soda", name: "Schweppes Manao Soda Mini - Lemon Lime", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Lemon-lime-flavoured carbonated soda for cocktails and highballs." },
   { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "For the Jägerbomb drop." },
   { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, refrigerate: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
   { id: "orange-juice", name: "Orange Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "In stock (carton). For Tequila Sunrise, Mimosa, Ward 8, and Screwdriver." },
