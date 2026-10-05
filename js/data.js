@@ -3583,7 +3583,7 @@ const DEFAULT_DRINKS = [
     proTip: "China and Taiwan's most famous nightlife challenge cocktail. Created by marrying equal parts high-proof Rum, Tequila, Whiskey, and an orange liqueur (Cointreau or Grand Marnier). In Chinese clubs, bartenders warm the snifter and ignite the vapors, sprinkling ground cinnamon from above to unleash a starry meteor shower of golden sparks. Always blow out the flame before drinking!",
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "tonight-rum" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "100% blue agave blanco or reposado", inventoryId: "teremana-tequila" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tequila", substitute: "100% blue agave blanco or reposado", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon or Johnnie Walker Black", inventoryId: "jd-bonded-rye", ingredientGroup: "tonight-whiskey" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grand Marnier (or Cointreau)", substitute: "Cointreau or Lumina Triple Sec", inventoryId: "grand-marnier" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Ground Cinnamon (for spark flame) & Fresh Orange Peel", substitute: "Navel orange twist", inventoryId: "fresh-oranges" }
@@ -3612,7 +3612,7 @@ const DEFAULT_DRINKS = [
     proTip: "The high-potency shooter edition designed to be taken down in one breathless gulp. Using your stocked Bacardi Rum, Teremana Tequila, Jim Beam Bourbon, and Cointreau gives it maximum proof with a surprisingly smooth citrus finish.",
     ingredients: [
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "tonight-rum" },
-      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Teremana Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila" },
+      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Cointreau (or Grand Marnier)", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" }
     ],
