@@ -1309,6 +1309,17 @@ a:hover {
   color: #60a5fa;
 }
 
+.inv-badge-premium {
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--radius-full);
+  padding: 0.15rem 0.45rem;
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  font-size: 0.65rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .inv-meta {
   font-size: 0.74rem;
   color: var(--accent-gold);
@@ -1655,6 +1666,37 @@ a:hover {
 .ingredient-option-status.in-stock { background: rgba(52, 211, 153, 0.16); color: #6ee7b7; }
 .ingredient-option-status.out-of-stock { background: rgba(248, 113, 113, 0.15); color: #fca5a5; }
 .ingredient-option-status.incoming { background: rgba(251, 191, 36, 0.15); color: #fcd34d; }
+
+/* Premium / Reserve spirit indicator */
+.ingredient-option-premium {
+  background: rgba(251, 191, 36, 0.05);
+  border-left: 2px solid rgba(251, 191, 36, 0.35);
+  padding-left: 0.5rem;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+}
+
+.ingredient-option-reserve {
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.14rem 0.5rem;
+  white-space: nowrap;
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  letter-spacing: 0.02em;
+}
+
+.ingredient-options-reserve-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: #fbbf24;
+  opacity: 0.8;
+  padding: 0.45rem 0.6rem;
+  background: rgba(251, 191, 36, 0.06);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid rgba(251, 191, 36, 0.35);
+}
 
 .ing-measure-item {
   display: flex;
@@ -2295,4 +2337,3 @@ input:checked + .switch-slider:before {
     height: 42px;
   }
 }
-

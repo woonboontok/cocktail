@@ -84,6 +84,18 @@ const INGREDIENT_GROUPS = {
     label: "Dark Rum",
     inventoryIds: ["myers-dark-rum", "mount-gay-black-barrel"]
   },
+  "air-mail-rum": {
+    label: "Air Mail Rum",
+    inventoryIds: ["mount-gay-black-barrel", "bacardi-superior"]
+  },
+  "casa-blanca-rum": {
+    label: "Casa Blanca Rum",
+    inventoryIds: ["mount-gay-black-barrel", "bacardi-superior"]
+  },
+  "tonight-rum": {
+    label: "Tonight Not Going Home Rum",
+    inventoryIds: ["goslings-black-seal-151", "bacardi-superior", "myers-dark-rum"]
+  },
   "overproof-rum": {
     label: "Overproof Rum",
     inventoryIds: ["goslings-black-seal-151"]
@@ -107,6 +119,22 @@ const INGREDIENT_GROUPS = {
   "rye-whiskey": {
     label: "Rye Whiskey",
     inventoryIds: ["jd-bonded-rye"]
+  },
+  "rye-bourbon": {
+    label: "Rye / Bourbon Whiskey",
+    inventoryIds: ["jd-bonded-rye", "jim-beam-black"]
+  },
+  "tonight-whiskey": {
+    label: "Tonight Not Going Home Whiskey",
+    inventoryIds: ["jd-bonded-rye", "jim-beam-black", "jw-black-label"]
+  },
+  "french-75-spirit": {
+    label: "French 75 Base Spirit",
+    inventoryIds: ["tanqueray-gin", "the-botanist-gin", "monkey-47-dry-gin", "jim-beam-black", "hennessy-vsop-cognac"]
+  },
+  "irish-coffee-whiskey": {
+    label: "Irish Whiskey / Bourbon",
+    inventoryIds: ["jameson-irish-whiskey", "jim-beam-black"]
   },
   "old-fashioned-base": {
     label: "Old Fashioned Base Spirit",
@@ -151,6 +179,10 @@ const INGREDIENT_GROUPS = {
   "brandy-cognac": {
     label: "Cognac / French Brandy",
     inventoryIds: ["hennessy-vsop-cognac", "otard-xo-gold-cognac", "premier-french-brandy-napoleon-special-reserve"]
+  },
+  "sidecar-base": {
+    label: "Sidecar Base Spirit",
+    inventoryIds: ["hennessy-vsop-cognac", "otard-xo-gold-cognac", "premier-french-brandy-napoleon-special-reserve", "tanqueray-gin", "bacardi-superior", "jim-beam-black"]
   },
   "pisco": {
     label: "Pisco",
@@ -308,21 +340,21 @@ const DEFAULT_INVENTORY = [
   { id: "jw-black-label", name: "Johnnie Walker Black Label Scotch Whisky", category: "spirits", subCategory: "Whiskey › Scotch", spiritFamily: "Whiskey", spiritStyle: "Scotch", inStock: true, abv: 40, notes: "12-year blended Scotch whisky with balanced fruit and gentle peat smoke." },
   { id: "hennessy-vsop-cognac", name: "Hennessy VSOP Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Rich VSOP cognac with orchard fruit, vanilla, and toasted oak." },
   { id: "premier-french-brandy-napoleon-special-reserve", name: "Premier French Brandy Napoléon Special Reserve", category: "spirits", subCategory: "Brandy › French Brandy", spiritFamily: "Brandy", spiritStyle: "French Brandy", inStock: true, abv: 40, notes: "Classic French brandy with warm spice, dried fruit, and vanilla." },
-  { id: "otard-xo-gold-cognac", name: "Otard XO Gold Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: true, abv: 40, notes: "Luxurious XO cognac with orange peel, caramel, and oak depth." },
+  { id: "otard-xo-gold-cognac", name: "Otard XO Gold Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: true, abv: 40, premium: true, notes: "Luxurious XO cognac with orange peel, caramel, and oak depth." },
   { id: "bacardi-superior", name: "Bacardi Carta Blanca Superior White Rum", category: "spirits", subCategory: "Rum › White", spiritFamily: "Rum", spiritStyle: "White", inStock: true, quantity: 2, unit: "bottle", abv: 37.5, notes: "Clean, floral light rum (700ml). Essential for Mojito and Daiquiri." },
   { id: "myers-dark-rum", name: "Myers's Original Dark Rum", category: "spirits", subCategory: "Rum › Dark Jamaican", spiritFamily: "Rum", spiritStyle: "Dark Jamaican", inStock: true, abv: 40, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices." },
-  { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
+  { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, premium: true, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum (75.5% ABV)", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
   { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
-  { id: "monkey-47-dry-gin", name: "Monkey 47 Schwarzwald Dry Gin (500ml)", category: "spirits", subCategory: "Gin › Dry Gin", spiritFamily: "Gin", spiritStyle: "Dry Gin", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 47, notes: "Incoming 500ml bottle at 47% ABV. Complex Black Forest gin with citrus, spice, and herbal notes; especially expressive in a Bee's Knees, Gin & Tonic, or Negroni." },
+  { id: "monkey-47-dry-gin", name: "Monkey 47 Schwarzwald Dry Gin (500ml)", category: "spirits", subCategory: "Gin › Dry Gin", spiritFamily: "Gin", spiritStyle: "Dry Gin", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 47, premium: true, notes: "Incoming 500ml bottle at 47% ABV. Complex Black Forest gin with citrus, spice, and herbal notes; especially expressive in a Bee's Knees, Gin & Tonic, or Negroni." },
   { id: "teremana-tequila", name: "Teremana Tequila Blanco 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Blanco", spiritFamily: "Agave", spiritStyle: "Blanco Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Blanco at 40% ABV; crisp agave, citrus peel, and a clean finish ideal for margaritas, Palomas, and tequila-forward cocktails." },
   { id: "teremana-tequila-anejo", name: "Teremana Tequila Añejo 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Añejo", spiritFamily: "Agave", spiritStyle: "Añejo Tequila", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Purchased: 1000ml Teremana Tequila Añejo at 40% ABV; due to arrive after 15 Oct. Ideal for sipping and richer tequila-forward cocktails." },
-  { id: "codigo-1530-reposado-cristalino", name: "Codigo 1530 Reposado Cristalino Tequila (750ml)", category: "spirits", subCategory: "Agave › Tequila Reposado Cristalino", spiritFamily: "Agave", spiritStyle: "Reposado Cristalino", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming 750ml bottle at 40% ABV. Oak-aged reposado tequila charcoal-filtered to a clear spirit; its agave, vanilla, and oak notes suit Margaritas, Palomas, and spirit-forward tequila cocktails." },
+  { id: "codigo-1530-reposado-cristalino", name: "Codigo 1530 Reposado Cristalino Tequila (750ml)", category: "spirits", subCategory: "Agave › Tequila Reposado Cristalino", spiritFamily: "Agave", spiritStyle: "Reposado Cristalino", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, premium: true, notes: "Incoming 750ml bottle at 40% ABV. Oak-aged reposado tequila charcoal-filtered to a clear spirit; its agave, vanilla, and oak notes suit Margaritas, Palomas, and spirit-forward tequila cocktails." },
   { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
   { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Iconic triple-distilled blended Irish whiskey. Smooth, approachable, and endlessly versatile — classic for Irish Coffee, Cameron's Kick, and Green Tea Shot." },
-  { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
+  { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, premium: true, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
@@ -449,7 +481,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Shaking aggressively aerates the pineapple juice, producing a luxuriant pink froth head without needing egg whites.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Peter Heering Cherry Liqueur", substitute: "Cherry brandy or Maraschino + Grenadine", inventoryId: "cherry-heering" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "D.O.M. Bénédictine (or St-Germain)", substitute: "St-Germain Elderflower or herbal amaro", inventoryId: "st-germain" },
@@ -736,7 +768,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Always use Rye whiskey for classic spice and bite. Bourbon can make a Manhattan overly cloying when paired with sweet vermouth.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
       { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Maraschino Cherry (Luxardo style)", substitute: "Orange twist", inventoryId: "maraschino-cherries" }
@@ -880,7 +912,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Named after the French 75mm field artillery cannon because it hits with surprising punch! Chill the flute beforehand and pour the cold Prosecco slowly down a spiral bar spoon to keep the carbonation lively.\n\nFamous 1-Ingredient Bubbly Variants:\n• French 95: Swap London Dry Gin for 1.5 oz Jim Beam Black Bourbon for a richer, oaky, caramel-and-vanilla sparkling cocktail.\n• French 76: Swap Gin for Absolut Vodka for a crisp, citrus-driven sparkling cocktail.\n• French 75 (Cognac Style): Swap Gin for Hennessy VSOP Cognac for the historic 1915 Paris original.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "London Dry Gin", substitute: "Jim Beam Black Bourbon (French 95) or Hennessy VSOP Cognac", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "London Dry Gin", substitute: "Jim Beam Black Bourbon (French 95) or Hennessy VSOP Cognac", inventoryId: "tanqueray-gin", ingredientGroup: "french-75-spirit" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
@@ -1111,7 +1143,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Sugar only half the coupe rim so the crunchy sweetness is optional. The classic 2 : 0.75 : 0.75 ratio strikes an ideal balance between rich grape spirit and tart citrus.\n\nFamous 1-Ingredient Sour / Daisy Family Variants:\n• White Lady (Chelsea Sidecar): Swap Cognac for 1.5 oz Tanqueray London Dry Gin (and optionally add 0.5 oz egg white) for a crisp, floral, porcelain-foamed classic.\n• Between the Sheets: Split the base with 1 oz Bacardi Superior White Rum and 1 oz Cognac/Bourbon with Cointreau and lemon juice for a drier, prohibition-era twist.\n• Margarita: Swap Cognac for Tequila and lemon for fresh lime juice!",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Cognac / French Brandy (or Bourbon)", substitute: "Tanqueray Gin (White Lady), Bacardi White Rum (Between the Sheets), or Jim Beam Black", inventoryId: "hennessy-vsop-cognac", ingredientGroup: "brandy-cognac" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Cognac / French Brandy (or Bourbon)", substitute: "Tanqueray Gin (White Lady), Bacardi White Rum (Between the Sheets), or Jim Beam Black", inventoryId: "hennessy-vsop-cognac", ingredientGroup: "sidecar-base" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Grand Marnier (Grand Sidecar) or Lumina Triple Sec", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons", ingredientGroup: "fresh-lemon" },
       { amountOz: "Rim", amountMl: "Rim", item: "Granulated Sugar", substitute: "Superfine sugar rim", inventoryId: "granulated-sugar" }
@@ -1166,7 +1198,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Lightly whip heavy cream just until it forms soft ribbons—do NOT whip to stiff peaks. Pour it gently over the back of a warm spoon so it floats on hot coffee.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jameson Irish Whiskey", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jameson Irish Whiskey", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-coffee-whiskey" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Hot Fresh Brewed Coffee", substitute: "Fresh Americano / espresso + hot water", inventoryId: "fresh-espresso" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Brown Sugar / Demerara Syrup", substitute: "Granulated sugar", inventoryId: "demerara-syrup" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Heavy Whipping Cream (Lightly whipped)", substitute: "Chilled fresh heavy cream", inventoryId: "whipping-heavy-cream" }
@@ -1197,8 +1229,8 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Smirnoff Red Vodka", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum", substitute: "Any quality light white rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila", preferNonPremium: true },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau (Classic) / Midori (Tokyo Tea) / Blue Curacao (AMF)", substitute: "Cointreau for the classic | Midori for Tokyo Tea (sweet honeydew and green color) | Curacao Bleu for AMF (candied orange and blue color)", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "1 oz for AMF (brighter and tarter) | Fresh house-made sour mix", inventoryId: "fresh-lemons", ingredientGroup: "fresh-lemon" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Premium sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
@@ -2168,7 +2200,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Equal parts Gin, St-Germain, Cointreau, and Lemon juice in an absinthe-rinsed glass. St-Germain's floral sweetness replaces the dry fortified wine.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "St-Germain Elderflower Liqueur", substitute: "Elderflower cordial", inventoryId: "st-germain" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
@@ -2411,7 +2443,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Despite the name, there is zero tea in this shot! It looks luminous green-yellow like green tea and goes down remarkably smooth.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jameson Irish Whiskey", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-whiskey" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jameson Irish Whiskey", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jameson-irish-whiskey", ingredientGroup: "irish-coffee-whiskey" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Hoffmann Peach Liqueur", substitute: "Peach schnapps", inventoryId: "hoffmann-peach" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Sweet & Sour Mix (or Lemon+Simple)", substitute: "Equal parts lemon juice and simple syrup", inventoryId: "fresh-lemons" },
       { amountOz: "Splash", amountMl: "Splash", item: "Lemon-Lime Soda (Sprite)", substitute: "Chang Soda Water", inventoryId: "lemon-lime-soda" }
@@ -2521,7 +2553,7 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "White Sambuca", substitute: "Disaronno Amaretto (for a sweeter base)", inventoryId: "sambuca", ingredientGroup: "sambuca" },
       { amountOz: "5-6 drops", amountMl: "5-6 drops", item: "Tabasco Hot Sauce", substitute: "Spicy hot sauce", inventoryId: "tabasco-sauce" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tequila", substitute: "100% agave tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" }
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tequila", substitute: "100% agave tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila", preferNonPremium: true }
     ],
     instructions: [
       "Pour White Sambuca into the bottom of a shot glass.",
@@ -2599,7 +2631,7 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Disaronno Originale Amaretto", substitute: "Almond liqueur", inventoryId: "disaronno-amaretto" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jim Beam Black Bourbon (or Southern Comfort)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin (or Sloe Gin)", substitute: "Any dry gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin (or Sloe Gin)", substitute: "Any dry gin", inventoryId: "tanqueray-gin", preferNonPremium: true },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Orange Juice", substitute: "Fresh orange juice", inventoryId: "orange-juice" }
     ],
     instructions: [
@@ -2806,7 +2838,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.1,
     proTip: "Mount Gay Black Barrel gives this mid-century rum cocktail a richer Barbados character. Keep the lime fresh and the maraschino dry to preserve its balance.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Bacardi Superior White Rum for a lighter classic style", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Bacardi Superior White Rum for a lighter classic style", inventoryId: "mount-gay-black-barrel", ingredientGroup: "casa-blanca-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Luxardo Maraschino Liqueur", substitute: "Peter Heering Cherry Liqueur, sweeter and fruitier", inventoryId: "maraschino-liqueur" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
@@ -2893,7 +2925,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.0,
     proTip: "The classic Alexander is built from equal parts spirit, cacao, and cream; Frangelico replaces the cacao liqueur for a toasted hazelnut finish.",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Otard XO Gold Cognac", substitute: "Hennessy VSOP Cognac", inventoryId: "otard-xo-gold-cognac" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Otard XO Gold Cognac", substitute: "Hennessy VSOP Cognac", inventoryId: "otard-xo-gold-cognac", preferNonPremium: true },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Frangelico Hazelnut Liqueur", substitute: "Disaronno Amaretto", inventoryId: "frangelico" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Heavy Whipping Cream", substitute: "Baileys Irish Cream for a sweeter variation", inventoryId: "whipping-heavy-cream" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Freshly Grated Nutmeg", substitute: "Cocoa powder", inventoryId: "fresh-oranges" }
@@ -3550,9 +3582,9 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "China and Taiwan's most famous nightlife challenge cocktail. Created by marrying equal parts high-proof Rum, Tequila, Whiskey, and an orange liqueur (Cointreau or Grand Marnier). In Chinese clubs, bartenders warm the snifter and ignite the vapors, sprinkling ground cinnamon from above to unleash a starry meteor shower of golden sparks. Always blow out the flame before drinking!",
     ingredients: [
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "tonight-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "100% blue agave blanco or reposado", inventoryId: "teremana-tequila" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon or Johnnie Walker Black", inventoryId: "jd-bonded-rye" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon or Johnnie Walker Black", inventoryId: "jd-bonded-rye", ingredientGroup: "tonight-whiskey" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grand Marnier (or Cointreau)", substitute: "Cointreau or Lumina Triple Sec", inventoryId: "grand-marnier" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Ground Cinnamon (for spark flame) & Fresh Orange Peel", substitute: "Navel orange twist", inventoryId: "fresh-oranges" }
     ],
@@ -3579,7 +3611,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "The high-potency shooter edition designed to be taken down in one breathless gulp. Using your stocked Bacardi Rum, Teremana Tequila, Jim Beam Bourbon, and Cointreau gives it maximum proof with a surprisingly smooth citrus finish.",
     ingredients: [
-      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151" },
+      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "tonight-rum" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Teremana Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Cointreau (or Grand Marnier)", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" }
@@ -3744,7 +3776,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Created in 1898 at Boston's Locke-Ober cafe. Squeezing fresh Navel oranges rather than bottled juice makes the world of difference against the spicy 100-proof rye.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Navel Orange Juice", substitute: "Strained fresh orange juice", inventoryId: "fresh-oranges" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" }
@@ -3797,7 +3829,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "The salt, brine, and vinegar in the pickle juice instantly and completely neutralize the heat of 100-proof Jack Daniel's Bonded Rye or Jim Beam Bourbon on your tongue! A certified bartender favorite.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Chilled Dill Pickle Brine", substitute: "Olive brine", inventoryId: "coarse-salt" }
     ],
     instructions: [
@@ -3881,7 +3913,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "The rum cousin of the French 75. Shaking rich honey syrup with gold/dark rum and lime juice creates an incredible flavor anchor before being stretched out by bubbly Prosecco.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Mount Gay Barbados Rum Black Barrel", substitute: "Bacardi Carta Blanca Superior White Rum", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Mount Gay Barbados Rum Black Barrel", substitute: "Bacardi Carta Blanca Superior White Rum", inventoryId: "mount-gay-black-barrel", ingredientGroup: "air-mail-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime juice", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Honey Syrup (3:1)", substitute: "Premium Simple Syrup", inventoryId: "honey-syrup" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Zonin Prosecco Brut or dry sparkling wine", inventoryId: "gio-prosecco" }

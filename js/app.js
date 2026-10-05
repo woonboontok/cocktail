@@ -712,6 +712,11 @@
   }
 
 
+  function renderPremiumBadge(item) {
+    if (!item || !item.premium) return "";
+    return `<span class="inv-badge-premium" title="Reserve spirit — best enjoyed in spirit-forward or lightly modified cocktails where its complexity can shine">✦ Reserve</span>`;
+  }
+
   function getInventoryStatus(item) {
     return item.inStock ? "in-stock" : item.incoming ? "incoming" : "to-buy";
   }
@@ -810,7 +815,7 @@
               const readyCount = usableRecipes.filter(drink => getDrinkStockStatus(drink).canMake).length;
               const linkLabel = readyCount > 0 ? `${readyCount} ready` : `${usableRecipes.length} recipes`;
               return `<tr class="${itemNeedsRefrigeration(item) ? 'needs-refrigeration' : ''}">
-                <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span>${renderRefrigerateBadge(item)}</label></td>
+                <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span>${renderPremiumBadge(item)}${renderRefrigerateBadge(item)}</label></td>
                 <td>${INVENTORY_CATEGORIES[item.category] || item.category || "—"}</td>
                 <td>${item.subCategory || "—"}</td>
                 <td><span class="inv-badge-stock ${status === "in-stock" ? "stock" : status === "incoming" ? "incoming" : "needed"}">${statusLabel(status)}</span></td>
@@ -854,6 +859,7 @@
               <div class="inv-name-row">
                 <span class="inv-name">${item.name}</span>
                 <div class="inv-badges-wrap">
+                  ${renderPremiumBadge(item)}
                   ${renderRefrigerateBadge(item)}
                   <span class="inv-badge-stock ${item.inStock ? "stock" : item.incoming ? "incoming" : "needed"}">
                     ${stockLabel}
@@ -1436,15 +1442,20 @@
             ${inventoryOptions.map(item => {
               const optionStatus = getInventoryOptionStatus(item);
               const quantity = item.quantity !== undefined ? `${item.quantity} ${item.unit || getDefaultUnit(item)}` : "Quantity not tracked";
+              const reserveBadge = (item.premium && ing.preferNonPremium)
+                ? `<span class="ingredient-option-reserve" title="Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity">✦ Reserve</span>`
+                : "";
               return `
-                <li class="ingredient-option">
+                <li class="ingredient-option${item.premium && ing.preferNonPremium ? " ingredient-option-premium" : ""}">
                   <span class="ingredient-option-name">${item.name}</span>
                   <span class="ingredient-option-meta">${quantity}</span>
                   <span class="ingredient-option-status ${optionStatus.className}">${optionStatus.label}</span>
+                  ${reserveBadge}
                 </li>
               `;
             }).join("")}
           </ul>
+          ${inventoryOptions.some(item => item.premium && ing.preferNonPremium) ? `<p class="ingredient-options-reserve-note">✦ <em>Reserve spirits shine best in spirit-forward or lightly modified cocktails — this recipe\'s bold modifiers may mask their character.</em></p>` : ""}
         </div>
       ` : "";
 
