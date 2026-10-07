@@ -540,7 +540,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Salt only half the rim! That allows the drinker to choose between salted and unsalted sips and prevents salt from dissolving prematurely into the drink.\n\nAnejo Margarita variant: Use 1.5 oz Teremana Anejo plus 0.5 oz blanco or reposado to keep the lime brightness while adding vanilla, caramel, and a subtler toasted-agave finish.\n\nCristalino variant: Use Codigo 1530 Reposado Cristalino for a clear, softly oaked Margarita; reduce the agave syrup slightly if your orange liqueur is sweet.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Any 100% blue agave blanco or reposado", inventoryId: "teremana-tequila" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Any 100% blue agave blanco or reposado", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Cointreau", substitute: "Grand Marnier (Cadillac style) or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime only", inventoryId: "fresh-limes" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Agave Syrup (Optional, to balance)", substitute: "Simple syrup", inventoryId: "agave-syrup" },
