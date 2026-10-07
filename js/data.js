@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "4 October 2026";
-const INVENTORY_SYNC_VERSION = "20261004_2";
+const INVENTORY_LAST_UPDATED = "7 October 2026";
+const INVENTORY_SYNC_VERSION = "20261007_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -50,10 +50,10 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "orange-juice": { inStock: true, quantity: 1, unit: "carton" },
   "lemon-lime-soda": { inStock: true, name: "Schweppes Manao Soda Mini - Lemon Lime", notes: "Lemon-lime-flavoured carbonated soda for cocktails and highballs." },
   "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
-  "monkey-47-dry-gin": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+  "monkey-47-dry-gin": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "teremana-tequila": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Blanco, 40% ABV, 1000ml. In stock." },
   "teremana-tequila-anejo": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Añejo, 40% ABV, 1000ml. Purchased; due after 15 Oct." },
-  "codigo-1530-reposado-cristalino": { inStock: false, incoming: true, quantity: 1, unit: "bottle" },
+  "codigo-1530-reposado-cristalino": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "tabasco-sauce": { inStock: true, quantity: 1, unit: "bottle" },
   "fever-tree-ginger-beer": { inStock: true, quantity: 6, unit: "pack" },
   "bundaberg-ginger-beer": { inStock: true },
@@ -346,10 +346,10 @@ const DEFAULT_INVENTORY = [
   { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, premium: true, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum (75.5% ABV)", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
   { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
-  { id: "monkey-47-dry-gin", name: "Monkey 47 Schwarzwald Dry Gin (500ml)", category: "spirits", subCategory: "Gin › Dry Gin", spiritFamily: "Gin", spiritStyle: "Dry Gin", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 47, premium: true, notes: "Incoming 500ml bottle at 47% ABV. Complex Black Forest gin with citrus, spice, and herbal notes; especially expressive in a Bee's Knees, Gin & Tonic, or Negroni." },
+  { id: "monkey-47-dry-gin", name: "Monkey 47 Schwarzwald Dry Gin (500ml)", category: "spirits", subCategory: "Gin › Dry Gin", spiritFamily: "Gin", spiritStyle: "Dry Gin", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 47, premium: true, notes: "In stock: 500ml bottle at 47% ABV. Complex Black Forest gin with citrus, spice, and herbal notes; especially expressive in a Bee's Knees, Gin & Tonic, or Negroni." },
   { id: "teremana-tequila", name: "Teremana Tequila Blanco 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Blanco", spiritFamily: "Agave", spiritStyle: "Blanco Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Blanco at 40% ABV; crisp agave, citrus peel, and a clean finish ideal for margaritas, Palomas, and tequila-forward cocktails." },
   { id: "teremana-tequila-anejo", name: "Teremana Tequila Añejo 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Añejo", spiritFamily: "Agave", spiritStyle: "Añejo Tequila", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Purchased: 1000ml Teremana Tequila Añejo at 40% ABV; due to arrive after 15 Oct. Ideal for sipping and richer tequila-forward cocktails." },
-  { id: "codigo-1530-reposado-cristalino", name: "Codigo 1530 Reposado Cristalino Tequila (750ml)", category: "spirits", subCategory: "Agave › Tequila Reposado Cristalino", spiritFamily: "Agave", spiritStyle: "Reposado Cristalino", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, premium: true, notes: "Incoming 750ml bottle at 40% ABV. Oak-aged reposado tequila charcoal-filtered to a clear spirit; its agave, vanilla, and oak notes suit Margaritas, Palomas, and spirit-forward tequila cocktails." },
+  { id: "codigo-1530-reposado-cristalino", name: "Codigo 1530 Reposado Cristalino Tequila (750ml)", category: "spirits", subCategory: "Agave › Tequila Reposado Cristalino", spiritFamily: "Agave", spiritStyle: "Reposado Cristalino", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, premium: true, notes: "In stock: 750ml bottle at 40% ABV. Oak-aged reposado tequila charcoal-filtered to a clear spirit; its agave, vanilla, and oak notes suit Margaritas, Palomas, and spirit-forward tequila cocktails." },
   { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
