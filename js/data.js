@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "7 October 2026";
-const INVENTORY_SYNC_VERSION = "20261007_1";
+const INVENTORY_LAST_UPDATED = "14 October 2026";
+const INVENTORY_SYNC_VERSION = "20261014_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -52,7 +52,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
   "monkey-47-dry-gin": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "teremana-tequila": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Blanco, 40% ABV, 1000ml. In stock." },
-  "teremana-tequila-anejo": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Añejo, 40% ABV, 1000ml. Purchased; due after 15 Oct." },
+  "teremana-tequila-anejo": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Añejo, 40% ABV, 1000ml. In stock." },
   "codigo-1530-reposado-cristalino": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "tabasco-sauce": { inStock: true, quantity: 1, unit: "bottle" },
   "fever-tree-ginger-beer": { inStock: true, quantity: 6, unit: "pack" },
@@ -66,6 +66,9 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "the-botanist-gin": { inStock: true, quantity: 1, unit: "bottle" },
   "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
   "kawashima-sake": { inStock: true, quantity: 1, unit: "bottle" },
+  "choya-rokkonshojo-sake": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, notes: "Choya Rokkonshojo Junmai Ginjo Sake, 15% ABV, 720ml. In stock." },
+  "drambuie": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Drambuie Honeyed Scotch Liqueur, 40% ABV, 700ml. In stock." },
+  "amaro-nonino": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 35, notes: "Amaro Nonino Herbal Infusion (Quintessentia), 35% ABV, 700ml. In stock." },
   "chang-lime-soda": { inStock: true, quantity: 2, unit: "bottle" },
   "cola": { inStock: true, quantity: 6, unit: "can" },
   "demerara-syrup": { inStock: true, quantity: 1, unit: "bottle" }
@@ -314,7 +317,7 @@ const INGREDIENT_GROUPS = {
   "soda-water": { label: "Soda Water", inventoryIds: ["chang-soda-water"] },
   "simple-syrup": { label: "Simple Syrup", inventoryIds: ["simple-syrup"] },
   "demerara-syrup": { label: "Demerara Syrup", inventoryIds: ["demerara-syrup"] },
-  "sake": { label: "Sake", inventoryIds: ["kawashima-sake"] },
+  "sake": { label: "Sake", inventoryIds: ["kawashima-sake", "choya-rokkonshojo-sake"] },
   "lime-soda": { label: "Lime Soda", inventoryIds: ["chang-lime-soda"] }
 };
 
@@ -348,7 +351,7 @@ const DEFAULT_INVENTORY = [
   { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
   { id: "monkey-47-dry-gin", name: "Monkey 47 Schwarzwald Dry Gin (500ml)", category: "spirits", subCategory: "Gin › Dry Gin", spiritFamily: "Gin", spiritStyle: "Dry Gin", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 47, premium: true, notes: "In stock: 500ml bottle at 47% ABV. Complex Black Forest gin with citrus, spice, and herbal notes; especially expressive in a Bee's Knees, Gin & Tonic, or Negroni." },
   { id: "teremana-tequila", name: "Teremana Tequila Blanco 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Blanco", spiritFamily: "Agave", spiritStyle: "Blanco Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Blanco at 40% ABV; crisp agave, citrus peel, and a clean finish ideal for margaritas, Palomas, and tequila-forward cocktails." },
-  { id: "teremana-tequila-anejo", name: "Teremana Tequila Añejo 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Añejo", spiritFamily: "Agave", spiritStyle: "Añejo Tequila", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Purchased: 1000ml Teremana Tequila Añejo at 40% ABV; due to arrive after 15 Oct. Ideal for sipping and richer tequila-forward cocktails." },
+  { id: "teremana-tequila-anejo", name: "Teremana Tequila Añejo 40% 1000ml", category: "spirits", subCategory: "Agave › Tequila Añejo", spiritFamily: "Agave", spiritStyle: "Añejo Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Añejo at 40% ABV. Rich agave, toasted oak, and vanilla finish; ideal for sipping, Añejo Old Fashioned, and Anejo Margaritas." },
   { id: "codigo-1530-reposado-cristalino", name: "Codigo 1530 Reposado Cristalino Tequila (750ml)", category: "spirits", subCategory: "Agave › Tequila Reposado Cristalino", spiritFamily: "Agave", spiritStyle: "Reposado Cristalino", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, premium: true, notes: "In stock: 750ml bottle at 40% ABV. Oak-aged reposado tequila charcoal-filtered to a clear spirit; its agave, vanilla, and oak notes suit Margaritas, Palomas, and spirit-forward tequila cocktails." },
   { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
@@ -356,6 +359,7 @@ const DEFAULT_INVENTORY = [
   { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Iconic triple-distilled blended Irish whiskey. Smooth, approachable, and endlessly versatile — classic for Irish Coffee, Cameron's Kick, and Green Tea Shot." },
   { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, premium: true, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
+  { id: "choya-rokkonshojo-sake", name: "Choya Rokkonshojo Junmai Ginjo Sake 720ml (15% ABV)", category: "spirits", subCategory: "Sake › Junmai Ginjo", spiritFamily: "Sake", spiritStyle: "Junmai Ginjo", inStock: true, quantity: 1, unit: "bottle", abv: 15, notes: "Premium Japanese Junmai Ginjo sake from Choya. Fragrant, delicate floral and fruity aroma with a smooth, refreshing, and clean finish." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
   { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
@@ -381,7 +385,7 @@ const DEFAULT_INVENTORY = [
   { id: "creme-de-violette", name: "Crème de Violette", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Violet flower liqueur that gives Aviation its sky-blue tint." },
   { id: "creme-de-cassis", name: "Crème de Cassis (Blackcurrant)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Blackcurrant liqueur for Kir Royale." },
   { id: "creme-de-mure", name: "Crème de Mûre (Blackberry)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Blackberry liqueur drizzled on the Bramble." },
-  { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: false, abv: 40, refrigerate: false, notes: "Scotch, heather honey, and herbs for Rusty Nail." },
+  { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, refrigerate: false, notes: "In stock: 700ml bottle at 40% ABV. Aged Scotch whisky, Scottish heather honey, herbs, and spices. Backbone of the classic Rusty Nail." },
   { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, refrigerate: false, notes: "130-herb French monk elixir for Last Word." },
   { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 40, refrigerate: false, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
   { id: "jagermeister", name: "Jägermeister Liqueur (35% ABV)", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 2, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
@@ -397,7 +401,7 @@ const DEFAULT_INVENTORY = [
   { id: "martini-rosso", name: "Martini Rosso Red Vermouth", category: "fortified", subCategory: "Vermouth", inStock: true, abv: 16, refrigerate: true, notes: "Sweet Italian red vermouth for Negroni, Manhattan, Boulevardier, and Americano." },
   { id: "aperol", name: "Aperol", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 11, refrigerate: true, notes: "Bittersweet orange, rhubarb, and gentian aperitivo for Aperol Spritz and Paper Plane." },
   { id: "campari", name: "Campari", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 25, refrigerate: true, notes: "Iconic red bitter aperitif with chinotto citrus and herbs for Negroni and Boulevardier." },
-  { id: "amaro-nonino", name: "Amaro Nonino Quintessentia", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 16, refrigerate: true, notes: "Grappa-based alpine amaro for Paper Plane." },
+  { id: "amaro-nonino", name: "Amaro Nonino Quintessentia", category: "fortified", subCategory: "Digestifs / Amaro", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 35, refrigerate: true, notes: "In stock: 700ml bottle at 35% ABV. Grappa-infused alpine herbal amaro with bitter orange and alpine herbs. Essential key component for the Paper Plane." },
   { id: "fernet-branca", name: "Fernet-Branca", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 39, refrigerate: true, notes: "Intensely herbal Italian digestif with mint, saffron, and bitter myrrh. Classic after-dinner bitter." },
   { id: "amaro-averna", name: "Averna Amaro Siciliano", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 29, refrigerate: true, notes: "Bittersweet Sicilian amaro with orange peel, herbs, and pomegranate. Smooth and versatile digestif." },
   { id: "amaro-montenegro", name: "Amaro Montenegro", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 23, refrigerate: true, notes: "Elegant Bologna amaro with 40 botanicals. Balanced, floral, and approachable digestif." },
@@ -1588,21 +1592,21 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Bittersweet, Caramel Bourbon, Herbal Rhubarb & Bright Citrus",
     difficulty: 2,
     popularity: 9.8,
-    proTip: "Equal parts 4-way harmony: Bourbon, Aperol, Amaro Nonino, and Lemon Juice. Shaken cold, it is one of the most celebrated modern classics of the 21st century.",
+    proTip: "Equal parts 4-way harmony: Bourbon, Aperol, Amaro Nonino, and Lemon Juice. Shaken cold, it is one of the most celebrated modern classics of the 21st century. With Amaro Nonino Quintessentia now in stock, you can enjoy this modern classic in its purest, intended form.",
     ingredients: [
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Aperol", substitute: "Campari (for a darker, more bitter riff)", inventoryId: "aperol" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Amaro Nonino (or Disaronno/Campari mix)", substitute: "Martini Rosso or Disaronno + splash Campari", inventoryId: "martini-rosso" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Amaro Nonino Quintessentia", substitute: "Disaronno/Campari mix or sweet vermouth", inventoryId: "amaro-nonino", ingredientGroup: "amaro" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh pressed lemon juice", inventoryId: "fresh-lemons" }
     ],
     instructions: [
       "Chill a coupe glass.",
-      "Combine bourbon, Aperol, Amaro Nonino (or sweet vermouth/Disaronno substitute), and lemon juice in a shaker.",
+      "Combine bourbon, Aperol, Amaro Nonino, and fresh lemon juice in a shaker.",
       "Fill with ice and shake vigorously for 12 seconds.",
       "Double strain into the chilled coupe glass.",
       "Optionally garnish with a tiny origami paper plane clipped to the rim."
     ],
-    tags: ["bourbon", "aperol", "modern-classic", "equal-parts", "bittersweet"]
+    tags: ["bourbon", "aperol", "amaro-nonino", "modern-classic", "equal-parts", "bittersweet", "in-stock"]
   },
   {
     id: "naked-and-famous",
@@ -2086,10 +2090,10 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Heather Honey, Peat Smoke, Herbal Scotch & Warmth",
     difficulty: 1,
     popularity: 9.3,
-    proTip: "If you don't have Drambuie, create a home bar substitute by gently warming honey syrup with a drop of Johnnie Walker and herbal spices.",
+    proTip: "The Rat Pack legend: aged Scotch whisky meets Scottish heather honey, herbs, and spices from Drambuie. Stir over a single large rock of ice so dilution stays controlled.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Any blended or single malt Scotch", inventoryId: "jw-black-label" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Drambuie (Honey Scotch Liqueur)", substitute: "Honey syrup + dash herbal amaro / Disaronno", inventoryId: "honey-syrup" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Drambuie (Honey Scotch Liqueur)", substitute: "Honey syrup + dash herbal amaro / Disaronno", inventoryId: "drambuie", ingredientGroup: "drambuie" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Lemon Peel Twist", substitute: "Lemon peel", inventoryId: "fresh-lemons" }
     ],
     instructions: [
@@ -2098,7 +2102,7 @@ const DEFAULT_DRINKS = [
       "Stir slowly for 20 seconds.",
       "Express a lemon peel twist over the drink to brighten the rich honey profile."
     ],
-    tags: ["scotch", "drambuie", "honey", "rat-pack", "classic"]
+    tags: ["scotch", "drambuie", "honey", "rat-pack", "classic", "in-stock"]
   },
   {
     id: "french-95",
@@ -4629,6 +4633,62 @@ const DEFAULT_DRINKS = [
       "Express a fresh lemon peel twist over the surface to discard, or garnish cleanly with a single green olive."
     ],
     tags: ["gin", "the-botanist", "vermouth", "absinthe", "martini", "spirit-forward", "dry", "in-stock"]
+  },
+  {
+    id: "saketini",
+    name: "Saketini",
+    otherNames: "Japanese Sake Martini",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Martini / Nick & Nora",
+    alcoholLevel: "High (~28% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Delicate, Silky Rice Umami, Crisp Botanical & Clean",
+    difficulty: 1,
+    popularity: 9.3,
+    proTip: "A serene, silky twist on the Dry Martini that originated at New York's Nippon Club. Sake replaces or complements vermouth, imparting subtle melon, rice, and gentle floral sweetness that softens the juniper edge of gin. Choya Rokkonshojo Junmai Ginjo gives a delicate aromatic lift, while Kawashima Matsu no Hana lends dry, savory umami.",
+    ingredients: [
+      { amountOz: "2.5 oz", amountMl: "75 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin (floral) or Absolut Vodka", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Choya Rokkonshojo Junmai Ginjo Sake", substitute: "Kawashima Matsu no Hana Junmai Shu Sake", inventoryId: "choya-rokkonshojo-sake", ingredientGroup: "sake" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Lemon Peel Twist or Cucumber Ribbon", substitute: "Cocktail olive", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Chill a martini or Nick & Nora glass in the freezer for 10 minutes.",
+      "Fill a mixing glass with clean, dense ice cubes.",
+      "Pour in the gin and sake.",
+      "Stir gracefully and steadily for 30 seconds until frosted and thoroughly chilled.",
+      "Fine strain into the chilled glass.",
+      "Express a lemon peel twist over the surface to release aromatic citrus oils, then discard or set on the rim."
+    ],
+    tags: ["gin", "sake", "martini", "japanese", "elegant", "clean", "in-stock"]
+  },
+  {
+    id: "black-manhattan",
+    name: "Black Manhattan",
+    otherNames: "Bourbon & Amaro Nonino Manhattan",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Coupe / Nick & Nora",
+    alcoholLevel: "High (~30% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Bittersweet, Alpine Herbs, Spiced Rye & Dark Orange",
+    difficulty: 2,
+    popularity: 9.6,
+    proTip: "Created at Bourbon & Branch in San Francisco, this modern classic swaps out sweet vermouth for Italian Amaro. Amaro Nonino Quintessentia brings silky alpine botanicals, bitter orange peel, and warm baking spices that pair exceptionally with Jack Daniel's Bonded Rye or Jim Beam Black.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Amaro Nonino Quintessentia", substitute: "Amaro Averna or Campari/Vermouth mix", inventoryId: "amaro-nonino", ingredientGroup: "amaro" },
+      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel Twist", substitute: "Brandied cherry", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Chill a coupe or Nick & Nora glass.",
+      "In a mixing glass filled with ice, combine rye whiskey, Amaro Nonino, and Angostura bitters.",
+      "Stir smoothly for 30 seconds until frosty cold and well-integrated.",
+      "Strain into the chilled glass.",
+      "Express orange peel oils over the surface and drop into the glass."
+    ],
+    tags: ["whiskey", "rye", "bourbon", "amaro-nonino", "bittersweet", "modern-classic", "spirit-forward", "in-stock"]
   }
 ];
 
