@@ -42,7 +42,7 @@ When a user mentions receiving, purchasing, or running out of bottles:
 3. **Check Ingredient Groups & Reserve Classification**:
    - If the item belongs to an existing spirit family (e.g. sake, tequila, gin, amaro, whiskey), ensure its `id` is listed under the matching `INGREDIENT_GROUPS` entry.
    - **Reserve Tag (`premium: true`)**: If the bottle is top-shelf, aged, rare, or craft (e.g., *Monkey 47*, *The Botanist*, *Código 1530 Cristalino*, *Otard XO Cognac*, *Mount Gay Black Barrel*), mark `premium: true` in `DEFAULT_INVENTORY`. This displays the `✦ Reserve` badge.
-   - **Refrigerate Tag (`refrigerate: true`)**: If the bottle contains perishable ingredients, wine bases, unfortified juice, or syrups (e.g., vermouths, amari like Nonino/Aperol, simple/agave/honey syrups, fresh citrus), ensure `refrigerate: true` is set.
+   - **Refrigerate Tag (`refrigerate: true`)**: Set `refrigerate: true` for perishable items, wine bases, unfortified juice, syrups (vermouths, amari, simple/agave/honey syrups, fresh citrus), and carbonated sodas/tonics/ginger beers/beers (user rotates <6 cans/bottles into the fridge for icy temperature and peak effervescence).
 
 4. **Adjust Cocktails & Preserve Reserve Spirits**:
    - Review cocktails that use the item or previously used substitutes (e.g., Rusty Nail for Drambuie, Paper Plane for Amaro Nonino).

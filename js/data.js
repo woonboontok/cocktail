@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "14 October 2026";
-const INVENTORY_SYNC_VERSION = "20261014_1";
+const INVENTORY_LAST_UPDATED = "15 October 2026";
+const INVENTORY_SYNC_VERSION = "20261015_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -24,7 +24,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "agave-syrup": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true },
   "granulated-sugar": { inStock: true, quantity: 1, unit: "bag" },
   "simple-syrup": { inStock: true, quantity: 1 },
-  "chang-soda-water": { inStock: true, quantity: 24, unit: "bottle" },
+  "chang-soda-water": { inStock: true, quantity: 24, unit: "bottle", refrigerate: true },
   "whipped-cream": { inStock: true, quantity: 1 },
   "whipping-heavy-cream": { inStock: true, quantity: 1 },
   "egg-white": { inStock: true, quantity: 1 },
@@ -423,20 +423,20 @@ const DEFAULT_INVENTORY = [
   { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, refrigerate: true, notes: "Fresh ginger syrup for Penicillin." },
   { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: true, notes: "For muddling in Old Fashioned and rimming glasses." },
   { id: "demerara-syrup", name: "Demerara Syrup (2:1 Rich Syrup)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Rich 2:1 raw Demerara sugar syrup. Deeper molasses-caramel sweetness than plain simple syrup; ideal for Old Fashioned, Penicillin, and Whiskey Sours." },
-  { id: "fever-tree-indian-tonic", name: "Fever-Tree Premium Indian Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Premium tonic water with botanical oils and high-quality quinine. Perfect upgrade for a crisp G&T." },
-  { id: "fever-tree-ginger-beer", name: "Fever-Tree Premium Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", notes: "Brewed with a blend of three natural gingers. Deep, spicy flavor profile that beautifully mimics alcohol proof." },
-  { id: "bundaberg-ginger-beer", name: "Bundaberg Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Classic craft-brewed Australian ginger beer, rich and sweet." },
+  { id: "fever-tree-indian-tonic", name: "Fever-Tree Premium Indian Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", refrigerate: true, notes: "Premium tonic water with botanical oils and high-quality quinine. Keep chilled in fridge for crisp, effervescent G&Ts." },
+  { id: "fever-tree-ginger-beer", name: "Fever-Tree Premium Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", refrigerate: true, notes: "Brewed with a blend of three natural gingers. Keep chilled in fridge for Moscow Mules and Dark 'n' Stormy." },
+  { id: "bundaberg-ginger-beer", name: "Bundaberg Ginger Beer", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, refrigerate: true, notes: "Classic craft-brewed Australian ginger beer, rich and sweet. Keep chilled in fridge." },
 
   // --- SODAS & MIXERS (User In Stock & Shopping List) ---
-  { id: "schweppes-ginger-soda", name: "Schweppes Ginger Soda", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Crisp, lively ginger soda. Essential for Highballs, Dark 'n' Stormy riffs, and Gunner." },
-  { id: "schweppes-ginger-ale", name: "Schweppes Ginger Ale Soda (Fulfilled by Ginger Soda)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "schweppes-ginger-soda", notes: "User has Schweppes Ginger Soda in stock." },
-  { id: "chang-soda-water", name: "Chang Soda Water (24 × 325 ml)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 24, unit: "bottle", notes: "24 bottles of extra-fizzy, high-carbonation club soda for Mojitos, Collins, and Spritzes." },
-  { id: "ginger-beer", name: "Ginger Beer (Fever-Tree / Bundaberg)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-ginger-beer", notes: "In stock (Fulfilled by Fever-Tree Premium Ginger Beer and Bundaberg Ginger Beer)." },
-  { id: "tonic-water", name: "Tonic Water (Fever-Tree)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-indian-tonic", notes: "In stock (Fulfilled by Fever-Tree Premium Indian Tonic Water)." },
-  { id: "cola", name: "Coca-Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "can", notes: "6 cans of Coca-Cola for Cuba Libre, Long Island Iced Tea, and Roy Rogers." },
-  { id: "chang-lime-soda", name: "Chang Lime Soda (2 Bottles)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 2, unit: "bottle", notes: "Refreshing lime-flavored carbonated soda. Crisp and citrusy for casual highball mixing and lime cocktail riffs." },
-  { id: "lemon-lime-soda", name: "Schweppes Manao Soda Mini - Lemon Lime", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "Lemon-lime-flavoured carbonated soda for cocktails and highballs." },
-  { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, notes: "For the Jägerbomb drop." },
+  { id: "schweppes-ginger-soda", name: "Schweppes Ginger Soda", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, refrigerate: true, notes: "Crisp, lively ginger soda. Keep chilled in fridge for Highballs, Dark 'n' Stormy riffs, and Gunner." },
+  { id: "schweppes-ginger-ale", name: "Schweppes Ginger Ale Soda (Fulfilled by Ginger Soda)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "schweppes-ginger-soda", refrigerate: true, notes: "User has Schweppes Ginger Soda in stock. Keep chilled in fridge." },
+  { id: "chang-soda-water", name: "Chang Soda Water (24 × 325 ml)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 24, unit: "bottle", refrigerate: true, notes: "24 bottles of extra-fizzy club soda. Keep 2–4 bottles chilled in fridge for instant icy highballs, Collins, and Spritzes." },
+  { id: "ginger-beer", name: "Ginger Beer (Fever-Tree / Bundaberg)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-ginger-beer", refrigerate: true, notes: "In stock (Fulfilled by Fever-Tree Premium Ginger Beer and Bundaberg Ginger Beer). Keep chilled." },
+  { id: "tonic-water", name: "Tonic Water (Fever-Tree)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-indian-tonic", refrigerate: true, notes: "In stock (Fulfilled by Fever-Tree Premium Indian Tonic Water). Keep chilled." },
+  { id: "cola", name: "Coca-Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "can", refrigerate: true, notes: "6 cans of Coca-Cola. Keep chilled in fridge for Cuba Libre, Long Island Iced Tea, and Roy Rogers." },
+  { id: "chang-lime-soda", name: "Chang Lime Soda (2 Bottles)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 2, unit: "bottle", refrigerate: true, notes: "Refreshing lime-flavored carbonated soda. Keep chilled in fridge for casual highball mixing and lime cocktail riffs." },
+  { id: "lemon-lime-soda", name: "Schweppes Manao Soda Mini - Lemon Lime", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, refrigerate: true, notes: "Lemon-lime-flavoured carbonated soda. Keep chilled in fridge for cocktails and highballs." },
+  { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, refrigerate: true, notes: "Keep chilled in fridge for the Jägerbomb drop." },
   { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, refrigerate: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
   { id: "orange-juice", name: "Orange Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "In stock (carton). For Tequila Sunrise, Mimosa, Ward 8, and Screwdriver." },
   { id: "pineapple-juice", name: "Pineapple Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "In stock (carton). Supports Singapore Sling, Piña Colada, and Pineapple Cooler." },

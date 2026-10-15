@@ -77,7 +77,7 @@ Schema for items in `DEFAULT_INVENTORY`:
   - Renders the `✦ Reserve` badge in the inventory table.
   - Signals to the cocktail selector and drinker to preserve this bottle for drinks where its intricate nuances shine rather than masking it behind heavy syrups, cream, or sweet mixers.
 - **`refrigerate: true` (❄ Refrigerate Tag)**:
-  - Must be set on all vermouths (*Martini Extra Dry*, *Martini Rosso*), aperitifs/amari with wine bases (*Lillet Blanc*, *Aperol*, *Campari*, *Amaro Nonino*), syrups (*simple*, *demerara*, *agave*, *orgeat*, *honey*), dairy/creams, fresh citrus/herbs, and opened juices.
+  - Must be set on all vermouths (*Martini Extra Dry*, *Martini Rosso*), aperitifs/amari with wine bases (*Lillet Blanc*, *Aperol*, *Campari*, *Amaro Nonino*), syrups (*simple*, *demerara*, *agave*, *orgeat*, *honey*), dairy/creams, fresh citrus/herbs, opened juices, and carbonated sodas/tonics/ginger beers/beers (where <6 are kept chilled in fridge for effervescence & temperature control).
   - Renders the snowflake icon badge in the inventory table.
 
 ### E. Cocktail & Drink Recipes (`DEFAULT_DRINKS`)
