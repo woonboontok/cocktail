@@ -39,12 +39,18 @@ When a user mentions receiving, purchasing, or running out of bottles:
      ```
    - Bump `INVENTORY_SYNC_VERSION` and update `INVENTORY_LAST_UPDATED`.
 
-3. **Check Ingredient Groups**:
+3. **Check Ingredient Groups & Reserve Classification**:
    - If the item belongs to an existing spirit family (e.g. sake, tequila, gin, amaro, whiskey), ensure its `id` is listed under the matching `INGREDIENT_GROUPS` entry.
+   - **Reserve Tag (`premium: true`)**: If the bottle is top-shelf, aged, rare, or craft (e.g., *Monkey 47*, *The Botanist*, *Código 1530 Cristalino*, *Otard XO Cognac*, *Mount Gay Black Barrel*), mark `premium: true` in `DEFAULT_INVENTORY`. This displays the `✦ Reserve` badge.
+   - **Refrigerate Tag (`refrigerate: true`)**: If the bottle contains perishable ingredients, wine bases, unfortified juice, or syrups (e.g., vermouths, amari like Nonino/Aperol, simple/agave/honey syrups, fresh citrus), ensure `refrigerate: true` is set.
 
-4. **Adjust Cocktails & Recipes**:
+4. **Adjust Cocktails & Preserve Reserve Spirits**:
    - Review cocktails that use the item or previously used substitutes (e.g., Rusty Nail for Drambuie, Paper Plane for Amaro Nonino).
    - If recipes previously pointed to substitute `inventoryId`s, update them to point directly to the newly in-stock bottle.
+   - **Preserving Reserve Spirits (`preferNonPremium: true`)**:
+     - When an ingredient is linked to an `ingredientGroup` containing reserve bottles (such as `gin`, `tequila`, `brandy-cognac`):
+       - If the cocktail features heavy mixers, high sugar, heavy cream, or strong juices that mask delicate spirit botanicals (e.g., Long Island Iced Tea, Singapore Sling, Alexander with cream, sugary shots), add `preferNonPremium: true` to the ingredient. The app will warn users: *“Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity.”*
+       - If the drink is spirit-forward, dry, or a showcase for the botanical/aged base (e.g., Martini, Saketini, Obituary, French 75, Old Fashioned), do NOT set `preferNonPremium: true`. Let the reserve spirit shine as the hero ingredient.
    - If new classic/signature drinks are unlocked by the addition, add them to `DEFAULT_DRINKS` with dual volume units (`amountOz` & `amountMl`), tags (`"in-stock"`), and helpful `proTip`s.
 
 ---

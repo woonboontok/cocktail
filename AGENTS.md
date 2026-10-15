@@ -65,10 +65,20 @@ Schema for items in `DEFAULT_INVENTORY`:
   quantity: 1,
   unit: "bottle",
   abv: 40,
-  refrigerate: false,
+  premium: false,      // Set true for top-shelf / Reserve bottles (e.g. Otard XO, Monkey 47, The Botanist, Codigo Cristalino)
+  refrigerate: false,  // Set true for perishables, vermouths, fortified wines, syrups, dairy, and juices
   notes: "..."
 }
 ```
+
+#### Reserve & Refrigeration Rules for Inventory:
+- **`premium: true` (✦ Reserve Tag)**:
+  - Designates rare, top-shelf, complex, or expensive spirits (e.g., *The Botanist Islay Dry Gin*, *Monkey 47 Dry Gin*, *Código 1530 Reposado Cristalino*, *Otard XO Gold Cognac*, *Mount Gay Black Barrel*).
+  - Renders the `✦ Reserve` badge in the inventory table.
+  - Signals to the cocktail selector and drinker to preserve this bottle for drinks where its intricate nuances shine rather than masking it behind heavy syrups, cream, or sweet mixers.
+- **`refrigerate: true` (❄ Refrigerate Tag)**:
+  - Must be set on all vermouths (*Martini Extra Dry*, *Martini Rosso*), aperitifs/amari with wine bases (*Lillet Blanc*, *Aperol*, *Campari*, *Amaro Nonino*), syrups (*simple*, *demerara*, *agave*, *orgeat*, *honey*), dairy/creams, fresh citrus/herbs, and opened juices.
+  - Renders the snowflake icon badge in the inventory table.
 
 ### E. Cocktail & Drink Recipes (`DEFAULT_DRINKS`)
 Schema for recipes:
@@ -93,7 +103,8 @@ Schema for recipes:
       item: "Tanqueray London Dry Gin",
       substitute: "The Botanist Islay Dry Gin",
       inventoryId: "tanqueray-gin",
-      ingredientGroup: "gin"
+      ingredientGroup: "gin",
+      preferNonPremium: false // Set true if high-sugar/cream/mixer modifiers would overpower a Reserve spirit
     }
   ],
   instructions: [
@@ -103,6 +114,12 @@ Schema for recipes:
   tags: ["gin", "sake", "martini", "in-stock"]
 }
 ```
+
+#### Preserving Reserve Spirits in Drink Recipes (`preferNonPremium: true`):
+- When a recipe has an `ingredientGroup` that includes both everyday workhorse spirits and `premium: true` reserve spirits (for instance, `gin` containing both *Tanqueray* and *Monkey 47* / *The Botanist*; or `tequila` containing both *Teremana Blanco* and *Código 1530 Cristalino*):
+  - **Set `preferNonPremium: true`** on the ingredient if the cocktail is heavily modified, sweet, creamy, or mixer-heavy (e.g., Long Island Iced Tea, Singapore Sling, Alexander with heavy cream, sugary tiki mixes).
+  - **Do NOT set `preferNonPremium: true`** (leave falsy) on spirit-forward, dry, or delicate cocktails where the reserve spirit is the deliberate star of the show (e.g., Martini, Obituary Cocktail, Saketini, French 75, classic sour riffs).
+  - When `preferNonPremium: true` is set, the UI modal displays an advisory badge on reserve options: *“Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity.”*
 
 ---
 
