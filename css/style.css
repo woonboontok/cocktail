@@ -1744,6 +1744,7 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+  padding: 0;
 }
 
 .drink-tool-item {

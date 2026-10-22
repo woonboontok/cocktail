@@ -1380,7 +1380,9 @@
     if (Array.isArray(drink.tools) && drink.tools.length) return drink.tools;
 
     const method = (drink.instructions || []).join(" ").toLowerCase();
-    const ingredients = (drink.ingredients || []).map(ing => String(ing.item || "").toLowerCase()).join(" ");
+    const ingredients = (drink.ingredients || [])
+      .filter(ing => String(ing.amountOz || "").toLowerCase() !== "garnish")
+      .map(ing => String(ing.item || "").toLowerCase());
     const glassware = String(drink.glassware || "").toLowerCase();
     const drinkName = String(drink.name || "").toLowerCase();
     const tools = ["Jigger or measuring cup"];
@@ -1390,23 +1392,22 @@
     if (/strain/.test(method)) tools.push("Hawthorne strainer" + (/fine strain/.test(method) ? " and fine-mesh strainer" : ""));
     if (/muddle/.test(method)) tools.push("Muddler");
     if (/blend|blender/.test(method)) tools.push("Blender");
-    if (/press|squeeze|fresh juice/.test(method) || /lemon|lime|orange|grapefruit/.test(ingredients)) tools.push("Citrus juicer or hand press");
+    if (/press|squeeze|fresh juice/.test(method) || ingredients.some(item => /lemon|lime|orange|grapefruit/.test(item) && /juice/.test(item))) tools.push("Citrus juicer or hand press");
     if (/zest|peel|express/.test(method) || /peel|zest/.test(ingredients)) tools.push("Peeler or channel knife");
     if (/copper mug|moscow mule/.test(glassware) || /mule/.test(drinkName)) tools.push("500 ml Moscow Mule mug");
     else if (/champagne|flute|coupe|martini|nick & nora/.test(glassware)) tools.push(`Chilled ${drink.glassware || "cocktail glass"}`);
     else tools.push(drink.glassware || "Serving glass");
 
     if (/highball|collins|copa|hurricane|mug|tiki/.test(glassware)) tools.push("Straight or bent 304 stainless steel straw");
-    if (/crushed|swizzle|tiki|julep/.test(method + " " + glassware)) {
+    const crushedIceServe = /crushed|swizzle|tiki|julep/.test(method + " " + glassware);
+    const servedOverIce = /rocks|old fashioned|snifter|highball|collins|copa|hurricane|mug|tiki/.test(glassware);
+    const chillsWithIce = /shake|shaker|stir|mixing glass/.test(method);
+    if (crushedIceServe) {
       tools.push("Crushed ice");
-    } else if (/rocks|old fashioned|snifter/.test(glassware)) {
-      if (/sphere/.test(method)) tools.push("4.93 cm clear ice sphere");
-      else if (/clear/.test(method)) tools.push("4.26 cm clear ice cube");
-      else if (/whiskey|bourbon|rum|tequila|brandy/.test(String(drink.baseSpirit || "").toLowerCase())) tools.push("1-inch, 3.3 cm, or 5 cm ice cube");
-      else tools.push("Ice cubes for serving");
-    } else {
-      tools.push("1-inch or 3.3 cm ice cubes for chilling");
+    } else if (servedOverIce) {
+      tools.push("Ice for serving: 1-inch or 3.3 cm cubes; for a slow-melting large serve, a 5 cm cube, 4.26 cm clear cube, or 4.93 cm clear sphere");
     }
+    if (chillsWithIce && !crushedIceServe) tools.push("1-inch or 3.3 cm cubes for shaking or stirring");
     return [...new Set(tools)];
   }
 
