@@ -15,11 +15,12 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "22 October 2026";
-const INVENTORY_SYNC_VERSION = "20261022_1";
+const INVENTORY_SYNC_VERSION = "20261022_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
+  "absolut-citron": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: Absolut Citron Lemon Flavored Vodka 1000ml (40% ABV). Natural lemon and lime peel infusion; iconic base for Cosmopolitan and Lemon Drop Martini." },
   "gio-prosecco": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Out of stock. Restock Gio Prosecco Spumante Extra Dry, or use in-stock Zonin Prosecco Brut / Bottega Spumante Venezia." },
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
   "agave-syrup": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true },
@@ -114,7 +115,7 @@ const INGREDIENT_GROUPS = {
   },
   "vodka": {
     label: "Vodka",
-    inventoryIds: ["absolut-blue", "smirnoff-red"]
+    inventoryIds: ["absolut-blue", "absolut-citron", "smirnoff-red"]
   },
   "bourbon": {
     label: "Bourbon Whiskey",
@@ -357,6 +358,7 @@ const DEFAULT_INVENTORY = [
   { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
+  { id: "absolut-citron", name: "Absolut Citron Vodka 1000ml (40% ABV)", category: "spirits", subCategory: "Vodka › Flavored / Citrus", spiritFamily: "Vodka", spiritStyle: "Citrus Vodka", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Swedish winter wheat vodka infused with natural citrus flavors from lemon and lime peel, with no added sugar. The definitive spirit behind Toby Cecchini's 1988 Cosmopolitan and the classic Lemon Drop." },
   { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Iconic triple-distilled blended Irish whiskey. Smooth, approachable, and endlessly versatile — classic for Irish Coffee, Cameron's Kick, and Green Tea Shot." },
   { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, premium: true, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
@@ -856,9 +858,9 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Tart, Citrusy, Crisp & Pink",
     difficulty: 2,
     popularity: 9.6,
-    proTip: "The cranberry juice is meant to provide a blush pink hue and tart acidity, not turn it into a red fruit punch. Use 100% tart cranberry juice.",
+    proTip: "The original 1988 modern classic created by Toby Cecchini at The Odeon in Tribeca called specifically for Absolut Citron, which provides vibrant lemon-oil brightness without sweetness. The cranberry juice is meant to provide a blush pink hue and tart acidity, not turn it into a red fruit punch.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Citron / lemon flavored vodka", inventoryId: "absolut-blue" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Citron (or Absolut Vodka)", substitute: "Absolut Vodka Original Blue / Smirnoff Red", inventoryId: "absolut-citron", ingredientGroup: "vodka" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Cranberry Juice", substitute: "Tart unsweetened cranberry", inventoryId: "cranberry-juice" },
@@ -866,12 +868,41 @@ const DEFAULT_DRINKS = [
     ],
     instructions: [
       "Chill a martini or coupe glass.",
-      "Add Absolut vodka, Cointreau, lime juice, and cranberry juice into a shaker with ice.",
+      "Add Absolut Citron (or vodka), Cointreau, lime juice, and cranberry juice into a shaker with ice.",
       "Shake vigorously for 12 seconds until thoroughly chilled.",
       "Double strain into the chilled glass.",
       "Flame an orange peel over the glass to express caramelized citrus oils over the pink surface."
     ],
     tags: ["vodka", "cointreau", "cranberry", "citrus", "modern-classic"]
+  },
+  {
+    id: "lemon-drop-martini",
+    name: "Lemon Drop Martini",
+    otherNames: "Citrus Martini",
+    category: "Cocktail",
+    baseSpirit: "Vodka",
+    glassware: "Martini / Coupe",
+    alcoholLevel: "Medium (~22% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Bright Citrus, Crisp Tart Lemon, Silky Sugar Rim",
+    difficulty: 2,
+    popularity: 9.7,
+    proTip: "Invented in the 1970s at Henry Africa's in San Francisco as the quintessential 'fern bar' cocktail. Absolut Citron was tailor-made for this drink: its crisp citrus oils cut through the lemon acidity without turning bitter. Always double-strain to keep citrus pulp and ice chips off the drink surface.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Citron Vodka", substitute: "Absolut Vodka Original Blue / Smirnoff Red", inventoryId: "absolut-citron", ingredientGroup: "vodka" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau (or Triple Sec)", substitute: "Lumina Triple Sec", inventoryId: "cointreau" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Agave syrup or fine caster sugar", inventoryId: "simple-syrup" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Granulated Sugar (Rim) & Lemon Wheel", substitute: "Sugar rim", inventoryId: "granulated-sugar" }
+    ],
+    instructions: [
+      "Run a fresh lemon wedge around half the rim of a chilled martini or coupe glass, then dip the rim into granulated sugar.",
+      "Add Absolut Citron, Cointreau, fresh lemon juice, and simple syrup into a cocktail shaker with plenty of ice.",
+      "Shake vigorously for 12 seconds until thoroughly chilled and frosty.",
+      "Double-strain into the prepared glass.",
+      "Float a thin lemon wheel on top."
+    ],
+    tags: ["vodka", "citrus", "lemon", "cointreau", "martini", "sweet-sour"]
   },
   {
     id: "bloody-mary",
@@ -2367,9 +2398,9 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Sweet-Tart Lemon, Sugar Rim & Crisp Vodka",
     difficulty: 1,
     popularity: 9.8,
-    proTip: "Rim the shot glass with sugar and prepare a sugar-coated lemon wedge. Take the chilled shot, then immediately bite into the sugared lemon!",
+    proTip: "Rim the shot glass with sugar and prepare a sugar-coated lemon wedge. Take the chilled shot, then immediately bite into the sugared lemon! Absolut Citron elevates this shot by amplifying the zesty citrus oils without needing artificial syrups.",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Absolut Citron (or Absolut Vodka)", substitute: "Absolut Vodka Original Blue / Smirnoff Red", inventoryId: "absolut-citron", ingredientGroup: "vodka" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Lumina Triple Sec (or Cointreau)", substitute: "Cointreau", inventoryId: "lumina-triple-sec" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup", substitute: "Granulated sugar", inventoryId: "simple-syrup" },

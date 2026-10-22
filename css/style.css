@@ -24,6 +24,12 @@
   --badge-shot: #ec4899;
   --badge-shot-bg: rgba(236, 72, 153, 0.15);
 
+  /* Status Colors */
+  --status-success: #34d399;
+  --status-warning: #fbbf24;
+  --status-info: #60a5fa;
+  --status-danger: #f87171;
+
   --text-primary: #edfdfa;
   --text-secondary: #a8c5c5;
   --text-muted: #6f9293;
@@ -666,6 +672,10 @@ a:hover {
   height: 1.2rem;
   padding: 0 0.35rem;
   line-height: 1;
+}
+
+.filter-badge.hidden {
+  display: none;
 }
 
 .control-panel.filters-collapsed .search-sort-row {
@@ -2327,3 +2337,140 @@ input:checked + .switch-slider:before {
     height: 42px;
   }
 }
+
+/* ==================== REFACTORED UTILITY & COMPONENT CLASSES ==================== */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nav-btn-highlight-success {
+  color: var(--status-success);
+}
+
+.nav-btn-highlight-gold {
+  color: var(--accent-gold);
+}
+
+.btn-danger-text {
+  color: var(--status-danger);
+}
+
+.admin-filter-select {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.admin-th-stock {
+  width: 70px;
+  text-align: center;
+}
+
+.admin-th-qty {
+  width: 175px;
+}
+
+.admin-th-actions {
+  width: 120px;
+  text-align: center;
+}
+
+.modal-dialog-md {
+  max-width: 600px;
+}
+
+.modal-dialog-lg {
+  max-width: 680px;
+}
+
+.modal-form-content {
+  padding: 1.5rem 2rem;
+}
+
+.modal-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.modal-form-actions-admin {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.form-group-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.form-label-checkbox {
+  text-transform: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.footer-subtext {
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+/* Status colors and card helpers */
+.stat-pill-ready {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.drinks-grid-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-secondary);
+}
+
+.drinks-grid-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.drinks-grid-empty-title {
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.drinks-grid-empty-text {
+  max-width: 420px;
+  margin: 0 auto 1.5rem;
+}
+
+.text-status-success {
+  color: var(--status-success);
+}
+
+.text-status-warning {
+  color: var(--status-warning);
+}
+
+.text-status-info {
+  color: var(--status-info);
+}
+
+.text-status-danger {
+  color: var(--status-danger);
+}
+
+.admin-kpi-pill-alert {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
