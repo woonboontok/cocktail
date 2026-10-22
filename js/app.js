@@ -6,6 +6,10 @@
 (function () {
   "use strict";
 
+  // ==================== SHARED SVG CONSTANTS ====================
+  const SNOWFLAKE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="12" y1="6" x2="9" y2="3"></line><line x1="12" y1="6" x2="15" y2="3"></line><line x1="12" y1="18" x2="9" y2="21"></line><line x1="12" y1="18" x2="15" y2="21"></line><line x1="3.34" y1="7" x2="20.66" y2="17"></line><line x1="6.8" y1="9" x2="3.8" y2="10.73"></line><line x1="6.8" y1="9" x2="5.07" y2="6"></line><line x1="17.2" y1="15" x2="20.2" y2="13.27"></line><line x1="17.2" y1="15" x2="18.93" y2="18"></line><line x1="3.34" y1="17" x2="20.66" y2="7"></line><line x1="6.8" y1="15" x2="5.07" y2="18"></line><line x1="6.8" y1="15" x2="3.8" y2="13.27"></line><line x1="17.2" y1="9" x2="18.93" y2="6"></line><line x1="17.2" y1="9" x2="20.2" y2="10.73"></line></svg>`;
+
+  let DOM = {};
   // ==================== STATE MANAGEMENT ====================
   const STORAGE_KEY_INVENTORY = "speakeasy_inventory_v2";
   const STORAGE_KEY_INVENTORY_UPDATE = `speakeasy_inventory_update_${INVENTORY_SYNC_VERSION}`;
@@ -482,9 +486,7 @@
     renderTabButtons();
     renderHeroStats();
 
-    const catalogView = document.getElementById("catalog-view");
-    const glossaryView = document.getElementById("glossary-view");
-    const adminView = document.getElementById("admin-view");
+    const { catalogView, glossaryView, adminView } = DOM;
 
     if (currentTab === "glossary") {
       if (catalogView) catalogView.style.display = "none";
@@ -517,7 +519,7 @@
     const inStockBottles = inventory.filter(i => i.inStock && (i.quantity === undefined || i.quantity > 0)).length;
     const totalBottles = inventory.length;
 
-    const statsEl = document.getElementById("hero-stats");
+    const statsEl = DOM.heroStats || document.getElementById("hero-stats");
     if (statsEl) {
       statsEl.innerHTML = `
         <div class="stat-pill">🍸 Cocktails: <strong>${cocktails}</strong></div>
@@ -575,8 +577,8 @@
 
   function renderDrinkCards() {
     const drinks = getFilteredAndSortedDrinks();
-    const container = document.getElementById("drinks-grid");
-    const countEl = document.getElementById("results-count");
+    const container = DOM.drinksGrid || document.getElementById("drinks-grid");
+    const countEl = DOM.resultsCount || document.getElementById("results-count");
 
     if (countEl) {
       countEl.innerHTML = `Showing <strong>${drinks.length}</strong> drink${drinks.length === 1 ? "" : "s"}`;
@@ -689,26 +691,7 @@
 
   function renderRefrigerateBadge(item) {
     if (!itemNeedsRefrigeration(item)) return "";
-    return `
-      <span class="inv-badge-refrigerate" title="Keep Refrigerated" aria-label="Keep Refrigerated">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="12" y1="2" x2="12" y2="22"></line>
-          <line x1="12" y1="6" x2="9" y2="3"></line>
-          <line x1="12" y1="6" x2="15" y2="3"></line>
-          <line x1="12" y1="18" x2="9" y2="21"></line>
-          <line x1="12" y1="18" x2="15" y2="21"></line>
-          <line x1="3.34" y1="7" x2="20.66" y2="17"></line>
-          <line x1="6.8" y1="9" x2="3.8" y2="10.73"></line>
-          <line x1="6.8" y1="9" x2="5.07" y2="6"></line>
-          <line x1="17.2" y1="15" x2="20.2" y2="13.27"></line>
-          <line x1="17.2" y1="15" x2="18.93" y2="18"></line>
-          <line x1="3.34" y1="17" x2="20.66" y2="7"></line>
-          <line x1="6.8" y1="15" x2="5.07" y2="18"></line>
-          <line x1="6.8" y1="15" x2="3.8" y2="13.27"></line>
-          <line x1="17.2" y1="9" x2="18.93" y2="6"></line>
-          <line x1="17.2" y1="9" x2="20.2" y2="10.73"></line>
-        </svg>
-      </span>`;
+    return `<span class="inv-badge-refrigerate" title="Keep Refrigerated" aria-label="Keep Refrigerated">${SNOWFLAKE_SVG}</span>`;
   }
 
 
@@ -796,7 +779,7 @@
         <div class="inventory-table-wrapper">
           <div class="inventory-stock-key">
             <span><i class="stock-key-dot shelf"></i>Shelf-Stable Bottles</span>
-            <span><span class="stock-key-refrigerate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="12" y1="6" x2="9" y2="3"></line><line x1="12" y1="6" x2="15" y2="3"></line><line x1="12" y1="18" x2="9" y2="21"></line><line x1="12" y1="18" x2="15" y2="21"></line><line x1="3.34" y1="7" x2="20.66" y2="17"></line><line x1="6.8" y1="9" x2="3.8" y2="10.73"></line><line x1="6.8" y1="9" x2="5.07" y2="6"></line><line x1="17.2" y1="15" x2="20.2" y2="13.27"></line><line x1="17.2" y1="15" x2="18.93" y2="18"></line><line x1="3.34" y1="17" x2="20.66" y2="7"></line><line x1="6.8" y1="15" x2="5.07" y2="18"></line><line x1="6.8" y1="15" x2="3.8" y2="13.27"></line><line x1="17.2" y1="9" x2="18.93" y2="6"></line><line x1="17.2" y1="9" x2="20.2" y2="10.73"></line></svg></span>Keep Refrigerated</span>
+            <span><span class="stock-key-refrigerate-icon">${SNOWFLAKE_SVG}</span>Keep Refrigerated</span>
           </div>
           <table class="inventory-table">
             <thead><tr>
@@ -963,34 +946,15 @@
     container.querySelectorAll(".inventory-drink-link").forEach(btn => {
       btn.addEventListener("click", () => {
         const itemId = btn.getAttribute("data-inventory-item-id");
-        const item = inventory.find(i => i.id === itemId);
-        if (!item) return;
-        const recipes = getRecipesUsingItem(itemId);
-        currentTab = "all";
-        inventoryRecipeFilterIds = recipes.map(drink => drink.id);
-        searchQuery = "";
-        const searchInput = document.getElementById("search-input");
-        if (searchInput) searchInput.value = "";
-        renderApp();
-        window.scrollTo({ top: 300, behavior: "smooth" });
+        if (inventory.find(i => i.id === itemId)) navigateToRecipesForItem(itemId);
       });
     });
 
     // Add "See drinks using this" click handlers
     container.querySelectorAll(".inv-used-in-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => {
+      btn.addEventListener("click", () => {
         const ingId = btn.getAttribute("data-filter-ing");
-        const found = inventory.find(i => i.id === ingId);
-        if (found) {
-          const recipes = getRecipesUsingItem(ingId);
-          currentTab = "all";
-          inventoryRecipeFilterIds = recipes.map(drink => drink.id);
-          searchQuery = "";
-          const searchInput = document.getElementById("search-input");
-          if (searchInput) searchInput.value = "";
-          renderApp();
-          window.scrollTo({ top: 300, behavior: "smooth" });
-        }
+        if (inventory.find(i => i.id === ingId)) navigateToRecipesForItem(ingId);
       });
     });
 
@@ -1009,6 +973,17 @@
         renderGlossary();
       };
     });
+  }
+
+  function navigateToRecipesForItem(itemId) {
+    const recipes = getRecipesUsingItem(itemId);
+    currentTab = "all";
+    inventoryRecipeFilterIds = recipes.map(drink => drink.id);
+    searchQuery = "";
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) searchInput.value = "";
+    renderApp();
+    window.scrollTo({ top: 300, behavior: "smooth" });
   }
 
   // ==================== ADMINISTRATION & QUANTITY MANAGER ====================
@@ -1188,27 +1163,25 @@
     });
   }
 
-  function updateItemQuantity(id, delta) {
+  function setItemQuantityDirect(id, newQty) {
     const item = inventory.find(i => i.id === id);
     if (!item) return;
-    const current = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
-    const newQty = Math.max(0, current + delta);
-    item.quantity = newQty;
-    item.inStock = newQty > 0;
+    item.quantity = Math.max(0, newQty);
+    item.inStock = item.quantity > 0;
     saveInventory();
     renderAdminView();
     renderHeroStats();
   }
 
-  function setItemQuantity(id, val) {
+  function updateItemQuantity(id, delta) {
     const item = inventory.find(i => i.id === id);
     if (!item) return;
-    const newQty = Math.max(0, val);
-    item.quantity = newQty;
-    item.inStock = newQty > 0;
-    saveInventory();
-    renderAdminView();
-    renderHeroStats();
+    const current = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
+    setItemQuantityDirect(id, current + delta);
+  }
+
+  function setItemQuantity(id, val) {
+    setItemQuantityDirect(id, val);
   }
 
   function toggleItemStock(id) {
@@ -1374,6 +1347,36 @@
     alert("Inventory reset to default setup!");
   }
 
+  // ==================== INGREDIENT FORMATTING HELPERS ====================
+  function formatMeasurement(ing) {
+    if (!ing.amountOz && !ing.amountMl) return "";
+    if (unitPreference === "oz") {
+      return ing.amountOz || ing.amountMl;
+    } else if (unitPreference === "ml") {
+      return ing.amountMl || ing.amountOz;
+    } else {
+      if (ing.amountOz && ing.amountMl && ing.amountOz !== ing.amountMl) {
+        return `${ing.amountOz} <span style="opacity:0.75; font-size:0.85em;">(${ing.amountMl})</span>`;
+      }
+      return ing.amountOz || ing.amountMl;
+    }
+  }
+
+  function splitPreferenceList(value) {
+    if (!value) return [];
+    return String(value)
+      .split(/[\/|]/)
+      .flatMap(part => part.split(/\s+or\s+/i))
+      .map(part => part.replace(/^\[|\]$/g, "").trim())
+      .filter(Boolean);
+  }
+
+  function preferredSubstituteText(ing) {
+    const list = splitPreferenceList(ing.substitute);
+    if (!list.length) return "";
+    return `<span class="ing-substitute"><strong>Substitute order:</strong> ${list.map(item => `[${item}]`).join(" → ")}</span>`;
+  }
+
   // ==================== DRINK DETAIL MODAL ====================
   function openDrinkModal(drinkId) {
     const all = getAllDrinks();
@@ -1388,36 +1391,7 @@
     const stock = getDrinkStockStatus(drink);
     const status = getDrinkStatus(drink.id);
 
-    // Format ingredient measurement according to user preference
-    function formatMeasurement(ing) {
-      if (!ing.amountOz && !ing.amountMl) return "";
-      if (unitPreference === "oz") {
-        return ing.amountOz || ing.amountMl;
-      } else if (unitPreference === "ml") {
-        return ing.amountMl || ing.amountOz;
-      } else {
-        // Both
-        if (ing.amountOz && ing.amountMl && ing.amountOz !== ing.amountMl) {
-          return `${ing.amountOz} <span style="opacity:0.75; font-size:0.85em;">(${ing.amountMl})</span>`;
-        }
-        return ing.amountOz || ing.amountMl;
-      }
-    }
 
-    function splitPreferenceList(value) {
-      if (!value) return [];
-      return String(value)
-        .split(/[\/|]/)
-        .flatMap(part => part.split(/\s+or\s+/i))
-        .map(part => part.replace(/^\[|\]$/g, "").trim())
-        .filter(Boolean);
-    }
-
-    const preferredSubstituteText = ing => {
-      const list = splitPreferenceList(ing.substitute);
-      if (!list.length) return "";
-      return `<span class="ing-substitute"><strong>Substitute order:</strong> ${list.map((item, idx) => idx === 0 ? `[${item}]` : `[${item}]`).join(" → ")}</span>`;
-    };
 
     const listableIngredients = drink.ingredients.filter(ing => String(ing.amountOz || "").toLowerCase() !== "garnish");
     const garnishEntries = drink.ingredients.filter(ing => String(ing.amountOz || "").toLowerCase() === "garnish");
@@ -1861,24 +1835,32 @@
       });
     }
 
+    function setupFilterPills(selector, getValue, setValue) {
+      document.querySelectorAll(`${selector} .pill-btn`).forEach(btn => {
+        btn.addEventListener("click", () => {
+          inventoryRecipeFilterIds = null;
+          const val = btn.getAttribute("data-val");
+          const current = getValue();
+          if (current === val && val !== "all") {
+            setValue("all");
+            document.querySelectorAll(`${selector} .pill-btn`).forEach(b => {
+              b.classList.toggle("active", b.getAttribute("data-val") === "all");
+            });
+          } else {
+            document.querySelectorAll(`${selector} .pill-btn`).forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            setValue(val);
+          }
+          renderDrinkCards();
+          updateFilterCollapseState();
+        });
+      });
+    }
+
     // Filter pills (Spirit)
+    setupFilterPills(".filter-pills[data-filter='spirit']", () => selectedSpirit, v => { selectedSpirit = v; });
     document.querySelectorAll(".filter-pills[data-filter='spirit'] .pill-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        inventoryRecipeFilterIds = null;
-        const val = btn.getAttribute("data-val");
-
-        if (selectedSpirit === val && val !== "all") {
-          selectedSpirit = "all";
-          document.querySelectorAll(".filter-pills[data-filter='spirit'] .pill-btn").forEach(b => {
-            b.classList.toggle("active", b.getAttribute("data-val") === "all");
-          });
-        } else {
-          document.querySelectorAll(".filter-pills[data-filter='spirit'] .pill-btn").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          selectedSpirit = val;
-        }
-
-        // Auto-switch conflicting tabs
         if (selectedSpirit === "Non-Alcoholic" && currentTab === "cocktails") {
           currentTab = "mocktails";
           renderTabButtons();
@@ -1886,55 +1868,14 @@
           currentTab = "all";
           renderTabButtons();
         }
-
-        renderDrinkCards();
-        updateFilterCollapseState();
       });
     });
 
     // Filter pills (Difficulty)
-    document.querySelectorAll(".filter-pills[data-filter='difficulty'] .pill-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        inventoryRecipeFilterIds = null;
-        const val = btn.getAttribute("data-val");
-
-        if (selectedDifficulty === val && val !== "all") {
-          selectedDifficulty = "all";
-          document.querySelectorAll(".filter-pills[data-filter='difficulty'] .pill-btn").forEach(b => {
-            b.classList.toggle("active", b.getAttribute("data-val") === "all");
-          });
-        } else {
-          document.querySelectorAll(".filter-pills[data-filter='difficulty'] .pill-btn").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          selectedDifficulty = val;
-        }
-
-        renderDrinkCards();
-        updateFilterCollapseState();
-      });
-    });
+    setupFilterPills(".filter-pills[data-filter='difficulty']", () => selectedDifficulty, v => { selectedDifficulty = v; });
 
     // Filter pills (Taste)
-    document.querySelectorAll(".filter-pills[data-filter='taste'] .pill-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        inventoryRecipeFilterIds = null;
-        const val = btn.getAttribute("data-val");
-
-        if (selectedTaste === val && val !== "all") {
-          selectedTaste = "all";
-          document.querySelectorAll(".filter-pills[data-filter='taste'] .pill-btn").forEach(b => {
-            b.classList.toggle("active", b.getAttribute("data-val") === "all");
-          });
-        } else {
-          document.querySelectorAll(".filter-pills[data-filter='taste'] .pill-btn").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          selectedTaste = val;
-        }
-
-        renderDrinkCards();
-        updateFilterCollapseState();
-      });
-    });
+    setupFilterPills(".filter-pills[data-filter='taste']", () => selectedTaste, v => { selectedTaste = v; });
 
     // "Only In Stock" toggle button
     const myBarToggleBtn = document.getElementById("btn-my-bar-toggle");
@@ -2065,6 +2006,13 @@
 
   // ==================== INITIALIZATION ====================
   function init() {
+    DOM.catalogView = document.getElementById("catalog-view");
+    DOM.glossaryView = document.getElementById("glossary-view");
+    DOM.adminView = document.getElementById("admin-view");
+    DOM.heroStats = document.getElementById("hero-stats");
+    DOM.drinksGrid = document.getElementById("drinks-grid");
+    DOM.resultsCount = document.getElementById("results-count");
+
     applyTheme();
     setupEventListeners();
     renderApp();

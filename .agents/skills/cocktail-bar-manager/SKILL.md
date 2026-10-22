@@ -1,25 +1,33 @@
 ---
 name: cocktail-bar-manager
 description: >-
-  Use this skill when managing the cocktail inventory, updating bottle stock, adding new spirits or liqueurs, adjusting cocktail and drink recipes, or verifying the data integrity of Boon's Home Bar.
+  Use this skill when managing the cocktail inventory, updating bottle stock, adding new spirits or liqueurs, adjusting cocktail and drink recipes, refactoring code, or verifying the data integrity of Boon's Home Bar.
 ---
 
-# Cocktail Bar Manager Skill
+# Cocktail Bar Manager & System Architecture Skill
 
-This skill guides the agent through managing the inventory and recipe system of **Boon's Home Bar**.
+This skill guides AI coding assistants through managing the inventory and recipe data, maintaining front-end architecture, and following development standards for **Boon's Home Bar**.
 
-## 1. Key Locations & Contracts
+---
 
-- **Core Data**: [`js/data.js`](../../js/data.js)
-  - `INVENTORY_LAST_UPDATED`: Current date string (e.g. `"15 October 2026"`).
-  - `INVENTORY_SYNC_VERSION`: Increment this on every inventory update (e.g. `"20261015_1"`).
-  - `INVENTORY_UPDATE_OVERRIDES`: Object overriding live stock flags and quantities.
-  - `INGREDIENT_GROUPS`: Multi-spirit groupings (e.g., `"sake"`, `"tequila"`, `"gin"`, `"amaro"`).
-  - `DEFAULT_INVENTORY`: Array of full bottle definitions.
-  - `DEFAULT_DRINKS`: Array of cocktail/mocktail/shot recipes.
+## 1. Project Architecture & Contracts
 
-- **App Logic**: [`js/app.js`](../../js/app.js)
-  - Handles stock availability resolution (`isItemInStock`, `getIngredientCandidates`, `getDrinkStockStatus`).
+**Boon's Home Bar** is a zero-dependency, vanilla JavaScript single-page application (SPA).
+
+| File | Role | Key Considerations |
+|---|---|---|
+| [`index.html`](../../index.html) | Semantic shell, modals, static navigation | Uses accessible modal dialogs, responsive nav toggle, SVG icons |
+| [`css/style.css`](../../css/style.css) | All styling, 7 dynamic time-of-day themes, CSS grid | Dynamic themes via `data-theme` on `<html>`. Font display: `--font-display`. Accent colors: `--accent-gold`, `--accent-copper`. |
+| [`js/data.js`](../../js/data.js) | **Single Source of Truth** for inventory & recipes | Must remain valid ES/CommonJS (consumable by Node.js validation scripts) |
+| [`js/app.js`](../../js/app.js) | State machine, stock resolution, rendering engine | Caches core DOM nodes on `init()`, modular helpers hoisted to file scope |
+
+### Core Data Contracts (`js/data.js`)
+- `INVENTORY_LAST_UPDATED`: Current date string (e.g. `"15 October 2026"`).
+- `INVENTORY_SYNC_VERSION`: Increment this on every inventory update (e.g. `"20261015_1"`).
+- `INVENTORY_UPDATE_OVERRIDES`: Live stock flags, quantities, units, and notes mapped by item `id`.
+- `INGREDIENT_GROUPS`: Multi-spirit groupings (e.g., `"sake"`, `"tequila"`, `"gin"`, `"amaro"`).
+- `DEFAULT_INVENTORY`: Array of full bottle and ingredient definitions.
+- `DEFAULT_DRINKS`: Array of cocktail/mocktail/shot recipes.
 
 ---
 
@@ -55,24 +63,41 @@ When a user mentions receiving, purchasing, or running out of bottles:
 
 ---
 
-## 3. Automated Validation
+## 3. UI & Codebase Patterns (`js/app.js` & `css/style.css`)
 
-Always run this validation script before committing:
+When modifying app behavior or styles, adhere to these established patterns:
+
+1. **Shared SVG Constants**: Reusable iconography (like `SNOWFLAKE_SVG`) should be defined at the top of `js/app.js` rather than duplicated inline inside template strings.
+2. **DOM Caching**: Primary structural containers (`catalogView`, `glossaryView`, `adminView`, `heroStats`, `drinksGrid`, `resultsCount`) are cached in `DOM` during `init()` to minimize redundant `getElementById` calls across render passes.
+3. **Pill Filtering Pattern**: Filter sets (spirit, difficulty, taste) use the shared `setupFilterPills(selector, getter, setter)` helper to maintain uniform active state toggles and reset behaviors.
+4. **Theme Awareness**: Use CSS variables for theming (`--bg-primary`, `--bg-card`, `--text-primary`, `--accent-gold`, etc.). Do not hardcode fixed hex colors (like `#fff` or `#f3f4f6`) inside body or card typography, as this breaks contrast in light themes (e.g., Morning theme).
+5. **Quantity Updates**: Modifying stock numbers should route through `setItemQuantityDirect(id, newQty)` to ensure `inStock` sync, storage persistence, and header stat updates occur atomically.
+
+---
+
+## 4. Automated Verification & Quality Checklist
+
+Before completing any task, always execute these checks:
 
 ```bash
+# 1. Syntax check for all JS files
+node -e "
+const fs = require('fs'), vm = require('vm');
+new vm.Script(fs.readFileSync('js/data.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/app.js', 'utf8'));
+console.log('✓ JS syntax valid');
+"
+
+# 2. Data integrity check (IDs, duplicate keys, groups)
 node -e "
 const data = require('./js/data.js');
 const invIds = new Set(data.DEFAULT_INVENTORY.map(i => i.id));
 let errors = 0;
-
-// Verify groups
 Object.entries(data.INGREDIENT_GROUPS).forEach(([grp, def]) => {
   def.inventoryIds.forEach(id => {
     if (!invIds.has(id)) { console.error('Unknown ID in group ' + grp + ':', id); errors++; }
   });
 });
-
-// Verify drinks
 data.DEFAULT_DRINKS.forEach(d => {
   d.ingredients.forEach(ing => {
     if (ing.inventoryId && !invIds.has(ing.inventoryId)) {
@@ -81,8 +106,11 @@ data.DEFAULT_DRINKS.forEach(d => {
     }
   });
 });
-
 if (errors === 0) console.log('✓ All inventory, groups, and drinks validated cleanly.');
 else process.exit(1);
 "
+
+# 3. Test local serving
+python3 -m http.server 8089 &
+PID=$!; sleep 1.5; curl -s http://localhost:8089/index.html | head -n 10; kill $PID
 ```
