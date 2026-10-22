@@ -1739,6 +1739,22 @@ a:hover {
 }
 
 /* Instructions Step-by-Step */
+.drink-tools-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.drink-tool-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  padding: 0.45rem 0.75rem;
+}
+
 .instructions-list {
   list-style: none;
   counter-reset: step-counter;
@@ -2473,4 +2489,3 @@ input:checked + .switch-slider:before {
 .admin-kpi-pill-alert {
   border-color: rgba(239, 68, 68, 0.4);
 }
-

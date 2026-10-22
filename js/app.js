@@ -28,7 +28,7 @@
   let unitPreference = localStorage.getItem(STORAGE_KEY_UNIT) || "both"; // "both", "oz", "ml"
   let filtersCollapsed = localStorage.getItem(STORAGE_KEY_FILTERS_COLLAPSED) !== "false"; // default to collapsed to save space
 
-  let currentTab = "all"; // "all", "cocktails", "mocktails", "shots", "glossary", "my-bar"
+  let currentTab = "all"; // "all", "cocktails", "mocktails", "shots", "glossary"
   let searchQuery = "";
   let selectedSpirit = "all";
   let selectedDifficulty = "all";
@@ -386,12 +386,10 @@
       drinks = drinks.filter(d => d.category === "Mocktail");
     } else if (currentTab === "shots") {
       drinks = drinks.filter(d => d.category === "Shot");
-    } else if (currentTab === "my-bar") {
-      drinks = drinks.filter(d => getDrinkStockStatus(d).canMake);
     }
 
     // Secondary filters
-    if (filterOnlyMyBar && currentTab !== "my-bar") {
+    if (filterOnlyMyBar) {
       drinks = drinks.filter(d => getDrinkStockStatus(d).canMake);
     }
 
@@ -1378,6 +1376,40 @@
   }
 
   // ==================== DRINK DETAIL MODAL ====================
+  function getDrinkTools(drink) {
+    if (Array.isArray(drink.tools) && drink.tools.length) return drink.tools;
+
+    const method = (drink.instructions || []).join(" ").toLowerCase();
+    const ingredients = (drink.ingredients || []).map(ing => String(ing.item || "").toLowerCase()).join(" ");
+    const glassware = String(drink.glassware || "").toLowerCase();
+    const drinkName = String(drink.name || "").toLowerCase();
+    const tools = ["Jigger or measuring cup"];
+
+    if (/shake|shaker/.test(method)) tools.push("Cocktail shaker");
+    if (/stir|mixing glass/.test(method)) tools.push("Mixing glass and bar spoon");
+    if (/strain/.test(method)) tools.push("Hawthorne strainer" + (/fine strain/.test(method) ? " and fine-mesh strainer" : ""));
+    if (/muddle/.test(method)) tools.push("Muddler");
+    if (/blend|blender/.test(method)) tools.push("Blender");
+    if (/press|squeeze|fresh juice/.test(method) || /lemon|lime|orange|grapefruit/.test(ingredients)) tools.push("Citrus juicer or hand press");
+    if (/zest|peel|express/.test(method) || /peel|zest/.test(ingredients)) tools.push("Peeler or channel knife");
+    if (/copper mug|moscow mule/.test(glassware) || /mule/.test(drinkName)) tools.push("500 ml Moscow Mule mug");
+    else if (/champagne|flute|coupe|martini|nick & nora/.test(glassware)) tools.push(`Chilled ${drink.glassware || "cocktail glass"}`);
+    else tools.push(drink.glassware || "Serving glass");
+
+    if (/highball|collins|copa|hurricane|mug|tiki/.test(glassware)) tools.push("Straight or bent 304 stainless steel straw");
+    if (/crushed|swizzle|tiki|julep/.test(method + " " + glassware)) {
+      tools.push("Crushed ice");
+    } else if (/rocks|old fashioned|snifter/.test(glassware)) {
+      if (/sphere/.test(method)) tools.push("4.93 cm clear ice sphere");
+      else if (/clear/.test(method)) tools.push("4.26 cm clear ice cube");
+      else if (/whiskey|bourbon|rum|tequila|brandy/.test(String(drink.baseSpirit || "").toLowerCase())) tools.push("1-inch, 3.3 cm, or 5 cm ice cube");
+      else tools.push("Ice cubes for serving");
+    } else {
+      tools.push("1-inch or 3.3 cm ice cubes for chilling");
+    }
+    return [...new Set(tools)];
+  }
+
   function openDrinkModal(drinkId) {
     const all = getAllDrinks();
     const drink = all.find(d => d.id === drinkId);
@@ -1473,6 +1505,7 @@
         </li>
       `;
     }).join("");
+    const toolsHtml = getDrinkTools(drink).map(tool => `<li class="drink-tool-item">${tool}</li>`).join("");
 
     modalContent.innerHTML = `
       <button class="modal-close-btn" id="modal-close-x" title="Close (Esc)" aria-label="Close recipe">✕</button>
@@ -1540,6 +1573,12 @@
           <ul class="ingredients-list">
             ${ingredientsHtml}${garnishHtml}
           </ul>
+        </div>
+
+        <!-- Preparation tools -->
+        <div>
+          <div class="modal-section-title"><span>Tools</span></div>
+          <ul class="drink-tools-list">${toolsHtml}</ul>
         </div>
 
         <!-- Detailed Step-by-Step Instructions -->
