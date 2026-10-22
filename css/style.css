@@ -804,6 +804,11 @@ a:hover {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+.drink-card:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
 .drink-card::before {
   content: "";
   position: absolute;
@@ -1508,7 +1513,7 @@ a:hover {
 }
 
 .specs-table td {
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -2489,4 +2494,63 @@ input:checked + .switch-slider:before {
 
 .admin-kpi-pill-alert {
   border-color: rgba(239, 68, 68, 0.4);
+}
+
+.inventory-empty-cell {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+
+.inventory-action-cell {
+  text-align: center;
+}
+
+.item-title-row,
+.admin-quantity-cell {
+  display: flex;
+  align-items: center;
+}
+
+.item-title-row {
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.admin-category-chip {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+}
+
+.admin-notes-cell {
+  display: block;
+  max-width: 320px;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inventory-row-actions {
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.measurement-secondary {
+  opacity: 0.75;
+  font-size: 0.85em;
+}
+
+.drink-base-label {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+.modal-base-label {
+  font-size: 0.85rem;
+  font-weight: 600;
 }

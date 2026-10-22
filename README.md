@@ -4,13 +4,13 @@ A polished, browser-based cocktail guide and personal home-bar inventory manager
 
 ## Highlights
 
-- 149 built-in recipes: 98 cocktails, 23 mocktails, and 28 shots
+- 152 built-in recipes: 101 cocktails, 23 mocktails, and 28 shots
 - Search, sort, and filter by base spirit, difficulty, flavour profile, and availability
 - Detailed recipes with method, glassware, substitutions, pro tips, and both oz/ml measurements
-- **Can I Make It?** view that identifies recipes available from the current inventory
+- Inventory availability filter for recipes makeable with current stock
 - Inventory glossary and admin area for stock status, quantities, custom items, and low-stock checks
 - Add and save personal recipe experiments
-- Bookmark recipes and mark them as tried or favourites
+- Mark recipes as tried or constructed
 - Export and import inventory backups as JSON
 - Automatic time-of-day themes, with a manual theme selector
 
@@ -34,7 +34,7 @@ Then visit [http://localhost:8000](http://localhost:8000).
 
 ## How it works
 
-All data stays in the browser. Inventory changes, custom recipes, bookmarks, drink statuses, measurement preferences, and theme preference are stored with `localStorage`. Use **Export Backup** in Inventory Admin before clearing browser data or moving to another device, and **Import Backup** to restore it.
+All data stays in the browser. Inventory changes, custom recipes, drink statuses, measurement preferences, and theme preference are stored with `localStorage`. Use **Export Backup** in Inventory Admin before clearing browser data or moving to another device, and **Import Backup** to restore it.
 
 ## Updating the inventory
 
@@ -110,10 +110,15 @@ From the project directory, run:
 ```bash
 node --check js/app.js
 node --check js/data.js
+node --check js/inventory-store.js
+node --check js/ui-utils.js
+node --check js/recipe-utils.js
+node --check js/modal.js
+node scripts/validate-data.js
 git diff --check
 ```
 
-Then refresh the app and check the inventory date, item status, ABV column, and “Can I Make It?” results. Publish with:
+Then refresh the app and check the inventory date, item status, ABV column, and inventory availability filter. Publish with:
 
 ```bash
 git add js/data.js js/app.js README.md
@@ -130,7 +135,11 @@ git push origin main
 │   └── style.css  # Responsive speakeasy design and time-based themes
 └── js/
     ├── data.js    # Built-in recipes and default inventory
-    └── app.js     # Rendering, filtering, inventory, and browser storage
+    ├── inventory-store.js  # Inventory persistence, validation, and migrations
+    ├── ui-utils.js         # Safe HTML rendering helper
+    ├── recipe-utils.js     # Pure recipe measurement and ABV helpers
+    ├── modal.js            # Accessible modal focus handling
+    └── app.js              # Rendering, filtering, and interaction state
 ```
 
 ## Customising the collection

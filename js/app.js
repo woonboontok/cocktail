@@ -14,16 +14,19 @@
   const STORAGE_KEY_INVENTORY = "speakeasy_inventory_v2";
   const STORAGE_KEY_INVENTORY_UPDATE = `speakeasy_inventory_update_${INVENTORY_SYNC_VERSION}`;
   const STORAGE_KEY_CUSTOM_DRINKS = "speakeasy_custom_drinks_v1";
-  const STORAGE_KEY_BOOKMARKS = "speakeasy_bookmarks_v1";
   const STORAGE_KEY_UNIT = "speakeasy_unit_pref_v1";
   const STORAGE_KEY_DRINK_STATUS = "speakeasy_drink_status_v1";
   const STORAGE_KEY_THEME = "speakeasy_theme_pref_v1";
   const STORAGE_KEY_FILTERS_COLLAPSED = "speakeasy_filters_collapsed_v1";
   const THEME_COOKIE = "speakeasy_theme";
+  const inventoryStore = window.BoonBarInventoryStore;
+  const { getDefaultUnit, getDefaultQuantity } = inventoryStore;
+  const { escapeHTML } = window.BoonBarUIUtils;
+  const { getDrinkVolume, getAbv, getDrinkAbvValue, parseAbvText, getInventoryAbv } = window.BoonBarRecipeUtils;
+  const { showModal, hideModal, keepFocusInOpenModal } = window.BoonBarModal;
 
   let inventory = loadInventory();
   let customDrinks = loadCustomDrinks();
-  let bookmarks = loadBookmarks();
   let drinkStatuses = loadDrinkStatuses();
   let unitPreference = localStorage.getItem(STORAGE_KEY_UNIT) || "both"; // "both", "oz", "ml"
   let filtersCollapsed = localStorage.getItem(STORAGE_KEY_FILTERS_COLLAPSED) !== "false"; // default to collapsed to save space
@@ -42,101 +45,41 @@
   let glossarySort = { column: "category", direction: "asc" };
 
   // ==================== STORAGE HELPERS ====================
-  function getDefaultUnit(item) {
-    if (item.unit) return item.unit;
-    if (item.category === "fresh_garnishes") {
-      const id = item.id.toLowerCase();
-      if (id.includes("lemon") || id.includes("lime") || id.includes("orange") || id.includes("peach")) return "pcs";
-      if (id.includes("mint") || id.includes("rosemary")) return "bunch";
-      if (id.includes("ice")) return "bag";
-      return "pack";
-    }
-    if (item.subCategory && item.subCategory.includes("Sodas")) return "can";
-    if (item.subCategory && item.subCategory.includes("Juices")) return "carton";
-    return "bottle";
-  }
-
-  function getDefaultQuantity(item) {
-    if (item.quantity !== undefined) return item.quantity;
-    if (!item.inStock) return 0;
-    if (item.category === "fresh_garnishes") {
-      const id = item.id.toLowerCase();
-      if (id.includes("lemon") || id.includes("lime") || id.includes("orange")) return 6;
-    }
-    if (item.subCategory && item.subCategory.includes("Sodas")) return 6;
-    return 1;
-  }
-
   function loadInventory() {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_INVENTORY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const idMap = new Map(parsed.map(item => [item.id, item]));
-
-        const merged = DEFAULT_INVENTORY.map(def => {
-          if (idMap.has(def.id)) {
-            const s = idMap.get(def.id);
-            const inStock = s.inStock !== undefined ? s.inStock : def.inStock;
-            let qty = s.quantity !== undefined ? s.quantity : getDefaultQuantity(def);
-            if (inStock && qty <= 0) qty = 1;
-            if (!inStock && !def.incoming && qty > 0) qty = 0;
-            return {
-              ...def,
-              inStock: inStock,
-              quantity: qty,
-              unit: s.unit || getDefaultUnit(def),
-              refrigerate: s.refrigerate !== undefined ? s.refrigerate : def.refrigerate
-            };
-          }
-          return {
-            ...def,
-            quantity: getDefaultQuantity(def),
-            unit: getDefaultUnit(def)
-          };
-        });
-
-        // Preserve any custom items added through admin view
-        const defaultIds = new Set(DEFAULT_INVENTORY.map(d => d.id));
-        parsed.forEach(item => {
-          if (!defaultIds.has(item.id) && item.id !== "overproof-rum" && !INVENTORY_UPDATE_REMOVE_IDS.includes(item.id)) {
-            merged.push(item);
-          }
-        });
-
-        // Apply this bar update once without discarding the user's other saved stock and quantities.
-        if (!localStorage.getItem(STORAGE_KEY_INVENTORY_UPDATE)) {
-          merged.forEach(item => {
-            if (INVENTORY_UPDATE_OVERRIDES[item.id]) Object.assign(item, INVENTORY_UPDATE_OVERRIDES[item.id]);
-          });
-          localStorage.setItem(STORAGE_KEY_INVENTORY, JSON.stringify(merged));
-          localStorage.setItem(STORAGE_KEY_INVENTORY_UPDATE, "true");
-        }
-
-        return merged;
-      }
-    } catch (e) {
-      console.warn("Error loading inventory from localStorage", e);
-    }
-    return DEFAULT_INVENTORY.map(def => ({
-      ...def,
-      quantity: getDefaultQuantity(def),
-      unit: getDefaultUnit(def)
-    }));
+    return inventoryStore.loadInventory({
+      storage: localStorage,
+      storageKey: STORAGE_KEY_INVENTORY,
+      updateKey: STORAGE_KEY_INVENTORY_UPDATE,
+      defaultInventory: DEFAULT_INVENTORY,
+      categories: INVENTORY_CATEGORIES,
+      overrides: INVENTORY_UPDATE_OVERRIDES,
+      removedIds: INVENTORY_UPDATE_REMOVE_IDS
+    });
   }
 
   function saveInventory() {
-    try {
-      localStorage.setItem(STORAGE_KEY_INVENTORY, JSON.stringify(inventory));
-    } catch (e) {
-      console.warn("Error saving inventory", e);
-    }
+    inventoryStore.saveInventory(localStorage, STORAGE_KEY_INVENTORY, inventory);
   }
 
   function loadCustomDrinks() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_CUSTOM_DRINKS);
-      return saved ? JSON.parse(saved) : [];
+      const parsed = saved ? JSON.parse(saved) : [];
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(drink =>
+        drink && typeof drink.id === "string" && typeof drink.name === "string" &&
+        ["Cocktail", "Mocktail", "Shot"].includes(drink.category) &&
+        ["otherNames", "baseSpirit", "glassware", "alcoholLevel", "tasteProfile", "proTip"].every(key => drink[key] === undefined || drink[key] === null || typeof drink[key] === "string") &&
+        Array.isArray(drink.ingredients) && drink.ingredients.every(ing => ing && typeof ing.item === "string" &&
+          ["amountOz", "amountMl", "substitute", "inventoryId", "ingredientGroup"].every(key => ing[key] === undefined || ing[key] === null || typeof ing[key] === "string")) &&
+        Array.isArray(drink.instructions) && drink.instructions.every(step => typeof step === "string") &&
+        (drink.tags === undefined || (Array.isArray(drink.tags) && drink.tags.every(tag => typeof tag === "string")))
+      ).map(drink => ({
+        ...drink,
+        difficulty: Math.max(1, Math.min(5, Number(drink.difficulty) || 2)),
+        popularity: Number.isFinite(Number(drink.popularity)) ? Number(drink.popularity) : 5,
+        tools: Array.isArray(drink.tools) ? drink.tools.filter(tool => typeof tool === "string") : undefined
+      }));
     } catch (e) {
       return [];
     }
@@ -148,26 +91,6 @@
     } catch (e) {
       console.warn("Error saving custom drinks", e);
     }
-  }
-
-  function loadBookmarks() {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_BOOKMARKS);
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function toggleBookmark(drinkId) {
-    const idx = bookmarks.indexOf(drinkId);
-    if (idx > -1) {
-      bookmarks.splice(idx, 1);
-    } else {
-      bookmarks.push(drinkId);
-    }
-    localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify(bookmarks));
-    renderApp();
   }
 
   function loadDrinkStatuses() {
@@ -184,57 +107,6 @@
   }
 
   function getDrinkStatus(drinkId) { return drinkStatuses[drinkId] || {}; }
-
-  function getDrinkVolume(drink) {
-    let totalMl = 0, hasTopUp = false;
-    drink.ingredients.forEach(ing => {
-      const amount = String(ing.amountMl || ing.amountOz || "").toLowerCase();
-      if (/top up|fill|splash/.test(amount)) hasTopUp = true;
-      const match = amount.match(/(\d+(?:\.\d+)?)/);
-      if (match && /ml|oz|cl|cup|tsp|tbsp/.test(amount)) {
-        let value = parseFloat(match[1]);
-        if (/oz/.test(amount) && !/ml/.test(amount)) value *= 29.5735;
-        else if (/cl/.test(amount)) value *= 10;
-        else if (/cup/.test(amount)) value *= 240;
-        else if (/tsp/.test(amount)) value *= 5;
-        else if (/tbsp/.test(amount)) value *= 15;
-        totalMl += value;
-      }
-    });
-    const rounded = Math.round(totalMl / 5) * 5;
-    if (!rounded) return hasTopUp ? "Served with mixer" : "Volume varies";
-    return `~${rounded} ml${hasTopUp ? " + top-up" : ""}`;
-  }
-
-  function getAbv(drink) {
-    const match = String(drink.alcoholLevel || "").match(/(?:~)?(\d+(?:\.\d+)?)%\s*ABV/i);
-    return match ? `${match[1]}% ABV` : "ABV not specified";
-  }
-
-  function getDrinkAbvValue(drink) {
-    return parseAbvText(drink && drink.alcoholLevel);
-  }
-
-  function parseAbvText(value) {
-    if (!value) return null;
-    if (typeof value === "number" && Number.isFinite(value)) return value;
-    const text = String(value).trim();
-    const abvMatch = text.match(/(\d+(?:\.\d+)?)\s*%\s*ABV/i);
-    if (abvMatch) return Number(abvMatch[1]);
-    const proofMatch = text.match(/(\d+(?:\.\d+)?)\s*proof/i);
-    if (proofMatch) return Number(proofMatch[1]) / 2;
-    return null;
-  }
-
-  function getInventoryAbv(item) {
-    if (!item) return "—";
-    const direct = parseAbvText(item.abv || item.proof || item.name);
-    if (direct !== null) {
-      const fixed = Number.isInteger(direct) ? direct.toFixed(0) : direct.toFixed(1);
-      return `${fixed}% ABV`;
-    }
-    return "—";
-  }
 
   function getRecipesUsingItem(itemId) {
     return getAllDrinks().filter(drink =>
@@ -278,16 +150,18 @@
   }
 
   function getIngredientGroupId(ingredient) {
-    if (ingredient.ingredientGroup) return ingredient.ingredientGroup;
-    if (INGREDIENT_GROUPS[ingredient.inventoryId]) return ingredient.inventoryId;
-    if (INGREDIENT_GROUP_BY_INVENTORY_ID[ingredient.inventoryId]) return INGREDIENT_GROUP_BY_INVENTORY_ID[ingredient.inventoryId];
-    if (INGREDIENT_GROUPS_BY_INVENTORY_ID[ingredient.inventoryId]?.length) return INGREDIENT_GROUPS_BY_INVENTORY_ID[ingredient.inventoryId][0];
+    if (ingredient.ingredientGroup && Object.prototype.hasOwnProperty.call(INGREDIENT_GROUPS, ingredient.ingredientGroup)) return ingredient.ingredientGroup;
+    if (Object.prototype.hasOwnProperty.call(INGREDIENT_GROUPS, ingredient.inventoryId)) return ingredient.inventoryId;
+    if (Object.prototype.hasOwnProperty.call(INGREDIENT_GROUP_BY_INVENTORY_ID, ingredient.inventoryId)) return INGREDIENT_GROUP_BY_INVENTORY_ID[ingredient.inventoryId];
+    if (Object.prototype.hasOwnProperty.call(INGREDIENT_GROUPS_BY_INVENTORY_ID, ingredient.inventoryId) && INGREDIENT_GROUPS_BY_INVENTORY_ID[ingredient.inventoryId].length) {
+      return INGREDIENT_GROUPS_BY_INVENTORY_ID[ingredient.inventoryId][0];
+    }
     return `inventory:${ingredient.inventoryId}`;
   }
 
   function getIngredientCandidates(ingredient) {
     const groupId = getIngredientGroupId(ingredient);
-    const group = INGREDIENT_GROUPS[groupId];
+    const group = Object.prototype.hasOwnProperty.call(INGREDIENT_GROUPS, groupId) ? INGREDIENT_GROUPS[groupId] : null;
     return group && group.inventoryIds && group.inventoryIds.length ? group.inventoryIds : [ingredient.inventoryId].filter(Boolean);
   }
 
@@ -310,8 +184,8 @@
   }
 
   function isItemInStock(inventoryId, ingredient) {
-    if (!inventoryId) return true;
-    return getIngredientCandidates({ ...(ingredient || {}), inventoryId }).some(candidateId => {
+    const candidates = getIngredientCandidates({ ...(ingredient || {}), inventoryId: inventoryId || ingredient?.inventoryId });
+    return candidates.some(candidateId => {
       const item = getInventoryItem(candidateId);
       return item && item.inStock && (item.quantity === undefined || item.quantity > 0);
     });
@@ -326,9 +200,10 @@
     let missingCount = 0;
     const missingItems = [];
     const missingFreshProduce = [];
+    const untrackedItems = [];
 
     drink.ingredients.forEach(ing => {
-      if (ing.inventoryId) {
+      if (ing.inventoryId || (ing.ingredientGroup && Object.prototype.hasOwnProperty.call(INGREDIENT_GROUPS, ing.ingredientGroup))) {
         totalStockable++;
         if (!isItemInStock(ing.inventoryId, ing)) {
           missingCount++;
@@ -336,15 +211,18 @@
           missingItems.push(group ? group.label : ing.item);
           if (isPerishableIngredient(ing)) missingFreshProduce.push(group ? group.label : ing.item);
         }
+      } else if (ing.item) {
+        untrackedItems.push(ing.item);
       }
     });
 
     return {
-      canMake: missingCount === 0,
+      canMake: missingCount === 0 && untrackedItems.length === 0,
       missingCount: missingCount,
       missingItems: missingItems,
       missingFreshProduce,
-      totalStockable: totalStockable
+      totalStockable: totalStockable,
+      untrackedItems
     };
   }
 
@@ -524,7 +402,7 @@
         <div class="stat-pill">🍹 Mocktails: <strong>${mocktails}</strong></div>
         <div class="stat-pill">🥃 Shots: <strong>${shots}</strong></div>
         <div class="stat-pill">🍾 In Bar: <strong>${inStockBottles} / ${totalBottles}</strong></div>
-        <div class="stat-pill" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1);">
+        <div class="stat-pill stat-pill-ready">
           ✨ Ready to Make Now: <strong>${readyToMake}</strong>
         </div>
       `;
@@ -563,11 +441,11 @@
     else if (drink.baseSpirit === "Rum") color = "#e6b35a";
 
     const glassIcons = {
-      coupe: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Coupe glass"}"><path d="M20 20h56L64 42c-4 8-11 13-16 14v17h12v5H36v-5h12V56c-5-1-12-6-16-14L20 20Z"/><path d="M28 27h40"/></svg>`,
-      rocks: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Rocks glass"}"><path d="M23 25h50l-5 46H28l-5-46Z"/><path d="M28 35h40M34 52h28"/></svg>`,
-      highball: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Highball glass"}"><path d="M29 15h38l-5 64H34l-5-64Z"/><path d="M31 27h34M34 58h28"/></svg>`,
-      flute: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Flute glass"}"><path d="M31 15h34L58 48c-2 6-5 10-10 12-5-2-8-6-10-12L31 15Z"/><path d="M48 60v18M38 82h20M35 23h26"/></svg>`,
-      shot: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${drink.glassware || "Shot glass"}"><path d="M30 29h36l-4 40H34l-4-40Z"/><path d="M32 37h32"/></svg>`
+      coupe: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Coupe glass")}"><path d="M20 20h56L64 42c-4 8-11 13-16 14v17h12v5H36v-5h12V56c-5-1-12-6-16-14L20 20Z"/><path d="M28 27h40"/></svg>`,
+      rocks: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Rocks glass")}"><path d="M23 25h50l-5 46H28l-5-46Z"/><path d="M28 35h40M34 52h28"/></svg>`,
+      highball: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Highball glass")}"><path d="M29 15h38l-5 64H34l-5-64Z"/><path d="M31 27h34M34 58h28"/></svg>`,
+      flute: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Flute glass")}"><path d="M31 15h34L58 48c-2 6-5 10-10 12-5-2-8-6-10-12L31 15Z"/><path d="M48 60v18M38 82h20M35 23h26"/></svg>`,
+      shot: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Shot glass")}"><path d="M30 29h36l-4 40H34l-4-40Z"/><path d="M32 37h32"/></svg>`
     };
 
     return { icon: glassIcons[glassShape], color };
@@ -586,10 +464,10 @@
 
     if (drinks.length === 0) {
       container.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-secondary);">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🍸</div>
-          <h3 style="color: #fff; margin-bottom: 0.5rem; font-size: 1.4rem;">No drinks found</h3>
-          <p style="max-width: 420px; margin: 0 auto 1.5rem;">Try clearing some filters or searching for a different spirit, cocktail name, or ingredient.</p>
+        <div class="drinks-grid-empty">
+          <div class="drinks-grid-empty-icon">🍸</div>
+          <h3 class="drinks-grid-empty-title">No drinks found</h3>
+          <p class="drinks-grid-empty-text">Try clearing some filters or searching for a different spirit, cocktail name, or ingredient.</p>
           <button class="btn-primary" id="btn-reset-filters">Clear All Filters</button>
         </div>
       `;
@@ -602,42 +480,43 @@
 
     container.innerHTML = drinks.map(drink => {
       const stock = getDrinkStockStatus(drink);
-      const categoryClass = drink.category.toLowerCase();
-      const isBookmarked = bookmarks.includes(drink.id);
+      const categoryClass = escapeHTML(drink.category.toLowerCase());
       const status = getDrinkStatus(drink.id);
 
       const stockBadge = stock.canMake
         ? `<span class="bar-stock-indicator status-ready">✓ In Stock</span>`
-        : `<span class="bar-stock-indicator status-missing" title="Missing: ${stock.missingItems.slice(0, 2).join(', ')}">Need ${stock.missingCount}</span>`;
+        : stock.untrackedItems.length
+          ? `<span class="bar-stock-indicator status-missing" title="Not linked to inventory: ${escapeHTML(stock.untrackedItems.join(', '))}">${stock.missingCount ? `Need ${stock.missingCount} · ` : ""}Check ${stock.untrackedItems.length}</span>`
+          : `<span class="bar-stock-indicator status-missing" title="Missing: ${escapeHTML(stock.missingItems.slice(0, 2).join(', '))}">Need ${stock.missingCount}</span>`;
       const freshProduceBadge = stock.missingFreshProduce.length
-        ? `<span class="fresh-produce-indicator" title="Missing: ${stock.missingFreshProduce.join(', ')}">🥬 Missing Fresh Produce</span>`
+        ? `<span class="fresh-produce-indicator" title="Missing: ${escapeHTML(stock.missingFreshProduce.join(', '))}">🥬 Missing Fresh Produce</span>`
         : "";
       const visual = getDrinkVisual(drink);
 
       // Ingredients preview (up to 4 tags)
       const ingPreview = drink.ingredients.slice(0, 4).map(i => {
         const shortName = i.item.split("(")[0].trim();
-        return `<span class="preview-tag">${shortName}</span>`;
+        return `<span class="preview-tag">${escapeHTML(shortName)}</span>`;
       }).join("");
 
       return `
-        <div class="drink-card card-${categoryClass}" data-id="${drink.id}">
+        <div class="drink-card card-${categoryClass}" data-id="${escapeHTML(drink.id)}" role="button" tabindex="0" aria-label="View ${escapeHTML(drink.name)} recipe">
           <div class="card-top-bar">
-            <span class="drink-category-badge badge-${categoryClass}">${drink.category}</span>
+            <span class="drink-category-badge badge-${categoryClass}">${escapeHTML(drink.category)}</span>
             <div class="card-statuses">${status.tried ? `<span class="drink-status tried">✓ Tried</span>` : ""}${status.constructed ? `<span class="drink-status constructed">⚗ Made</span>` : ""}${stockBadge}${freshProduceBadge}</div>
           </div>
 
           <div class="drink-card-visual" style="--drink-accent: ${visual.color};">${visual.icon}</div>
 
           <div class="card-title-block">
-            <h3 class="drink-name">${drink.name}</h3>
-            ${drink.otherNames ? `<span class="drink-alias">${drink.otherNames}</span>` : ""}
+            <h3 class="drink-name">${escapeHTML(drink.name)}</h3>
+            ${drink.otherNames ? `<span class="drink-alias">${escapeHTML(drink.otherNames)}</span>` : ""}
           </div>
 
           <div class="card-specs-row">
             <div class="spec-item">
               <span class="spec-key">Glass</span>
-              <span class="spec-val">${drink.glassware || "Cocktail"}</span>
+              <span class="spec-val">${escapeHTML(drink.glassware || "Cocktail")}</span>
             </div>
             <div class="spec-item">
               <span class="spec-key">Alcohol</span>
@@ -666,7 +545,7 @@
           </div>
 
           <div class="card-footer-action">
-            <span style="font-size: 0.76rem; color: var(--text-muted);">${drink.baseSpirit || drink.category}</span>
+            <span class="drink-base-label">${escapeHTML(drink.baseSpirit || drink.category)}</span>
             <span class="view-recipe-link">View Recipe →</span>
           </div>
         </div>
@@ -675,9 +554,16 @@
 
     // Add click listeners to cards
     container.querySelectorAll(".drink-card").forEach(card => {
-      card.addEventListener("click", () => {
+      const openCard = () => {
         const id = card.getAttribute("data-id");
         openDrinkModal(id);
+      };
+      card.addEventListener("click", openCard);
+      card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openCard();
+        }
       });
     });
   }
@@ -749,15 +635,15 @@
     if (statsEl) {
       statsEl.innerHTML = `
         <div class="inv-stat-item">
-          <div class="inv-stat-num" style="color: #34d399;">${inStock}</div>
+          <div class="inv-stat-num text-status-success">${inStock}</div>
           <div class="inv-stat-label">In My Bar</div>
         </div>
         <div class="inv-stat-item">
-          <div class="inv-stat-num" style="color: #fbbf24;">${shoppingList}</div>
+          <div class="inv-stat-num text-status-warning">${shoppingList}</div>
           <div class="inv-stat-label">Shopping List</div>
         </div>
         ${incoming ? `<div class="inv-stat-item">
-          <div class="inv-stat-num" style="color: #60a5fa;">${incoming}</div>
+          <div class="inv-stat-num text-status-info">${incoming}</div>
           <div class="inv-stat-label">Incoming</div>
         </div>` : ""}
       `;
@@ -796,20 +682,20 @@
               const readyCount = usableRecipes.filter(drink => getDrinkStockStatus(drink).canMake).length;
               const linkLabel = readyCount > 0 ? `${readyCount} ready` : `${usableRecipes.length} recipes`;
               return `<tr class="${itemNeedsRefrigeration(item) ? 'needs-refrigeration' : ''}">
-                <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}><span>${item.name}</span>${renderPremiumBadge(item)}${renderRefrigerateBadge(item)}</label></td>
-                <td>${INVENTORY_CATEGORIES[item.category] || item.category || "—"}</td>
-                <td>${item.subCategory || "—"}</td>
+                <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${escapeHTML(item.id)}" ${item.inStock ? "checked" : ""}><span>${escapeHTML(item.name)}</span>${renderPremiumBadge(item)}${renderRefrigerateBadge(item)}</label></td>
+                <td>${escapeHTML(INVENTORY_CATEGORIES[item.category] || item.category || "—")}</td>
+                <td>${escapeHTML(item.subCategory || "—")}</td>
                 <td><span class="inv-badge-stock ${status === "in-stock" ? "stock" : status === "incoming" ? "incoming" : "needed"}">${statusLabel(status)}</span></td>
                 <td>${getInventoryAbv(item)}</td>
-                <td>${quantity} ${item.unit || getDefaultUnit(item)}</td>
-                <td>${usableRecipes.length ? `<button class="inventory-drink-link" data-inventory-item-id="${item.id}">${linkLabel}</button>` : "—"}</td>
+                <td>${quantity} ${escapeHTML(item.unit || getDefaultUnit(item))}</td>
+                <td>${usableRecipes.length ? `<button class="inventory-drink-link" data-inventory-item-id="${escapeHTML(item.id)}">${linkLabel}</button>` : "—"}</td>
               </tr>`;
             }).join("")}</tbody>
           </table>
         </div>` : `<div class="inventory-empty-state">No inventory items match this filter.</div>`;
     } else {
     // Group visible inventory by category for the list view.
-    const grouped = {};
+    const grouped = Object.create(null);
     Object.keys(INVENTORY_CATEGORIES).forEach(cat => {
       grouped[cat] = [];
     });
@@ -834,11 +720,11 @@
         const abvDisplay = getInventoryAbv(item);
         const showAbv = abvDisplay !== "—" && (item.category === "spirits" || item.category === "liqueurs" || item.category === "fortified" || item.category === "sparkling");
         return `
-          <div class="inventory-item-card ${item.inStock ? "in-stock" : "shopping-list"}" data-item-id="${item.id}">
-            <input type="checkbox" class="inv-checkbox" data-id="${item.id}" ${item.inStock ? "checked" : ""}>
+          <div class="inventory-item-card ${item.inStock ? "in-stock" : "shopping-list"}" data-item-id="${escapeHTML(item.id)}">
+            <input type="checkbox" class="inv-checkbox" data-id="${escapeHTML(item.id)}" ${item.inStock ? "checked" : ""}>
             <div class="inv-content">
               <div class="inv-name-row">
-                <span class="inv-name">${item.name}</span>
+                <span class="inv-name">${escapeHTML(item.name)}</span>
                 <div class="inv-badges-wrap">
                   ${renderPremiumBadge(item)}
                   ${renderRefrigerateBadge(item)}
@@ -847,9 +733,9 @@
                   </span>
                 </div>
               </div>
-              <div class="inv-meta">${item.subCategory || ""}${showAbv ? " • " + abvDisplay : ""}${item.inStock ? " • " + quantity + " " + unit : ""}${item.proof ? " • " + item.proof : ""}</div>
-              ${item.notes ? `<div class="inv-notes">${item.notes}</div>` : ""}
-              <button class="inv-used-in-btn" data-filter-ing="${item.id}">See drinks using this →</button>
+              <div class="inv-meta">${escapeHTML(item.subCategory || "")}${showAbv ? " • " + escapeHTML(abvDisplay) : ""}${item.inStock ? " • " + quantity + " " + escapeHTML(unit) : ""}${item.proof ? " • " + escapeHTML(item.proof) : ""}</div>
+              ${item.notes ? `<div class="inv-notes">${escapeHTML(item.notes)}</div>` : ""}
+              <button class="inv-used-in-btn" data-filter-ing="${escapeHTML(item.id)}">See drinks using this →</button>
             </div>
           </div>
         `;
@@ -857,7 +743,7 @@
 
       // Group items by subCategory for categories that benefit from it
       const groupBySubCategory = (items) => {
-        const groups = {};
+        const groups = Object.create(null);
         items.forEach(item => {
           const sub = item.subCategory || "Other";
           if (!groups[sub]) groups[sub] = [];
@@ -871,16 +757,16 @@
         itemCards = Object.entries(items.reduce((families, item) => {
             const family = item.spiritFamily || "Other Spirits";
             const style = item.spiritStyle || item.subCategory || "Other";
-            if (!families[family]) families[family] = {};
-            if (!families[family][style]) families[family][style] = [];
+            if (!Object.prototype.hasOwnProperty.call(families, family)) families[family] = Object.create(null);
+            if (!Object.prototype.hasOwnProperty.call(families[family], style)) families[family][style] = [];
             families[family][style].push(item);
             return families;
-          }, {})).map(([family, styles]) => `
+          }, Object.create(null))).map(([family, styles]) => `
             <section class="spirit-family-group">
-              <h4>${family}</h4>
+              <h4>${escapeHTML(family)}</h4>
               ${Object.entries(styles).map(([style, styleItems]) => `
                 <div class="spirit-style-group">
-                  <h5>${style}</h5>
+                  <h5>${escapeHTML(style)}</h5>
                   <div class="inventory-grid inventory-list-grid">${styleItems.map(renderItemCard).join("")}</div>
                 </div>
               `).join("")}
@@ -890,7 +776,7 @@
         const subGroups = groupBySubCategory(items);
         itemCards = Object.entries(subGroups).map(([subCat, subItems]) => `
           <div class="spirit-style-group">
-            <h5>${subCat}</h5>
+            <h5>${escapeHTML(subCat)}</h5>
             <div class="inventory-grid inventory-list-grid">${subItems.map(renderItemCard).join("")}</div>
           </div>
         `).join("");
@@ -901,7 +787,7 @@
       return `
         <div class="inventory-category-group">
           <div class="category-header-title">
-            <h3>${title} (${items.filter(i => i.inStock).length}/${items.length} In Stock)</h3>
+            <h3>${escapeHTML(title)} (${items.filter(i => i.inStock).length}/${items.length} In Stock)</h3>
             <span class="inventory-storage-label ${catKey === "fresh_garnishes" ? "perishable" : "shelf-stable"}">${storageLabel}</span>
           </div>
           ${itemCards}
@@ -1007,15 +893,15 @@
           <div class="admin-kpi-label">Catalog Items</div>
         </div>
         <div class="admin-kpi-pill">
-          <div class="admin-kpi-num" style="color: #34d399;">${inStockItems}</div>
+          <div class="admin-kpi-num text-status-success">${inStockItems}</div>
           <div class="admin-kpi-label">In Stock</div>
         </div>
         <div class="admin-kpi-pill">
-          <div class="admin-kpi-num" style="color: #fbbf24;">${shoppingListItems}</div>
+          <div class="admin-kpi-num text-status-warning">${shoppingListItems}</div>
           <div class="admin-kpi-label">Shopping List</div>
         </div>
-        <div class="admin-kpi-pill" style="border-color: ${lowStockItems > 0 ? "rgba(239, 68, 68, 0.4)" : "var(--border-subtle)"};">
-          <div class="admin-kpi-num" style="color: #f87171;">${lowStockItems}</div>
+        <div class="admin-kpi-pill${lowStockItems > 0 ? " admin-kpi-pill-alert" : ""}">
+          <div class="admin-kpi-num text-status-danger">${lowStockItems}</div>
           <div class="admin-kpi-label">Low Stock (≤1)</div>
         </div>
       `;
@@ -1049,7 +935,7 @@
     if (items.length === 0) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+          <td colspan="6" class="inventory-empty-cell">
             No inventory items match the current search or filters.
           </td>
         </tr>
@@ -1064,52 +950,52 @@
       const isLowStock = isStocked && qty <= 1;
 
       return `
-        <tr data-id="${item.id}" class="${itemNeedsRefrigeration(item) ? 'needs-refrigeration' : ''}">
-          <td style="text-align: center;">
+        <tr data-id="${escapeHTML(item.id)}" class="${itemNeedsRefrigeration(item) ? 'needs-refrigeration' : ''}">
+          <td class="inventory-action-cell">
             <label class="switch-container" title="${isStocked ? "In Stock (Click to mark Out of Stock)" : "Out of Stock (Click to mark In Stock)"}">
-              <input type="checkbox" class="admin-stock-toggle" data-id="${item.id}" ${isStocked ? "checked" : ""}>
+              <input type="checkbox" class="admin-stock-toggle" data-id="${escapeHTML(item.id)}" ${isStocked ? "checked" : ""}>
               <span class="switch-slider"></span>
             </label>
           </td>
 
           <td>
             <div class="item-meta-cell">
-              <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
-                <span class="item-title-text">${item.name}</span>
+              <div class="item-title-row">
+                <span class="item-title-text">${escapeHTML(item.name)}</span>
                 ${renderRefrigerateBadge(item)}
               </div>
-              <span class="item-subtext">${item.subCategory || ""} ${item.brand ? "• " + item.brand : ""}</span>
+              <span class="item-subtext">${escapeHTML(item.subCategory || "")} ${item.brand ? "• " + escapeHTML(item.brand) : ""}</span>
             </div>
           </td>
 
           <td>
-            <span style="font-size: 0.76rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 0.2rem 0.55rem; border-radius: var(--radius-full);">
-              ${INVENTORY_CATEGORIES[item.category] || item.category}
+            <span class="admin-category-chip">
+              ${escapeHTML(INVENTORY_CATEGORIES[item.category] || item.category)}
             </span>
           </td>
 
           <td>
-            <div style="display: flex; align-items: center;">
+            <div class="admin-quantity-cell">
               <div class="admin-qty-stepper">
-                <button class="qty-step-btn btn-qty-minus" data-id="${item.id}" title="Decrease quantity">−</button>
-                <input type="number" class="qty-number-input" data-id="${item.id}" value="${qty}" min="0" step="1">
-                <button class="qty-step-btn btn-qty-plus" data-id="${item.id}" title="Increase quantity">＋</button>
+                <button class="qty-step-btn btn-qty-minus" data-id="${escapeHTML(item.id)}" title="Decrease quantity">−</button>
+                <input type="number" class="qty-number-input" data-id="${escapeHTML(item.id)}" value="${qty}" min="0" step="1">
+                <button class="qty-step-btn btn-qty-plus" data-id="${escapeHTML(item.id)}" title="Increase quantity">＋</button>
               </div>
-              <span class="qty-unit-label">${unit}</span>
+              <span class="qty-unit-label">${escapeHTML(unit)}</span>
               ${isLowStock ? `<span class="warning-badge" title="Low stock alert!">Low</span>` : ""}
             </div>
           </td>
 
           <td>
-            <span style="font-size: 0.78rem; color: var(--text-secondary); max-width: 320px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.notes || ""}">
-              ${item.notes || "—"}
+            <span class="admin-notes-cell" title="${escapeHTML(item.notes || "")}">
+              ${escapeHTML(item.notes || "—")}
             </span>
           </td>
 
-          <td style="text-align: center;">
-            <div style="display: inline-flex; gap: 0.4rem;">
-              <button class="btn-edit-outline btn-admin-edit" data-id="${item.id}" title="Edit item details">Edit</button>
-              <button class="btn-danger-outline btn-admin-delete" data-id="${item.id}" title="Delete item">✕</button>
+          <td class="inventory-action-cell">
+            <div class="inventory-row-actions">
+              <button class="btn-edit-outline btn-admin-edit" data-id="${escapeHTML(item.id)}" title="Edit item details">Edit</button>
+              <button class="btn-danger-outline btn-admin-delete" data-id="${escapeHTML(item.id)}" title="Delete item">✕</button>
             </div>
           </td>
         </tr>
@@ -1211,7 +1097,7 @@
     if (refrigEl) refrigEl.checked = false;
 
     const modal = document.getElementById("admin-item-modal-backdrop");
-    if (modal) modal.classList.add("open");
+    showModal(modal, "#form-item-name");
   }
 
   function openEditItemModal(id) {
@@ -1231,12 +1117,12 @@
     if (refrigEl) refrigEl.checked = Boolean(item.refrigerate);
 
     const modal = document.getElementById("admin-item-modal-backdrop");
-    if (modal) modal.classList.add("open");
+    showModal(modal, "#form-item-name");
   }
 
   function closeAdminItemModal() {
     const modal = document.getElementById("admin-item-modal-backdrop");
-    if (modal) modal.classList.remove("open");
+    hideModal(modal);
   }
 
   function handleSaveAdminItem(e) {
@@ -1318,14 +1204,20 @@
     reader.onload = function(evt) {
       try {
         const imported = JSON.parse(evt.target.result);
-        if (Array.isArray(imported)) {
-          inventory = imported;
+        if (Array.isArray(imported) && imported.length && imported.every(item => inventoryStore.isValidInventoryRecord(item, INVENTORY_CATEGORIES))) {
+          const importedIds = imported.map(item => item.id.trim());
+          if (new Set(importedIds).size !== importedIds.length) {
+            alert("Invalid inventory backup: item IDs must be unique.");
+            return;
+          }
+          const normalized = imported.map(inventoryStore.normalizeInventoryRecord);
+          inventory = inventoryStore.mergeInventoryRecords(normalized, DEFAULT_INVENTORY, INVENTORY_UPDATE_REMOVE_IDS);
           saveInventory();
           renderAdminView();
           renderHeroStats();
           alert("Inventory successfully restored from backup!");
         } else {
-          alert("Invalid inventory backup file format.");
+          alert("Invalid inventory backup: expected a non-empty array of items with valid IDs, names, categories, stock flags, quantities, and units.");
         }
       } catch (err) {
         alert("Error parsing backup file: " + err.message);
@@ -1354,9 +1246,9 @@
       return ing.amountMl || ing.amountOz;
     } else {
       if (ing.amountOz && ing.amountMl && ing.amountOz !== ing.amountMl) {
-        return `${ing.amountOz} <span style="opacity:0.75; font-size:0.85em;">(${ing.amountMl})</span>`;
+        return `${escapeHTML(ing.amountOz)} <span class="measurement-secondary">(${escapeHTML(ing.amountMl)})</span>`;
       }
-      return ing.amountOz || ing.amountMl;
+      return escapeHTML(ing.amountOz || ing.amountMl);
     }
   }
 
@@ -1372,7 +1264,7 @@
   function preferredSubstituteText(ing) {
     const list = splitPreferenceList(ing.substitute);
     if (!list.length) return "";
-    return `<span class="ing-substitute"><strong>Substitute order:</strong> ${list.map(item => `[${item}]`).join(" → ")}</span>`;
+    return `<span class="ing-substitute"><strong>Substitute order:</strong> ${list.map(item => `[${escapeHTML(item)}]`).join(" → ")}</span>`;
   }
 
   // ==================== DRINK DETAIL MODAL ====================
@@ -1425,7 +1317,7 @@
     const modalContent = document.getElementById("drink-modal-content");
     if (!modalBackdrop || !modalContent) return;
 
-    const categoryClass = drink.category.toLowerCase();
+    const categoryClass = escapeHTML(drink.category.toLowerCase());
     const stock = getDrinkStockStatus(drink);
     const status = getDrinkStatus(drink.id);
 
@@ -1434,32 +1326,33 @@
     const listableIngredients = drink.ingredients.filter(ing => String(ing.amountOz || "").toLowerCase() !== "garnish");
     const garnishEntries = drink.ingredients.filter(ing => String(ing.amountOz || "").toLowerCase() === "garnish");
     const garnishText = garnishEntries.length
-      ? garnishEntries.map(ing => ing.item).join("; ")
-      : (drink.garnish ? drink.garnish : "");
+      ? garnishEntries.map(ing => escapeHTML(ing.item)).join("; ")
+      : (drink.garnish ? escapeHTML(drink.garnish) : "");
 
     const ingredientsHtml = listableIngredients.map((ing, index) => {
       const inStock = isItemInStock(ing.inventoryId, ing);
-      const stockBadge = ing.inventoryId
+      const hasInventoryLink = Boolean(ing.inventoryId || (ing.ingredientGroup && Object.prototype.hasOwnProperty.call(INGREDIENT_GROUPS, ing.ingredientGroup)));
+      const stockBadge = hasInventoryLink
         ? (inStock
             ? `<span class="ing-stock-badge status-ready">✓ In Bar</span>`
             : `<span class="ing-stock-badge status-missing">Need to Buy</span>`)
         : "";
 
-      const inventoryOptions = ing.inventoryId ? getIngredientInventoryOptions(ing) : [];
-      const optionsId = `ingredient-options-${drink.id}-${index}`;
+      const inventoryOptions = hasInventoryLink ? getIngredientInventoryOptions(ing) : [];
+      const optionsId = escapeHTML(`ingredient-options-${drink.id}-${index}`);
       const inventoryOptionsHtml = inventoryOptions.length ? `
         <div class="ingredient-options" id="${optionsId}" hidden>
           <div class="ingredient-options-heading">Your inventory options</div>
           <ul class="ingredient-options-list">
             ${inventoryOptions.map(item => {
               const optionStatus = getInventoryOptionStatus(item);
-              const quantity = item.quantity !== undefined ? `${item.quantity} ${item.unit || getDefaultUnit(item)}` : "Quantity not tracked";
+              const quantity = item.quantity !== undefined ? `${item.quantity} ${escapeHTML(item.unit || getDefaultUnit(item))}` : "Quantity not tracked";
               const reserveBadge = (item.premium && ing.preferNonPremium)
                 ? `<span class="ingredient-option-reserve" title="Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity">✦ Reserve</span>`
                 : "";
               return `
                 <li class="ingredient-option${item.premium && ing.preferNonPremium ? " ingredient-option-premium" : ""}">
-                  <span class="ingredient-option-name">${item.name}</span>
+                  <span class="ingredient-option-name">${escapeHTML(item.name)}</span>
                   <span class="ingredient-option-meta">${quantity}</span>
                   <span class="ingredient-option-status ${optionStatus.className}">${optionStatus.label}</span>
                   ${reserveBadge}
@@ -1475,7 +1368,7 @@
         <div class="ing-measure-item">
           <span class="ing-measure">${formatMeasurement(ing)}</span>
           <div class="ing-details">
-            <span class="ing-name">${ing.item}</span>
+            <span class="ing-name">${escapeHTML(ing.item)}</span>
             ${preferredSubstituteText(ing)}
           </div>
         </div>
@@ -1507,24 +1400,26 @@
     const instructionsHtml = drink.instructions.map(step => {
       return `
         <li class="instruction-step">
-          <span class="instruction-text">${step}</span>
+          <span class="instruction-text">${escapeHTML(step)}</span>
         </li>
       `;
     }).join("");
-    const toolsHtml = getDrinkTools(drink).map(tool => `<li class="drink-tool-item">${tool}</li>`).join("");
+    const toolsHtml = getDrinkTools(drink).map(tool => `<li class="drink-tool-item">${escapeHTML(tool)}</li>`).join("");
 
     modalContent.innerHTML = `
       <button class="modal-close-btn" id="modal-close-x" title="Close (Esc)" aria-label="Close recipe">✕</button>
       <div class="modal-header">
         <div class="modal-pretitle">
-          <span class="drink-category-badge badge-${categoryClass}">${drink.category}</span>
-          <span class="spec-val gold" style="font-size: 0.85rem; font-weight: 600;">Base: ${drink.baseSpirit || "Cocktail"}</span>
+          <span class="drink-category-badge badge-${categoryClass}">${escapeHTML(drink.category)}</span>
+          <span class="spec-val gold modal-base-label">Base: ${escapeHTML(drink.baseSpirit || "Cocktail")}</span>
           ${stock.canMake 
             ? `<span class="bar-stock-indicator status-ready">✓ Ready to Make with Your Bar</span>` 
-            : `<span class="bar-stock-indicator status-missing">Missing ${stock.missingCount} Ingredients</span>`}
+            : stock.untrackedItems.length
+              ? `<span class="bar-stock-indicator status-missing">${stock.missingCount ? `Missing ${stock.missingCount} · ` : ""}Check ${stock.untrackedItems.length} unlinked Ingredients</span>`
+              : `<span class="bar-stock-indicator status-missing">Missing ${stock.missingCount} Ingredients</span>`}
         </div>
-        <h2 class="modal-drink-title">${drink.name}</h2>
-        ${drink.otherNames ? `<div class="modal-drink-aliases">Also known as: ${drink.otherNames}</div>` : ""}
+        <h2 class="modal-drink-title" id="modal-drink-title">${escapeHTML(drink.name)}</h2>
+        ${drink.otherNames ? `<div class="modal-drink-aliases">Also known as: ${escapeHTML(drink.otherNames)}</div>` : ""}
         <div class="drink-actions"><button class="status-action ${status.tried ? "active" : ""}" data-status="tried">${status.tried ? "✓ Tried it" : "Mark as tried"}</button><button class="status-action ${status.constructed ? "active" : ""}" data-status="constructed">${status.constructed ? "⚗ Constructed" : "Mark as constructed"}</button></div>
       </div>
 
@@ -1536,11 +1431,11 @@
             <tbody>
               <tr>
                 <th>Glassware</th>
-                <td>${drink.glassware || "Cocktail Glass"}</td>
+                <td>${escapeHTML(drink.glassware || "Cocktail Glass")}</td>
               </tr>
               <tr>
                 <th>Alcohol by Volume</th>
-                <td><strong class="gold">${getAbv(drink)}</strong> · ${drink.alcoholLevel || "Standard"}</td>
+                <td><strong class="gold">${getAbv(drink)}</strong> · ${escapeHTML(drink.alcoholLevel || "Standard")}</td>
               </tr>
               <tr>
                 <th>Serving Volume</th>
@@ -1548,7 +1443,7 @@
               </tr>
               <tr>
                 <th>Taste Profile</th>
-                <td>${drink.tasteProfile || "Balanced & Refreshing"}</td>
+                <td>${escapeHTML(drink.tasteProfile || "Balanced & Refreshing")}</td>
               </tr>
               <tr>
                 <th>Difficulty Level</th>
@@ -1560,7 +1455,7 @@
               </tr>
               <tr>
                 <th>Category</th>
-                <td>${drink.category}</td>
+                <td>${escapeHTML(drink.category)}</td>
               </tr>
             </tbody>
           </table>
@@ -1603,7 +1498,7 @@
             <div class="pro-tip-icon">💡</div>
             <div>
               <div class="pro-tip-title">Speakeasy Pro-Tip & Bar Secret</div>
-              <div class="pro-tip-content">${drink.proTip}</div>
+              <div class="pro-tip-content">${escapeHTML(drink.proTip)}</div>
             </div>
           </div>
         ` : ""}
@@ -1641,25 +1536,23 @@
     const closeBtn = document.getElementById("modal-close-x");
     if (closeBtn) closeBtn.addEventListener("click", closeDrinkModal);
 
-    modalBackdrop.classList.add("open");
-    document.body.style.overflow = "hidden";
+    showModal(modalBackdrop, "#modal-close-x");
   }
 
   function closeDrinkModal() {
     const modalBackdrop = document.getElementById("drink-modal-backdrop");
-    if (modalBackdrop) modalBackdrop.classList.remove("open");
-    document.body.style.overflow = "";
+    hideModal(modalBackdrop);
   }
 
   // ==================== ADD CUSTOM RECIPE ====================
   function openAddRecipeModal() {
     const modal = document.getElementById("add-recipe-modal-backdrop");
-    if (modal) modal.classList.add("open");
+    showModal(modal, "#form-drink-name");
   }
 
   function closeAddRecipeModal() {
     const modal = document.getElementById("add-recipe-modal-backdrop");
-    if (modal) modal.classList.remove("open");
+    hideModal(modal);
   }
 
   function handleSaveCustomRecipe(e) {
@@ -1974,6 +1867,8 @@
 
     const btnCloseAddRecipe = document.getElementById("btn-close-add-recipe");
     if (btnCloseAddRecipe) btnCloseAddRecipe.addEventListener("click", closeAddRecipeModal);
+    const btnCancelAddRecipe = document.getElementById("btn-cancel-add-recipe");
+    if (btnCancelAddRecipe) btnCancelAddRecipe.addEventListener("click", closeAddRecipeModal);
 
     const addRecipeBackdrop = document.getElementById("add-recipe-modal-backdrop");
     if (addRecipeBackdrop) {
@@ -2015,6 +1910,8 @@
 
     const btnCloseAdminItem = document.getElementById("btn-close-admin-item");
     if (btnCloseAdminItem) btnCloseAdminItem.addEventListener("click", closeAdminItemModal);
+    const btnCancelAdminItem = document.getElementById("btn-cancel-admin-item");
+    if (btnCancelAdminItem) btnCancelAdminItem.addEventListener("click", closeAdminItemModal);
 
     const formAdminItem = document.getElementById("form-admin-item");
     if (formAdminItem) formAdminItem.addEventListener("submit", handleSaveAdminItem);
@@ -2045,6 +1942,8 @@
         closeDrinkModal();
         closeAddRecipeModal();
         closeAdminItemModal();
+      } else if (e.key === "Tab") {
+        keepFocusInOpenModal(e);
       }
     });
   }

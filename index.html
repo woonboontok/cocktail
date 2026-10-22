@@ -131,6 +131,7 @@
               <button class="pill-btn" data-val="2">★★☆☆☆ Easy (Standard Shake/Stir)</button>
               <button class="pill-btn" data-val="3">★★★☆☆ Moderate (Layering/Infusions)</button>
               <button class="pill-btn" data-val="4">★★★★☆ Advanced (Tiki / Multi-step)</button>
+              <button class="pill-btn" data-val="5">★★★★★ Master</button>
             </div>
           </div>
 
@@ -263,17 +264,17 @@
 
   <!-- ==================== DRINK DETAIL MODAL ==================== -->
   <div class="modal-backdrop" id="drink-modal-backdrop">
-    <div class="modal-dialog" id="drink-modal-content">
+    <div class="modal-dialog" id="drink-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-drink-title">
       <!-- Populated dynamically by openDrinkModal() in app.js -->
     </div>
   </div>
 
   <!-- ==================== ADD RECIPE / EXPERIMENT MODAL ==================== -->
   <div class="modal-backdrop" id="add-recipe-modal-backdrop">
-    <div class="modal-dialog modal-dialog-lg">
+    <div class="modal-dialog modal-dialog-lg" role="dialog" aria-modal="true" aria-labelledby="add-recipe-title">
       <div class="modal-header">
         <button class="modal-close-btn" id="btn-close-add-recipe" title="Close">✕</button>
-        <h2 class="modal-drink-title">🧪 Log a Drink Experiment</h2>
+        <h2 class="modal-drink-title" id="add-recipe-title">🧪 Log a Drink Experiment</h2>
         <div class="modal-drink-aliases">Document your personal cocktail, mocktail, or shot inventions</div>
       </div>
       <form id="form-add-recipe" class="modal-form-content">
@@ -353,7 +354,7 @@
 
   <!-- ==================== ADD / EDIT INVENTORY ITEM MODAL ==================== -->
   <div class="modal-backdrop" id="admin-item-modal-backdrop">
-    <div class="modal-dialog modal-dialog-md">
+    <div class="modal-dialog modal-dialog-md" role="dialog" aria-modal="true" aria-labelledby="admin-item-modal-title">
       <div class="modal-header">
         <button class="modal-close-btn" id="btn-close-admin-item" title="Close">✕</button>
         <h2 class="modal-drink-title" id="admin-item-modal-title">Add Inventory Item</h2>
@@ -439,6 +440,10 @@
 
   <!-- App Scripts -->
   <script src="js/data.js"></script>
+  <script src="js/inventory-store.js"></script>
+  <script src="js/ui-utils.js"></script>
+  <script src="js/recipe-utils.js"></script>
+  <script src="js/modal.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
