@@ -1377,7 +1377,7 @@
 
   // ==================== DRINK DETAIL MODAL ====================
   function getDrinkTools(drink) {
-    if (Array.isArray(drink.tools) && drink.tools.length) return drink.tools;
+    if (Array.isArray(drink.tools)) return drink.tools;
 
     const method = (drink.instructions || []).join(" ").toLowerCase();
     const ingredients = (drink.ingredients || [])
@@ -1402,7 +1402,6 @@
     const crushedIceServe = /crushed|swizzle|tiki|julep/.test(method + " " + glassware);
     const rocksServe = /rocks|old fashioned|snifter/.test(glassware);
     const tallServe = /highball|collins|copa|hurricane|mug|tiki/.test(glassware);
-    const servedOverIce = rocksServe || tallServe;
     const shakesWithIce = /shake|shaker/.test(method);
     const stirsWithIce = /stir|mixing glass/.test(method);
     if (crushedIceServe) {

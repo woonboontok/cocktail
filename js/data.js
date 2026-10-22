@@ -3629,8 +3629,9 @@ const DEFAULT_DRINKS = [
       "Swirl gently to marry the high-proof spirits.",
       "Optional Flaming Ritual: Use a long bar lighter to carefully warm the rim and ignite the surface vapors into a dancing blue flame.",
       "Sprinkle a pinch of ground cinnamon high above the flame to create crackling golden sparks (fireworks effect).",
-      "Extinguish the flame immediately by covering with a coaster or shaker tin before drinking with a fireproof straw, or chill over a large ice cube for a frosty knockout cocktail."
+      "Extinguish the flame immediately by covering with a coaster or shaker tin. Let the warmed snifter settle, then sip carefully with a fireproof straw."
     ],
+    tools: ["Jigger or measuring cup", "Brandy snifter", "Long bar lighter", "Coaster or shaker tin", "Fireproof straw", "Peeler or channel knife"],
     tags: ["tonight-not-going-home", "jin-ye-bu-hui-jia", "flaming", "chinese-bar", "potent", "in-stock"]
   },
   {
