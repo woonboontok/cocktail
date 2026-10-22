@@ -1400,14 +1400,18 @@
 
     if (/highball|collins|copa|hurricane|mug|tiki/.test(glassware)) tools.push("Straight or bent 304 stainless steel straw");
     const crushedIceServe = /crushed|swizzle|tiki|julep/.test(method + " " + glassware);
-    const servedOverIce = /rocks|old fashioned|snifter|highball|collins|copa|hurricane|mug|tiki/.test(glassware);
+    const rocksServe = /rocks|old fashioned|snifter/.test(glassware);
+    const tallServe = /highball|collins|copa|hurricane|mug|tiki/.test(glassware);
+    const servedOverIce = rocksServe || tallServe;
     const chillsWithIce = /shake|shaker|stir|mixing glass/.test(method);
     if (crushedIceServe) {
-      tools.push("Crushed ice");
-    } else if (servedOverIce) {
-      tools.push("Ice for serving: 1-inch or 3.3 cm cubes; for a slow-melting large serve, a 5 cm cube, 4.26 cm clear cube, or 4.93 cm clear sphere");
+      tools.push("Serving ice: crushed ice");
+    } else if (rocksServe) {
+      tools.push("Serving ice: 5 cm cube, 4.26 cm clear cube, or 4.93 cm clear sphere");
+    } else if (tallServe) {
+      tools.push("Serving ice: 1-inch or 3.3 cm cubes");
     }
-    if (chillsWithIce && !crushedIceServe) tools.push("1-inch or 3.3 cm cubes for shaking or stirring");
+    if (chillsWithIce) tools.push("Shaker / mixing ice: 1-inch or 3.3 cm cubes");
     return [...new Set(tools)];
   }
 
