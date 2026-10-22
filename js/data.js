@@ -14,12 +14,13 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "15 October 2026";
-const INVENTORY_SYNC_VERSION = "20261015_1";
+const INVENTORY_LAST_UPDATED = "22 October 2026";
+const INVENTORY_SYNC_VERSION = "20261022_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
+  "gio-prosecco": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Out of stock. Restock Gio Prosecco Spumante Extra Dry, or use in-stock Zonin Prosecco Brut / Bottega Spumante Venezia." },
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
   "agave-syrup": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true },
   "granulated-sugar": { inStock: true, quantity: 1, unit: "bag" },
@@ -359,7 +360,7 @@ const DEFAULT_INVENTORY = [
   { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Iconic triple-distilled blended Irish whiskey. Smooth, approachable, and endlessly versatile — classic for Irish Coffee, Cameron's Kick, and Green Tea Shot." },
   { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, premium: true, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
-  { id: "choya-rokkonshojo-sake", name: "Choya Rokkonshojo Junmai Ginjo Sake 720ml (15% ABV)", category: "spirits", subCategory: "Sake › Junmai Ginjo", spiritFamily: "Sake", spiritStyle: "Junmai Ginjo", inStock: true, quantity: 1, unit: "bottle", abv: 15, notes: "Premium Japanese Junmai Ginjo sake from Choya. Fragrant, delicate floral and fruity aroma with a smooth, refreshing, and clean finish." },
+  { id: "choya-rokkonshojo-sake", name: "Choya Rokkonshojo Junmai Ginjo Sake 720ml (15% ABV)", category: "spirits", subCategory: "Sake › Junmai Ginjo", spiritFamily: "Sake", spiritStyle: "Junmai Ginjo", inStock: true, quantity: 1, unit: "bottle", abv: 15, premium: true, notes: "Premium Japanese Junmai Ginjo sake from Choya. Fragrant, delicate floral and fruity aroma with a smooth, refreshing, and clean finish." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
   { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
@@ -406,8 +407,8 @@ const DEFAULT_INVENTORY = [
   { id: "amaro-averna", name: "Averna Amaro Siciliano", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 29, refrigerate: true, notes: "Bittersweet Sicilian amaro with orange peel, herbs, and pomegranate. Smooth and versatile digestif." },
   { id: "amaro-montenegro", name: "Amaro Montenegro", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 23, refrigerate: true, notes: "Elegant Bologna amaro with 40 botanicals. Balanced, floral, and approachable digestif." },
 
-  // --- SPARKLING WINE (User In Stock) ---
-  { id: "gio-prosecco", name: "Gio Prosecco Spumante Extra Dry", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11.5, refrigerate: true, notes: "Crisp Italian Prosecco with fine bubbles for Aperol Spritz, French 75, Bellini, and Mimosa." },
+  // --- SPARKLING WINE (User In Stock & Shopping List) ---
+  { id: "gio-prosecco", name: "Gio Prosecco Spumante Extra Dry", category: "sparkling", subCategory: "Sparkling Wine", inStock: false, abv: 11.5, refrigerate: true, notes: "Out of stock. Crisp Italian Prosecco with fine bubbles for Aperol Spritz, French 75, Bellini, and Mimosa." },
   { id: "bottega-spumante-venezia", name: "Bottega Spumante Venezia", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, refrigerate: true, notes: "Elegant, smooth Italian sparkling blend of Glera & Chardonnay; crisp notes of apple, peach, and almond—ideal premium base for an Aperol Spritz or Mimosa." },
   { id: "zonin-prosecco-brut", name: "Zonin Prosecco Brut", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, refrigerate: true, notes: "Crisp, dry authentic Italian Prosecco DOC with lively bubbles and bright notes of green apple and citrus—the ultimate classic base for any Spritz, Bellini, or Mimosa." },
 
@@ -3920,7 +3921,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Mount Gay Barbados Rum Black Barrel", substitute: "Bacardi Carta Blanca Superior White Rum", inventoryId: "mount-gay-black-barrel", ingredientGroup: "air-mail-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime juice", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Honey Syrup (3:1)", substitute: "Premium Simple Syrup", inventoryId: "honey-syrup" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Zonin Prosecco Brut or dry sparkling wine", inventoryId: "gio-prosecco" }
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Zonin Prosecco Brut or dry sparkling wine", inventoryId: "zonin-prosecco-brut", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Chill a champagne flute or coupe glass.",
@@ -4693,5 +4694,5 @@ const DEFAULT_DRINKS = [
 ];
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { INVENTORY_CATEGORIES, DEFAULT_INVENTORY, DEFAULT_DRINKS, INGREDIENT_GROUPS };
+  module.exports = { INVENTORY_CATEGORIES, INVENTORY_LAST_UPDATED, INVENTORY_SYNC_VERSION, INVENTORY_UPDATE_OVERRIDES, DEFAULT_INVENTORY, DEFAULT_DRINKS, INGREDIENT_GROUPS };
 }

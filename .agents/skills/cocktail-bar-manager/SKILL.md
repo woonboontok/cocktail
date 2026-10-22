@@ -22,10 +22,10 @@ This skill guides AI coding assistants through managing the inventory and recipe
 | [`js/app.js`](../../js/app.js) | State machine, stock resolution, rendering engine | Caches core DOM nodes on `init()`, modular helpers hoisted to file scope |
 
 ### Core Data Contracts (`js/data.js`)
-- `INVENTORY_LAST_UPDATED`: Current date string (e.g. `"15 October 2026"`).
-- `INVENTORY_SYNC_VERSION`: Increment this on every inventory update (e.g. `"20261015_1"`).
+- `INVENTORY_LAST_UPDATED`: Current date string (e.g. `"22 October 2026"`).
+- `INVENTORY_SYNC_VERSION`: Increment this on every inventory update (e.g. `"20261022_1"`).
 - `INVENTORY_UPDATE_OVERRIDES`: Live stock flags, quantities, units, and notes mapped by item `id`.
-- `INGREDIENT_GROUPS`: Multi-spirit groupings (e.g., `"sake"`, `"tequila"`, `"gin"`, `"amaro"`).
+- `INGREDIENT_GROUPS`: Multi-spirit groupings (e.g., `"sake"`, `"tequila"`, `"gin"`, `"amaro"`, `"prosecco"`).
 - `DEFAULT_INVENTORY`: Array of full bottle and ingredient definitions.
 - `DEFAULT_DRINKS`: Array of cocktail/mocktail/shot recipes.
 
@@ -37,7 +37,7 @@ When a user mentions receiving, purchasing, or running out of bottles:
 
 1. **Locate or Add the Inventory Item**:
    - Check if an entry already exists in `DEFAULT_INVENTORY`.
-   - If present, set `inStock: true`, `incoming: false`, and verify `abv`, `unit`, and bottle size.
+   - If present, set `inStock: true` or `inStock: false` (with `quantity: 0` if depleted), and verify `abv`, `unit`, and bottle size.
    - If new, create an entry with a slugified `id`, descriptive `name`, appropriate `category`, `subCategory`, `abv`, and tasting notes.
 
 2. **Update Overrides & Versioning**:
@@ -48,22 +48,42 @@ When a user mentions receiving, purchasing, or running out of bottles:
    - Bump `INVENTORY_SYNC_VERSION` and update `INVENTORY_LAST_UPDATED`.
 
 3. **Check Ingredient Groups & Reserve Classification**:
-   - If the item belongs to an existing spirit family (e.g. sake, tequila, gin, amaro, whiskey), ensure its `id` is listed under the matching `INGREDIENT_GROUPS` entry.
-   - **Reserve Tag (`premium: true`)**: If the bottle is top-shelf, aged, rare, or craft (e.g., *Monkey 47*, *The Botanist*, *Código 1530 Cristalino*, *Otard XO Cognac*, *Mount Gay Black Barrel*), mark `premium: true` in `DEFAULT_INVENTORY`. This displays the `✦ Reserve` badge.
+   - If the item belongs to an existing spirit family (e.g. sake, tequila, gin, amaro, whiskey, prosecco), ensure its `id` is listed under the matching `INGREDIENT_GROUPS` entry.
+   - **Reserve Tag (`premium: true`)**: See Section 3 for strict classification rules.
    - **Refrigerate Tag (`refrigerate: true`)**: Set `refrigerate: true` for perishable items, wine bases, unfortified juice, syrups (vermouths, amari, simple/agave/honey syrups, fresh citrus), and carbonated sodas/tonics/ginger beers/beers (user rotates <6 cans/bottles into the fridge for icy temperature and peak effervescence).
 
 4. **Adjust Cocktails & Preserve Reserve Spirits**:
    - Review cocktails that use the item or previously used substitutes (e.g., Rusty Nail for Drambuie, Paper Plane for Amaro Nonino).
    - If recipes previously pointed to substitute `inventoryId`s, update them to point directly to the newly in-stock bottle.
    - **Preserving Reserve Spirits (`preferNonPremium: true`)**:
-     - When an ingredient is linked to an `ingredientGroup` containing reserve bottles (such as `gin`, `tequila`, `brandy-cognac`):
-       - If the cocktail features heavy mixers, high sugar, heavy cream, or strong juices that mask delicate spirit botanicals (e.g., Long Island Iced Tea, Singapore Sling, Alexander with cream, sugary shots), add `preferNonPremium: true` to the ingredient. The app will warn users: *“Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity.”*
-       - If the drink is spirit-forward, dry, or a showcase for the botanical/aged base (e.g., Martini, Saketini, Obituary, French 75, Old Fashioned), do NOT set `preferNonPremium: true`. Let the reserve spirit shine as the hero ingredient.
+     - Follow the strict matrix in Section 3 below.
    - If new classic/signature drinks are unlocked by the addition, add them to `DEFAULT_DRINKS` with dual volume units (`amountOz` & `amountMl`), tags (`"in-stock"`), and helpful `proTip`s.
 
 ---
 
-## 3. UI & Codebase Patterns (`js/app.js` & `css/style.css`)
+## 3. Reserve Spirit Decision Framework (`✦ Reserve` & `preferNonPremium`)
+
+### A. When to Tag an Inventory Bottle as `premium: true` (✦ Reserve)
+Mark `premium: true` on a bottle **ONLY** if it meets at least two of the following criteria:
+1. **Exceptional Craft / Foraging / Botanicals**: Artisanal distillation featuring rare or intricate botanicals (e.g., *The Botanist Islay Dry Gin* with 22 hand-foraged Islay botanicals, *Monkey 47* with 47 Black Forest botanicals).
+2. **Extended Age Statement / Top-Shelf Classification**: XO, Extra Añejo, or double-cask aged spirits (e.g., *Otard XO Gold Cognac*, *Mount Gay Black Barrel Double Cask Rum*, *Código 1530 Reposado Cristalino*).
+3. **High Replacement Cost / Sipping Profile**: Distinct sipping nuance meant to be evaluated neat or in spirit-forward builds rather than used as high-volume well spirits.
+
+#### What NOT to Tag as `premium: true`:
+- **High ABV / Overproof alone is NOT premium**: High proof or high ABV (e.g., *Goslings Black Seal 151* at 75.5% ABV, *Topanito Mezcal Artesanal* at 52% ABV, *Jack Daniel's Bonded Rye* at 50% ABV) is a **functional specification** for Tiki floats, flaming serves, or high-proof backbone—not a designation of delicate top-shelf rarity. Goslings 151 is designed specifically as a high-proof utility mixer/float for Zombies and flaming drinks; marking it reserve would discourage its core intended usage.
+- **Reliable Workhorse / Well Spirits**: Bottles intended for high-volume, everyday mixing (*Tanqueray London Dry*, *Bacardi Superior*, *Smirnoff Red*, *Jim Beam Black*, *Teremana Blanco*) should remain `premium: false`.
+
+### B. When to Set `preferNonPremium: true` in Drink Recipes
+When a drink ingredient references an `ingredientGroup` (e.g., `gin`, `tequila`, `dark-rum`, `brandy-cognac`) that contains both everyday workhorses and `premium: true` bottles:
+
+| Drink Characteristic | `preferNonPremium` Setting | Example Drinks | Rationale |
+|---|---|---|---|
+| **Heavily modified / Sugary / Creamy / High-Mixer** | **`true`** | Singapore Sling, Long Island Iced Tea, Frangelico Brandy Alexander, Alabama Slammer, Flatliner | Heavy cream, cola, 4 oz fruit juices, or Tabasco completely drown out the delicate botanicals or barrel nuances of reserve bottles. Displays advisory: *"Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity."* |
+| **Spirit-Forward / Minimal Modifier / Dry Showcase** | **`false` (leave falsy)** | Dry Martini, Saketini, Obituary, Vesper, Classic Gimlet, French 75, Classic Margarita, Paloma, Old Fashioned | The base spirit is the deliberate star of the glass. Reserve spirits elevate the cocktail and should be readily recommended. |
+
+---
+
+## 4. UI & Codebase Patterns (`js/app.js` & `css/style.css`)
 
 When modifying app behavior or styles, adhere to these established patterns:
 
@@ -75,7 +95,7 @@ When modifying app behavior or styles, adhere to these established patterns:
 
 ---
 
-## 4. Automated Verification & Quality Checklist
+## 5. Automated Verification & Quality Checklist
 
 Before completing any task, always execute these checks:
 
