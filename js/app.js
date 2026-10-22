@@ -1403,15 +1403,17 @@
     const rocksServe = /rocks|old fashioned|snifter/.test(glassware);
     const tallServe = /highball|collins|copa|hurricane|mug|tiki/.test(glassware);
     const servedOverIce = rocksServe || tallServe;
-    const chillsWithIce = /shake|shaker|stir|mixing glass/.test(method);
+    const shakesWithIce = /shake|shaker/.test(method);
+    const stirsWithIce = /stir|mixing glass/.test(method);
     if (crushedIceServe) {
       tools.push("Serving ice: crushed ice");
     } else if (rocksServe) {
-      tools.push("Serving ice: 5 cm cube, 4.26 cm clear cube, or 4.93 cm clear sphere");
+      tools.push("Serving ice: clear ice cube or sphere");
     } else if (tallServe) {
-      tools.push("Serving ice: 1-inch or 3.3 cm cubes");
+      tools.push("Serving ice: clear ice cubes");
     }
-    if (chillsWithIce) tools.push("Shaker / mixing ice: 1-inch or 3.3 cm cubes");
+    if (shakesWithIce) tools.push("Shaker ice: small or medium cubes");
+    else if (stirsWithIce) tools.push("Mixing ice: medium or large cubes");
     return [...new Set(tools)];
   }
 
