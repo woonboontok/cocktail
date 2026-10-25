@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "22 October 2026";
-const INVENTORY_SYNC_VERSION = "20261022_2";
+const INVENTORY_LAST_UPDATED = "25 October 2026";
+const INVENTORY_SYNC_VERSION = "20261025_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -64,7 +64,13 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "tonic-water": { inStock: true, aliasOf: "fever-tree-indian-tonic" },
   "midori": { inStock: true, quantity: 1, unit: "bottle" },
   "energy-drink": { inStock: true, quantity: 4, unit: "can" },
-  "jameson-irish-whiskey": { inStock: true, quantity: 1, unit: "bottle" },
+  "jameson-irish-whiskey": { inStock: true, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1 bottle. Incoming spare: Jameson Irish Whiskey 700ml." },
+  "disaronno-amaretto": { inStock: true, incoming: true, quantity: 1, unit: "bottle", abv: 28, notes: "In stock: 1 bottle. Incoming spare: Disaronno Originale Amaretto 700ml." },
+  "grand-marnier": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Existing 350ml bottle in stock." },
+  "grand-marnier-700ml": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Received spare Grand Marnier 700ml bottle." },
+  "myers-dark-rum": { inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 40, notes: "2 bottles in stock, including received spare: Myers's Original Dark Rum 750ml." },
+  "worcestershire-sauce": { inStock: false, incoming: true, quantity: 1, unit: "bottle", notes: "Incoming: Lea & Perrins Worcestershire Sauce 150ml." },
+  "jack-daniels-black-label": { inStock: true, incoming: false, quantity: 1.5, unit: "bottle", abv: 40, notes: "One 700ml bottle in stock plus one existing bottle about half full (1.5 bottle-equivalents total)." },
   "the-botanist-gin": { inStock: true, quantity: 1, unit: "bottle" },
   "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
   "kawashima-sake": { inStock: true, quantity: 1, unit: "bottle" },
@@ -131,7 +137,7 @@ const INGREDIENT_GROUPS = {
   },
   "tonight-whiskey": {
     label: "Tonight Not Going Home Whiskey",
-    inventoryIds: ["jd-bonded-rye", "jim-beam-black", "jw-black-label"]
+    inventoryIds: ["jd-bonded-rye", "jim-beam-black", "jw-black-label", "jack-daniels-black-label"]
   },
   "french-75-spirit": {
     label: "French 75 Base Spirit",
@@ -145,6 +151,7 @@ const INGREDIENT_GROUPS = {
     label: "Old Fashioned Base Spirit",
     inventoryIds: [
       "jd-bonded-rye",
+      "jack-daniels-black-label",
       "jim-beam-black",
       "mount-gay-black-barrel",
       "myers-dark-rum",
@@ -195,7 +202,7 @@ const INGREDIENT_GROUPS = {
   },
   "triple-sec": {
     label: "Triple Sec / Orange Liqueur",
-    inventoryIds: ["cointreau", "grand-marnier", "lumina-triple-sec", "curacao-bleu"]
+    inventoryIds: ["cointreau", "grand-marnier", "grand-marnier-700ml", "lumina-triple-sec", "curacao-bleu"]
   },
   "coffee-liqueur": {
     label: "Coffee Liqueur",
@@ -341,13 +348,14 @@ const INGREDIENT_GROUPS_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).redu
 const DEFAULT_INVENTORY = [
   // --- BASE SPIRITS (User In Stock) ---
   { id: "jd-bonded-rye", name: "Jack Daniel's Bonded Rye Tennessee Whiskey", category: "spirits", subCategory: "Whiskey › Tennessee Rye", spiritFamily: "Whiskey", spiritStyle: "Tennessee Rye", inStock: true, abv: 50, notes: "Bold 100-proof rye with cracked pepper, baking spice, and oak." },
+  { id: "jack-daniels-black-label", name: "Jack Daniel's Black Label Extra Aged Tennessee Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Tennessee", spiritFamily: "Whiskey", spiritStyle: "Tennessee Whiskey", inStock: true, incoming: false, quantity: 1.5, unit: "bottle", abv: 40, notes: "One full 700ml bottle plus one existing bottle about half full (1.5 bottle-equivalents total). Classic charcoal-mellowed Tennessee whiskey with mellow oak, vanilla, and caramel notes." },
   { id: "jim-beam-black", name: "Jim Beam Black Aged Bourbon", category: "spirits", subCategory: "Whiskey › Bourbon", spiritFamily: "Whiskey", spiritStyle: "Bourbon", inStock: true, abv: 43, notes: "Extra-aged Kentucky straight bourbon. Rich caramel and vanilla." },
   { id: "jw-black-label", name: "Johnnie Walker Black Label Scotch Whisky", category: "spirits", subCategory: "Whiskey › Scotch", spiritFamily: "Whiskey", spiritStyle: "Scotch", inStock: true, abv: 40, notes: "12-year blended Scotch whisky with balanced fruit and gentle peat smoke." },
   { id: "hennessy-vsop-cognac", name: "Hennessy VSOP Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Rich VSOP cognac with orchard fruit, vanilla, and toasted oak." },
   { id: "premier-french-brandy-napoleon-special-reserve", name: "Premier French Brandy Napoléon Special Reserve", category: "spirits", subCategory: "Brandy › French Brandy", spiritFamily: "Brandy", spiritStyle: "French Brandy", inStock: true, abv: 40, notes: "Classic French brandy with warm spice, dried fruit, and vanilla." },
   { id: "otard-xo-gold-cognac", name: "Otard XO Gold Cognac", category: "spirits", subCategory: "Brandy › Cognac", spiritFamily: "Brandy", spiritStyle: "Cognac", inStock: true, abv: 40, premium: true, notes: "Luxurious XO cognac with orange peel, caramel, and oak depth." },
   { id: "bacardi-superior", name: "Bacardi Carta Blanca Superior White Rum", category: "spirits", subCategory: "Rum › White", spiritFamily: "Rum", spiritStyle: "White", inStock: true, quantity: 2, unit: "bottle", abv: 37.5, notes: "Clean, floral light rum (700ml). Essential for Mojito and Daiquiri." },
-  { id: "myers-dark-rum", name: "Myers's Original Dark Rum", category: "spirits", subCategory: "Rum › Dark Jamaican", spiritFamily: "Rum", spiritStyle: "Dark Jamaican", inStock: true, abv: 40, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices." },
+  { id: "myers-dark-rum", name: "Myers's Original Dark Rum 750ml", category: "spirits", subCategory: "Rum › Dark Jamaican", spiritFamily: "Rum", spiritStyle: "Dark Jamaican", inStock: true, quantity: 2, unit: "bottle", abv: 40, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices. 2 bottles in stock, including received spare 750ml bottle." },
   { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, premium: true, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum (75.5% ABV)", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
   { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
@@ -359,7 +367,7 @@ const DEFAULT_INVENTORY = [
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
   { id: "absolut-citron", name: "Absolut Citron Vodka 1000ml (40% ABV)", category: "spirits", subCategory: "Vodka › Flavored / Citrus", spiritFamily: "Vodka", spiritStyle: "Citrus Vodka", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Swedish winter wheat vodka infused with natural citrus flavors from lemon and lime peel, with no added sugar. The definitive spirit behind Toby Cecchini's 1988 Cosmopolitan and the classic Lemon Drop." },
-  { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Iconic triple-distilled blended Irish whiskey. Smooth, approachable, and endlessly versatile — classic for Irish Coffee, Cameron's Kick, and Green Tea Shot." },
+  { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1 bottle. Incoming spare: Jameson Irish Whiskey 700ml (40% ABV)." },
   { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, premium: true, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
   { id: "choya-rokkonshojo-sake", name: "Choya Rokkonshojo Junmai Ginjo Sake 720ml (15% ABV)", category: "spirits", subCategory: "Sake › Junmai Ginjo", spiritFamily: "Sake", spiritStyle: "Junmai Ginjo", inStock: true, quantity: 1, unit: "bottle", abv: 15, premium: true, notes: "Premium Japanese Junmai Ginjo sake from Choya. Fragrant, delicate floral and fruity aroma with a smooth, refreshing, and clean finish." },
@@ -369,11 +377,12 @@ const DEFAULT_INVENTORY = [
   { id: "cachaca", name: "Cachaça", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Brazilian fresh pressed sugarcane spirit for Caipirinha." },
 
   // --- LIQUEURS (User In Stock) ---
-  { id: "disaronno-amaretto", name: "Disaronno Originale Amaretto Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, abv: 28, notes: "Italian almond-apricot stone liqueur. Shines in Amaretto Sour and Godfather." },
+  { id: "disaronno-amaretto", name: "Disaronno Originale Amaretto Liqueur 700ml", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, incoming: true, quantity: 1, unit: "bottle", abv: 28, notes: "In stock: 1 bottle. Incoming spare: Disaronno Originale Amaretto 700ml (28% ABV)." },
   { id: "kahlua", name: "Kahlúa Coffee Liqueur", category: "liqueurs", subCategory: "Coffee", inStock: true, abv: 20, notes: "Mexican Arabica coffee and sugarcane rum liqueur for White Russian and B-52." },
   { id: "walcher-coffee", name: "Walcher Premium Coffee Liqueur", category: "liqueurs", subCategory: "Coffee", inStock: true, abv: 20, notes: "Artisanal South Tyrol organic coffee liqueur with deep espresso roast." },
   { id: "cointreau", name: "Cointreau", category: "liqueurs", subCategory: "Citrus & Orange", inStock: true, abv: 40, notes: "Premier French 40% ABV crystal triple sec. Essential for Margarita and Sidecar." },
-  { id: "grand-marnier", name: "Grand Marnier", category: "liqueurs", subCategory: "Citrus & Orange", inStock: true, abv: 40, notes: "Cognac-based bitter orange liqueur. Adds luxury to B-52 and Cadillac Margarita." },
+  { id: "grand-marnier", name: "Grand Marnier 350ml", category: "liqueurs", subCategory: "Citrus & Orange", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Existing 350ml bottle of Cognac-based bitter orange liqueur." },
+  { id: "grand-marnier-700ml", name: "Grand Marnier 700ml", category: "liqueurs", subCategory: "Citrus & Orange", inStock: true, quantity: 1, unit: "bottle", abv: 40, notes: "Received spare 700ml bottle of Cognac-based bitter orange liqueur." },
   { id: "lumina-triple-sec", name: "Lumina Triple Sec Liqueur", category: "liqueurs", subCategory: "Citrus & Orange", inStock: true, abv: 24, notes: "Sweet citrus liqueur ideal for Kamikaze and highball mixing." },
   { id: "curacao-bleu", name: "Curaçao Bleu Liqueur (élaboré en France)", category: "liqueurs", subCategory: "Citrus & Orange", inStock: true, abv: 25, notes: "Electric blue orange liqueur for Blue Lagoon and Blue Kamikaze." },
   { id: "hoffmann-peach", name: "Hoffmann Peach Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, abv: 20, notes: "Juicy ripe peach schnapps for Sex on the Beach and Woo Woo." },
@@ -465,7 +474,7 @@ const DEFAULT_INVENTORY = [
   { id: "coffee-beans", name: "Whole Roasted Coffee Beans", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "Three floated beans for Espresso Martini and coffee cocktail garnishes." },
   { id: "egg-white", name: "Egg White (Fresh or Aquafaba)", category: "fresh_garnishes", subCategory: "Cocktail Texture", inStock: true, refrigerate: true, notes: "Creates silky texture and dense meringue foam on Sours." },
   { id: "tabasco-sauce", name: "Tabasco Hot Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: true, notes: "Piquant heat for Bloody Mary, Virgin Mary, and Flatliner." },
-  { id: "worcestershire-sauce", name: "Worcestershire Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: false, notes: "Savory umami for Bloody Mary and Virgin Mary." },
+  { id: "worcestershire-sauce", name: "Lea & Perrins Worcestershire Sauce 150ml", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: false, incoming: true, quantity: 1, unit: "bottle", notes: "Incoming Lea & Perrins Worcestershire Sauce, 150ml. Savory umami for Bloody Mary and Virgin Mary." },
   { id: "coarse-salt", name: "Coarse Kosher Salt", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "For glass rims on Margarita, Paloma, and Salty Dog." },
   { id: "ice", name: "Ice Cubes (and crushed ice as needed)", category: "fresh_garnishes", subCategory: "Bar Essentials", inStock: true, refrigerate: true, notes: "Available ice cubes for chilling and dilution; crush as needed for tiki and julep-style drinks." }
 ];
