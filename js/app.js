@@ -1279,8 +1279,15 @@
     const drinkName = String(drink.name || "").toLowerCase();
     const tools = ["Jigger or measuring cup"];
 
-    if (/shake|shaker/.test(method)) tools.push("Cocktail shaker");
-    if (/stir|mixing glass/.test(method)) tools.push("Mixing glass and bar spoon");
+    const isLayeredShot = drink.category === "Shot" && Array.isArray(drink.tags) && drink.tags.includes("layered");
+    if (isLayeredShot || /bar spoon|back of (a )?spoon|spoon back|over a spoon/.test(method)) tools.push("Bar spoon");
+    const activelyShakes = /\b(?:dry |wet |flash )?(?:shake|shakes|shaken|shaking)\b/.test(method) && !/\bshake\s+\d+\s+dashes\b/.test(method);
+    const mixesInShaker = /\b(?:add|pour|combine|place|put|muddle)\b.{0,100}\b(?:into|in|to)\s+(?:a\s+)?(?:cocktail\s+)?shaker\b|\bshaker\s+(?:filled|with)\s+ice\b/.test(method);
+    const usesCocktailShaker = activelyShakes || mixesInShaker;
+    if (usesCocktailShaker) tools.push("Cocktail shaker");
+    if (/\bwhip\b/.test(method) && /\b(?:shaker or bowl|bowl or shaker)\b/.test(method)) tools.push("Small shaker or mixing bowl");
+    if (/\bmixing glass\b/.test(method)) tools.push("Mixing glass");
+    if (/\bstir(?:s|red|ring)?\b/.test(method)) tools.push("Bar spoon");
     if (/strain/.test(method)) tools.push("Hawthorne strainer" + (/fine strain/.test(method) ? " and fine-mesh strainer" : ""));
     if (/muddle/.test(method)) tools.push("Muddler");
     if (/blend|blender/.test(method)) tools.push("Blender");
@@ -1294,8 +1301,8 @@
     const crushedIceServe = /crushed|swizzle|tiki|julep/.test(method + " " + glassware);
     const rocksServe = /rocks|old fashioned|snifter/.test(glassware);
     const tallServe = /highball|collins|copa|hurricane|mug|tiki/.test(glassware);
-    const shakesWithIce = /shake|shaker/.test(method);
-    const stirsWithIce = /stir|mixing glass/.test(method);
+    const shakesWithIce = usesCocktailShaker && /\bice\b/.test(method);
+    const stirsWithIce = /\bmixing glass\b/.test(method) && /\bice\b/.test(method);
     if (crushedIceServe) {
       tools.push("Serving ice: crushed ice");
     } else if (rocksServe) {

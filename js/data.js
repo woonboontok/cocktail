@@ -2266,7 +2266,7 @@ const DEFAULT_DRINKS = [
   // =========================================================================
   {
     id: "b-52",
-    name: "B-52 Layered Shot",
+    name: "B-52 Shot",
     otherNames: "The Stratosphere Shot",
     category: "Shot",
     baseSpirit: "Liqueur/Wine",
