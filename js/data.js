@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "4 November 2026";
-const INVENTORY_SYNC_VERSION = "20261104_1";
+const INVENTORY_LAST_UPDATED = "5 November 2026";
+const INVENTORY_SYNC_VERSION = "20261105_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -77,6 +77,10 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
   "kawashima-sake": { inStock: true, quantity: 1, unit: "bottle" },
   "choya-rokkonshojo-sake": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, notes: "Choya Rokkonshojo Junmai Ginjo Sake, 15% ABV, 720ml. In stock." },
+  "soju": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, notes: "Soju (Korean spirit), ~25% ABV, 360ml. In stock." },
+  "yakult": { inStock: false, incoming: true, quantity: 0, unit: "bottle", notes: "Yakult probiotic fermented milk drink. Easily sourced — incoming." },
+  "baijiu": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Baijiu (Chinese spirit). To be sourced." },
+  "beer-lager": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Asian Pale Lager / Beer (e.g. Tiger, Cass, Asahi, Tsingtao). To be sourced." },
   "drambuie": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Drambuie Honeyed Scotch Liqueur, 40% ABV, 700ml. In stock." },
   "amaro-nonino": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 35, notes: "Amaro Nonino Herbal Infusion (Quintessentia), 35% ABV, 700ml. In stock." },
   "chang-lime-soda": { inStock: true, quantity: 2, unit: "bottle" },
@@ -329,7 +333,10 @@ const INGREDIENT_GROUPS = {
   "simple-syrup": { label: "Simple Syrup", inventoryIds: ["simple-syrup"] },
   "demerara-syrup": { label: "Demerara Syrup", inventoryIds: ["demerara-syrup"] },
   "sake": { label: "Sake", inventoryIds: ["kawashima-sake", "choya-rokkonshojo-sake"] },
-  "lime-soda": { label: "Lime Soda", inventoryIds: ["chang-lime-soda"] }
+  "lime-soda": { label: "Lime Soda", inventoryIds: ["chang-lime-soda"] },
+  "soju": { label: "Soju", inventoryIds: ["soju"] },
+  "baijiu": { label: "Baijiu", inventoryIds: ["baijiu"] },
+  "beer": { label: "Beer / Lager", inventoryIds: ["beer-lager"] }
 };
 
 const INGREDIENT_GROUP_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
@@ -373,6 +380,8 @@ const DEFAULT_INVENTORY = [
   { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, premium: true, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
   { id: "choya-rokkonshojo-sake", name: "Choya Rokkonshojo Junmai Ginjo Sake 720ml (15% ABV)", category: "spirits", subCategory: "Sake › Junmai Ginjo", spiritFamily: "Sake", spiritStyle: "Junmai Ginjo", inStock: true, quantity: 1, unit: "bottle", abv: 15, premium: true, notes: "Premium Japanese Junmai Ginjo sake from Choya. Fragrant, delicate floral and fruity aroma with a smooth, refreshing, and clean finish." },
+  { id: "soju", name: "Soju (Korean Spirit)", category: "spirits", subCategory: "Soju", spiritFamily: "Soju", spiritStyle: "Korean Clear Spirit", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, refrigerate: false, notes: "Korean distilled spirit made from grain (rice, wheat, or barley). Neutral, slightly sweet, and ultra-smooth at ~25% ABV. The world's best-selling spirit by volume. Essential for Somaek and soju cocktails." },
+  { id: "baijiu", name: "Baijiu (Chinese Grain Spirit)", category: "spirits", subCategory: "Baijiu", spiritFamily: "Baijiu", spiritStyle: "Chinese Clear Spirit", inStock: false, incoming: false, quantity: 0, unit: "bottle", abv: 50, notes: "Traditional Chinese distilled grain liquor. High-proof (40–60%+ ABV), complex earthy-floral character. The world's most consumed spirit. To be sourced." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
   { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
@@ -462,6 +471,8 @@ const DEFAULT_INVENTORY = [
   { id: "coconut-water", name: "Pure Coconut Water", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Hydrating tropical water for Coconut Lime Mocktail." },
   { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
   { id: "whipped-cream", name: "Whipped Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Fluffy crown for the Blowjob shot and dessert-style drinks." },
+  { id: "yakult", name: "Yakult Probiotic Fermented Drink", category: "mixers_sodas", subCategory: "Dairy & Fermented", inStock: false, incoming: true, refrigerate: true, notes: "Cultured probiotic fermented milk drink. Popular mixer across East Asia (Korea, Japan, Singapore, Taiwan) for Yakult Soju and probiotic mocktails." },
+  { id: "beer-lager", name: "Asian Pale Lager / Beer", category: "mixers_sodas", subCategory: "Beer & Cider", inStock: false, incoming: false, refrigerate: true, notes: "Crisp Asian pale lager (e.g. Tiger, Cass, Asahi Super Dry, Tsingtao). Essential for Korean Somaek and Japanese Sake Bomb." },
 
   // --- FRESH PRODUCE & GARNISHES (User In Stock & Shopping List) ---
   { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, refrigerate: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
@@ -5012,6 +5023,200 @@ const DEFAULT_DRINKS = [
       "Garnish with a lime wheel on the rim."
     ],
     tags: ["midori", "prosecco", "spritz", "melon", "japanese", "korean", "light", "bubbly", "aperitivo", "in-stock"]
+  },
+  {
+    id: "peach-soju",
+    name: "Peach Soju Highball",
+    otherNames: "Korean Peach Soju; 복숭아 소주",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Highball",
+    alcoholLevel: "Low-Medium (~11% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Luscious Ripe Peach, Smooth Clean Soju, Crisp Citrus & Sparkling Fizz",
+    difficulty: 1,
+    popularity: 9.3,
+    proTip: "Flavored fruit soju exploded across South Korea with brands like Chum Churum Soonhari and Jinro Chamisul Peach. Crafting your own fresh highball with real Soju and Hoffmann Peach Liqueur yields a far cleaner, more natural stone-fruit flavor than commercial artificial versions. Topped with chilled Chang Soda Water and fresh lemon juice, this is delightfully refreshing and sessionable.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Soju (Korean Spirit)", substitute: "Absolut Vodka Original Blue", inventoryId: "soju", ingredientGroup: "soju" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Hoffmann Peach Liqueur", substitute: "Peach schnapps", inventoryId: "hoffmann-peach", ingredientGroup: "peach-liqueur" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "2.5 oz", amountMl: "75 ml", item: "Chang Soda Water", substitute: "Any chilled soda water", inventoryId: "chang-soda-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon Wheel", substitute: "Mint sprig", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Fill a tall highball glass with fresh ice cubes.",
+      "Pour in Soju, Hoffmann Peach Liqueur, and freshly squeezed lemon juice.",
+      "Top with chilled Chang Soda Water.",
+      "Stir gently once or twice from the bottom up to marry the flavours without losing fizz.",
+      "Garnish with a fresh lemon wheel on the rim."
+    ],
+    tags: ["soju", "peach", "korean", "highball", "fruity", "refreshing", "in-stock"]
+  },
+  {
+    id: "soju-tonic",
+    name: "Soju Tonic",
+    otherNames: "Korean Sojutonic; 소주토닉",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Highball / Rocks",
+    alcoholLevel: "Low-Medium (~10% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Clean Botanical Quinine, Crisp Citrus, Gentle Sweet Grain & Effervescent",
+    difficulty: 1,
+    popularity: 9.4,
+    proTip: "Korea's beloved answer to the Gin & Tonic and Japanese Highball. Known as 'Sojutonic' across Seoul izakayas and pochas, the ritual combines Soju with premium tonic water and an abundance of fresh lemon or lime slices. The mild grain sweetness of Soju softens the quinine snap of Fever-Tree tonic, creating a remarkably crisp, food-friendly thirst quencher that pairs extraordinarily well with Korean BBQ and spicy dishes.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Soju (Korean Spirit)", substitute: "Absolut Vodka Original Blue", inventoryId: "soju", ingredientGroup: "soju" },
+      { amountOz: "3.5 oz", amountMl: "105 ml", item: "Fever-Tree Premium Indian Tonic Water", substitute: "Any chilled tonic water", inventoryId: "fever-tree-indian-tonic", ingredientGroup: "tonic-water" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon Wheels", substitute: "Fresh lime wheels", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Fill a highball glass to the brim with fresh ice cubes.",
+      "Pour in Soju and freshly squeezed lemon juice.",
+      "Slowly top with chilled Fever-Tree Indian Tonic Water down the side of the glass.",
+      "Stir gently once with a bar spoon to combine.",
+      "Tuck 2 thin lemon wheels down the inside of the glass and serve immediately."
+    ],
+    tags: ["soju", "tonic-water", "korean", "highball", "citrus", "clean", "refreshing", "in-stock"]
+  },
+  {
+    id: "yakult-soju",
+    name: "Yogurt Soju (Yakult Soju)",
+    otherNames: "Korean Pocha Yakult Cocktail; 요구르트 소주",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Highball / Tumbler",
+    alcoholLevel: "Low (~7% ABV)",
+    alcoholScore: 1,
+    tasteProfile: "Creamy Probiotic Citrus, Sweet & Tart, Ultra-Smooth & Fizzy",
+    difficulty: 1,
+    popularity: 9.6,
+    proTip: "The undisputed cult favourite of Korean pocha (tent bars) and Asian karaoke lounges worldwide! The sweet-tart, creamy flavor of Yakult completely smooths away any alcohol burn from the Soju, while lemon-lime soda provides refreshing effervescence. Traditionally prepared in a 1:1:1 ratio (equal parts Soju, Yakult, and Chilsung Cider / Lemon-Lime Soda). For hot summer nights, blend with ice for a frozen Yakult Soju slushie!",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Soju (Korean Spirit)", substitute: "Absolut Vodka Original Blue (use 1.5 oz)", inventoryId: "soju", ingredientGroup: "soju" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Yakult Probiotic Fermented Drink", substitute: "Sweetened kefir or probiotic yogurt drink", inventoryId: "yakult" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Lemon-Lime Soda (or Chang Lime Soda)", substitute: "Chang Soda Water + 0.25 oz simple syrup", inventoryId: "lemon-lime-soda" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon Wheel", substitute: "Fresh mint sprig", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Fill a highball glass or tumbler with ice cubes.",
+      "Pour in Soju and chilled Yakult.",
+      "Top with chilled lemon-lime soda.",
+      "Stir gently to integrate the creamy probiotic layer with the citrus fizz.",
+      "Garnish with a fresh lemon wheel on the rim."
+    ],
+    tags: ["soju", "yakult", "korean", "pocha", "sweet", "creamy", "refreshing", "low-abv"]
+  },
+  {
+    id: "yakult-fizz",
+    name: "Yakult Lemon Fizz",
+    otherNames: "Taiwanese / Singaporean Yakult Soda Mocktail; 养乐多气泡饮",
+    category: "Mocktail",
+    baseSpirit: "Non-Alcoholic",
+    glassware: "Highball / Tumbler",
+    alcoholLevel: "Zero Proof (0.0% ABV)",
+    alcoholScore: 1,
+    tasteProfile: "Creamy Sweet-Tart Yogurt, Zesty Citrus, Effervescent Fizz & Cooling Mint",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "A staple across night markets, bubble tea shops, and cafes from Taipei and Hong Kong to Singapore. The pairing of creamy, tangy Yakult with sparkling soda water and fresh lemon juice creates a crisp, effervescent probiotic cooler that is completely irresistible in tropical heat. Serve ice-cold with fresh mint.",
+    ingredients: [
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Yakult Probiotic Fermented Drink", substitute: "Any cultured probiotic drink", inventoryId: "yakult" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Chang Soda Water", substitute: "Any chilled sparkling water", inventoryId: "chang-soda-water" },
+      { amountOz: "3 leaves", amountMl: "3 leaves", item: "Fresh Spearmint", substitute: null, inventoryId: "fresh-mint" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Slice & Fresh Mint Sprig", substitute: null, inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Lightly clap 3 fresh mint leaves to express their aroma and drop into a tall highball glass filled with ice.",
+      "Pour in Yakult and fresh lemon juice.",
+      "Top with chilled Chang Soda Water.",
+      "Stir gently once to lift the creamy probiotic swirls through the sparkling bubbles.",
+      "Garnish with a fresh lemon wheel and a vibrant mint sprig."
+    ],
+    tags: ["yakult", "mocktail", "non-alcoholic", "singapore", "taiwan", "refreshing", "citrus", "fizzy"]
+  },
+  {
+    id: "somaek",
+    name: "Somaek (소맥)",
+    otherNames: "Korean Soju & Beer; Soju Bomb",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Beer Glass / Pint",
+    alcoholLevel: "Low-Medium (~8% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Crisp Malt Lager, Clean Silky Grain, Frothy Cascade & Refreshing Snap",
+    difficulty: 1,
+    popularity: 9.7,
+    proTip: "Somaek (a portmanteau of Soju + Maekju, the Korean word for beer) is the ultimate Korean drinking ritual. The classic golden ratio is '3 parts Soju to 7 parts crisp Asian Pale Lager'. The party trick: after pouring Soju into the beer, strike the bottom of the glass firmly with a spoon or insert a metal chopstick and tap it — this instantly triggers acoustic cavitation, producing a cascading vortex of micro-foam throughout the entire glass!",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Soju (Korean Spirit)", substitute: "Kawashima Junmai Sake", inventoryId: "soju", ingredientGroup: "soju" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Asian Pale Lager / Beer", substitute: "Tiger, Cass, Asahi, or Tsingtao beer", inventoryId: "beer-lager", ingredientGroup: "beer" }
+    ],
+    instructions: [
+      "Fill a chilled beer glass or pint with 4 oz of cold Asian Pale Lager.",
+      "Pour 1.5 oz of Soju directly into the beer.",
+      "Insert a metal spoon or chopsticks and strike the base of the glass to release a sudden rush of frothy micro-bubbles.",
+      "Drink immediately in one or two hearty gulps while foaming!"
+    ],
+    tags: ["soju", "beer", "korean", "ritual", "somaek", "party", "bomb"]
+  },
+  {
+    id: "sake-bomb",
+    name: "Sake Bomb",
+    otherNames: "Japanese Beer Bomb Shot; 酒ボム",
+    category: "Shot",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Shot Glass & Pint Glass",
+    alcoholLevel: "Low-Medium (~8% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Warm Earthy Rice Umami, Crisp Bitter Lager & Effervescent Foam",
+    difficulty: 1,
+    popularity: 9.6,
+    proTip: "An iconic Japanese-American izakaya ritual! A shot glass of sake is balanced across two parallel chopsticks resting on top of a pint glass of beer. The drinkers chant 'Ichi... Ni... San... SAKE BOMB!' and pound the table with both fists until the vibration drops the sake into the beer, erupting in a fountain of foam. Choya Ginjo Sake or Kawashima Junmai both provide lovely rice umami against cold lager.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Kawashima Sake", substitute: "Choya Rokkonshojo Junmai Ginjo Sake", inventoryId: "kawashima-sake", ingredientGroup: "sake" },
+      { amountOz: "6 oz", amountMl: "180 ml", item: "Asian Pale Lager / Beer", substitute: "Asahi Super Dry, Sapporo, or Tiger Beer", inventoryId: "beer-lager", ingredientGroup: "beer" }
+    ],
+    instructions: [
+      "Fill a pint glass halfway with cold lager beer.",
+      "Place two wooden or metal chopsticks parallel across the top rim of the pint glass.",
+      "Carefully balance a full shot glass of sake on top of the chopsticks.",
+      "Count 'Ichi, Ni, San... SAKE BOMB!' and slam both fists on the table to knock the shot into the beer.",
+      "Chug immediately while effervescing vigorously!"
+    ],
+    tags: ["sake", "beer", "japanese", "shot", "ritual", "party", "bomb"]
+  },
+  {
+    id: "baijiu-sour",
+    name: "Baijiu Sour",
+    otherNames: "Chinese Baijiu Citrus Sour; 白酒酸酒",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Coupe / Rocks",
+    alcoholLevel: "High (~22% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Complex Fermented Tropical Fruit, Savory Anise, Tart Lemon & Silky Egg White Foam",
+    difficulty: 2,
+    popularity: 9.1,
+    proTip: "The flagship cocktail bridging traditional Chinese baijiu culture with modern international craft bartending, championed by pioneering cocktail bars in Shanghai (Speak Low), Beijing (Jing-A), and Guangzhou (Hope & Sesame). Baijiu's intense ester-rich aromatics (pineapple, green apple, earthy grain) are brilliantly tamed by fresh lemon juice, sugar, and an egg-white foam cap. A dash of Angostura bitters grounds the exotic florals.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Baijiu (Chinese Grain Spirit)", substitute: "Topanito Mezcal Artesanal (for similarly intense savory-ester complexity)", inventoryId: "baijiu", ingredientGroup: "baijiu" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Honey Syrup (3:1)", inventoryId: "simple-syrup" },
+      { amountOz: "1", amountMl: "1", item: "Egg White (1 fresh)", substitute: "2 tbsp aquafaba", inventoryId: "egg-white" },
+      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: null, inventoryId: "angostura-bitters" }
+    ],
+    instructions: [
+      "Add Baijiu, fresh lemon juice, simple syrup, and egg white to a cocktail shaker without ice.",
+      "Dry shake vigorously for 15 seconds to create a silky, emulsified foam.",
+      "Add ice cubes and wet shake hard for 12 seconds until frosty cold.",
+      "Fine-strain into a chilled coupe glass.",
+      "Garnish by dropping 2 dashes of Angostura bitters onto the creamy white foam, dragging a cocktail pick through to create a heart pattern."
+    ],
+    tags: ["baijiu", "chinese", "sour", "egg-white", "craft", "complex", "spirit-forward"]
   }
 ];
 

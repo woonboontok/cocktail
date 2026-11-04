@@ -1300,16 +1300,17 @@
       "tonic-water",
       "fever-tree-ginger-beer",
       "bundaberg-ginger-beer",
-      "ginger-beer"
+      "ginger-beer",
+      "beer-lager"
     ]);
-    const bottledMixerGroups = new Set(["soda-water", "lime-soda", "tonic-water", "ginger-beer"]);
+    const bottledMixerGroups = new Set(["soda-water", "lime-soda", "tonic-water", "ginger-beer", "beer"]);
     const usesBottledMixer = (drink.ingredients || []).some(ing => {
       const invId = String(ing.inventoryId || "");
       const grp = String(ing.ingredientGroup || "");
       const item = String(ing.item || "").toLowerCase();
       return bottledMixerIds.has(invId) ||
         bottledMixerGroups.has(grp) ||
-        /\b(?:soda water|lime soda|tonic(?: water)?|ginger beer)\b/.test(item);
+        /\b(?:soda water|lime soda|tonic(?: water)?|ginger beer|beer|lager)\b/.test(item);
     });
     if (usesBottledMixer) tools.push("Bottle opener");
     if (/copper mug|moscow mule/.test(glassware) || /mule/.test(drinkName)) tools.push("500 ml Moscow Mule mug");
