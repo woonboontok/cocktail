@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "25 October 2026";
-const INVENTORY_SYNC_VERSION = "20261025_2";
+const INVENTORY_LAST_UPDATED = "3 November 2026";
+const INVENTORY_SYNC_VERSION = "20261103_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -23,6 +23,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "absolut-citron": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: Absolut Citron Lemon Flavored Vodka 1000ml (40% ABV). Natural lemon and lime peel infusion; iconic base for Cosmopolitan and Lemon Drop Martini." },
   "gio-prosecco": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Out of stock. Restock Gio Prosecco Spumante Extra Dry, or use in-stock Zonin Prosecco Brut / Bottega Spumante Venezia." },
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
+  "black-pepper": { inStock: true, quantity: 1, unit: "grinder", notes: "Freshly ground black pepper for savory cocktails and Bloody Mary." },
   "agave-syrup": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true },
   "granulated-sugar": { inStock: true, quantity: 1, unit: "bag" },
   "simple-syrup": { inStock: true, quantity: 1 },
@@ -69,7 +70,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "grand-marnier": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Existing 350ml bottle in stock." },
   "grand-marnier-700ml": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Received spare Grand Marnier 700ml bottle." },
   "myers-dark-rum": { inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 40, notes: "2 bottles in stock, including received spare: Myers's Original Dark Rum 750ml." },
-  "worcestershire-sauce": { inStock: false, incoming: true, quantity: 1, unit: "bottle", notes: "Incoming: Lea & Perrins Worcestershire Sauce 150ml." },
+  "worcestershire-sauce": { inStock: true, incoming: false, quantity: 1, unit: "bottle", notes: "Lea & Perrins Worcestershire Sauce 150ml. In stock." },
+  "tomato-juice": { inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "Tomato juice (seasoned). In stock." },
   "jack-daniels-black-label": { inStock: true, incoming: false, quantity: 1.5, unit: "bottle", abv: 40, notes: "One 700ml bottle in stock plus one existing bottle about half full (1.5 bottle-equivalents total)." },
   "the-botanist-gin": { inStock: true, quantity: 1, unit: "bottle" },
   "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
@@ -455,7 +457,7 @@ const DEFAULT_INVENTORY = [
   { id: "grapefruit-juice", name: "Grapefruit Juice / Pink Grapefruit Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "In stock (carton). Supports Paloma, Hemingway Daiquiri, and Sea Breeze." },
   { id: "apple-juice", name: "Apple Juice / Cider", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Crisp apple juice for Spiced Apple Cider, Washington Apple, and Apple Martini." },
   { id: "mango-juice", name: "Mango Puree / Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Lush tropical puree for Mango Mule." },
-  { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
+  { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
   { id: "coconut-cream", name: "Coconut Cream (Cream of Coconut)", category: "mixers_sodas", subCategory: "Juices & Creams", inStock: false, refrigerate: true, notes: "Sweet rich coconut cream for Piña Colada and Coconut Lime Mocktail." },
   { id: "coconut-water", name: "Pure Coconut Water", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Hydrating tropical water for Coconut Lime Mocktail." },
   { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
@@ -474,8 +476,9 @@ const DEFAULT_INVENTORY = [
   { id: "coffee-beans", name: "Whole Roasted Coffee Beans", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "Three floated beans for Espresso Martini and coffee cocktail garnishes." },
   { id: "egg-white", name: "Egg White (Fresh or Aquafaba)", category: "fresh_garnishes", subCategory: "Cocktail Texture", inStock: true, refrigerate: true, notes: "Creates silky texture and dense meringue foam on Sours." },
   { id: "tabasco-sauce", name: "Tabasco Hot Sauce", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: true, notes: "Piquant heat for Bloody Mary, Virgin Mary, and Flatliner." },
-  { id: "worcestershire-sauce", name: "Lea & Perrins Worcestershire Sauce 150ml", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: false, incoming: true, quantity: 1, unit: "bottle", notes: "Incoming Lea & Perrins Worcestershire Sauce, 150ml. Savory umami for Bloody Mary and Virgin Mary." },
+  { id: "worcestershire-sauce", name: "Lea & Perrins Worcestershire Sauce 150ml", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: true, incoming: false, quantity: 1, unit: "bottle", notes: "Lea & Perrins Worcestershire Sauce, 150ml. Savory umami for Bloody Mary and Virgin Mary." },
   { id: "coarse-salt", name: "Coarse Kosher Salt", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "For glass rims on Margarita, Paloma, and Salty Dog." },
+  { id: "black-pepper", name: "Black Pepper (Freshly Ground)", category: "fresh_garnishes", subCategory: "Spices & Savory", inStock: true, quantity: 1, unit: "grinder", notes: "Freshly ground black pepper for savory seasonings in Bloody Mary, Virgin Mary, and cocktails." },
   { id: "ice", name: "Ice Cubes (and crushed ice as needed)", category: "fresh_garnishes", subCategory: "Bar Essentials", inStock: true, refrigerate: true, notes: "Available ice cubes for chilling and dilution; crush as needed for tiki and julep-style drinks." }
 ];
 
@@ -4731,6 +4734,40 @@ const DEFAULT_DRINKS = [
       "Express orange peel oils over the surface and drop into the glass."
     ],
     tags: ["whiskey", "rye", "bourbon", "amaro-nonino", "bittersweet", "modern-classic", "spirit-forward", "in-stock"]
+  },
+  {
+    id: "bahama-mama",
+    name: "Bahama Mama",
+    otherNames: "Nassau Tropical Punch",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Hurricane / Highball",
+    alcoholLevel: "Medium (~15% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Tropical Coconut, Roasted Coffee Undertone, Rich Rum, Sweet Orange & Pineapple",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "The secret signature of a true Bahama Mama is the barspoon of coffee liqueur (Kahlúa) combined with coconut rum and dark Jamaican rum — it adds a rich, roasted caramel depth that balances the bright pineapple and orange juices.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Myers's Original Dark Rum", substitute: "Mount Gay Barbados Rum", inventoryId: "myers-dark-rum", ingredientGroup: "dark-rum", preferNonPremium: true },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Bacardi Superior White Rum", substitute: "Any light white rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Malibu Coconut Rum Liqueur", substitute: "Coconut rum", inventoryId: "malibu-rum", ingredientGroup: "coconut-rum" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua", ingredientGroup: "coffee-liqueur" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Pineapple Juice", substitute: "Fresh pineapple juice", inventoryId: "pineapple-juice" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Orange Juice", substitute: "Fresh orange juice", inventoryId: "orange-juice" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Orange Slice & Maraschino Cherry", substitute: "Fresh pineapple wedge or mint sprig", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Fill a cocktail shaker with ice cubes.",
+      "Add dark rum, white rum, Malibu coconut rum, Kahlúa, pineapple juice, orange juice, lemon juice, and grenadine.",
+      "Shake vigorously for 15 seconds until thoroughly chilled and frothy.",
+      "Fill a hurricane or tall highball glass with fresh crushed or cubed ice.",
+      "Strain the mixture into the prepared glass.",
+      "Garnish with an orange slice and maraschino cherry (or pineapple wedge)."
+    ],
+    tags: ["rum", "tiki", "tropical", "coconut", "pineapple", "fruity", "in-stock"]
   }
 ];
 
