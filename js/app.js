@@ -1293,6 +1293,25 @@
     if (/blend|blender/.test(method)) tools.push("Blender");
     if (/\bpress\b|squeeze|fresh juice/.test(method) || ingredients.some(item => /lemon|lime|orange|grapefruit/.test(item) && /juice/.test(item))) tools.push("Citrus juicer or hand press");
     if (/zest|peel|express/.test(method) || /peel|zest/.test(ingredients)) tools.push("Peeler or channel knife");
+    const bottledMixerIds = new Set([
+      "chang-soda-water",
+      "chang-lime-soda",
+      "fever-tree-indian-tonic",
+      "tonic-water",
+      "fever-tree-ginger-beer",
+      "bundaberg-ginger-beer",
+      "ginger-beer"
+    ]);
+    const bottledMixerGroups = new Set(["soda-water", "lime-soda", "tonic-water", "ginger-beer"]);
+    const usesBottledMixer = (drink.ingredients || []).some(ing => {
+      const invId = String(ing.inventoryId || "");
+      const grp = String(ing.ingredientGroup || "");
+      const item = String(ing.item || "").toLowerCase();
+      return bottledMixerIds.has(invId) ||
+        bottledMixerGroups.has(grp) ||
+        /\b(?:soda water|lime soda|tonic(?: water)?|ginger beer)\b/.test(item);
+    });
+    if (usesBottledMixer) tools.push("Bottle opener");
     if (/copper mug|moscow mule/.test(glassware) || /mule/.test(drinkName)) tools.push("500 ml Moscow Mule mug");
     else if (/champagne|flute|coupe|martini|nick & nora/.test(glassware)) tools.push(`Chilled ${drink.glassware || "cocktail glass"}`);
     else tools.push(drink.glassware || "Serving glass");
