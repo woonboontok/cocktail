@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "5 November 2026";
-const INVENTORY_SYNC_VERSION = "20261105_1";
+const INVENTORY_SYNC_VERSION = "20261105_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -80,7 +80,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "soju": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, notes: "Soju (Korean spirit), ~25% ABV, 360ml. In stock." },
   "yakult": { inStock: false, incoming: true, quantity: 0, unit: "bottle", notes: "Yakult probiotic fermented milk drink. Easily sourced — incoming." },
   "baijiu": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Baijiu (Chinese spirit). To be sourced." },
-  "beer-lager": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Asian Pale Lager / Beer (e.g. Tiger, Cass, Asahi, Tsingtao). To be sourced." },
+  "beer-lager": { inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 5.3, notes: "German wheat & lager beers in stock: Erdinger Weissbier and Paulaner (Hefe-Weißbier / Münchner Hell)." },
+  "makgeolli": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 6, notes: "Makgeolli (Korean unfiltered sparkling rice wine), ~6% ABV. Keep refrigerated." },
   "drambuie": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Drambuie Honeyed Scotch Liqueur, 40% ABV, 700ml. In stock." },
   "amaro-nonino": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 35, notes: "Amaro Nonino Herbal Infusion (Quintessentia), 35% ABV, 700ml. In stock." },
   "chang-lime-soda": { inStock: true, quantity: 2, unit: "bottle" },
@@ -336,7 +337,8 @@ const INGREDIENT_GROUPS = {
   "lime-soda": { label: "Lime Soda", inventoryIds: ["chang-lime-soda"] },
   "soju": { label: "Soju", inventoryIds: ["soju"] },
   "baijiu": { label: "Baijiu", inventoryIds: ["baijiu"] },
-  "beer": { label: "Beer / Lager", inventoryIds: ["beer-lager"] }
+  "beer": { label: "Beer / Lager / Weissbier", inventoryIds: ["beer-lager"] },
+  "makgeolli": { label: "Makgeolli", inventoryIds: ["makgeolli"] }
 };
 
 const INGREDIENT_GROUP_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
@@ -381,6 +383,7 @@ const DEFAULT_INVENTORY = [
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
   { id: "choya-rokkonshojo-sake", name: "Choya Rokkonshojo Junmai Ginjo Sake 720ml (15% ABV)", category: "spirits", subCategory: "Sake › Junmai Ginjo", spiritFamily: "Sake", spiritStyle: "Junmai Ginjo", inStock: true, quantity: 1, unit: "bottle", abv: 15, premium: true, notes: "Premium Japanese Junmai Ginjo sake from Choya. Fragrant, delicate floral and fruity aroma with a smooth, refreshing, and clean finish." },
   { id: "soju", name: "Soju (Korean Spirit)", category: "spirits", subCategory: "Soju", spiritFamily: "Soju", spiritStyle: "Korean Clear Spirit", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, refrigerate: false, notes: "Korean distilled spirit made from grain (rice, wheat, or barley). Neutral, slightly sweet, and ultra-smooth at ~25% ABV. The world's best-selling spirit by volume. Essential for Somaek and soju cocktails." },
+  { id: "makgeolli", name: "Makgeolli (Korean Sparkling Rice Wine)", category: "spirits", subCategory: "Rice Wine › Makgeolli", spiritFamily: "Rice Wine", spiritStyle: "Korean Unfiltered Rice Wine", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 6, refrigerate: true, notes: "Traditional Korean unfiltered, naturally effervescent fermented rice brew (~6% ABV). Milky white, tangy, gently sweet, and rich in probiotics. Essential for Maksa, Honey Makgeolli, and Korean pocha dining." },
   { id: "baijiu", name: "Baijiu (Chinese Grain Spirit)", category: "spirits", subCategory: "Baijiu", spiritFamily: "Baijiu", spiritStyle: "Chinese Clear Spirit", inStock: false, incoming: false, quantity: 0, unit: "bottle", abv: 50, notes: "Traditional Chinese distilled grain liquor. High-proof (40–60%+ ABV), complex earthy-floral character. The world's most consumed spirit. To be sourced." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
@@ -472,7 +475,7 @@ const DEFAULT_INVENTORY = [
   { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
   { id: "whipped-cream", name: "Whipped Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Fluffy crown for the Blowjob shot and dessert-style drinks." },
   { id: "yakult", name: "Yakult Probiotic Fermented Drink", category: "mixers_sodas", subCategory: "Dairy & Fermented", inStock: false, incoming: true, refrigerate: true, notes: "Cultured probiotic fermented milk drink. Popular mixer across East Asia (Korea, Japan, Singapore, Taiwan) for Yakult Soju and probiotic mocktails." },
-  { id: "beer-lager", name: "Asian Pale Lager / Beer", category: "mixers_sodas", subCategory: "Beer & Cider", inStock: false, incoming: false, refrigerate: true, notes: "Crisp Asian pale lager (e.g. Tiger, Cass, Asahi Super Dry, Tsingtao). Essential for Korean Somaek and Japanese Sake Bomb." },
+  { id: "beer-lager", name: "Premium Beer (Erdinger Weissbier & Paulaner)", category: "mixers_sodas", subCategory: "Beer & Cider", inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 5.3, refrigerate: true, notes: "Bavarian wheat beer and crisp lagers in stock: Erdinger Weissbier and Paulaner (Hefe-Weißbier / Münchner Hell). Ideal for Somaek, Sake Bomb, and Bavarian Russ." },
 
   // --- FRESH PRODUCE & GARNISHES (User In Stock & Shopping List) ---
   { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, refrigerate: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
@@ -5150,18 +5153,18 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Crisp Malt Lager, Clean Silky Grain, Frothy Cascade & Refreshing Snap",
     difficulty: 1,
     popularity: 9.7,
-    proTip: "Somaek (a portmanteau of Soju + Maekju, the Korean word for beer) is the ultimate Korean drinking ritual. The classic golden ratio is '3 parts Soju to 7 parts crisp Asian Pale Lager'. The party trick: after pouring Soju into the beer, strike the bottom of the glass firmly with a spoon or insert a metal chopstick and tap it — this instantly triggers acoustic cavitation, producing a cascading vortex of micro-foam throughout the entire glass!",
+    proTip: "Somaek (a portmanteau of Soju + Maekju, the Korean word for beer) is the ultimate Korean drinking ritual. The classic golden ratio is '3 parts Soju to 7 parts crisp beer'. While crisp Asian lagers are classic, using authentic Bavarian wheat beer (Erdinger Weissbier or Paulaner) yields an extraordinarily rich, creamy, and velvety head that elevates this into a gourmet pocha experience! The party trick: after pouring Soju into the beer, strike the bottom of the glass firmly with a spoon or tap a metal chopstick — this instantly triggers acoustic cavitation, erupting into a cascading vortex of micro-foam throughout the entire glass!",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Soju (Korean Spirit)", substitute: "Kawashima Junmai Sake", inventoryId: "soju", ingredientGroup: "soju" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Asian Pale Lager / Beer", substitute: "Tiger, Cass, Asahi, or Tsingtao beer", inventoryId: "beer-lager", ingredientGroup: "beer" }
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Premium Beer (Erdinger Weissbier or Paulaner)", substitute: "Any cold crisp lager or wheat beer", inventoryId: "beer-lager", ingredientGroup: "beer" }
     ],
     instructions: [
-      "Fill a chilled beer glass or pint with 4 oz of cold Asian Pale Lager.",
+      "Fill a chilled beer glass or pint with 4 oz of cold Erdinger Weissbier or Paulaner.",
       "Pour 1.5 oz of Soju directly into the beer.",
       "Insert a metal spoon or chopsticks and strike the base of the glass to release a sudden rush of frothy micro-bubbles.",
       "Drink immediately in one or two hearty gulps while foaming!"
     ],
-    tags: ["soju", "beer", "korean", "ritual", "somaek", "party", "bomb"]
+    tags: ["soju", "beer", "korean", "ritual", "somaek", "party", "bomb", "in-stock"]
   },
   {
     id: "sake-bomb",
@@ -5175,19 +5178,19 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Warm Earthy Rice Umami, Crisp Bitter Lager & Effervescent Foam",
     difficulty: 1,
     popularity: 9.6,
-    proTip: "An iconic Japanese-American izakaya ritual! A shot glass of sake is balanced across two parallel chopsticks resting on top of a pint glass of beer. The drinkers chant 'Ichi... Ni... San... SAKE BOMB!' and pound the table with both fists until the vibration drops the sake into the beer, erupting in a fountain of foam. Choya Ginjo Sake or Kawashima Junmai both provide lovely rice umami against cold lager.",
+    proTip: "An iconic Japanese-American izakaya ritual! A shot glass of sake is balanced across two parallel chopsticks resting on top of a pint glass of beer. The drinkers chant 'Ichi... Ni... San... SAKE BOMB!' and pound the table with both fists until the vibration drops the sake into the beer, erupting in a fountain of foam. Erdinger Weissbier or Paulaner brings complex bready wheat esters that pair marvelously with Kawashima Junmai's clean rice umami.",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Kawashima Sake", substitute: "Choya Rokkonshojo Junmai Ginjo Sake", inventoryId: "kawashima-sake", ingredientGroup: "sake" },
-      { amountOz: "6 oz", amountMl: "180 ml", item: "Asian Pale Lager / Beer", substitute: "Asahi Super Dry, Sapporo, or Tiger Beer", inventoryId: "beer-lager", ingredientGroup: "beer" }
+      { amountOz: "6 oz", amountMl: "180 ml", item: "Premium Beer (Erdinger Weissbier or Paulaner)", substitute: "Any cold crisp lager or wheat beer", inventoryId: "beer-lager", ingredientGroup: "beer" }
     ],
     instructions: [
-      "Fill a pint glass halfway with cold lager beer.",
+      "Fill a pint glass halfway with cold Erdinger Weissbier or Paulaner.",
       "Place two wooden or metal chopsticks parallel across the top rim of the pint glass.",
       "Carefully balance a full shot glass of sake on top of the chopsticks.",
       "Count 'Ichi, Ni, San... SAKE BOMB!' and slam both fists on the table to knock the shot into the beer.",
       "Chug immediately while effervescing vigorously!"
     ],
-    tags: ["sake", "beer", "japanese", "shot", "ritual", "party", "bomb"]
+    tags: ["sake", "beer", "japanese", "shot", "ritual", "party", "bomb", "in-stock"]
   },
   {
     id: "baijiu-sour",
@@ -5217,6 +5220,87 @@ const DEFAULT_DRINKS = [
       "Garnish by dropping 2 dashes of Angostura bitters onto the creamy white foam, dragging a cocktail pick through to create a heart pattern."
     ],
     tags: ["baijiu", "chinese", "sour", "egg-white", "craft", "complex", "spirit-forward"]
+  },
+  {
+    id: "maksa",
+    name: "Maksa (막사)",
+    otherNames: "Korean Makgeolli & Sprite; Rice Wine Shandy",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Tumbler / Ceramic Bowl",
+    alcoholLevel: "Low (~4% ABV)",
+    alcoholScore: 1,
+    tasteProfile: "Tangy Effervescent Rice Wine, Sweet Lemon-Lime, Creamy & Refreshing",
+    difficulty: 1,
+    popularity: 9.6,
+    proTip: "Maksa (막사) is a portmanteau of Makgeolli (막걸리) + Cider/Sprite (사이다) and is South Korea's ultimate casual social drink. Traditionally served cold in shallow yellow-brass or ceramic bowls after outdoor hikes or alongside Korean pancakes (jeon) and spicy barbecue. The golden ratio is 2 parts Makgeolli to 1 part Lemon-Lime Soda (or Chang Lime Soda). Gently invert the Makgeolli bottle before opening to integrate the creamy rice sediment.\n\nPopular 1-Ingredient Makgeolli Variants:\n• Peach Makgeolli (복숭아 막걸리): Add 0.75 oz Hoffmann Peach Liqueur for a luscious ripe stone-fruit craft twist.\n• Yakult Makgeolli (요구르트 막걸리): Swap the soda for chilled Yakult for an ultra-creamy probiotic blend.",
+    ingredients: [
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Makgeolli (Korean Sparkling Rice Wine)", substitute: "Any unfiltered Korean rice brew", inventoryId: "makgeolli", ingredientGroup: "makgeolli" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Lemon-Lime Soda", substitute: "Chang Lime Soda or Schweppes Manao Soda", inventoryId: "lemon-lime-soda" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon Wheel", substitute: "Lime wedge", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Gently invert the Makgeolli bottle back and forth 2-3 times to evenly distribute the creamy rice sediment (do not shake vigorously).",
+      "Fill a tumbler, highball, or traditional ceramic bowl with fresh ice cubes.",
+      "Pour in chilled Makgeolli.",
+      "Top with crisp Lemon-Lime Soda (or Chang Lime Soda).",
+      "Stir gently once and enjoy immediately."
+    ],
+    tags: ["makgeolli", "korean", "maksa", "rice-wine", "refreshing", "low-abv", "pocha", "in-stock"]
+  },
+  {
+    id: "honey-makgeolli",
+    name: "Honey Makgeolli (꿀막걸리)",
+    otherNames: "Korean Honeyed Rice Wine; Kkul Makgeolli",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Tumbler / Ceramic Bowl",
+    alcoholLevel: "Low (~5% ABV)",
+    alcoholScore: 1,
+    tasteProfile: "Floral Wildflower Honey, Tangy Probiotic Rice Wine, Velvety & Gentle Fizz",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "An absolute culinary craze across Seoul's hip nightlife districts (Hongdae, Gangnam, and Euljiro). Upscale modern pochas serve large wooden or brass bowls of ice-cold Makgeolli swirled with artisanal wild honey. The floral richness of honey harmonizes flawlessly with the natural acidity and creamy fizz of unfiltered rice wine. Squeeze a few drops of fresh lemon juice to brighten the finish.",
+    ingredients: [
+      { amountOz: "5 oz", amountMl: "150 ml", item: "Makgeolli (Korean Sparkling Rice Wine)", substitute: "Any unfiltered Korean rice brew", inventoryId: "makgeolli", ingredientGroup: "makgeolli" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Honey Syrup (3:1)", substitute: "Pure honey warmed with a splash of water", inventoryId: "honey-syrup" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Fresh Lemon Juice", substitute: null, inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "In a tumbler or shallow bowl, add honey syrup and a squeeze of fresh lemon juice.",
+      "Gently tilt and invert the Makgeolli bottle to blend the sediment.",
+      "Pour in 5 oz of chilled Makgeolli.",
+      "Whisk gently with a spoon until the honey syrup is fully dissolved into the milky rice wine.",
+      "Add 2-3 ice cubes and serve cold."
+    ],
+    tags: ["makgeolli", "honey", "korean", "sweet", "creamy", "pocha", "dessert", "in-stock"]
+  },
+  {
+    id: "bavarian-russ",
+    name: "Bavarian Russ (Weissbier Radler)",
+    otherNames: "Russ'n Maß; German Wheat Beer Shandy",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Weizen Glass / Beer Stein",
+    alcoholLevel: "Low (~3% ABV)",
+    alcoholScore: 1,
+    tasteProfile: "Bready Wheat & Banana Esters, Crisp Lemon-Lime Citrus, Effervescent & Thirst-Quenching",
+    difficulty: 1,
+    popularity: 9.2,
+    proTip: "Originating in Munich during the turbulent 1918 German Revolution (frequented by the communist 'Russians' or workers' councils, giving rise to its name 'Russ'), this is Bavaria's signature summer cooler. Made with authentic Bavarian wheat beer (Erdinger Weissbier or Paulaner Hefe-Weißbier) and Lemon-Lime Soda in equal parts. Always pour the chilled soda first, then gently tilt the glass and pour the cloudy wheat beer down the inside to maintain a gorgeous creamy foam head without bubbling over.",
+    ingredients: [
+      { amountOz: "6 oz", amountMl: "180 ml", item: "Premium Beer (Erdinger Weissbier or Paulaner)", substitute: "Any crisp wheat beer or German lager", inventoryId: "beer-lager", ingredientGroup: "beer" },
+      { amountOz: "6 oz", amountMl: "180 ml", item: "Lemon-Lime Soda", substitute: "Chang Lime Soda or Sprite", inventoryId: "lemon-lime-soda" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon Wheel", substitute: null, inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Chill a tall Weizen glass or beer mug.",
+      "Pour chilled Lemon-Lime Soda (or Chang Lime Soda) into the glass first.",
+      "Slowly pour Erdinger Weissbier or Paulaner down the side of the tilted glass to marry the two without erupting into excessive foam.",
+      "Allow the dense, creamy white foam collar to rise naturally to the rim.",
+      "Garnish with a fresh lemon wheel on the rim and enjoy ice-cold."
+    ],
+    tags: ["beer", "weissbier", "german", "bavarian", "shandy", "radler", "low-abv", "refreshing", "in-stock"]
   }
 ];
 
