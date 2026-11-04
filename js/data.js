@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "3 November 2026";
-const INVENTORY_SYNC_VERSION = "20261103_1";
+const INVENTORY_LAST_UPDATED = "4 November 2026";
+const INVENTORY_SYNC_VERSION = "20261104_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -4035,60 +4035,6 @@ const DEFAULT_DRINKS = [
     tags: ["gin", "tonic", "classic", "refreshing", "summer", "in-stock"]
   },
   {
-    id: "dark-n-stormy-fever-tree",
-    name: "Dark 'n' Stormy (Premium Style)",
-    otherNames: "Bermuda Highball, Spicy Storm",
-    category: "Cocktail",
-    baseSpirit: "Rum",
-    glassware: "Highball",
-    alcoholLevel: "Medium (~15% ABV)",
-    alcoholScore: 3,
-    tasteProfile: "Spicy Ginger, Dark Molasses, Lime & Rich Fizz",
-    difficulty: 1,
-    popularity: 9.7,
-    proTip: "Using Fever-Tree Premium Ginger Beer elevates this drink tremendously. Its 3-ginger blend mimics alcohol burn, providing a deep, robust background to the molasses-heavy Myers's rum.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Myers's Original Dark Rum", substitute: "Mount Gay Barbados Rum", inventoryId: "myers-dark-rum" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", ingredientGroup: "ginger-beer" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime wedge", inventoryId: "fresh-limes" }
-    ],
-    instructions: [
-      "Fill a tall highball glass with clean ice cubes.",
-      "Add fresh lime juice and top with Fever-Tree ginger beer, leaving 1.5 inches of space at the top.",
-      "Slowly float your Myers's Dark Rum over the back of a bar spoon to form a dark, stormy layer.",
-      "Garnish with a lime wheel and serve unstrained for visual drama."
-    ],
-    tags: ["rum", "ginger-beer", "dark-rum", "classic", "layered", "in-stock"]
-  },
-  {
-    id: "classic-moscow-mule",
-    name: "Classic Moscow Mule (Premium Brew)",
-    otherNames: "Vodka Buck",
-    category: "Cocktail",
-    baseSpirit: "Vodka",
-    glassware: "Copper Mug / Highball",
-    alcoholLevel: "Low-Medium (~12% ABV)",
-    alcoholScore: 2,
-    tasteProfile: "Zesty, Fiery Ginger, Crisp & Shockingly Chilled",
-    difficulty: 1,
-    popularity: 9.8,
-    proTip: "Your original Moscow Mule recipe lacked the group configuration! Now, using either Bundaberg (sweeter) or Fever-Tree (spicier) will satisfy the drink perfectly based on your mood.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka (or Smirnoff Red)", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime juice", inventoryId: "fresh-limes" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", ingredientGroup: "ginger-beer" },
-      { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wheel & Mint Sprig", substitute: "Expressed lime zest", inventoryId: "fresh-limes" }
-    ],
-    instructions: [
-      "Pack a copper mug or highball glass with crushed ice.",
-      "Pour in Absolut vodka and fresh lime juice.",
-      "Top with your in-stock premium ginger beer.",
-      "Give it a single gentle stir to lift the citrus.",
-      "Garnish with a lime wheel and a slapped sprig of spearmint."
-    ],
-    tags: ["vodka", "ginger-beer", "mule", "refreshing", "copper-mug", "in-stock"]
-  },
-  {
     id: "rum-and-tonic",
     name: "Rum & Tonic",
     otherNames: "The Havana Highball",
@@ -4192,89 +4138,6 @@ const DEFAULT_DRINKS = [
       "Slowly float your Teremana Tequila over the top as the final crystal clear layer. Gulp down in one breathless go."
     ],
     tags: ["shot", "tequila", "sambuca", "spicy", "tabasco", "layered", "in-stock"]
-  },
-  {
-    id: "classic-tom-collins",
-    name: "Classic Tom Collins",
-    otherNames: "The Sparkling Gin Lemonade",
-    category: "Cocktail",
-    baseSpirit: "Gin",
-    glassware: "Collins / Highball",
-    alcoholLevel: "Low-Medium (~12% ABV)",
-    alcoholScore: 2,
-    tasteProfile: "Crisp, Sparkling Lemonade & Sharp Botanical",
-    difficulty: 1,
-    popularity: 9.5,
-    proTip: "Think of this as the ultimate adult sparkling lemonade. Shaking the gin, lemon, and syrup before adding soda prevents the sugar from settling at the base. Tanqueray's bold juniper easily stands up to the heavy fizz.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon wedges", inventoryId: "fresh-lemons" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Premium Simple Syrup", substitute: "Sugar syrup", ingredientGroup: "simple-syrup" },
-      { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", ingredientGroup: "soda-water" },
-      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Wheel & Mint Sprig", substitute: "Lemon slice", inventoryId: "fresh-lemons" }
-    ],
-    instructions: [
-      "Combine Tanqueray gin, fresh lemon juice, and simple syrup in a cocktail shaker with ice.",
-      "Shake quickly for 10 seconds to chill.",
-      "Strain into a tall Collins glass packed with clean ice blocks.",
-      "Top up with icy Chang Soda Water.",
-      "Stir gently once from the bottom up to lift the citrus, and garnish with a lemon wheel."
-    ],
-    tags: ["gin", "citrus", "collins", "summer", "refreshing", "in-stock"]
-  },
-  {
-    id: "classic-southside",
-    name: "Classic Southside",
-    otherNames: "The Gin Mojito, Al Capone's Chicago Club Classic",
-    category: "Cocktail",
-    baseSpirit: "Gin",
-    glassware: "Coupe",
-    alcoholLevel: "Medium-High (~22% ABV)",
-    alcoholScore: 3,
-    tasteProfile: "Crisp Botanical Juniper, Spearmint & Sharp Fresh Lime",
-    difficulty: 2,
-    popularity: 9.7,
-    proTip: "Regarded as the Mojito's refined, high-society cousin served 'up' in a coupe glass. Shaking fresh mint leaves directly with ice bruises the herbs gently and blankets the gin in refreshing essential oils without shredding them.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", ingredientGroup: "fresh-lime" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Premium Simple Syrup", substitute: "Rich simple syrup", ingredientGroup: "simple-syrup" },
-      { amountOz: "6-8 leaves", amountMl: "6-8 leaves", item: "Fresh Spearmint Leaves", substitute: "Fresh mint sprigs", ingredientGroup: "fresh-mint" }
-    ],
-    instructions: [
-      "Add fresh mint leaves, Tanqueray gin, fresh lime juice, and simple syrup to a cocktail shaker.",
-      "Fill with plenty of ice cubes.",
-      "Shake with maximum power for 12 seconds until the shaker exterior frosts over.",
-      "Double strain through a fine mesh strainer into a chilled coupe glass to filter out fine mint flecks.",
-      "Float a single pristine fresh mint leaf on the surface as an aromatic crown."
-    ],
-    tags: ["gin", "mint", "sour", "classic", "prohibition", "in-stock"]
-  },
-  {
-    id: "classic-gin-gimlet",
-    name: "Classic Gin Gimlet",
-    otherNames: "The Royal Navy Sour",
-    category: "Cocktail",
-    baseSpirit: "Gin",
-    glassware: "Coupe",
-    alcoholLevel: "Medium-High (~24% ABV)",
-    alcoholScore: 4,
-    tasteProfile: "Zesty, Crisp, Sweet-Tart & Botanical",
-    difficulty: 1,
-    popularity: 9.5,
-    proTip: "Historically made with Rose's Lime Cordial to prevent scurvy in the navy. Modern craft bars favor fresh lime juice paired with simple syrup, which creates a far brighter, cleaner flavor anchor against the gin.",
-    ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Absolut Vodka (for a Vodka Gimlet)", inventoryId: "tanqueray-gin" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh squeezed lime only", ingredientGroup: "fresh-lime" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Premium Simple Syrup", substitute: "Agave syrup", ingredientGroup: "simple-syrup" }
-    ],
-    instructions: [
-      "Chill a coupe glass in your freezer for 5 minutes.",
-      "Add Tanqueray gin, fresh lime juice, and simple syrup into a shaker filled with plenty of ice.",
-      "Shake with energy for 12 seconds until ice-cold.",
-      "Fine strain into the chilled coupe, and garnish with a thin lime wheel floating on top."
-    ],
-    tags: ["gin", "lime", "sour", "classic", "sharp", "in-stock"]
   },
   {
     id: "midori-sour",
@@ -4768,6 +4631,177 @@ const DEFAULT_DRINKS = [
       "Garnish with an orange slice and maraschino cherry (or pineapple wedge)."
     ],
     tags: ["rum", "tiki", "tropical", "coconut", "pineapple", "fruity", "in-stock"]
+  },
+  {
+    id: "blood-and-sand",
+    name: "Blood and Sand",
+    otherNames: "Classic 1930 Savoy Scotch Cocktail, Rudolph Valentino Classic",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Coupe",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Smoky Peat, Ruby Cherry, Herbal Sweet Vermouth & Fresh Orange",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "Named after Rudolph Valentino's 1922 bullfighter movie. The equal-parts quartet (Scotch, Cherry Heering, sweet vermouth, orange juice) sounds unconventional, but the sweet dark cherry and citrus meld seamlessly with Johnnie Walker Black's peat smoke. Use freshly squeezed orange juice and shake hard.",
+    ingredients: [
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Any blended Scotch", inventoryId: "jw-black-label", ingredientGroup: "scotch" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Peter Heering Cherry Liqueur", substitute: "Cherry brandy", inventoryId: "cherry-heering" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Orange Juice", substitute: "Strained fresh orange juice", inventoryId: "orange-juice" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel Twist", substitute: "Brandied cherry", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Chill a coupe glass in the freezer.",
+      "Combine Scotch whisky, Cherry Heering, sweet red vermouth, and fresh orange juice in a shaker with plenty of ice.",
+      "Shake vigorously for 12 seconds until thoroughly chilled.",
+      "Double strain into the chilled coupe glass.",
+      "Express an orange peel twist over the drink and drape on the rim."
+    ],
+    tags: ["scotch", "cherry-heering", "vermouth", "classic", "savoy", "in-stock"]
+  },
+  {
+    id: "death-in-the-afternoon",
+    name: "Death in the Afternoon",
+    otherNames: "Hemingway Champagne Cocktail, Absinthe Royale",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Champagne Flute / Coupe",
+    alcoholLevel: "Medium-High (~20% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Lush Effervescence, Anise & Herbal Grand Wormwood",
+    difficulty: 1,
+    popularity: 9.4,
+    proTip: "Invented by Ernest Hemingway in 1935: 'Pour one jigger absinthe into a Champagne glass. Add iced Champagne until it attains the proper opalescent milkiness. Drink three to five of these slowly.' The Prosecco activates the louche effect instantly, clouding into a magical green-gold shimmer.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Père Kermann's Absinthe", substitute: "White Sambuca for sweeter profile", inventoryId: "pere-kermanns-absinthe" },
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Zonin Prosecco Brut (or Bottega Spumante)", substitute: "Crisp dry sparkling wine", inventoryId: "zonin-prosecco-brut", ingredientGroup: "prosecco" }
+    ],
+    instructions: [
+      "Pour Père Kermann's Absinthe into a chilled champagne flute or coupe glass.",
+      "Slowly top up with icy cold Zonin Prosecco Brut.",
+      "Watch the sparkling wine trigger the milky opalescent louche effect.",
+      "Do not stir; serve immediately."
+    ],
+    tags: ["absinthe", "prosecco", "sparkling", "hemingway", "louche", "in-stock"]
+  },
+  {
+    id: "bobby-burns",
+    name: "Bobby Burns",
+    otherNames: "Robert Burns Cocktail, The Savoy 1930 Scotch Manhattan",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Coupe / Nick & Nora",
+    alcoholLevel: "High (~29% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Smoky Peat, Heather Honey, Spiced Vermouth & Herbal Richness",
+    difficulty: 2,
+    popularity: 9.4,
+    proTip: "First printed in the 1900 Bishop and Babcock guide and immortalized in Harry Craddock's 1930 Savoy Cocktail Book. It elevates the classic Rob Roy by weaving in Drambuie's Scottish heather honey and herbal spice. Always stirred, never shaken.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Any blended or peated Scotch", inventoryId: "jw-black-label", ingredientGroup: "scotch" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Drambuie (Honey Scotch Liqueur)", substitute: "Bénédictine or honey syrup", inventoryId: "drambuie", ingredientGroup: "drambuie" },
+      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Lemon Peel Twist", substitute: "Shortbread cookie or lemon twist", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Chill a coupe or Nick & Nora glass.",
+      "Combine Scotch whisky, sweet red vermouth, Drambuie, and Angostura bitters in a mixing glass with clean ice cubes.",
+      "Stir smoothly for 30 seconds until frosty cold and silky.",
+      "Strain into the chilled glass.",
+      "Express a fresh lemon peel twist over the surface and discard or float as garnish."
+    ],
+    tags: ["scotch", "drambuie", "vermouth", "classic", "savoy", "spirit-forward", "in-stock"]
+  },
+  {
+    id: "rob-roy",
+    name: "Rob Roy",
+    otherNames: "Scotch Manhattan, Waldorf-Astoria 1894 Classic",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Coupe / Nick & Nora",
+    alcoholLevel: "High (~30% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Rich Peat Smoke, Sweet Botanical Vermouth & Aromatic Spice",
+    difficulty: 2,
+    popularity: 9.6,
+    proTip: "Created in 1894 at the Waldorf Astoria in New York to celebrate the premiere of an operetta based on Scottish folk hero Rob Roy MacGregor. While a standard Manhattan uses Rye, the Rob Roy uses Scotch — where Johnnie Walker Black's peaty malt richness marries beautifully with sweet red vermouth.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Any blended Scotch whisky", inventoryId: "jw-black-label", ingredientGroup: "scotch" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
+      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Maraschino Cherry or Lemon Twist", substitute: "Expressed lemon peel", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Chill a coupe or Nick & Nora glass.",
+      "In a mixing glass filled with ice, combine Scotch whisky, sweet vermouth, and bitters.",
+      "Stir smoothly for 30 seconds until deeply chilled and well integrated.",
+      "Strain into the chilled glass.",
+      "Garnish with a brandied maraschino cherry or an expressed lemon twist."
+    ],
+    tags: ["scotch", "vermouth", "classic", "manhattan-riff", "spirit-forward", "in-stock"]
+  },
+  {
+    id: "floradora",
+    name: "Floradora",
+    otherNames: "Broadway 1900s Classic, Raspberry Gin Cooler",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Bright Raspberry, Juniper Gin, Spicy Fiery Ginger & Tart Lime",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "Created in the early 1900s for the hit Broadway musical 'Florodora', famed for its glamorous chorus line. The pairing of raspberry syrup and fresh lime juice with fiery ginger beer provides a refreshing, spicy-sweet balance that lets Tanqueray's juniper shine.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Raspberry Rhapsody Flavored Syrup", substitute: "Fresh raspberry puree + simple syrup", inventoryId: "raspberry-rhapsody" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer or Schweppes Ginger Soda", inventoryId: "fever-tree-ginger-beer", ingredientGroup: "ginger-beer" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lime Wheel", substitute: "Fresh raspberries", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a cocktail shaker with ice cubes.",
+      "Add Tanqueray gin, raspberry syrup, and fresh lime juice.",
+      "Shake vigorously for 10 seconds to chill.",
+      "Strain into a tall highball or Collins glass packed with clean ice.",
+      "Top with Fever-Tree ginger beer and stir gently once to lift the berry layer.",
+      "Garnish with a fresh lime wheel on the rim."
+    ],
+    tags: ["gin", "raspberry", "ginger-beer", "broadway", "refreshing", "in-stock"]
+  },
+  {
+    id: "french-blonde",
+    name: "French Blonde",
+    otherNames: "Parisian Elderflower & Grapefruit Coupe",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe",
+    alcoholLevel: "Medium (~16% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Floral Elderflower, Bittersweet Grapefruit, Candied Orange & Crisp Botanicals",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "An elegant Parisian coupe cocktail that gained immense international fame as Taylor Swift's favorite drink. The combination of Lillet Blanc and St-Germain elderflower balances tart pink grapefruit juice, while botanical gin anchors the cocktail with sophisticated dry structure.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Lillet Blanc", substitute: "Dry white vermouth", inventoryId: "lillet-blanc" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin", ingredientGroup: "gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "St-Germain Elderflower Liqueur", substitute: "Elderflower syrup", inventoryId: "st-germain" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Grapefruit Juice / Pink Grapefruit Juice", substitute: "Fresh pink grapefruit juice", inventoryId: "grapefruit-juice" },
+      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Fresh Lemon Juice", substitute: "Lemon twist squeeze", inventoryId: "fresh-lemons" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Lemon Peel Twist", substitute: "Grapefruit peel", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Chill a coupe glass in the freezer.",
+      "In a cocktail shaker filled with ice, combine Lillet Blanc, gin, St-Germain, grapefruit juice, and lemon juice.",
+      "Shake hard for 12 seconds until frosty and well aerated.",
+      "Fine strain into the chilled coupe.",
+      "Express a lemon peel twist across the top to release fragrant citrus oils."
+    ],
+    tags: ["gin", "lillet-blanc", "st-germain", "grapefruit", "floral", "elegant", "in-stock"]
   }
 ];
 
