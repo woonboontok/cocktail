@@ -139,6 +139,7 @@ Schema for recipes:
 - Always link each ingredient to a valid `inventoryId` (matching an `id` in `DEFAULT_INVENTORY`).
 - If variants exist (e.g. swapping base spirits), document them in `proTip` and assign an `ingredientGroup`.
 - If the cocktail can now be made with in-stock bottles, include `"in-stock"` in the `tags` array.
+- Preparation tools are inferred dynamically via `getDrinkTools(drink)` in `js/app.js` (including automatically adding a **Bottle opener** for drinks featuring bottled carbonated mixers like Chang Soda Water, Chang Lime Soda, Fever-Tree Tonic Water, and ginger beers).
 
 ---
 

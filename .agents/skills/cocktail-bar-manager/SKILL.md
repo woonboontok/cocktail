@@ -92,6 +92,9 @@ When modifying app behavior or styles, adhere to these established patterns:
 3. **Pill Filtering Pattern**: Filter sets (spirit, difficulty, taste) use the shared `setupFilterPills(selector, getter, setter)` helper to maintain uniform active state toggles and reset behaviors.
 4. **Theme Awareness**: Use CSS variables for theming (`--bg-primary`, `--bg-card`, `--text-primary`, `--accent-gold`, etc.). Do not hardcode fixed hex colors (like `#fff` or `#f3f4f6`) inside body or card typography, as this breaks contrast in light themes (e.g., Morning theme).
 5. **Quantity Updates**: Modifying stock numbers should route through `setItemQuantityDirect(id, newQty)` to ensure `inStock` sync, storage persistence, and header stat updates occur atomically.
+6. **Drink Preparation Tools (`getDrinkTools`)**:
+   - In `js/app.js`, `getDrinkTools(drink)` dynamically infers required bar equipment and ice for the recipe modal.
+   - **Bottle Opener**: Automatically included whenever a drink uses bottled mixers (e.g. Chang Soda Water, Chang Lime Soda, Fever-Tree Indian Tonic, Fever-Tree Ginger Beer, Bundaberg Ginger Beer). Keep this check updated if new glass-bottled mixers or beers are added.
 
 ---
 
