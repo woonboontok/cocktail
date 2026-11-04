@@ -4802,6 +4802,216 @@ const DEFAULT_DRINKS = [
       "Express a lemon peel twist across the top to release fragrant citrus oils."
     ],
     tags: ["gin", "lillet-blanc", "st-germain", "grapefruit", "floral", "elegant", "in-stock"]
+  },
+  {
+    id: "stengah",
+    name: "Stengah",
+    otherNames: "Half-and-Half Scotch Soda; Singapore Officers' Mess Highball",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Highball",
+    alcoholLevel: "Low-Medium (~15% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Smoky Malt Scotch, Light & Refreshing, Crisp Effervescence",
+    difficulty: 1,
+    popularity: 8.5,
+    proTip: "The Stengah (Malay for 'half') is an iconic colonial-era drink of British Malaya and Singapore, famously served in the Raffles Hotel Long Bar and British Officers' Messes from the 1900s onward. The name refers to its defining ratio: exactly half Scotch whisky and half soda water. Serve tall, ice-cold, and without garnish — just as the colonial planters did after a long day on the rubber estates. A beautiful historical cocktail with zero fuss.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Johnnie Walker Black Label Scotch Whisky", substitute: "Any blended Scotch whisky", inventoryId: "jw-black-label", ingredientGroup: "scotch" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Chang Soda Water", substitute: "Any chilled soda water", inventoryId: "chang-soda-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Peel Twist (optional)", substitute: "Omit for purist style", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Fill a highball glass with large ice cubes.",
+      "Pour 1.5 oz of Johnnie Walker Black Label Scotch whisky directly over the ice.",
+      "Top with exactly 1.5 oz of chilled Chang soda water — the classic 1:1 'half-and-half' ratio.",
+      "Stir gently once with a bar spoon to integrate.",
+      "Optionally express a lemon peel over the top and discard — or serve as-is in true Officers' Mess tradition."
+    ],
+    tags: ["scotch", "soda-water", "singapore", "colonial", "malaya", "highball", "classic", "in-stock"]
+  },
+  {
+    id: "ramos-gin-fizz",
+    name: "Ramos Gin Fizz",
+    otherNames: "New Orleans Fizz; Singapore Long Bar Gin Fizz",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Creamy Citrus, Floral Orange, Silky Frothy Foam & Juniper Finish",
+    difficulty: 3,
+    popularity: 9.4,
+    proTip: "Invented in 1888 by Henry C. Ramos at his New Orleans bar, and historically served at the Singapore Long Bar at Raffles Hotel. The secret is the extended shake — at least 60–90 seconds (original recipe required 12 minutes of continuous shaking!) to emulsify the cream and egg white into a thick, cloud-like foam. The orange blossom water is the irreplaceable aromatic heart of this cocktail; a few drops of Cointreau make an excellent modern substitute if unavailable. Strain into a chilled Collins glass with no ice for the classic tall foam cap effect.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: null, inventoryId: "fresh-lemons" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: null, inventoryId: "fresh-limes" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Demerara Syrup (use 0.5 oz)", inventoryId: "simple-syrup" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Heavy Whipping Cream", substitute: "Half-and-half cream", inventoryId: "whipping-heavy-cream" },
+      { amountOz: "1", amountMl: "1", item: "Egg White (1 fresh)", substitute: "2 tbsp aquafaba", inventoryId: "egg-white" },
+      { amountOz: "3 drops", amountMl: "3 drops", item: "Cointreau (sub for orange blossom water)", substitute: "Orange blossom water if available", inventoryId: "cointreau" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Chang Soda Water (to top)", substitute: "Any chilled soda water", inventoryId: "chang-soda-water" }
+    ],
+    instructions: [
+      "Combine gin, lemon juice, lime juice, simple syrup, heavy cream, egg white, and 3 drops of Cointreau (or orange blossom water) in a cocktail shaker WITHOUT ice.",
+      "Dry shake vigorously for 20–30 seconds to begin emulsifying the cream and egg white.",
+      "Add a large scoop of ice and shake again, hard, for at least 60 seconds — the longer, the better the cloud foam.",
+      "Strain into a chilled Collins or highball glass with NO ice.",
+      "Slowly top with chilled soda water poured down the inside of the glass — the fizz rises the foam above the rim into a tall white cap.",
+      "Serve immediately without garnish — the foam cap is the presentation."
+    ],
+    tags: ["gin", "cream", "egg-white", "fizz", "new-orleans", "singapore", "raffles", "classic", "frothy", "in-stock"]
+  },
+  {
+    id: "midori-splice",
+    name: "Midori Splice",
+    otherNames: "Melon Coconut Colada; Singapore Bar Favourite",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Highball / Hurricane",
+    alcoholLevel: "Low-Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Sweet Honeydew Melon, Tropical Coconut & Tangy Pineapple",
+    difficulty: 1,
+    popularity: 9.0,
+    proTip: "An absolute crowd-pleaser across Singapore, Australian, and Southeast Asian bars since the 1980s. The Midori Splice is essentially a tropical Colada variation that swaps rum for Malibu, making it lighter and sweeter. For a frozen version, blend all ingredients with ice for a slushy tropical split. The vivid electric-green colour makes it a visual showstopper. Serve immediately — the layers of melon and pineapple separate beautifully if left to sit.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Malibu Coconut Rum Liqueur", substitute: "Coconut cream + white rum", inventoryId: "malibu-rum" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Pineapple Juice", substitute: "Mango juice", inventoryId: "pineapple-juice" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Pineapple Slice or Lime Wheel", substitute: null, inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a highball or hurricane glass with ice cubes.",
+      "In a shaker with ice, combine Midori, Malibu, pineapple juice, and lime juice.",
+      "Shake well for 10 seconds.",
+      "Strain or pour over the ice in the glass.",
+      "Garnish with a pineapple slice and lime wheel.",
+      "Frozen version: blend all ingredients with 1 cup crushed ice until smooth and pour into a chilled glass."
+    ],
+    tags: ["midori", "malibu", "pineapple", "coconut", "melon", "tropical", "singapore", "sweet", "in-stock"]
+  },
+  {
+    id: "sakura-martini",
+    name: "Sakura Martini",
+    otherNames: "Japanese Cherry Blossom Martini; Sake Elderflower Martini",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Martini / Nick & Nora",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Floral Elderflower, Delicate Rice Umami, Crisp Citrus & Soft Botanical",
+    difficulty: 2,
+    popularity: 9.0,
+    proTip: "A Japanese-inspired modern classic that evokes the delicate beauty of cherry blossom season (花見, hanami). The key is balance — sake provides the silky umami base, St-Germain adds floral complexity, and gin gives structure. The Botanist Islay Dry Gin's 22 hand-foraged botanicals pair particularly beautifully with sake's rice elegance. Choya Ginjo Sake is the preferred choice here for its superior aromatic profile. For a fully no-gin version, increase sake to 2.5 oz and double the St-Germain. Serve in a Nick & Nora glass for maximum elegance.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin", ingredientGroup: "gin" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Choya Rokkonshojo Junmai Ginjo Sake", substitute: "Kawashima Sake", inventoryId: "choya-rokkonshojo-sake", ingredientGroup: "sake" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "St-Germain Elderflower Liqueur", substitute: "Elderflower syrup (reduce to 0.25 oz)", inventoryId: "st-germain" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Fresh Lemon Juice", substitute: "Yuzu juice if available", inventoryId: "fresh-lemons" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Peel Twist", substitute: "Edible flower or cherry blossom", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Chill a Martini or Nick & Nora glass in the freezer for at least 5 minutes.",
+      "In a cocktail shaker filled with ice, combine The Botanist gin, Choya Ginjo sake, St-Germain elderflower liqueur, and lemon juice.",
+      "Shake gently for 10 seconds — just enough to chill and blend without over-diluting.",
+      "Fine-strain into the chilled glass.",
+      "Express a lemon peel over the surface to release its fragrant oils, then drop in or discard.",
+      "Serve immediately — the floral aroma is best enjoyed fresh."
+    ],
+    tags: ["gin", "sake", "st-germain", "floral", "japanese", "martini", "elegant", "spring", "in-stock"]
+  },
+  {
+    id: "peach-sake-fizz",
+    name: "Peach Sake Fizz",
+    otherNames: "Momo Fizz; Japanese Peach Cocktail",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Low (~10% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Ripe Peach, Silky Rice Umami, Citrus Spritz & Floral Effervescence",
+    difficulty: 1,
+    popularity: 8.8,
+    proTip: "Inspired by the wildly popular Japanese bar trend of peach (momo) cocktails, this fizz celebrates the marriage of sake and peach — a combination beloved across Japan, Korea, and Southeast Asian nightlife. Hoffmann Peach Liqueur brings an authentic, sun-ripened stone fruit sweetness that pairs perfectly with Choya Ginjo sake's delicate floral umami. For a creamier 'peach bellini' style, substitute soda water with chilled Prosecco. Serve immediately while effervescent.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Kawashima Sake", substitute: "Choya Rokkonshojo Ginjo Sake", inventoryId: "kawashima-sake", ingredientGroup: "sake" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Hoffmann Peach Liqueur", substitute: "Peach schnapps", inventoryId: "hoffmann-peach" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Yuzu juice if available", inventoryId: "fresh-lemons" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Chang Soda Water", substitute: "Fever-Tree Tonic (adds a pleasing bitterness)", inventoryId: "chang-soda-water" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Slice or Fresh Mint Sprig", substitute: null, inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Fill a highball or Collins glass with ice cubes.",
+      "In a cocktail shaker with ice, combine sake, Hoffmann Peach Liqueur, and lemon juice.",
+      "Shake gently for 8 seconds to chill.",
+      "Strain over fresh ice in the highball glass.",
+      "Top with chilled soda water and stir gently once.",
+      "Garnish with a lemon slice or fresh mint sprig.",
+      "Prosecco variation: replace soda water with 2 oz chilled Prosecco for a Peach Sake Bellini."
+    ],
+    tags: ["sake", "peach", "fizz", "japanese", "light", "refreshing", "floral", "in-stock"]
+  },
+  {
+    id: "velvet-hammer",
+    name: "Velvet Hammer",
+    otherNames: "Coffee Cream Dessert Cocktail; Creamy Kahlúa After-Dinner",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Martini / Coupe",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Rich Coffee, Sweet Vanilla Cream, Orange Zest & Silky Smooth Finish",
+    difficulty: 1,
+    popularity: 8.7,
+    proTip: "A beloved 1970s after-dinner cocktail that became an enduring staple of Asian hotel bars and Singapore nightlife, later popularised as a chic 'dessert in a glass'. The Velvet Hammer pairs Cointreau's bright orange with the dark richness of Kahlúa coffee liqueur, balanced by luscious heavy cream. Shake hard with plenty of ice for maximum aeration and a velvety, creamy mouthfeel. For a frozen version, blend with ice for a coffee-orange frappé. Add a Frangelico float for a Nutty Velvet Hammer twist.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua", ingredientGroup: "coffee-liqueur" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Heavy Whipping Cream", substitute: "Half-and-half cream or Baileys", inventoryId: "whipping-heavy-cream" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Freshly Grated Nutmeg or Coffee Bean", substitute: "Cocoa powder dusting", inventoryId: "coffee-beans" }
+    ],
+    instructions: [
+      "Chill a Martini or coupe glass in the freezer.",
+      "Combine Cointreau, Kahlúa, and heavy cream in a cocktail shaker filled with ice.",
+      "Shake vigorously for 15 seconds until very cold and velvety.",
+      "Fine-strain into the chilled Martini or coupe glass.",
+      "Garnish with 3 roasted coffee beans floated on the surface, or a dusting of freshly grated nutmeg."
+    ],
+    tags: ["cointreau", "kahlua", "cream", "coffee", "dessert", "smooth", "classic", "asian-bars", "in-stock"]
+  },
+  {
+    id: "melon-spritz",
+    name: "Melon Spritz",
+    otherNames: "Midori Prosecco Spritz; Japanese Melon Aperitivo",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Wine Glass / Spritz Glass",
+    alcoholLevel: "Low (~10% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Sweet Honeydew Melon, Effervescent Bubbles, Crisp Lime & Floral Finish",
+    difficulty: 1,
+    popularity: 8.9,
+    proTip: "The Melon Spritz is a modern Japanese-inspired aperitivo, born from the global love of Midori melon liqueur and the spritz cocktail trend that swept East Asian bars in the 2010s. This vivid emerald-green cocktail is a popular order across Tokyo izakayas, Singapore cocktail bars, and Korean craft cocktail spots. Keep everything ice-cold and pour the Prosecco gently to preserve the bubbles. Chang Lime Soda makes an excellent lower-ABV variant with a tangy citrus lift.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Zonin Prosecco Brut", substitute: "Bottega Spumante Venezia", inventoryId: "zonin-prosecco-brut", ingredientGroup: "prosecco" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Lemon juice", inventoryId: "fresh-limes" },
+      { amountOz: "Splash", amountMl: "Splash", item: "Chang Lime Soda (optional top)", substitute: "Chang Soda Water", inventoryId: "chang-lime-soda" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wheel", substitute: "Fresh mint sprig", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a large wine glass or spritz glass with ice cubes.",
+      "Pour Midori melon liqueur directly over the ice.",
+      "Add fresh lime juice.",
+      "Gently pour in ice-cold Prosecco down the side of the glass to preserve the bubbles.",
+      "Add a small splash of Chang Lime Soda for extra citrus effervescence if desired.",
+      "Stir gently once with a bar spoon.",
+      "Garnish with a lime wheel on the rim."
+    ],
+    tags: ["midori", "prosecco", "spritz", "melon", "japanese", "korean", "light", "bubbly", "aperitivo", "in-stock"]
   }
 ];
 
