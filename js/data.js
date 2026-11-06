@@ -14,13 +14,13 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "5 November 2026";
-const INVENTORY_SYNC_VERSION = "20261105_2";
+const INVENTORY_LAST_UPDATED = "6 November 2026";
+const INVENTORY_SYNC_VERSION = "20261106_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
-  "absolut-citron": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: Absolut Citron Lemon Flavored Vodka 1000ml (40% ABV). Natural lemon and lime peel infusion; iconic base for Cosmopolitan and Lemon Drop Martini." },
+  "absolut-citron": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: Absolut Citron Lemon Flavored Vodka 1000ml (40% ABV). Natural lemon and lime peel infusion; iconic base for Cosmopolitan and Lemon Drop Martini." },
   "gio-prosecco": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Out of stock. Restock Gio Prosecco Spumante Extra Dry, or use in-stock Zonin Prosecco Brut / Bottega Spumante Venezia." },
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
   "black-pepper": { inStock: true, quantity: 1, unit: "grinder", notes: "Freshly ground black pepper for savory cocktails and Bloody Mary." },
@@ -79,7 +79,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "choya-rokkonshojo-sake": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, notes: "Choya Rokkonshojo Junmai Ginjo Sake, 15% ABV, 720ml. In stock." },
   "soju": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, notes: "Soju (Korean spirit), ~25% ABV, 360ml. In stock." },
   "yakult": { inStock: false, incoming: true, quantity: 0, unit: "bottle", notes: "Yakult probiotic fermented milk drink. Easily sourced — incoming." },
-  "baijiu": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Baijiu (Chinese spirit). To be sourced." },
+  "baijiu": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 52, notes: "Luzhou Laojiao Black Cap Baijiu, 750ml, 52% ABV. In stock." },
   "beer-lager": { inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 5.3, notes: "German wheat & lager beers in stock: Erdinger Weissbier and Paulaner (Hefe-Weißbier / Münchner Hell)." },
   "makgeolli": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 6, notes: "Makgeolli (Korean unfiltered sparkling rice wine), ~6% ABV. Keep refrigerated." },
   "drambuie": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Drambuie Honeyed Scotch Liqueur, 40% ABV, 700ml. In stock." },
@@ -377,14 +377,14 @@ const DEFAULT_INVENTORY = [
   { id: "topanito-mezcal-artesanal-espadin", name: "Topanito Mezcal Artesanal Espadín 52% ABV", category: "spirits", subCategory: "Agave › Mezcal", spiritFamily: "Agave", spiritStyle: "Mezcal", inStock: true, incoming: false, quantity: 1, unit: "bottle", proof: "52% ABV", abv: 52, notes: "Artisanal mezcal with smoky agave, mineral lift, and citrus." },
   { id: "smirnoff-red", name: "Smirnoff Red Vodka (37.5% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 37.5, notes: "Ultra-clean triple-distilled neutral vodka for Moscow Mule and Kamikaze." },
   { id: "absolut-blue", name: "Absolut Vodka Original Blue (40% ABV)", category: "spirits", subCategory: "Vodka › Neutral", spiritFamily: "Vodka", spiritStyle: "Neutral", inStock: true, abv: 40, notes: "Rich Swedish winter wheat vodka for Espresso Martini and Cosmopolitan." },
-  { id: "absolut-citron", name: "Absolut Citron Vodka 1000ml (40% ABV)", category: "spirits", subCategory: "Vodka › Flavored / Citrus", spiritFamily: "Vodka", spiritStyle: "Citrus Vodka", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Swedish winter wheat vodka infused with natural citrus flavors from lemon and lime peel, with no added sugar. The definitive spirit behind Toby Cecchini's 1988 Cosmopolitan and the classic Lemon Drop." },
+  { id: "absolut-citron", name: "Absolut Citron Vodka 1000ml (40% ABV)", category: "spirits", subCategory: "Vodka › Flavored / Citrus", spiritFamily: "Vodka", spiritStyle: "Citrus Vodka", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Swedish winter wheat vodka infused with natural citrus flavors from lemon and lime peel, with no added sugar. The definitive spirit behind Toby Cecchini's 1988 Cosmopolitan and the classic Lemon Drop." },
   { id: "jameson-irish-whiskey", name: "Jameson Irish Whiskey 700ml", category: "spirits", subCategory: "Whiskey › Irish", spiritFamily: "Whiskey", spiritStyle: "Irish", inStock: true, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1 bottle. Incoming spare: Jameson Irish Whiskey 700ml (40% ABV)." },
   { id: "the-botanist-gin", name: "The Botanist Islay Dry Gin (1 Litre)", category: "spirits", subCategory: "Gin › Islay Dry", spiritFamily: "Gin", spiritStyle: "Islay Dry", inStock: true, quantity: 1, unit: "bottle", abv: 46, premium: true, notes: "Forager's gin from Bruichladdich Distillery, Islay. 22 hand-foraged local botanicals plus 9 classic gin botanicals. Complex, floral, and herbaceous." },
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
   { id: "choya-rokkonshojo-sake", name: "Choya Rokkonshojo Junmai Ginjo Sake 720ml (15% ABV)", category: "spirits", subCategory: "Sake › Junmai Ginjo", spiritFamily: "Sake", spiritStyle: "Junmai Ginjo", inStock: true, quantity: 1, unit: "bottle", abv: 15, premium: true, notes: "Premium Japanese Junmai Ginjo sake from Choya. Fragrant, delicate floral and fruity aroma with a smooth, refreshing, and clean finish." },
   { id: "soju", name: "Soju (Korean Spirit)", category: "spirits", subCategory: "Soju", spiritFamily: "Soju", spiritStyle: "Korean Clear Spirit", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, refrigerate: false, notes: "Korean distilled spirit made from grain (rice, wheat, or barley). Neutral, slightly sweet, and ultra-smooth at ~25% ABV. The world's best-selling spirit by volume. Essential for Somaek and soju cocktails." },
   { id: "makgeolli", name: "Makgeolli (Korean Sparkling Rice Wine)", category: "spirits", subCategory: "Rice Wine › Makgeolli", spiritFamily: "Rice Wine", spiritStyle: "Korean Unfiltered Rice Wine", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 6, refrigerate: true, notes: "Traditional Korean unfiltered, naturally effervescent fermented rice brew (~6% ABV). Milky white, tangy, gently sweet, and rich in probiotics. Essential for Maksa, Honey Makgeolli, and Korean pocha dining." },
-  { id: "baijiu", name: "Baijiu (Chinese Grain Spirit)", category: "spirits", subCategory: "Baijiu", spiritFamily: "Baijiu", spiritStyle: "Chinese Clear Spirit", inStock: false, incoming: false, quantity: 0, unit: "bottle", abv: 50, notes: "Traditional Chinese distilled grain liquor. High-proof (40–60%+ ABV), complex earthy-floral character. The world's most consumed spirit. To be sourced." },
+  { id: "baijiu", name: "Luzhou Laojiao Black Cap Baijiu 750ml (52% ABV)", category: "spirits", subCategory: "Baijiu", spiritFamily: "Baijiu", spiritStyle: "Chinese Strong Aroma Baijiu", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 52, notes: "Luzhou Laojiao Black Cap Baijiu, 750ml, 52% ABV. In stock." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
   { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
@@ -804,14 +804,14 @@ const DEFAULT_DRINKS = [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
       { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
-      { amountOz: "Garnish", amountMl: "Garnish", item: "Maraschino Cherry (Luxardo style)", substitute: "Orange twist", inventoryId: "maraschino-cherries" }
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed orange twist (or maraschino cherry)", substitute: "Maraschino cherry", inventoryId: "fresh-oranges" }
     ],
     instructions: [
       "Chill a coupe or Nick & Nora glass.",
       "In a mixing glass, combine rye whiskey, Martini Rosso vermouth, and Angostura bitters.",
       "Add ice and stir smoothly for 30 seconds until ice cold.",
       "Strain into the chilled glass.",
-      "Drop in a rich maraschino cherry."
+      "Garnish with an expressed orange twist or a maraschino cherry."
     ],
     tags: ["whiskey", "rye", "vermouth", "classic", "spirit-forward"]
   },
