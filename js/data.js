@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "6 November 2026";
-const INVENTORY_SYNC_VERSION = "20261106_1";
+const INVENTORY_SYNC_VERSION = "20261106_4";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -80,11 +80,12 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "soju": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, notes: "Soju (Korean spirit), ~25% ABV, 360ml. In stock." },
   "yakult": { inStock: false, incoming: true, quantity: 0, unit: "bottle", notes: "Yakult probiotic fermented milk drink. Easily sourced — incoming." },
   "baijiu": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 52, notes: "Luzhou Laojiao Black Cap Baijiu, 750ml, 52% ABV. In stock." },
+  "fresh-mint": { inStock: false, incoming: false, quantity: 0, unit: "bunch", refrigerate: true, notes: "Fresh spearmint / mint. Out of stock." },
   "beer-lager": { inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 5.3, notes: "German wheat & lager beers in stock: Erdinger Weissbier and Paulaner (Hefe-Weißbier / Münchner Hell)." },
   "makgeolli": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 6, notes: "Makgeolli (Korean unfiltered sparkling rice wine), ~6% ABV. Keep refrigerated." },
   "drambuie": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Drambuie Honeyed Scotch Liqueur, 40% ABV, 700ml. In stock." },
   "amaro-nonino": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 35, notes: "Amaro Nonino Herbal Infusion (Quintessentia), 35% ABV, 700ml. In stock." },
-  "chang-lime-soda": { inStock: true, quantity: 2, unit: "bottle" },
+  "chang-lime-soda": { inStock: true, quantity: 2, unit: "bottle", notes: "Running low: 2 bottles of Chang Lime Soda. Restock soon." },
   "cola": { inStock: true, quantity: 6, unit: "can" },
   "demerara-syrup": { inStock: true, quantity: 1, unit: "bottle" }
 };
@@ -460,7 +461,7 @@ const DEFAULT_INVENTORY = [
   { id: "ginger-beer", name: "Ginger Beer (Fever-Tree / Bundaberg)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-ginger-beer", refrigerate: true, notes: "In stock (Fulfilled by Fever-Tree Premium Ginger Beer and Bundaberg Ginger Beer). Keep chilled." },
   { id: "tonic-water", name: "Tonic Water (Fever-Tree)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-indian-tonic", refrigerate: true, notes: "In stock (Fulfilled by Fever-Tree Premium Indian Tonic Water). Keep chilled." },
   { id: "cola", name: "Coca-Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "can", refrigerate: true, notes: "6 cans of Coca-Cola. Keep chilled in fridge for Cuba Libre, Long Island Iced Tea, and Roy Rogers." },
-  { id: "chang-lime-soda", name: "Chang Lime Soda (2 Bottles)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 2, unit: "bottle", refrigerate: true, notes: "Refreshing lime-flavored carbonated soda. Keep chilled in fridge for casual highball mixing and lime cocktail riffs." },
+  { id: "chang-lime-soda", name: "Chang Lime Soda (2 Bottles)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 2, unit: "bottle", refrigerate: true, notes: "Running low: 2 bottles of refreshing lime-flavoured carbonated soda. Keep chilled; restock soon." },
   { id: "lemon-lime-soda", name: "Schweppes Manao Soda Mini - Lemon Lime", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, refrigerate: true, notes: "Lemon-lime-flavoured carbonated soda. Keep chilled in fridge for cocktails and highballs." },
   { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, refrigerate: true, notes: "Keep chilled in fridge for the Jägerbomb drop." },
   { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, refrigerate: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
@@ -481,7 +482,7 @@ const DEFAULT_INVENTORY = [
   { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, refrigerate: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
   { id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh limes for juice and wheels; core citrus for Margarita, Daiquiri, Moscow Mule, Mojito, Southside, and Gimlet." },
   { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh navel oranges for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
-  { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, refrigerate: true, notes: "Aromatic sprigs for Mojito, Mint Julep, and Hugo Spritz." },
+  { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, incoming: false, quantity: 0, unit: "bunch", refrigerate: true, notes: "Aromatic sprigs for Mojito, Mint Julep, and Hugo Spritz. Out of stock." },
   { id: "fresh-cucumber", name: "Fresh Cucumber", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Crisp cucumber slices for Cucumber Mint Cooler and Gimlet." },
   { id: "fresh-rosemary", name: "Fresh Rosemary Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Woody aromatic herb for Rosemary Grapefruit Spritzer." },
   { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "For Virgin Strawberry Daiquiri." },
