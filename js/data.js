@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "6 November 2026";
-const INVENTORY_SYNC_VERSION = "20261106_4";
+const INVENTORY_LAST_UPDATED = "7 November 2026";
+const INVENTORY_SYNC_VERSION = "20261107_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -46,7 +46,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" },
-  "fresh-oranges": { inStock: true, quantity: 1, unit: "fruit" },
+  "fresh-oranges": { inStock: true, quantity: 3, unit: "fruit", notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run." },
   "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
   "grapefruit-juice": { inStock: true, quantity: 1, unit: "carton" },
   "pineapple-juice": { inStock: true, quantity: 1, unit: "carton" },
@@ -78,6 +78,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "kawashima-sake": { inStock: true, quantity: 1, unit: "bottle" },
   "choya-rokkonshojo-sake": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, notes: "Choya Rokkonshojo Junmai Ginjo Sake, 15% ABV, 720ml. In stock." },
   "soju": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, notes: "Soju (Korean spirit), ~25% ABV, 360ml. In stock." },
+  "jinro-fruit-soju": { inStock: true, incoming: false, quantity: 2, unit: "bottle", notes: "Two Jinro 360ml fruit-soju bottles: melon and grape flavours." },
   "yakult": { inStock: false, incoming: true, quantity: 0, unit: "bottle", notes: "Yakult probiotic fermented milk drink. Easily sourced — incoming." },
   "baijiu": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 52, notes: "Luzhou Laojiao Black Cap Baijiu, 750ml, 52% ABV. In stock." },
   "fresh-mint": { inStock: false, incoming: false, quantity: 0, unit: "bunch", refrigerate: true, notes: "Fresh spearmint / mint. Out of stock." },
@@ -85,7 +86,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "makgeolli": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 6, notes: "Makgeolli (Korean unfiltered sparkling rice wine), ~6% ABV. Keep refrigerated." },
   "drambuie": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Drambuie Honeyed Scotch Liqueur, 40% ABV, 700ml. In stock." },
   "amaro-nonino": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 35, notes: "Amaro Nonino Herbal Infusion (Quintessentia), 35% ABV, 700ml. In stock." },
-  "chang-lime-soda": { inStock: true, quantity: 2, unit: "bottle", notes: "Running low: 2 bottles of Chang Lime Soda. Restock soon." },
+  "chang-lime-soda": { inStock: true, quantity: 4, unit: "bottle", refrigerate: true, notes: "4 bottles of Chang Lime Soda total: 2 previously listed plus 2 added after the grocery run." },
+  "maraschino-cherries": { inStock: true, incoming: false, quantity: 1, unit: "jar", refrigerate: true, notes: "1 jar of maraschino cherries, added after the grocery run." },
   "cola": { inStock: true, quantity: 6, unit: "can" },
   "demerara-syrup": { inStock: true, quantity: 1, unit: "bottle" }
 };
@@ -336,7 +338,7 @@ const INGREDIENT_GROUPS = {
   "demerara-syrup": { label: "Demerara Syrup", inventoryIds: ["demerara-syrup"] },
   "sake": { label: "Sake", inventoryIds: ["kawashima-sake", "choya-rokkonshojo-sake"] },
   "lime-soda": { label: "Lime Soda", inventoryIds: ["chang-lime-soda"] },
-  "soju": { label: "Soju", inventoryIds: ["soju"] },
+  "soju": { label: "Soju", inventoryIds: ["soju", "jinro-fruit-soju"] },
   "baijiu": { label: "Baijiu", inventoryIds: ["baijiu"] },
   "beer": { label: "Beer / Lager / Weissbier", inventoryIds: ["beer-lager"] },
   "makgeolli": { label: "Makgeolli", inventoryIds: ["makgeolli"] }
@@ -384,6 +386,7 @@ const DEFAULT_INVENTORY = [
   { id: "kawashima-sake", name: "Kawashima Matsu no Hana Junmai Shu Sake 750ml (15.4% ABV)", category: "spirits", subCategory: "Sake › Junmai", spiritFamily: "Sake", spiritStyle: "Junmai", inStock: true, quantity: 1, unit: "bottle", abv: 15.4, notes: "Traditional Japanese pure rice sake (Junmai). Clean, slightly earthy umami with gentle sweetness and a dry finish." },
   { id: "choya-rokkonshojo-sake", name: "Choya Rokkonshojo Junmai Ginjo Sake 720ml (15% ABV)", category: "spirits", subCategory: "Sake › Junmai Ginjo", spiritFamily: "Sake", spiritStyle: "Junmai Ginjo", inStock: true, quantity: 1, unit: "bottle", abv: 15, premium: true, notes: "Premium Japanese Junmai Ginjo sake from Choya. Fragrant, delicate floral and fruity aroma with a smooth, refreshing, and clean finish." },
   { id: "soju", name: "Soju (Korean Spirit)", category: "spirits", subCategory: "Soju", spiritFamily: "Soju", spiritStyle: "Korean Clear Spirit", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, refrigerate: false, notes: "Korean distilled spirit made from grain (rice, wheat, or barley). Neutral, slightly sweet, and ultra-smooth at ~25% ABV. The world's best-selling spirit by volume. Essential for Somaek and soju cocktails." },
+  { id: "jinro-fruit-soju", name: "Jinro Fruit Soju (Melon & Grape) 360ml", category: "spirits", subCategory: "Soju", spiritFamily: "Soju", spiritStyle: "Fruit-Flavoured Korean Soju", inStock: true, incoming: false, quantity: 2, unit: "bottle", refrigerate: true, notes: "Two 360ml Jinro fruit-soju bottles: melon and grape flavours." },
   { id: "makgeolli", name: "Makgeolli (Korean Sparkling Rice Wine)", category: "spirits", subCategory: "Rice Wine › Makgeolli", spiritFamily: "Rice Wine", spiritStyle: "Korean Unfiltered Rice Wine", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 6, refrigerate: true, notes: "Traditional Korean unfiltered, naturally effervescent fermented rice brew (~6% ABV). Milky white, tangy, gently sweet, and rich in probiotics. Essential for Maksa, Honey Makgeolli, and Korean pocha dining." },
   { id: "baijiu", name: "Luzhou Laojiao Black Cap Baijiu 750ml (52% ABV)", category: "spirits", subCategory: "Baijiu", spiritFamily: "Baijiu", spiritStyle: "Chinese Strong Aroma Baijiu", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 52, notes: "Luzhou Laojiao Black Cap Baijiu, 750ml, 52% ABV. In stock." },
 
@@ -461,7 +464,7 @@ const DEFAULT_INVENTORY = [
   { id: "ginger-beer", name: "Ginger Beer (Fever-Tree / Bundaberg)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-ginger-beer", refrigerate: true, notes: "In stock (Fulfilled by Fever-Tree Premium Ginger Beer and Bundaberg Ginger Beer). Keep chilled." },
   { id: "tonic-water", name: "Tonic Water (Fever-Tree)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, aliasOf: "fever-tree-indian-tonic", refrigerate: true, notes: "In stock (Fulfilled by Fever-Tree Premium Indian Tonic Water). Keep chilled." },
   { id: "cola", name: "Coca-Cola", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "can", refrigerate: true, notes: "6 cans of Coca-Cola. Keep chilled in fridge for Cuba Libre, Long Island Iced Tea, and Roy Rogers." },
-  { id: "chang-lime-soda", name: "Chang Lime Soda (2 Bottles)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 2, unit: "bottle", refrigerate: true, notes: "Running low: 2 bottles of refreshing lime-flavoured carbonated soda. Keep chilled; restock soon." },
+  { id: "chang-lime-soda", name: "Chang Lime Soda (4 Bottles)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 4, unit: "bottle", refrigerate: true, notes: "4 bottles total: 2 previously listed plus 2 added after the grocery run. Keep chilled." },
   { id: "lemon-lime-soda", name: "Schweppes Manao Soda Mini - Lemon Lime", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, refrigerate: true, notes: "Lemon-lime-flavoured carbonated soda. Keep chilled in fridge for cocktails and highballs." },
   { id: "energy-drink", name: "Energy Drink (Red Bull)", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, refrigerate: true, notes: "Keep chilled in fridge for the Jägerbomb drop." },
   { id: "cranberry-juice", name: "Cranberry Juice", category: "mixers_sodas", subCategory: "Juices", inStock: true, refrigerate: true, notes: "In stock. Tart crimson juice for Cosmopolitan, Sex on the Beach, Sea Breeze, and Woo Woo." },
@@ -481,12 +484,12 @@ const DEFAULT_INVENTORY = [
   // --- FRESH PRODUCE & GARNISHES (User In Stock & Shopping List) ---
   { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, refrigerate: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
   { id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh limes for juice and wheels; core citrus for Margarita, Daiquiri, Moscow Mule, Mojito, Southside, and Gimlet." },
-  { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh navel oranges for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
+  { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 3, unit: "fruit", refrigerate: true, notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run. Use for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
   { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, incoming: false, quantity: 0, unit: "bunch", refrigerate: true, notes: "Aromatic sprigs for Mojito, Mint Julep, and Hugo Spritz. Out of stock." },
   { id: "fresh-cucumber", name: "Fresh Cucumber", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Crisp cucumber slices for Cucumber Mint Cooler and Gimlet." },
   { id: "fresh-rosemary", name: "Fresh Rosemary Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Woody aromatic herb for Rosemary Grapefruit Spritzer." },
   { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "For Virgin Strawberry Daiquiri." },
-  { id: "maraschino-cherries", name: "Maraschino Cherries", category: "fresh_garnishes", subCategory: "Garnishes", inStock: false, refrigerate: true, notes: "Classic garnish for Manhattan, Shirley Temple, and Singapore Sling." },
+  { id: "maraschino-cherries", name: "Maraschino Cherries", category: "fresh_garnishes", inStock: true, incoming: false, quantity: 1, unit: "jar", refrigerate: true, notes: "1 jar of maraschino cherries, added after the grocery run. Classic garnish for Manhattan, Shirley Temple, and Singapore Sling." },
   { id: "fresh-espresso", name: "Fresh Espresso Shots (made to order)", category: "fresh_garnishes", subCategory: "Coffee & Fresh", inStock: true, quantity: 1, unit: "on demand", notes: "Readily available fresh espresso for dense crema on Espresso Martinis and coffee drinks." },
   { id: "coffee-beans", name: "Whole Roasted Coffee Beans", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "Three floated beans for Espresso Martini and coffee cocktail garnishes." },
   { id: "egg-white", name: "Egg White (Fresh or Aquafaba)", category: "fresh_garnishes", subCategory: "Cocktail Texture", inStock: true, refrigerate: true, notes: "Creates silky texture and dense meringue foam on Sours." },
