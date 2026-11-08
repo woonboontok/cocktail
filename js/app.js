@@ -1370,19 +1370,26 @@
       const inventoryOptionsHtml = inventoryOptions.length ? `
         <div class="ingredient-options" id="${optionsId}" hidden>
           <div class="ingredient-options-heading">Your inventory options</div>
+          <div class="ingredient-option-header" aria-hidden="true">
+            <span>Name</span>
+            <span>ABV</span>
+            <span>Qty</span>
+            <span>Status</span>
+          </div>
           <ul class="ingredient-options-list">
             ${inventoryOptions.map(item => {
               const optionStatus = getInventoryOptionStatus(item);
               const quantity = item.quantity !== undefined ? `${item.quantity} ${escapeHTML(item.unit || getDefaultUnit(item))}` : "Quantity not tracked";
+              const alcoholLevel = getInventoryAbv(item).replace(/\s*ABV$/i, "");
               const reserveBadge = (item.premium && ing.preferNonPremium)
                 ? `<span class="ingredient-option-reserve" title="Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity">✦ Reserve</span>`
                 : "";
               return `
                 <li class="ingredient-option${item.premium && ing.preferNonPremium ? " ingredient-option-premium" : ""}">
-                  <span class="ingredient-option-name">${escapeHTML(item.name)}</span>
+                  <span class="ingredient-option-name">${escapeHTML(item.name)} ${reserveBadge}</span>
+                  <span class="ingredient-option-alcohol">${alcoholLevel}</span>
                   <span class="ingredient-option-meta">${quantity}</span>
                   <span class="ingredient-option-status ${optionStatus.className}">${optionStatus.label}</span>
-                  ${reserveBadge}
                 </li>
               `;
             }).join("")}

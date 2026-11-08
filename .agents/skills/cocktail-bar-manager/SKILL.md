@@ -64,10 +64,12 @@ When a user mentions receiving, purchasing, or running out of bottles:
 ## 3. Reserve Spirit Decision Framework (`✦ Reserve` & `preferNonPremium`)
 
 ### A. When to Tag an Inventory Bottle as `premium: true` (✦ Reserve)
-Mark `premium: true` on a bottle **ONLY** if it meets at least two of the following criteria:
-1. **Exceptional Craft / Foraging / Botanicals**: Artisanal distillation featuring rare or intricate botanicals (e.g., *The Botanist Islay Dry Gin* with 22 hand-foraged Islay botanicals, *Monkey 47* with 47 Black Forest botanicals).
-2. **Extended Age Statement / Top-Shelf Classification**: XO, Extra Añejo, or double-cask aged spirits (e.g., *Otard XO Gold Cognac*, *Mount Gay Black Barrel Double Cask Rum*, *Código 1530 Reposado Cristalino*).
-3. **High Replacement Cost / Sipping Profile**: Distinct sipping nuance meant to be evaluated neat or in spirit-forward builds rather than used as high-volume well spirits.
+Reserve status is primarily about **rarity and replacement cost**. Mark `premium: true` only when the bottle meets at least two of these signals:
+1. **Rare or hard to replace**: limited availability, unusual provenance, or difficulty sourcing a replacement.
+2. **High replacement cost**: materially more expensive to replace than an everyday bottle in the same ingredient group.
+3. **Distinctive profile worth preserving**: complex craft, meaningful aging, or sipping qualities that would be lost if masked in a heavily modified drink.
+
+Rarity and replacement cost are the main signals; a distinctive sipping profile supports the classification. Craft, age, or brand prestige by itself does not make a bottle Reserve. This is why an ordinary Añejo does not qualify automatically, while *Código 1530 Reposado Cristalino* is an explicit Reserve example: it is distinctive, costly, and harder to replace than a workhorse tequila.
 
 #### What NOT to Tag as `premium: true`:
 - **High ABV / Overproof alone is NOT premium**: High proof or high ABV (e.g., *Goslings Black Seal 151* at 75.5% ABV, *Topanito Mezcal Artesanal* at 52% ABV, *Jack Daniel's Bonded Rye* at 50% ABV) is a **functional specification** for Tiki floats, flaming serves, or high-proof backbone—not a designation of delicate top-shelf rarity. Goslings 151 is designed specifically as a high-proof utility mixer/float for Zombies and flaming drinks; marking it reserve would discourage its core intended usage.
@@ -78,7 +80,7 @@ When a drink ingredient references an `ingredientGroup` (e.g., `gin`, `tequila`,
 
 | Drink Characteristic | `preferNonPremium` Setting | Example Drinks | Rationale |
 |---|---|---|---|
-| **Heavily modified / Sugary / Creamy / High-Mixer** | **`true`** | Singapore Sling, Long Island Iced Tea, Frangelico Brandy Alexander, Alabama Slammer, Flatliner | Heavy cream, cola, 4 oz fruit juices, or Tabasco completely drown out the delicate botanicals or barrel nuances of reserve bottles. Displays advisory: *"Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity."* |
+| **Heavily modified / Sugary / Creamy / High-Mixer** | **`true`** | Singapore Sling, Long Island Iced Tea, Tom Collins, Brandy Alexander, Alabama Slammer, Flatliner, Barbados Rum Punch, Monkey Gland, Floradora, Ramos Gin Fizz, Peach Sake Fizz, Sake Bomb, Tonight Not Going Home and its shot, heavily sweetened tiki drinks | Heavy syrup or liqueur, cream, large amounts of juice, cola, intense spice, or several competing spirits can overpower the reserved bottle's profile and waste it. Displays advisory: *"Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity."* |
 | **Spirit-Forward / Minimal Modifier / Dry Showcase** | **`false` (leave falsy)** | Dry Martini, Saketini, Obituary, Vesper, Classic Gimlet, French 75, Classic Margarita, Paloma, Old Fashioned | The base spirit is the deliberate star of the glass. Reserve spirits elevate the cocktail and should be readily recommended. |
 
 ---

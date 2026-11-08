@@ -1641,17 +1641,33 @@ a:hover {
   gap: 0.45rem;
 }
 
+.ingredient-option-header,
 .ingredient-option {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) minmax(100px, auto) minmax(105px, auto) auto;
   align-items: center;
   gap: 0.65rem;
   font-size: 0.82rem;
 }
 
+.ingredient-option-header {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
 .ingredient-option-name {
   color: #fff;
   font-weight: 600;
+}
+
+.ingredient-option-alcohol {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
 }
 
 .ingredient-option-meta {
@@ -1677,10 +1693,12 @@ a:hover {
   background: rgba(251, 191, 36, 0.05);
   border-left: 2px solid rgba(251, 191, 36, 0.35);
   padding-left: 0.5rem;
-  grid-template-columns: minmax(0, 1fr) auto auto auto;
 }
 
 .ingredient-option-reserve {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 0.3rem;
   border-radius: var(--radius-full);
   font-size: 0.65rem;
   font-weight: 700;
@@ -1966,14 +1984,17 @@ a:hover {
     justify-content: space-between;
   }
   .ingredient-option {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    gap: 0.4rem;
   }
-  .ingredient-option-meta {
-    grid-column: 1;
+  .ingredient-option-header {
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    gap: 0.4rem;
+    font-size: 0.58rem;
   }
   .ingredient-option-status {
-    grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-column: auto;
+    grid-row: auto;
   }
   .ing-measure {
     min-width: unset;

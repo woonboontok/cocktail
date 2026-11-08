@@ -1126,7 +1126,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Think of this as the ultimate adult sparkling lemonade. Shaking the Tanqueray gin, fresh lemon, and simple syrup before adding soda prevents sugar from settling at the base. Tanqueray's bold juniper easily stands up to the heavy fizz of Chang Soda Water.\n\nClassic 1-Ingredient Collins Variants:\n• John Collins (Vodka Collins): Swap gin for 2 oz Absolut Vodka for a clean, sparkling citrus cooler.\n• Colonel Collins: Swap gin for 2 oz Jim Beam Black Bourbon for a refreshing whiskey fizz.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Absolut Vodka (John Collins) or Jim Beam Black (Colonel Collins)", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Absolut Vodka (John Collins) or Jim Beam Black (Colonel Collins)", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Rich simple syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
       { amountOz: "Top up", amountMl: "Top up", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" },
@@ -3025,7 +3025,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.3,
     proTip: "Use the classic island balance: one of sour, two of sweet, three of strong, and four of weak. Mount Gay adds a dry oak and vanilla backbone.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel", ingredientGroup: "dark-rum", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Premium Simple Syrup", substitute: "Pomegranate Grenadine", inventoryId: "simple-syrup" },
       { amountOz: "2 oz", amountMl: "60 ml", item: "Fresh Orange Juice", substitute: "Orange juice", inventoryId: "orange-juice" },
@@ -3652,7 +3652,7 @@ const DEFAULT_DRINKS = [
     proTip: "China and Taiwan's most famous nightlife challenge cocktail. Created by marrying equal parts high-proof Rum, Tequila, Whiskey, and an orange liqueur (Cointreau or Grand Marnier). In Chinese clubs, bartenders warm the snifter and ignite the vapors, sprinkling ground cinnamon from above to unleash a starry meteor shower of golden sparks. Always blow out the flame before drinking!",
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "tonight-rum" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tequila", substitute: "100% blue agave blanco or reposado", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tequila", substitute: "100% blue agave blanco or reposado", inventoryId: "teremana-tequila", ingredientGroup: "tequila", preferNonPremium: true },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon or Johnnie Walker Black", inventoryId: "jd-bonded-rye", ingredientGroup: "tonight-whiskey" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grand Marnier (or Cointreau)", substitute: "Cointreau or Lumina Triple Sec", inventoryId: "grand-marnier" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Ground Cinnamon (for spark flame) & Fresh Orange Peel", substitute: "Navel orange twist", inventoryId: "fresh-oranges" }
@@ -3682,7 +3682,7 @@ const DEFAULT_DRINKS = [
     proTip: "The high-potency shooter edition designed to be taken down in one breathless gulp. Using your stocked Bacardi Rum, Teremana Tequila, Jim Beam Bourbon, and Cointreau gives it maximum proof with a surprisingly smooth citrus finish.",
     ingredients: [
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "tonight-rum" },
-      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
+      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila", preferNonPremium: true },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Cointreau (or Grand Marnier)", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" }
     ],
@@ -4519,9 +4519,9 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Fruity, Citrusy, Botanical & Herbaceous Anise Kiss",
     difficulty: 2,
     popularity: 9.2,
-    proTip: "Named mockingly after a 1920s medical craze. The combination of sweet orange juice and rich pomegranate grenadine acts as a smooth blanket, allowing the bold, complex herbal notes of The Botanist and Père Kermann's Absinthe to surface cleanly without a harsh alcohol burn.",
+    proTip: "Named mockingly after a 1920s medical craze. Sweet orange juice and pomegranate grenadine soften the gin's botanical edge, so Tanqueray is the practical everyday choice here. Save The Botanist for a drier, less modified cocktail where its layered botanicals can take center stage. Père Kermann's Absinthe adds a brief herbal accent without a harsh alcohol burn.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Fresh Orange Juice", substitute: "Blood orange juice", inventoryId: "orange-juice" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Père Kermann's Absinthe", substitute: "Generic Absinthe", inventoryId: "pere-kermanns-absinthe" }
@@ -4778,7 +4778,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Created in the early 1900s for the hit Broadway musical 'Florodora', famed for its glamorous chorus line. The pairing of raspberry syrup and fresh lime juice with fiery ginger beer provides a refreshing, spicy-sweet balance that lets Tanqueray's juniper shine.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Raspberry Rhapsody Flavored Syrup", substitute: "Fresh raspberry puree + simple syrup", inventoryId: "raspberry-rhapsody" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer or Schweppes Ginger Soda", inventoryId: "fever-tree-ginger-beer", ingredientGroup: "ginger-beer" },
@@ -4865,7 +4865,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Invented in 1888 by Henry C. Ramos at his New Orleans bar, and historically served at the Singapore Long Bar at Raffles Hotel. The secret is the extended shake — at least 60–90 seconds (original recipe required 12 minutes of continuous shaking!) to emulsify the cream and egg white into a thick, cloud-like foam. The orange blossom water is the irreplaceable aromatic heart of this cocktail; a few drops of Cointreau make an excellent modern substitute if unavailable. Strain into a chilled Collins glass with no ice for the classic tall foam cap effect.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: null, inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: null, inventoryId: "fresh-limes" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Demerara Syrup (use 0.5 oz)", inventoryId: "simple-syrup" },
@@ -4958,7 +4958,7 @@ const DEFAULT_DRINKS = [
     popularity: 8.8,
     proTip: "Inspired by the wildly popular Japanese bar trend of peach (momo) cocktails, this fizz celebrates the marriage of sake and peach — a combination beloved across Japan, Korea, and Southeast Asian nightlife. Hoffmann Peach Liqueur brings an authentic, sun-ripened stone fruit sweetness that pairs perfectly with Choya Ginjo sake's delicate floral umami. For a creamier 'peach bellini' style, substitute soda water with chilled Prosecco. Serve immediately while effervescent.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Kawashima Sake", substitute: "Choya Rokkonshojo Ginjo Sake", inventoryId: "kawashima-sake", ingredientGroup: "sake" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Kawashima Sake", substitute: "Choya Rokkonshojo Ginjo Sake", inventoryId: "kawashima-sake", ingredientGroup: "sake", preferNonPremium: true },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Hoffmann Peach Liqueur", substitute: "Peach schnapps", inventoryId: "hoffmann-peach" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Yuzu juice if available", inventoryId: "fresh-lemons" },
       { amountOz: "2 oz", amountMl: "60 ml", item: "Chang Soda Water", substitute: "Fever-Tree Tonic (adds a pleasing bitterness)", inventoryId: "chang-soda-water" },
@@ -5187,7 +5187,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "An iconic Japanese-American izakaya ritual! A shot glass of sake is balanced across two parallel chopsticks resting on top of a pint glass of beer. The drinkers chant 'Ichi... Ni... San... SAKE BOMB!' and pound the table with both fists until the vibration drops the sake into the beer, erupting in a fountain of foam. Erdinger Weissbier or Paulaner brings complex bready wheat esters that pair marvelously with Kawashima Junmai's clean rice umami.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Kawashima Sake", substitute: "Choya Rokkonshojo Junmai Ginjo Sake", inventoryId: "kawashima-sake", ingredientGroup: "sake" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Kawashima Sake", substitute: "Choya Rokkonshojo Junmai Ginjo Sake", inventoryId: "kawashima-sake", ingredientGroup: "sake", preferNonPremium: true },
       { amountOz: "6 oz", amountMl: "180 ml", item: "Premium Beer (Erdinger Weissbier or Paulaner)", substitute: "Any cold crisp lager or wheat beer", inventoryId: "beer-lager", ingredientGroup: "beer" }
     ],
     instructions: [
