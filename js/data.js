@@ -327,11 +327,11 @@ const INGREDIENT_GROUPS = {
   },
   "ginger-beer": {
     label: "Ginger Beer",
-    inventoryIds: ["fever-tree-ginger-beer", "bundaberg-ginger-beer", "ginger-beer"]
+    inventoryIds: ["fever-tree-ginger-beer", "bundaberg-ginger-beer"]
   },
   "tonic-water": {
     label: "Tonic Water",
-    inventoryIds: ["fever-tree-indian-tonic", "tonic-water"]
+    inventoryIds: ["fever-tree-indian-tonic"]
   },
   "fresh-lime": { label: "Fresh Lime", inventoryIds: ["fresh-limes"] },
   "fresh-lemon": { label: "Fresh Lemon", inventoryIds: ["fresh-lemons"] },
