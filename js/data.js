@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "8 November 2026";
-const INVENTORY_SYNC_VERSION = "20261108_3";
+const INVENTORY_LAST_UPDATED = "9 November 2026";
+const INVENTORY_SYNC_VERSION = "20261109_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -323,7 +323,7 @@ const INGREDIENT_GROUPS = {
   },
   "amaro": {
     label: "Amaro",
-    inventoryIds: ["amaro-nonino"]
+    inventoryIds: ["amaro-nonino", "amaro-averna", "amaro-montenegro"]
   },
   "ginger-beer": {
     label: "Ginger Beer",
@@ -1183,9 +1183,9 @@ const DEFAULT_DRINKS = [
     proTip: "Serve neat in a thoroughly chilled glass with no ice. The absinthe rinse should coat the glass walls before being discarded, leaving an ethereal herbal aroma.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black or Cognac", inventoryId: "jd-bonded-rye" },
-      { amountOz: "1 tsp", amountMl: "5 ml", item: "Absinthe (Rinse)", substitute: "White Sambuca or Herbsaint rinse", inventoryId: "sambuca" },
+      { amountOz: "1 tsp", amountMl: "5 ml", item: "Absinthe (Rinse)", substitute: "White Sambuca or Herbsaint rinse", inventoryId: "sambuca", ingredientGroup: "absinthe" },
       { amountOz: "1 cube", amountMl: "1 cube", item: "Sugar Cube (or 0.25 oz Simple Syrup)", substitute: "Simple syrup", inventoryId: "simple-syrup" },
-      { amountOz: "3 dashes", amountMl: "3 dashes", item: "Peychaud's Bitters", substitute: "Angostura bitters (2 dashes)", inventoryId: "angostura-bitters" },
+      { amountOz: "3 dashes", amountMl: "3 dashes", item: "Peychaud's Bitters", substitute: "Angostura bitters (2 dashes)", inventoryId: "peychaud-bitters" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Lemon Peel (Discarded)", substitute: "Lemon twist", inventoryId: "fresh-lemons" }
     ],
     instructions: [
@@ -1413,7 +1413,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Cut the lime into small wedges and remove the white pith from the center to eliminate bitterness before muddling vigorously with sugar.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Cachaça (or Bacardi White Rum)", substitute: "Bacardi Superior White Rum (Caipirissima)", inventoryId: "bacardi-superior" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Cachaça (or Bacardi White Rum)", substitute: "Bacardi Superior White Rum (Caipirissima)", inventoryId: "cachaca", ingredientGroup: "cachaca" },
       { amountOz: "1 whole", amountMl: "1 whole", item: "Fresh Lime (Cut into 8 wedges)", substitute: "Fresh lime wedges", inventoryId: "fresh-limes" },
       { amountOz: "2 tsp", amountMl: "10 ml", item: "Granulated Sugar", substitute: "Simple syrup", inventoryId: "granulated-sugar" }
     ],
@@ -1467,9 +1467,9 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Go easy on the Crème de Violette—just a quarter ounce is enough to impart the signature pale periwinkle sky color without making it taste like soap.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Maraschino Liqueur", substitute: "Peter Heering Cherry + touch of dry vermouth", inventoryId: "cherry-heering" },
-      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Crème de Violette", substitute: "St-Germain Elderflower (Aviation riff)", inventoryId: "st-germain" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Maraschino Liqueur", substitute: "Peter Heering Cherry + touch of dry vermouth", inventoryId: "maraschino-liqueur", ingredientGroup: "maraschino" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Crème de Violette", substitute: "St-Germain Elderflower (Aviation riff)", inventoryId: "creme-de-violette", ingredientGroup: "creme-de-violette" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" }
     ],
     instructions: [
@@ -1495,7 +1495,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Always drop Angostura bitters directly onto the egg white foam rather than into the shaker. The bitters sit as aromatic art on top.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Pisco (or Tanqueray Gin / Bacardi Rum)", substitute: "Tanqueray Gin (Gin Sour) or Bacardi Rum", inventoryId: "tanqueray-gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Pisco (or Tanqueray Gin / Bacardi Rum)", substitute: "Tanqueray Gin (Gin Sour) or Bacardi Rum", inventoryId: "pisco", ingredientGroup: "pisco" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh key lime juice", inventoryId: "fresh-limes" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Rich simple syrup", inventoryId: "simple-syrup" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Egg White", substitute: "Aquafaba", inventoryId: "egg-white" },
@@ -1523,10 +1523,10 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Drizzle the berry liqueur (or Raspberry Rhapsody) over the crushed ice *after* straining the gin sour base so it bleeds beautifully through the ice.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Mûre (or Raspberry Rhapsody)", substitute: "Raspberry Rhapsody Flavored Syrup / Peter Heering", inventoryId: "raspberry-rhapsody" }
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Mûre (or Raspberry Rhapsody)", substitute: "Raspberry Rhapsody Flavored Syrup / Peter Heering", inventoryId: "creme-de-mure", ingredientGroup: "creme-de-mure" }
     ],
     instructions: [
       "Combine Tanqueray gin, lemon juice, and simple syrup in a shaker with ice.",
@@ -1687,9 +1687,9 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "The lovechild of the Last Word and the Paper Plane. Equal parts Mezcal, Aperol, Yellow Chartreuse, and fresh lime juice.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Artisanal Mezcal (or Teremana Tequila)", substitute: "Teremana Tequila (for unsmoked agave riff)", inventoryId: "teremana-tequila" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Aperol", substitute: "Campari", inventoryId: "aperol" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Yellow Chartreuse (or St-Germain)", substitute: "St-Germain Elderflower Liqueur", inventoryId: "st-germain" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Artisanal Mezcal (or Teremana Tequila)", substitute: "Teremana Tequila (for unsmoked agave riff)", inventoryId: "topanito-mezcal-artesanal-espadin", ingredientGroup: "mezcal" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Aperol", substitute: "Campari", inventoryId: "aperol", ingredientGroup: "aperol" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Yellow Chartreuse (or St-Germain)", substitute: "St-Germain Elderflower Liqueur", inventoryId: "yellow-chartreuse", ingredientGroup: "yellow-chartreuse" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" }
     ],
     instructions: [
@@ -1800,7 +1800,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Duncan Nichol's historic Gold Rush recipe. Shaking with rich pineapple syrup or juice creates a natural velvety foam.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Pisco (or Tanqueray Gin / Bacardi Rum)", substitute: "Bacardi Superior White Rum", inventoryId: "bacardi-superior" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Pisco (or Tanqueray Gin / Bacardi Rum)", substitute: "Bacardi Superior White Rum", inventoryId: "pisco", ingredientGroup: "pisco" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Pineapple Juice", substitute: "Fresh pressed pineapple juice", inventoryId: "pineapple-juice" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Demerara or pineapple syrup", inventoryId: "simple-syrup" }
@@ -1890,7 +1890,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Bénédictine (or St-Germain)", substitute: "St-Germain Elderflower Liqueur", inventoryId: "st-germain" },
       { amountOz: "1 dash", amountMl: "1 dash", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
-      { amountOz: "1 dash", amountMl: "1 dash", item: "Peychaud's Bitters", substitute: "Angostura bitters", inventoryId: "angostura-bitters" }
+      { amountOz: "1 dash", amountMl: "1 dash", item: "Peychaud's Bitters", substitute: "Angostura bitters", inventoryId: "peychaud-bitters" }
     ],
     instructions: [
       "Combine rye whiskey, cognac (or bourbon), Martini Rosso vermouth, herbal liqueur, and bitters in a mixing glass with ice.",
@@ -5308,6 +5308,88 @@ const DEFAULT_DRINKS = [
       "Garnish with a fresh lemon wheel on the rim and enjoy ice-cold."
     ],
     tags: ["beer", "weissbier", "german", "bavarian", "shandy", "radler", "low-abv", "refreshing", "in-stock"]
+  },
+  {
+    id: "hanky-panky",
+    name: "Hanky Panky",
+    otherNames: "Ada Coleman Savoy Classic (1903)",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe / Nick & Nora",
+    alcoholLevel: "High (~29% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Botanical Juniper, Rich Sweet Vermouth, Minty Bitter Myrrh & Citrus",
+    difficulty: 2,
+    popularity: 9.5,
+    proTip: "Created by Ada Coleman at the American Bar in the Savoy Hotel for actor Sir Charles Hawtrey. The key is just 2 dashes (about 0.25 oz or a barspoon) of Fernet-Branca—any more will overpower the botanicals of the gin and vermouth.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso", ingredientGroup: "sweet-vermouth" },
+      { amountOz: "2 dashes", amountMl: "5 ml", item: "Fernet-Branca", substitute: "Amaro Nonino or Averna with a drop of mint", inventoryId: "fernet-branca" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Orange Peel Twist", substitute: "Orange peel", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Add Tanqueray gin, Martini Rosso sweet vermouth, and Fernet-Branca into a mixing glass with plenty of ice.",
+      "Stir smoothly for 30 seconds until thoroughly chilled and diluted.",
+      "Strain into a chilled coupe or Nick & Nora glass.",
+      "Express an orange peel twist over the surface to release fragrant citrus oils, and drop it into the glass."
+    ],
+    tags: ["gin", "vermouth", "fernet", "savoy", "classic", "spirit-forward", "bittersweet"]
+  },
+  {
+    id: "fernet-con-coca",
+    name: "Fernet con Coca",
+    otherNames: "Fernando, Fernet Cola; Argentina's National Highball",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Medium (~12% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Effervescent Cola, Peppermint Coolness, Herbaceous Bitter & Caramel",
+    difficulty: 1,
+    popularity: 9.6,
+    proTip: "The undisputed national obsession of Argentina (especially Córdoba). Pour Fernet-Branca over plenty of ice, then gently pour Coca-Cola at a tilt to build a dense, aromatic creamy foam head (known as 'la espuma').",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Fernet-Branca", substitute: "Amaro Averna or Amaro Nonino", inventoryId: "fernet-branca" },
+      { amountOz: "5 oz", amountMl: "150 ml", item: "Coca-Cola", substitute: "Cola", inventoryId: "cola" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon or Lime Wedge", substitute: "Lemon slice", inventoryId: "fresh-lemons" }
+    ],
+    instructions: [
+      "Fill a tall highball glass to the brim with large ice cubes.",
+      "Pour in Fernet-Branca over the ice.",
+      "Slowly top with chilled Coca-Cola, tilting the glass to create a thick, aromatic head of foam.",
+      "Gently give one light lift with a bar spoon to combine without extinguishing the fizz.",
+      "Garnish with a fresh lemon or lime wedge."
+    ],
+    tags: ["fernet", "cola", "argentina", "highball", "low-effort", "refreshing"]
+  },
+  {
+    id: "montenegroni",
+    name: "Montenegroni",
+    otherNames: "Monte Negroni, Amaro Montenegro Negroni",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "High (~26% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Floral Botanicals, Bittersweet Orange, Warming Spices & Velvety Herbal Finish",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "Swapping Campari for Amaro Montenegro creates a much softer, more approachable, and floral Negroni variant with gentle notes of dried orange peel, vanilla, and coriander that complement Tanqueray gin brilliantly.",
+    ingredients: [
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Amaro Montenegro", substitute: "Amaro Nonino Quintessentia", inventoryId: "amaro-montenegro", ingredientGroup: "amaro" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso", ingredientGroup: "sweet-vermouth" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel Twist", substitute: "Orange slice", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Fill a rocks glass or mixing glass with ice.",
+      "Add Tanqueray gin, Amaro Montenegro, and Martini Rosso red vermouth.",
+      "Stir smoothly for 25-30 seconds until ice cold.",
+      "Strain over fresh ice or a single large rock in a rocks glass.",
+      "Express an orange peel over the glass and drop it in."
+    ],
+    tags: ["gin", "amaro", "montenegro", "negroni", "aperitivo", "bittersweet", "twist"]
   }
 ];
 
