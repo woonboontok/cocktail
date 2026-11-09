@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "9 November 2026";
-const INVENTORY_SYNC_VERSION = "20261109_1";
+const INVENTORY_SYNC_VERSION = "20261109_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -45,6 +45,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "jagermeister": { inStock: true, incoming: false, quantity: 2, unit: "bottle" },
   "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+  "ginger-syrup": { inStock: false, incoming: true, quantity: 0, unit: "bottle", refrigerate: true, notes: "Incoming: Laobanniang Bentong Ginger Syrup 500ml." },
+  "creme-de-cassis": { inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 15, refrigerate: true, notes: "Incoming: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml." },
   "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" },
   "fresh-oranges": { inStock: true, quantity: 3, unit: "fruit", notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run." },
   "maraschino-liqueur": { inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 32, notes: "Incoming: Luxardo Maraschino Liqueur, 750ml." },
@@ -416,7 +418,7 @@ const DEFAULT_INVENTORY = [
   { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, abv: 17, refrigerate: true, notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
   { id: "maraschino-liqueur", name: "Luxardo Maraschino Liqueur 750ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 32, notes: "Incoming: 750ml bottle. Dry cherry pit and herbal liqueur for Aviation, Last Word, and Hemingway Daiquiri." },
   { id: "creme-de-violette", name: "Crème de Violette", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Violet flower liqueur that gives Aviation its sky-blue tint." },
-  { id: "creme-de-cassis", name: "Crème de Cassis (Blackcurrant)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Blackcurrant liqueur for Kir Royale." },
+  { id: "creme-de-cassis", name: "L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 15, refrigerate: true, notes: "Incoming: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml. Classic French blackcurrant liqueur for Kir Royale, Kir, and berry-forward cocktails." },
   { id: "creme-de-mure", name: "Crème de Mûre (Blackberry)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Blackberry liqueur drizzled on the Bramble." },
   { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, refrigerate: false, notes: "In stock: 700ml bottle at 40% ABV. Aged Scotch whisky, Scottish heather honey, herbs, and spices. Backbone of the classic Rusty Nail." },
   { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, refrigerate: false, notes: "130-herb French monk elixir for Last Word." },
@@ -453,7 +455,7 @@ const DEFAULT_INVENTORY = [
   { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
   { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "French sweet almond and orange flower syrup for Mai Tai." },
   { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Liquid clover honey for Penicillin and Bee's Knees." },
-  { id: "ginger-syrup", name: "Spicy Ginger Syrup", category: "bitters_syrups", subCategory: "Syrups", inStock: false, refrigerate: true, notes: "Fresh ginger syrup for Penicillin." },
+  { id: "ginger-syrup", name: "Laobanniang Bentong Ginger Syrup 500ml", category: "bitters_syrups", subCategory: "Syrups", inStock: false, incoming: true, quantity: 0, unit: "bottle", refrigerate: true, notes: "Incoming: Laobanniang Bentong Ginger Syrup 500ml. Spicy ginger syrup for Penicillin and ginger-forward highballs." },
   { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: true, notes: "For muddling in Old Fashioned and rimming glasses." },
   { id: "demerara-syrup", name: "Demerara Syrup (2:1 Rich Syrup)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Rich 2:1 raw Demerara sugar syrup. Deeper molasses-caramel sweetness than plain simple syrup; ideal for Old Fashioned, Penicillin, and Whiskey Sours." },
   { id: "fever-tree-indian-tonic", name: "Fever-Tree Premium Indian Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", refrigerate: true, notes: "Premium tonic water with botanical oils and high-quality quinine. Keep chilled in fridge for crisp, effervescent G&Ts." },
