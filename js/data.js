@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "9 November 2026";
-const INVENTORY_SYNC_VERSION = "20261109_2";
+const INVENTORY_SYNC_VERSION = "20261109_4";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -86,7 +86,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "jinro-fruit-soju": { inStock: true, incoming: false, quantity: 2, unit: "bottle", notes: "Two Jinro 360ml fruit-soju bottles: melon and grape flavours." },
   "yakult": { inStock: false, incoming: true, quantity: 0, unit: "bottle", notes: "Yakult probiotic fermented milk drink. Easily sourced — incoming." },
   "baijiu": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 52, notes: "Luzhou Laojiao Black Cap Baijiu, 750ml, 52% ABV. In stock." },
-  "fresh-mint": { inStock: false, incoming: false, quantity: 0, unit: "bunch", refrigerate: true, notes: "Fresh spearmint / mint. Out of stock." },
+  "fresh-mint": { inStock: true, incoming: false, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh mint leaves. In stock: 1 bunch. Keep refrigerated." },
   "beer-lager": { inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 5.3, notes: "German wheat & lager beers in stock: Erdinger Weissbier and Paulaner (Hefe-Weißbier / Münchner Hell)." },
   "makgeolli": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 6, notes: "Makgeolli (Korean unfiltered sparkling rice wine), ~6% ABV. Keep refrigerated." },
   "drambuie": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Drambuie Honeyed Scotch Liqueur, 40% ABV, 700ml. In stock." },
@@ -490,7 +490,7 @@ const DEFAULT_INVENTORY = [
   { id: "fresh-lemons", name: "Fresh Lemons (Juice & Twists)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, refrigerate: true, notes: "Essential souring agent for Whiskey Sour, French 75, Corpse Reviver, and White Lady." },
   { id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh limes for juice and wheels; core citrus for Margarita, Daiquiri, Moscow Mule, Mojito, Southside, and Gimlet." },
   { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 3, unit: "fruit", refrigerate: true, notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run. Use for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
-  { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, incoming: false, quantity: 0, unit: "bunch", refrigerate: true, notes: "Aromatic sprigs for Mojito, Mint Julep, and Hugo Spritz. Out of stock." },
+  { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, incoming: false, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh mint leaves. In stock: 1 bunch. Keep refrigerated." },
   { id: "fresh-cucumber", name: "Fresh Cucumber", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Crisp cucumber slices for Cucumber Mint Cooler and Gimlet." },
   { id: "fresh-rosemary", name: "Fresh Rosemary Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Woody aromatic herb for Rosemary Grapefruit Spritzer." },
   { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "For Virgin Strawberry Daiquiri." },
