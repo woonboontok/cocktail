@@ -2318,6 +2318,33 @@ const DEFAULT_DRINKS = [
     tags: ["shot", "layered", "b-52", "kahlua", "grand-marnier", "baileys", "legendary"]
   },
   {
+    id: "flaming-lamborghini",
+    name: "Flaming Lamborghini",
+    otherNames: "Lamborghini Shot",
+    category: "Shot",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Shot Glass + 2 Side Shot Glasses",
+    alcoholLevel: "High (~25% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Sweet Coffee, Anise, Cream & Orange",
+    difficulty: 3,
+    popularity: 9.4,
+    proTip: "This recipe is served unlit. The traditional flaming presentation is omitted for safety; do not ignite the drink or consume it while burning.",
+    ingredients: [
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua", ingredientGroup: "coffee-liqueur" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Vaccari Sambuca", substitute: "White Sambuca", inventoryId: "sambuca", ingredientGroup: "sambuca" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Baileys Irish Cream", substitute: "Irish cream liqueur", inventoryId: "baileys-irish-cream", ingredientGroup: "irish-cream" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Curaçao Bleu", substitute: "Blue Curaçao", inventoryId: "curacao-bleu" }
+    ],
+    instructions: [
+      "Pour the coffee liqueur into a shot glass.",
+      "Gently layer the Sambuca over the back of a bar spoon.",
+      "Pour the Irish cream and Curaçao Bleu into separate side shot glasses.",
+      "Keep all ingredients unlit; combine the pours and drink as a single shot."
+    ],
+    tags: ["shot", "layered", "coffee", "sambuca", "irish-cream", "blue-curacao", "party", "in-stock"]
+  },
+  {
     id: "b-53",
     name: "B-53 Shot",
     otherNames: "B-52 Sambuca / Vodka Variant",
