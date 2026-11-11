@@ -2180,6 +2180,114 @@ const DEFAULT_DRINKS = [
     tags: ["tequila", "cassis", "ginger-beer", "highball", "refreshing", "summer"]
   },
   {
+    id: "bourbon-renewal",
+    name: "Bourbon Renewal",
+    otherNames: "Morgenthaler's Blackcurrant Bourbon Sour",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "Medium-High (~22% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Rich Bourbon Oak, Jammy Tart Blackcurrant & Crisp Lemon",
+    difficulty: 1,
+    popularity: 9.5,
+    proTip: "Created by legendary craft bartender Jeffrey Morgenthaler in the early 2000s in Oregon. It is widely regarded as a modern craft classic that elevates the Whiskey Sour by substituting half the sweetening component with rich French crème de cassis. Shake vigorously with ice and strain over fresh rocks.",
+    ingredients: [
+      {
+        amountOz: "2 oz",
+        amountMl: "60 ml",
+        item: "Jim Beam Black Extra-Aged Bourbon",
+        substitute: "Jack Daniel's Bonded Rye",
+        inventoryId: "jim-beam-black",
+        ingredientGroup: "bourbon"
+      },
+      {
+        amountOz: "0.5 oz",
+        amountMl: "15 ml",
+        item: "Crème de Cassis",
+        substitute: "Blackcurrant liqueur",
+        inventoryId: "creme-de-cassis",
+        ingredientGroup: "creme-de-cassis"
+      },
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Fresh Lemon Juice",
+        substitute: "Fresh lemon juice",
+        inventoryId: "fresh-lemons"
+      },
+      {
+        amountOz: "0.5 oz",
+        amountMl: "15 ml",
+        item: "Simple Syrup",
+        substitute: "Rich demerara syrup or agave nectar",
+        inventoryId: "simple-syrup",
+        ingredientGroup: "simple-syrup"
+      },
+      {
+        amountOz: "1 dash",
+        amountMl: "1 dash",
+        item: "Angostura Bitters",
+        substitute: "Aromatic bitters",
+        inventoryId: "angostura-bitters"
+      }
+    ],
+    instructions: [
+      "Add bourbon, crème de cassis, fresh lemon juice, simple syrup, and Angostura bitters into a shaker filled with ice.",
+      "Shake vigorously for 12 to 15 seconds until chilled and frothy.",
+      "Strain into an ice-filled rocks glass.",
+      "Garnish with a fresh lemon wheel or a blackberry."
+    ],
+    tags: ["bourbon", "whiskey", "cassis", "sour", "modern-classic", "morgenthaler"]
+  },
+  {
+    id: "parisian-cocktail",
+    name: "The Parisian Cocktail",
+    otherNames: "Arnaud Cocktail / Parisian Martini",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe / Nick & Nora",
+    alcoholLevel: "Medium-High (~22% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Dry Herbal Botanicals, Wine Aromatics & Sweet Tart Blackcurrant",
+    difficulty: 1,
+    popularity: 9.3,
+    proTip: "A historic 1920s Prohibition-era Parisian classic published in Harry Craddock's 1930 'The Savoy Cocktail Book' and the 1937 'Café Royal Cocktail Book'. Equal parts dry gin, French dry vermouth, and crème de cassis produce a gorgeous ruby-hued, spirit-forward aperitif with an aromatic lemon oil finish.",
+    ingredients: [
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Tanqueray London Dry Gin",
+        substitute: "Monkey 47 or The Botanist Gin",
+        inventoryId: "tanqueray-gin",
+        ingredientGroup: "gin"
+      },
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Martini Extra Dry Vermouth",
+        substitute: "French dry vermouth",
+        inventoryId: "martini-extra-dry",
+        ingredientGroup: "dry-vermouth"
+      },
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Crème de Cassis",
+        substitute: "French blackcurrant liqueur",
+        inventoryId: "creme-de-cassis",
+        ingredientGroup: "creme-de-cassis"
+      }
+    ],
+    instructions: [
+      "Combine Tanqueray gin, dry vermouth, and crème de cassis in a mixing glass filled with ice.",
+      "Stir with a bar spoon for 25 to 30 seconds until ice-cold and crystalline.",
+      "Strain into a chilled coupe or Nick & Nora glass.",
+      "Express a fresh lemon twist over the top to release citrus oils and drop in."
+    ],
+    tags: ["gin", "cassis", "vermouth", "classic", "historic", "aperitif", "savoy"]
+  },
+  {
     id: "whiskey-highball",
     name: "Whiskey Highball",
     otherNames: "Japanese Highball (Haibōru)",
@@ -3106,6 +3214,114 @@ const DEFAULT_DRINKS = [
       "Shoot and savor the warm holiday bakery flavor."
     ],
     tags: ["shot", "fireball", "cinnamon", "apple", "autumn", "comfort"]
+  },
+  {
+    id: "cinnamon-toast-crunch-shot",
+    name: "Cinnamon Toast Crunch Shot",
+    otherNames: "Cereal Milk Shooter",
+    category: "Shot",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Shot Glass",
+    alcoholLevel: "Medium (~25% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Sweet Spiced Cinnamon, Creamy Vanilla & Cereal-Milk Comfort",
+    difficulty: 1,
+    popularity: 9.7,
+    proTip: "A modern bar legend and party favorite cataloged by Difford's Guide. Equal parts Fireball cinnamon whisky and rich Irish cream (or RumChata) create an uncanny flavor replica of the sweet cinnamon-spiced milk at the bottom of a cereal bowl.",
+    ingredients: [
+      {
+        amountOz: "0.75 oz",
+        amountMl: "22.5 ml",
+        item: "Fireball Cinnamon Whisky",
+        substitute: "Jack Daniel's Bonded Rye + pinch cinnamon",
+        inventoryId: "fireball",
+        ingredientGroup: "fireball"
+      },
+      {
+        amountOz: "0.75 oz",
+        amountMl: "22.5 ml",
+        item: "Baileys Irish Cream",
+        substitute: "RumChata or heavy cream with vanilla syrup",
+        inventoryId: "baileys-irish-cream",
+        ingredientGroup: "irish-cream"
+      },
+      {
+        amountOz: "Rim",
+        amountMl: "Rim",
+        item: "Cinnamon Sugar Rim",
+        substitute: "Granulated sugar and ground cinnamon",
+        inventoryId: "granulated-sugar"
+      }
+    ],
+    instructions: [
+      "Optionally wet the rim of a shot glass with water or simple syrup and dip into cinnamon sugar.",
+      "Add Fireball cinnamon whisky and Baileys Irish Cream to a cocktail shaker filled with ice.",
+      "Shake vigorously for 10 to 12 seconds until frosty and well aerated.",
+      "Strain into the prepared shot glass.",
+      "Shoot in one swift gulp."
+    ],
+    tags: ["shot", "fireball", "baileys", "cinnamon", "cream", "party", "dessert"]
+  },
+  {
+    id: "fireball-old-fashioned",
+    name: "Fireball Old Fashioned",
+    otherNames: "Spiced Cinnamon Old Fashioned",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "High (~29% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Toasted Oak, Fiery Sweet Cinnamon Bark & Rich Bitters",
+    difficulty: 1,
+    popularity: 9.3,
+    proTip: "The official signature craft cocktail from Fireball Whisky. Splitting the base between robust bourbon (Jim Beam Black) and Fireball dials back the intense sugar while infusing authentic red-hot cinnamon heat into the classic Old Fashioned framework.",
+    ingredients: [
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Jim Beam Black Extra-Aged Bourbon",
+        substitute: "Jack Daniel's Bonded Rye",
+        inventoryId: "jim-beam-black",
+        ingredientGroup: "bourbon"
+      },
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Fireball Cinnamon Whisky",
+        substitute: "Cinnamon whiskey liqueur",
+        inventoryId: "fireball",
+        ingredientGroup: "fireball"
+      },
+      {
+        amountOz: "0.25 oz",
+        amountMl: "7.5 ml",
+        item: "Simple Syrup",
+        substitute: "Sugar cube or demerara syrup",
+        inventoryId: "simple-syrup",
+        ingredientGroup: "simple-syrup"
+      },
+      {
+        amountOz: "2 dashes",
+        amountMl: "2 dashes",
+        item: "Angostura Bitters",
+        substitute: "Aromatic cocktail bitters",
+        inventoryId: "angostura-bitters"
+      },
+      {
+        amountOz: "Garnish",
+        amountMl: "Garnish",
+        item: "Expressed Orange Peel",
+        substitute: "Orange twist",
+        inventoryId: "fresh-oranges"
+      }
+    ],
+    instructions: [
+      "Add simple syrup, Angostura bitters, Fireball cinnamon whisky, and bourbon into a rocks glass.",
+      "Add a large ice cube or fresh ice.",
+      "Stir gently with a bar spoon for 20 to 30 seconds to chill and properly dilute.",
+      "Express the aromatic oils of a fresh orange peel over the glass and drop it in."
+    ],
+    tags: ["whiskey", "bourbon", "fireball", "cinnamon", "old-fashioned", "classic-riff"]
   },
 
   // =========================================================================
