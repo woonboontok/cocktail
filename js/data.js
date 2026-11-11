@@ -1402,6 +1402,61 @@ const DEFAULT_DRINKS = [
     tags: ["vodka", "kahlua", "cream", "dessert", "classic", "movie", "in-stock"]
   },
   {
+    id: "pink-russian",
+    name: "Pink Russian",
+    otherNames: "Strawberry White Russian",
+    category: "Cocktail",
+    baseSpirit: "Vodka",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "Medium (~17% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Velvety Strawberry Cream, Roasted Coffee & Silky Vodka",
+    difficulty: 1,
+    popularity: 9.6,
+    proTip: "An official signature cocktail from the Tequila Rose distillery. Shaking aerates the strawberry cream with the rich coffee liqueur and clean vodka into an adult strawberry-cappuccino consistency. For a dramatic layered presentation, shake the vodka and Kahlúa first over ice, strain, and gently float chilled Tequila Rose and cream on top.",
+    ingredients: [
+      {
+        amountOz: "2 oz",
+        amountMl: "60 ml",
+        item: "Tequila Rose Strawberry Cream Liqueur",
+        substitute: "Teremana Tequila (0.5 oz) + Baileys (1.5 oz)",
+        inventoryId: "tequila-rose",
+        ingredientGroup: "tequila-rose"
+      },
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Absolut Vodka Original Blue",
+        substitute: "Smirnoff Red Vodka",
+        inventoryId: "absolut-blue",
+        ingredientGroup: "vodka"
+      },
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Kahlúa Coffee Liqueur",
+        substitute: "Walcher Premium Coffee Liqueur",
+        inventoryId: "kahlua",
+        ingredientGroup: "coffee-liqueur"
+      },
+      {
+        amountOz: "0.5 oz",
+        amountMl: "15 ml",
+        item: "Heavy Whipping Cream (or Half-and-Half / Milk)",
+        substitute: "Whole milk or oat milk",
+        inventoryId: "whipping-heavy-cream"
+      }
+    ],
+    instructions: [
+      "Fill a cocktail shaker with fresh ice cubes.",
+      "Add Tequila Rose, Absolut Vodka, Kahlúa coffee liqueur, and heavy cream.",
+      "Shake vigorously for 20 to 30 seconds until frosted and thoroughly chilled.",
+      "Strain into a rocks glass filled with fresh ice cubes.",
+      "Optionally garnish with a fresh strawberry slice on the rim."
+    ],
+    tags: ["vodka", "tequila-rose", "kahlua", "coffee", "cream", "strawberry", "dessert", "in-stock"]
+  },
+  {
     id: "caipirinha",
     name: "Caipirinha",
     otherNames: "Brazil's National Cocktail",
@@ -2896,6 +2951,82 @@ const DEFAULT_DRINKS = [
       "Drink ice cold."
     ],
     tags: ["shot", "strawberry", "cream", "tequila", "sweet", "in-stock"]
+  },
+  {
+    id: "espresso-yourself-shot",
+    name: "Espresso Yourself",
+    otherNames: "Tequila Rose Coffee Shot / Pink Baby Guinness",
+    category: "Shot",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Shot Glass",
+    alcoholLevel: "Medium (~17% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Dark Roasted Espresso Coffee & Ice-Cold Strawberry Cream",
+    difficulty: 1,
+    popularity: 9.4,
+    proTip: "Official Tequila Rose recipe. A delectable dessert shooter that combines dark roasted coffee liqueur with velvety strawberry cream. Pour slowly over the back of a warm bar spoon so the vibrant pink cream floats cleanly on top of the dark coffee base.",
+    ingredients: [
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Tequila Rose Strawberry Cream Liqueur",
+        substitute: "Baileys Irish Cream",
+        inventoryId: "tequila-rose",
+        ingredientGroup: "tequila-rose"
+      },
+      {
+        amountOz: "0.5 oz",
+        amountMl: "15 ml",
+        item: "Kahlúa Coffee Liqueur",
+        substitute: "Walcher Premium Coffee Liqueur",
+        inventoryId: "kahlua",
+        ingredientGroup: "coffee-liqueur"
+      }
+    ],
+    instructions: [
+      "Pour Kahlúa coffee liqueur into the bottom of a shot glass.",
+      "Place the back of a bar spoon against the inside wall of the shot glass just above the surface of the Kahlúa.",
+      "Slowly pour freezer-chilled Tequila Rose over the spoon to layer a distinct pink strawberry cream cap over the dark coffee base.",
+      "Serve immediately and drink in one go."
+    ],
+    tags: ["shot", "layered", "tequila-rose", "kahlua", "coffee", "strawberry", "cream", "dessert", "in-stock"]
+  },
+  {
+    id: "beastly-beauty-shot",
+    name: "Beastly Beauty",
+    otherNames: "Beauty and the Beast Shot",
+    category: "Shot",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Shot Glass",
+    alcoholLevel: "Medium (~22% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Complex Alpine Herbs, Anise & Luscious Strawberry Cream",
+    difficulty: 1,
+    popularity: 9.3,
+    proTip: "An iconic official Tequila Rose recipe pairing 'Beauty' (velvety pink strawberry cream) with the 'Beast' (dark, 56-botanical Jägermeister). When layered slowly over a spoon, the deep herbal liqueur floats on the cream for an eye-catching contrast that tastes like berries and alpine spice.",
+    ingredients: [
+      {
+        amountOz: "1 oz",
+        amountMl: "30 ml",
+        item: "Tequila Rose Strawberry Cream Liqueur",
+        substitute: "Baileys Irish Cream",
+        inventoryId: "tequila-rose",
+        ingredientGroup: "tequila-rose"
+      },
+      {
+        amountOz: "0.5 oz",
+        amountMl: "15 ml",
+        item: "Jägermeister Herbal Liqueur",
+        substitute: "Amaro Nonino or herbal liqueur",
+        inventoryId: "jagermeister"
+      }
+    ],
+    instructions: [
+      "Pour chilled Tequila Rose into the bottom of a shot glass.",
+      "Position a bar spoon over the surface and slowly pour Jägermeister over the back of the spoon to float on top.",
+      "Admire the dark herbal layer resting over the strawberry pink base, then down in one shot."
+    ],
+    tags: ["shot", "layered", "tequila-rose", "jagermeister", "strawberry", "herbal", "party", "in-stock"]
   },
   {
     id: "mexican-firing-squad-shot",
