@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "11 November 2026";
-const INVENTORY_SYNC_VERSION = "20261111_1";
+const INVENTORY_SYNC_VERSION = "20261111_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -46,11 +46,11 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "ginger-syrup": { inStock: false, incoming: true, quantity: 0, unit: "bottle", refrigerate: true, notes: "Incoming: Laobanniang Bentong Ginger Syrup 500ml." },
-  "creme-de-cassis": { inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 15, refrigerate: true, notes: "Incoming: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml." },
+  "creme-de-cassis": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: true, notes: "In stock: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml, 15% ABV. Refrigerate after opening." },
   "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" },
   "fresh-oranges": { inStock: true, quantity: 3, unit: "fruit", notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run." },
-  "maraschino-liqueur": { inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 32, notes: "Incoming: Luxardo Maraschino Liqueur, 750ml." },
-  "fireball": { inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 33, notes: "Incoming: Fireball Cinnamon Whisky, 750ml." },
+  "maraschino-liqueur": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 32, notes: "In stock: Luxardo Maraschino Liqueur, 750ml, 32% ABV." },
+  "fireball": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 33, notes: "In stock: Fireball Cinnamon Whisky, 750ml, 33% ABV." },
   "tequila-rose": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: true, notes: "In stock: Tequila Rose Strawberry Cream Liqueur, 700ml (70cl), 15% ABV. Strawberry cream and Mexican tequila liqueur; keep refrigerated/chilled." },
   "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
   "grapefruit-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
@@ -416,16 +416,16 @@ const DEFAULT_INVENTORY = [
 
   // --- LIQUEURS (Shopping List / Expansion) ---
   { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, abv: 17, refrigerate: true, notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
-  { id: "maraschino-liqueur", name: "Luxardo Maraschino Liqueur 750ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 32, notes: "Incoming: 750ml bottle. Dry cherry pit and herbal liqueur for Aviation, Last Word, and Hemingway Daiquiri." },
+  { id: "maraschino-liqueur", name: "Luxardo Maraschino Liqueur 750ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 32, notes: "In stock: 750ml bottle at 32% ABV. Dry cherry pit and herbal liqueur for Aviation, Last Word, and Hemingway Daiquiri." },
   { id: "creme-de-violette", name: "Crème de Violette", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Violet flower liqueur that gives Aviation its sky-blue tint." },
-  { id: "creme-de-cassis", name: "L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 15, refrigerate: true, notes: "Incoming: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml. Classic French blackcurrant liqueur for Kir Royale, Kir, and berry-forward cocktails." },
+  { id: "creme-de-cassis", name: "L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: true, notes: "In stock: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml, 15% ABV. Classic French blackcurrant liqueur for Kir Royale, Kir, and berry-forward cocktails. Refrigerate after opening." },
   { id: "creme-de-mure", name: "Crème de Mûre (Blackberry)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Blackberry liqueur drizzled on the Bramble." },
   { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, refrigerate: false, notes: "In stock: 700ml bottle at 40% ABV. Aged Scotch whisky, Scottish heather honey, herbs, and spices. Backbone of the classic Rusty Nail." },
   { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, refrigerate: false, notes: "130-herb French monk elixir for Last Word." },
   { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 40, refrigerate: false, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
   { id: "jagermeister", name: "Jägermeister Liqueur", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: true, quantity: 2, unit: "bottle", abv: 35, notes: "German herbal liqueur with 56 botanicals for Jägerbombs and cocktails alike." },
   { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Vivid neon-green Japanese muskmelon and yubari melon liqueur. Sweet and fragrant."},
-  { id: "fireball", name: "Fireball Cinnamon Whisky 750ml", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 33, notes: "Incoming: 750ml bottle. Cinnamon whisky for Fireball Apple Pie Shot." },
+  { id: "fireball", name: "Fireball Cinnamon Whisky 750ml", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 33, notes: "In stock: 750ml bottle at 33% ABV. Cinnamon whisky for Fireball Apple Pie Shot and cinnamon whiskey cocktails." },
   { id: "pere-kermanns-absinthe", name: "Père Kermann's Absinthe 700ml", category: "liqueurs", subCategory: "Anise & Herbal", inStock: true, quantity: 1, unit: "bottle", abv: 55, refrigerate: false, notes: "Classic French-style absinthe with anise, fennel, and grand wormwood. Essential for the Sazerac rinse, Corpse Reviver No. 2, and Death in the Afternoon." },
   { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur 700ml", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: true, notes: "In stock: 700ml (70cl) bottle at 15% ABV. Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot and dessert cocktails." },
   { id: "frangelico", name: "Frangelico Hazelnut Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Hazelnut liqueur for Nutty Irishman and Duck Fart." },
@@ -1690,7 +1690,7 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry gin", inventoryId: "tanqueray-gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Green Chartreuse", substitute: "St-Germain or Yellow Chartreuse", inventoryId: "green-chartreuse" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Luxardo Maraschino Liqueur", substitute: "Peter Heering Cherry + Cointreau", inventoryId: "cherry-heering" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Luxardo Maraschino Liqueur", substitute: "Peter Heering Cherry + Cointreau", inventoryId: "maraschino-liqueur", ingredientGroup: "maraschino" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" }
     ],
     instructions: [
@@ -1885,7 +1885,7 @@ const DEFAULT_DRINKS = [
     proTip: "Ernest Hemingway drank these at El Floridita in Havana. He requested no sugar and double rum! Adding a touch of maraschino brings floral balance.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Superior White Rum", substitute: "Any dry white rum", inventoryId: "bacardi-superior" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Luxardo Maraschino Liqueur", substitute: "Peter Heering Cherry + Cointreau", inventoryId: "cherry-heering" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Luxardo Maraschino Liqueur", substitute: "Peter Heering Cherry + Cointreau", inventoryId: "maraschino-liqueur", ingredientGroup: "maraschino" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grapefruit Juice", substitute: "Fresh pink grapefruit juice", inventoryId: "grapefruit-juice" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (Optional)", substitute: "Simple syrup to balance", inventoryId: "simple-syrup" }
