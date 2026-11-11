@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "9 November 2026";
-const INVENTORY_SYNC_VERSION = "20261109_4";
+const INVENTORY_LAST_UPDATED = "11 November 2026";
+const INVENTORY_SYNC_VERSION = "20261111_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -51,7 +51,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "fresh-oranges": { inStock: true, quantity: 3, unit: "fruit", notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run." },
   "maraschino-liqueur": { inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 32, notes: "Incoming: Luxardo Maraschino Liqueur, 750ml." },
   "fireball": { inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 33, notes: "Incoming: Fireball Cinnamon Whisky, 750ml." },
-  "tequila-rose": { inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 15, refrigerate: true, notes: "Incoming: Tequila Rose Strawberry Cream, 700ml (70cl), 15% ABV." },
+  "tequila-rose": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: true, notes: "In stock: Tequila Rose Strawberry Cream Liqueur, 700ml (70cl), 15% ABV. Strawberry cream and Mexican tequila liqueur; keep refrigerated/chilled." },
   "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
   "grapefruit-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
   "pineapple-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
@@ -427,7 +427,7 @@ const DEFAULT_INVENTORY = [
   { id: "midori", name: "Midori Melon Liqueur", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Vivid neon-green Japanese muskmelon and yubari melon liqueur. Sweet and fragrant."},
   { id: "fireball", name: "Fireball Cinnamon Whisky 750ml", category: "liqueurs", subCategory: "Nut & Spice", inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 33, notes: "Incoming: 750ml bottle. Cinnamon whisky for Fireball Apple Pie Shot." },
   { id: "pere-kermanns-absinthe", name: "Père Kermann's Absinthe 700ml", category: "liqueurs", subCategory: "Anise & Herbal", inStock: true, quantity: 1, unit: "bottle", abv: 55, refrigerate: false, notes: "Classic French-style absinthe with anise, fennel, and grand wormwood. Essential for the Sazerac rinse, Corpse Reviver No. 2, and Death in the Afternoon." },
-  { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur 700ml", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: false, incoming: true, quantity: 0, unit: "bottle", abv: 15, refrigerate: true, notes: "Incoming: 700ml (70cl) bottle at 15% ABV. Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot." },
+  { id: "tequila-rose", name: "Tequila Rose Strawberry Cream Liqueur 700ml", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: true, notes: "In stock: 700ml (70cl) bottle at 15% ABV. Strawberry cream and Mexican tequila liqueur for Tequila Rose Shot and dessert cocktails." },
   { id: "frangelico", name: "Frangelico Hazelnut Liqueur", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, quantity: 1, unit: "bottle", abv: 20, notes: "Hazelnut liqueur for Nutty Irishman and Duck Fart." },
 
   // --- FORTIFIED WINES & APERITIFS (User In Stock) ---
@@ -1185,7 +1185,7 @@ const DEFAULT_DRINKS = [
     proTip: "Serve neat in a thoroughly chilled glass with no ice. The absinthe rinse should coat the glass walls before being discarded, leaving an ethereal herbal aroma.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black or Cognac", inventoryId: "jd-bonded-rye" },
-      { amountOz: "1 tsp", amountMl: "5 ml", item: "Absinthe (Rinse)", substitute: "White Sambuca or Herbsaint rinse", inventoryId: "sambuca", ingredientGroup: "absinthe" },
+      { amountOz: "1 tsp", amountMl: "5 ml", item: "Absinthe (Rinse)", substitute: "White Sambuca or Herbsaint rinse", inventoryId: "pere-kermanns-absinthe", ingredientGroup: "absinthe" },
       { amountOz: "1 cube", amountMl: "1 cube", item: "Sugar Cube (or 0.25 oz Simple Syrup)", substitute: "Simple syrup", inventoryId: "simple-syrup" },
       { amountOz: "3 dashes", amountMl: "3 dashes", item: "Peychaud's Bitters", substitute: "Angostura bitters (2 dashes)", inventoryId: "peychaud-bitters" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Lemon Peel (Discarded)", substitute: "Lemon twist", inventoryId: "fresh-lemons" }
@@ -2025,7 +2025,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "A little cassis goes a long way. Just half an ounce creates a deep ruby sparkle without burying the crisp wine acidity.",
     ingredients: [
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Cassis (Blackcurrant)", substitute: "Raspberry Rhapsody syrup or Peter Heering", inventoryId: "raspberry-rhapsody", ingredientGroup: "creme-de-cassis" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Cassis (Blackcurrant)", substitute: "Raspberry Rhapsody syrup or Peter Heering", inventoryId: "creme-de-cassis", ingredientGroup: "creme-de-cassis" },
       { amountOz: "4.5 oz", amountMl: "135 ml", item: "Prosecco", substitute: "Brut Champagne or dry sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
@@ -2065,6 +2065,64 @@ const DEFAULT_DRINKS = [
       "Stir gently and garnish with a charred grapefruit wheel."
     ],
     tags: ["mezcal", "tequila", "smoky", "grapefruit", "mexico"]
+  },
+  {
+    id: "el-diablo",
+    name: "El Diablo",
+    otherNames: "Trader Vic's Mexican El Diablo",
+    category: "Cocktail",
+    baseSpirit: "Tequila/Mezcal",
+    glassware: "Highball / Collins",
+    alcoholLevel: "Medium (~14% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Zesty Lime, Fiery Ginger Spice & Deep Tart Blackcurrant",
+    difficulty: 1,
+    popularity: 9.2,
+    proTip: "Shake the tequila and fresh lime juice with ice, strain into an ice-filled highball, top with spicy ginger beer, and float Crème de Cassis gently on top for a devilish ruby-to-gold gradient.",
+    ingredients: [
+      {
+        amountOz: "1.5 oz",
+        amountMl: "45 ml",
+        item: "Teremana Tequila Blanco",
+        substitute: "Teremana Tequila Añejo or Codigo 1530 Cristalino",
+        inventoryId: "teremana-tequila",
+        ingredientGroup: "tequila",
+        preferNonPremium: true
+      },
+      {
+        amountOz: "0.5 oz",
+        amountMl: "15 ml",
+        item: "Crème de Cassis",
+        substitute: "Blackcurrant liqueur",
+        inventoryId: "creme-de-cassis",
+        ingredientGroup: "creme-de-cassis"
+      },
+      {
+        amountOz: "0.5 oz",
+        amountMl: "15 ml",
+        item: "Fresh Lime Juice",
+        substitute: "Fresh lime wedge juice",
+        inventoryId: "fresh-limes",
+        ingredientGroup: "fresh-lime"
+      },
+      {
+        amountOz: "3 oz",
+        amountMl: "90 ml",
+        item: "Ginger Beer",
+        substitute: "Bundaberg Ginger Beer",
+        inventoryId: "fever-tree-ginger-beer",
+        ingredientGroup: "ginger-beer"
+      }
+    ],
+    instructions: [
+      "Fill a highball or Collins glass with fresh ice cubes.",
+      "In a shaker filled with ice, combine tequila and fresh lime juice.",
+      "Shake briefly to chill, then strain into the prepared ice-filled glass.",
+      "Top with cold ginger beer, leaving about half an inch of room at the top.",
+      "Slowly drizzle or float the Crème de Cassis over the back of a spoon on top so it bleeds down through the ice.",
+      "Garnish with a lime wheel or wedge and a blackberry."
+    ],
+    tags: ["tequila", "cassis", "ginger-beer", "highball", "refreshing", "summer"]
   },
   {
     id: "whiskey-highball",
@@ -2837,7 +2895,7 @@ const DEFAULT_DRINKS = [
       "Optionally dip the rim in pink sugar or garnish with a fresh strawberry slice.",
       "Drink ice cold."
     ],
-    tags: ["shot", "strawberry", "cream", "tequila", "sweet"]
+    tags: ["shot", "strawberry", "cream", "tequila", "sweet", "in-stock"]
   },
   {
     id: "mexican-firing-squad-shot",
