@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "13 November 2026";
-const INVENTORY_SYNC_VERSION = "20261113_4";
+const INVENTORY_SYNC_VERSION = "20261113_5";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -97,7 +97,9 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "chang-lime-soda": { inStock: true, quantity: 4, unit: "bottle", refrigerate: true, notes: "4 bottles of Chang Lime Soda total: 2 previously listed plus 2 added after the grocery run." },
   "maraschino-cherries": { inStock: true, incoming: false, quantity: 1, unit: "jar", refrigerate: true, notes: "1 jar of maraschino cherries, added after the grocery run." },
   "cola": { inStock: true, quantity: 6, unit: "can" },
-  "demerara-syrup": { inStock: true, quantity: 1, unit: "bottle" }
+  "demerara-syrup": { inStock: true, quantity: 1, unit: "bottle" },
+  "giffard-cachaca-thoquino": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: Giffard Cachaça Thoquino, 40% ABV, 700ml. Brazilian fresh-cut sugarcane agricole spirit; grassy, floral, and clean — the premium base for Caipirinha and Brazilian cocktails." },
+  "fernet-branca": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 39, refrigerate: true, notes: "Incoming: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter and backbone of Hanky Panky, Toronto, and Fernet con Coca." }
 };
 
 const INGREDIENT_GROUPS = {
@@ -131,7 +133,7 @@ const INGREDIENT_GROUPS = {
   },
   "cachaca": {
     label: "Cachaça",
-    inventoryIds: ["cachaca"]
+    inventoryIds: ["giffard-cachaca-thoquino", "cachaca"]
   },
   "gin": {
     label: "Dry & Botanical Gin",
@@ -330,6 +332,10 @@ const INGREDIENT_GROUPS = {
     label: "Amaro",
     inventoryIds: ["amaro-nonino", "amaro-averna", "amaro-montenegro"]
   },
+  "fernet-branca": {
+    label: "Fernet-Branca",
+    inventoryIds: ["fernet-branca"]
+  },
   "ginger-beer": {
     label: "Ginger Beer",
     inventoryIds: ["fever-tree-ginger-beer", "bundaberg-ginger-beer"]
@@ -400,7 +406,8 @@ const DEFAULT_INVENTORY = [
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
   { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
-  { id: "cachaca", name: "Cachaça", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Brazilian fresh pressed sugarcane spirit for Caipirinha." },
+  { id: "cachaca", name: "Cachaça (Generic)", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Generic cachaça placeholder. Incoming: Giffard Cachaça Thoquino (see giffard-cachaca-thoquino)." },
+  { id: "giffard-cachaca-thoquino", name: "Giffard Cachaça Thoquino 700ml", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: Giffard Cachaça Thoquino, 40% ABV, 700ml. Award-winning Brazilian sugarcane agricole spirit with fresh-cut grass, floral citrus peel, and clean sweetness. The definitive premium base for Caipirinha, Batida, and Brazilian Mule." },
 
   // --- LIQUEURS (User In Stock) ---
   { id: "disaronno-amaretto", name: "Disaronno Originale Amaretto Liqueur 700ml", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, incoming: true, quantity: 1, unit: "bottle", abv: 28, notes: "In stock: 1 bottle. Incoming spare: Disaronno Originale Amaretto 700ml (28% ABV)." },
@@ -440,7 +447,7 @@ const DEFAULT_INVENTORY = [
   { id: "aperol", name: "Aperol", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 11, refrigerate: true, notes: "Bittersweet orange, rhubarb, and gentian aperitivo for Aperol Spritz and Paper Plane." },
   { id: "campari", name: "Campari", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 25, refrigerate: true, notes: "Iconic red bitter aperitif with chinotto citrus and herbs for Negroni and Boulevardier." },
   { id: "amaro-nonino", name: "Amaro Nonino Quintessentia", category: "fortified", subCategory: "Digestifs / Amaro", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 35, refrigerate: true, notes: "In stock: 700ml bottle at 35% ABV. Grappa-infused alpine herbal amaro with bitter orange and alpine herbs. Essential key component for the Paper Plane." },
-  { id: "fernet-branca", name: "Fernet-Branca", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 39, refrigerate: true, notes: "Intensely herbal Italian digestif with mint, saffron, and bitter myrrh. Classic after-dinner bitter." },
+  { id: "fernet-branca", name: "Fernet-Branca Bitters Liqueur 700ml", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 39, refrigerate: true, notes: "Incoming: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter; backbone of the Hanky Panky, Toronto, and Fernet con Coca." },
   { id: "amaro-averna", name: "Averna Amaro Siciliano", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 29, refrigerate: true, notes: "Bittersweet Sicilian amaro with orange peel, herbs, and pomegranate. Smooth and versatile digestif." },
   { id: "amaro-montenegro", name: "Amaro Montenegro", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 23, refrigerate: true, notes: "Elegant Bologna amaro with 40 botanicals. Balanced, floral, and approachable digestif." },
 
@@ -1472,9 +1479,9 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Grassy Cane, Tart Lime & Pure Sugar",
     difficulty: 1,
     popularity: 9.5,
-    proTip: "Cut the lime into small wedges and remove the white pith from the center to eliminate bitterness before muddling vigorously with sugar.",
+    proTip: "Cut the lime into small wedges and remove the white pith from the center to eliminate bitterness before muddling vigorously with sugar.\n\nGiffard Cachaça Thoquino is an outstanding choice here: its fresh-cut sugarcane, floral citrus, and clean finish let the lime and sugar shine without competing.\n\nVariant — Caipirissima: swap cachaça for Bacardi Superior White Rum for a smoother, lighter version. Caipiroska: swap for Absolut vodka for the neutral, vodka-based version.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Cachaça (or Bacardi White Rum)", substitute: "Bacardi Superior White Rum (Caipirissima)", inventoryId: "cachaca", ingredientGroup: "cachaca" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Giffard Cachaça Thoquino", substitute: "Bacardi Superior White Rum (Caipirissima)", inventoryId: "giffard-cachaca-thoquino", ingredientGroup: "cachaca" },
       { amountOz: "1 whole", amountMl: "1 whole", item: "Fresh Lime (Cut into 8 wedges)", substitute: "Fresh lime wedges", inventoryId: "fresh-limes" },
       { amountOz: "2 tsp", amountMl: "10 ml", item: "Granulated Sugar", substitute: "Simple syrup", inventoryId: "granulated-sugar" }
     ],
@@ -5763,7 +5770,7 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso", ingredientGroup: "sweet-vermouth" },
-      { amountOz: "2 dashes", amountMl: "5 ml", item: "Fernet-Branca", substitute: "Amaro Nonino or Averna with a drop of mint", inventoryId: "fernet-branca" },
+      { amountOz: "2 dashes", amountMl: "5 ml", item: "Fernet-Branca", substitute: "Amaro Nonino or Averna with a drop of mint", inventoryId: "fernet-branca", ingredientGroup: "fernet-branca" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Orange Peel Twist", substitute: "Orange peel", inventoryId: "fresh-oranges" }
     ],
     instructions: [
@@ -5788,7 +5795,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "The undisputed national obsession of Argentina (especially Córdoba). Pour Fernet-Branca over plenty of ice, then gently pour Coca-Cola at a tilt to build a dense, aromatic creamy foam head (known as 'la espuma').",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Fernet-Branca", substitute: "Amaro Averna or Amaro Nonino", inventoryId: "fernet-branca" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Fernet-Branca", substitute: "Amaro Averna or Amaro Nonino", inventoryId: "fernet-branca", ingredientGroup: "fernet-branca" },
       { amountOz: "5 oz", amountMl: "150 ml", item: "Coca-Cola", substitute: "Cola", inventoryId: "cola" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon or Lime Wedge", substitute: "Lemon slice", inventoryId: "fresh-lemons" }
     ],
@@ -5828,6 +5835,140 @@ const DEFAULT_DRINKS = [
       "Express an orange peel over the glass and drop it in."
     ],
     tags: ["gin", "amaro", "montenegro", "negroni", "aperitivo", "bittersweet", "twist"]
+  },
+  {
+    id: "toronto",
+    name: "Toronto",
+    otherNames: "Fernet Manhattan, Rye & Fernet",
+    category: "Cocktail",
+    baseSpirit: "Whiskey/Bourbon",
+    glassware: "Coupe / Nick & Nora",
+    alcoholLevel: "High (~32% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Rye Spice, Herbal Bitterness, Caramel & Minty Finish",
+    difficulty: 2,
+    popularity: 9.2,
+    proTip: "Use only 0.25 oz of Fernet-Branca — it punches far above its volume. The rye's pepper and grain backbone is the star; Fernet adds a herbal, mentholated backbone without overwhelming the spirit. Stir very gently: over-dilution washes out the Fernet's complexity.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black Bourbon or any rye whiskey", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Fernet-Branca", substitute: "Amaro Nonino (less intense)", inventoryId: "fernet-branca", ingredientGroup: "fernet-branca" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup", substitute: "Demerara syrup for deeper caramel", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Orange bitters", inventoryId: "angostura-bitters" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Orange Peel Twist", substitute: "Lemon peel", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Combine rye whiskey, Fernet-Branca, simple syrup, and Angostura bitters in a mixing glass with ice.",
+      "Stir smoothly for 25–30 seconds until very cold and properly diluted.",
+      "Strain into a chilled coupe or Nick & Nora glass.",
+      "Express an orange peel twist over the surface to release fragrant oils, and drop it in."
+    ],
+    tags: ["whiskey", "rye", "fernet", "classic", "spirit-forward", "bittersweet", "stirred"]
+  },
+  {
+    id: "fernet-shot",
+    name: "Fernet-Branca Shot",
+    otherNames: "Fernet Digestif, Italian Bitter Shot",
+    category: "Shot",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Shot Glass",
+    alcoholLevel: "High (~39% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Medicinal Mint, Bitter Myrrh, Saffron & Herbal Heat",
+    difficulty: 1,
+    popularity: 9.0,
+    proTip: "Served neat and chilled as the definitive Italian after-dinner digestif ritual. Refrigerate the bottle briefly before service for a cleaner, crisper edge. It is an acquired taste — but once it clicks, it clicks.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Fernet-Branca", substitute: "Amaro Nonino (gentler) or Jägermeister (sweeter)", inventoryId: "fernet-branca", ingredientGroup: "fernet-branca" }
+    ],
+    instructions: [
+      "Pour Fernet-Branca into a shot glass.",
+      "Serve neat, slightly chilled (from the fridge), or over a single small ice cube.",
+      "Sip slowly as a digestif — traditionally served after a heavy meal."
+    ],
+    tags: ["fernet", "digestif", "shot", "herbal", "bitter", "italian", "neat"]
+  },
+  {
+    id: "fernet-and-mint",
+    name: "Fernet & Fresh Mint",
+    otherNames: "Fernet con Menta, Argentine Digestif",
+    category: "Cocktail",
+    baseSpirit: "Liqueur/Wine",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Cooling Mint, Herbal Bitterness, Saffron & Clean Finish",
+    difficulty: 1,
+    popularity: 9.1,
+    proTip: "A beloved Argentine bar ritual — Fernet-Branca is already rich in natural menthol and mint botanicals, so adding fresh mint amplifies that cooling quality to a spectacular degree. Use crushed ice to give the mint room to perfume the entire drink.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Fernet-Branca", substitute: "Amaro Nonino + a few drops of mint extract", inventoryId: "fernet-branca", ingredientGroup: "fernet-branca" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Simple Syrup", substitute: "Honey syrup for a floral sweetness", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "Handful", amountMl: "Handful", item: "Fresh Spearmint Leaves", substitute: "Fresh mint", inventoryId: "fresh-mint", ingredientGroup: "fresh-mint" },
+      { amountOz: "Top", amountMl: "Top", item: "Chang Soda Water", substitute: "Still water", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" }
+    ],
+    instructions: [
+      "Lightly muddle fresh mint leaves with simple syrup in a rocks glass — just enough to bruise and release the oils.",
+      "Fill the glass with crushed ice.",
+      "Pour Fernet-Branca over the mint and ice.",
+      "Top gently with a splash of soda water.",
+      "Garnish with a fresh sprig of mint and serve with a straw."
+    ],
+    tags: ["fernet", "mint", "digestif", "argentina", "herbal", "refreshing", "low-effort"]
+  },
+  {
+    id: "brazilian-mule",
+    name: "Brazilian Mule",
+    otherNames: "Caipirinha Mule, Cachaça Mule",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Copper Mug / Highball",
+    alcoholLevel: "Medium (~14% ABV)",
+    alcoholScore: 2,
+    tasteProfile: "Grassy Cane, Zingy Ginger, Tart Lime & Tropical Brightness",
+    difficulty: 1,
+    popularity: 9.1,
+    proTip: "The Brazilian cousin of the Moscow Mule: cachaça's fresh sugarcane and herbal notes make it even more tropical than vodka. Use Giffard Cachaça Thoquino for its clean, bright grassy profile — it won't fight the ginger. Squeeze the lime wedge directly into the mug rather than juicing, to get the essential oils from the skin.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Giffard Cachaça Thoquino", substitute: "Bacardi Superior White Rum", inventoryId: "giffard-cachaca-thoquino", ingredientGroup: "cachaca", preferNonPremium: false },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime wedges squeezed in", inventoryId: "fresh-limes", ingredientGroup: "fresh-lime" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (optional)", substitute: "Agave syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "Top", amountMl: "~4 oz / 120 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", inventoryId: "fever-tree-ginger-beer", ingredientGroup: "ginger-beer" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wedge & Fresh Mint", substitute: "Lime wheel", inventoryId: "fresh-limes" }
+    ],
+    instructions: [
+      "Fill a copper mug or highball glass with ice cubes.",
+      "Squeeze the juice of half a lime directly into the glass.",
+      "Pour in Giffard Cachaça Thoquino and simple syrup.",
+      "Top with chilled Fever-Tree Ginger Beer and stir gently once from the bottom.",
+      "Garnish with a fresh lime wedge and a sprig of mint."
+    ],
+    tags: ["cachaca", "ginger-beer", "lime", "brazil", "mule", "tropical", "refreshing", "low-effort"]
+  },
+  {
+    id: "batida-de-limao",
+    name: "Batida de Limão",
+    otherNames: "Brazilian Lime Batida, Batida Paulista",
+    category: "Cocktail",
+    baseSpirit: "Rum",
+    glassware: "Rocks / Lowball",
+    alcoholLevel: "Medium (~18% ABV)",
+    alcoholScore: 3,
+    tasteProfile: "Creamy, Zesty Lime, Tropical Sweetness & Fresh Sugarcane",
+    difficulty: 1,
+    popularity: 9.0,
+    proTip: "Batida means 'beaten' or 'shaken' in Portuguese. The key is to shake aggressively for at least 20 seconds — the condensed milk emulsifies with the cachaça to create a velvety, almost milkshake-like texture that is unique to the Brazilian beach bar tradition. Serve immediately while cold and frothy.\n\nNo condensed milk? Substitute 1 oz simple syrup plus 1 oz whipping cream for a similar result.",
+    ingredients: [
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Giffard Cachaça Thoquino", substitute: "Bacardi Superior White Rum", inventoryId: "giffard-cachaca-thoquino", ingredientGroup: "cachaca", preferNonPremium: false },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes", ingredientGroup: "fresh-lime" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Simple Syrup (or Condensed Milk)", substitute: "Condensed milk (1 oz) for creamier Brazilian-authentic version", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" }
+    ],
+    instructions: [
+      "Add Giffard Cachaça Thoquino, fresh lime juice, and simple syrup (or condensed milk) into a cocktail shaker.",
+      "Fill with ice and shake hard for 20 seconds until the shaker is very cold and frosted.",
+      "Strain into a rocks glass filled with fresh ice.",
+      "Garnish with a fresh lime wheel on the rim and serve immediately."
+    ],
+    tags: ["cachaca", "lime", "brazil", "creamy", "tropical", "refreshing", "low-effort"]
   }
 ];
 
