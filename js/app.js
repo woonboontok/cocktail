@@ -391,6 +391,8 @@
     const mocktails = all.filter(d => d.category === "Mocktail").length;
     const shots = all.filter(d => d.category === "Shot").length;
     const readyToMake = all.filter(d => getDrinkStockStatus(d).canMake).length;
+    const constructed = all.filter(d => getDrinkStatus(d.id).constructed).length;
+    const tried = all.filter(d => getDrinkStatus(d.id).tried).length;
 
     const inStockBottles = inventory.filter(i => i.inStock && (i.quantity === undefined || i.quantity > 0)).length;
     const totalBottles = inventory.length;
@@ -405,6 +407,8 @@
         <div class="stat-pill stat-pill-ready">
           ✨ Ready to Make Now: <strong>${readyToMake}</strong>
         </div>
+        <div class="stat-pill">⚗ Constructed: <strong>${constructed} / ${all.length}</strong></div>
+        <div class="stat-pill">✓ Tried: <strong>${tried} / ${all.length}</strong></div>
       `;
     }
   }
