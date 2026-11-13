@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "11 November 2026";
-const INVENTORY_SYNC_VERSION = "20261111_2";
+const INVENTORY_LAST_UPDATED = "13 November 2026";
+const INVENTORY_SYNC_VERSION = "20261113_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -45,7 +45,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "jagermeister": { inStock: true, incoming: false, quantity: 2, unit: "bottle" },
   "frangelico": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "orgeat-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
-  "ginger-syrup": { inStock: false, incoming: true, quantity: 0, unit: "bottle", refrigerate: true, notes: "Incoming: Laobanniang Bentong Ginger Syrup 500ml." },
+  "ginger-syrup": { inStock: true, incoming: false, quantity: 1, unit: "bottle", refrigerate: true, notes: "In stock: Laobanniang Bentong Ginger Syrup 500ml, 1 bottle received." },
   "creme-de-cassis": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: true, notes: "In stock: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml, 15% ABV. Refrigerate after opening." },
   "coffee-beans": { inStock: true, incoming: false, quantity: 1, unit: "pack" },
   "fresh-oranges": { inStock: true, quantity: 3, unit: "fruit", notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run." },
@@ -77,6 +77,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "myers-dark-rum": { inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 40, notes: "2 bottles in stock, including received spare: Myers's Original Dark Rum 750ml." },
   "worcestershire-sauce": { inStock: true, incoming: false, quantity: 1, unit: "bottle", notes: "Lea & Perrins Worcestershire Sauce 150ml. In stock." },
   "tomato-juice": { inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "Tomato juice (seasoned). In stock." },
+  "kagome-tomato-juice-no-salt": { inStock: true, quantity: 12, unit: "bottle", refrigerate: true, notes: "In stock: Kagome Tomato Juice No Salt Added, 12 x 200ml." },
+  "fresh-rosemary": { inStock: true, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh rosemary herb leaves. In stock: 1 bunch, refrigerated." },
   "jack-daniels-black-label": { inStock: true, incoming: false, quantity: 1.5, unit: "bottle", abv: 40, notes: "One 700ml bottle in stock plus one existing bottle about half full (1.5 bottle-equivalents total)." },
   "the-botanist-gin": { inStock: true, quantity: 1, unit: "bottle" },
   "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
@@ -455,7 +457,7 @@ const DEFAULT_INVENTORY = [
   { id: "agave-syrup", name: "Agave Syrup / Agave Nectar", category: "bitters_syrups", subCategory: "Syrups", inStock: true, refrigerate: true, notes: "Pure blue agave sweetener for Tommy's Margarita and Paloma." },
   { id: "orgeat-syrup", name: "Orgeat Syrup (Almond)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "French sweet almond and orange flower syrup for Mai Tai." },
   { id: "honey-syrup", name: "Honey Syrup (3:1)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Liquid clover honey for Penicillin and Bee's Knees." },
-  { id: "ginger-syrup", name: "Laobanniang Bentong Ginger Syrup 500ml", category: "bitters_syrups", subCategory: "Syrups", inStock: false, incoming: true, quantity: 0, unit: "bottle", refrigerate: true, notes: "Incoming: Laobanniang Bentong Ginger Syrup 500ml. Spicy ginger syrup for Penicillin and ginger-forward highballs." },
+  { id: "ginger-syrup", name: "Laobanniang Bentong Ginger Syrup 500ml", category: "bitters_syrups", subCategory: "Syrups", inStock: true, incoming: false, quantity: 1, unit: "bottle", refrigerate: true, notes: "In stock: Laobanniang Bentong Ginger Syrup 500ml. Spicy ginger syrup for Penicillin and ginger-forward highballs." },
   { id: "granulated-sugar", name: "Granulated Sugar / Sugar Cubes", category: "bitters_syrups", subCategory: "Sweeteners", inStock: true, notes: "For muddling in Old Fashioned and rimming glasses." },
   { id: "demerara-syrup", name: "Demerara Syrup (2:1 Rich Syrup)", category: "bitters_syrups", subCategory: "Syrups", inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Rich 2:1 raw Demerara sugar syrup. Deeper molasses-caramel sweetness than plain simple syrup; ideal for Old Fashioned, Penicillin, and Whiskey Sours." },
   { id: "fever-tree-indian-tonic", name: "Fever-Tree Premium Indian Tonic Water", category: "mixers_sodas", subCategory: "Sodas & Carbonated", inStock: true, quantity: 6, unit: "pack", refrigerate: true, notes: "Premium tonic water with botanical oils and high-quality quinine. Keep chilled in fridge for crisp, effervescent G&Ts." },
@@ -479,6 +481,7 @@ const DEFAULT_INVENTORY = [
   { id: "apple-juice", name: "Apple Juice / Cider", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Crisp apple juice for Spiced Apple Cider, Washington Apple, and Apple Martini." },
   { id: "mango-juice", name: "Mango Puree / Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Lush tropical puree for Mango Mule." },
   { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
+  { id: "kagome-tomato-juice-no-salt", name: "Kagome Tomato Juice No Salt Added (12 × 200ml)", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 12, unit: "bottle", refrigerate: true, notes: "In stock: 12 x 200ml bottles of Kagome Tomato Juice No Salt Added for Bloody Mary, Virgin Mary, and savory mixes." },
   { id: "coconut-cream", name: "Coconut Cream (Cream of Coconut)", category: "mixers_sodas", subCategory: "Juices & Creams", inStock: false, refrigerate: true, notes: "Sweet rich coconut cream for Piña Colada and Coconut Lime Mocktail." },
   { id: "coconut-water", name: "Pure Coconut Water", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Hydrating tropical water for Coconut Lime Mocktail." },
   { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
@@ -492,7 +495,7 @@ const DEFAULT_INVENTORY = [
   { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 3, unit: "fruit", refrigerate: true, notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run. Use for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
   { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, incoming: false, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh mint leaves. In stock: 1 bunch. Keep refrigerated." },
   { id: "fresh-cucumber", name: "Fresh Cucumber", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Crisp cucumber slices for Cucumber Mint Cooler and Gimlet." },
-  { id: "fresh-rosemary", name: "Fresh Rosemary Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Woody aromatic herb for Rosemary Grapefruit Spritzer." },
+  { id: "fresh-rosemary", name: "Fresh Rosemary Leaves / Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh rosemary herb leaves. In stock: 1 bunch, kept refrigerated for Rosemary Grapefruit Spritzer and savory cocktails." },
   { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "For Virgin Strawberry Daiquiri." },
   { id: "maraschino-cherries", name: "Maraschino Cherries", category: "fresh_garnishes", inStock: true, incoming: false, quantity: 1, unit: "jar", refrigerate: true, notes: "1 jar of maraschino cherries, added after the grocery run. Classic garnish for Manhattan, Shirley Temple, and Singapore Sling." },
   { id: "fresh-espresso", name: "Fresh Espresso Shots (made to order)", category: "fresh_garnishes", subCategory: "Coffee & Fresh", inStock: true, quantity: 1, unit: "on demand", notes: "Readily available fresh espresso for dense crema on Espresso Martinis and coffee drinks." },
