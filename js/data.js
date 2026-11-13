@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "13 November 2026";
-const INVENTORY_SYNC_VERSION = "20261113_5";
+const INVENTORY_SYNC_VERSION = "20261113_6";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -87,7 +87,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "choya-rokkonshojo-sake": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, notes: "Choya Rokkonshojo Junmai Ginjo Sake, 15% ABV, 720ml. In stock." },
   "soju": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 25, notes: "Soju (Korean spirit), ~25% ABV, 360ml. In stock." },
   "jinro-fruit-soju": { inStock: true, incoming: false, quantity: 2, unit: "bottle", notes: "Two Jinro 360ml fruit-soju bottles: melon and grape flavours." },
-  "yakult": { inStock: false, incoming: true, quantity: 0, unit: "bottle", notes: "Yakult probiotic fermented milk drink. Easily sourced — incoming." },
+  "yakult": { inStock: true, incoming: false, quantity: 1, unit: "pack", refrigerate: true, notes: "In stock: Yakult Ace Lite probiotic fermented milk drink. Keep refrigerated. Use for Yakult Soju and Yakult Lemon Fizz mocktail." },
   "baijiu": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 52, notes: "Luzhou Laojiao Black Cap Baijiu, 750ml, 52% ABV. In stock." },
   "fresh-mint": { inStock: true, incoming: false, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh mint leaves. In stock: 1 bunch. Keep refrigerated." },
   "beer-lager": { inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 5.3, notes: "German wheat & lager beers in stock: Erdinger Weissbier and Paulaner (Hefe-Weißbier / Münchner Hell)." },
@@ -494,7 +494,7 @@ const DEFAULT_INVENTORY = [
   { id: "coconut-water", name: "Pure Coconut Water", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: true, notes: "Hydrating tropical water for Coconut Lime Mocktail." },
   { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
   { id: "whipped-cream", name: "Whipped Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: true, notes: "Fluffy crown for the Blowjob shot and dessert-style drinks." },
-  { id: "yakult", name: "Yakult Probiotic Fermented Drink", category: "mixers_sodas", subCategory: "Dairy & Fermented", inStock: false, incoming: true, refrigerate: true, notes: "Cultured probiotic fermented milk drink. Popular mixer across East Asia (Korea, Japan, Singapore, Taiwan) for Yakult Soju and probiotic mocktails." },
+  { id: "yakult", name: "Yakult Ace Lite Probiotic Fermented Drink", category: "mixers_sodas", subCategory: "Dairy & Fermented", inStock: true, incoming: false, quantity: 1, unit: "pack", refrigerate: true, notes: "In stock: Yakult Ace Lite probiotic fermented milk drink. Keep refrigerated. Popular mixer across East Asia (Korea, Japan, Singapore, Taiwan) for Yakult Soju and probiotic mocktails." },
   { id: "beer-lager", name: "Premium Beer (Erdinger Weissbier & Paulaner)", category: "mixers_sodas", subCategory: "Beer & Cider", inStock: true, incoming: false, quantity: 2, unit: "bottle", abv: 5.3, refrigerate: true, notes: "Bavarian wheat beer and crisp lagers in stock: Erdinger Weissbier and Paulaner (Hefe-Weißbier / Münchner Hell). Ideal for Somaek, Sake Bomb, and Bavarian Russ." },
 
   // --- FRESH PRODUCE & GARNISHES (User In Stock & Shopping List) ---
@@ -5562,7 +5562,7 @@ const DEFAULT_DRINKS = [
       "Stir gently to integrate the creamy probiotic layer with the citrus fizz.",
       "Garnish with a fresh lemon wheel on the rim."
     ],
-    tags: ["soju", "yakult", "korean", "pocha", "sweet", "creamy", "refreshing", "low-abv"]
+    tags: ["soju", "yakult", "korean", "pocha", "sweet", "creamy", "refreshing", "low-abv", "in-stock"]
   },
   {
     id: "yakult-fizz",
@@ -5591,7 +5591,7 @@ const DEFAULT_DRINKS = [
       "Stir gently once to lift the creamy probiotic swirls through the sparkling bubbles.",
       "Garnish with a fresh lemon wheel and a vibrant mint sprig."
     ],
-    tags: ["yakult", "mocktail", "non-alcoholic", "singapore", "taiwan", "refreshing", "citrus", "fizzy"]
+    tags: ["yakult", "mocktail", "non-alcoholic", "singapore", "taiwan", "refreshing", "citrus", "fizzy", "in-stock"]
   },
   {
     id: "somaek",
