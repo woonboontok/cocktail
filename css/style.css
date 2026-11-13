@@ -516,6 +516,28 @@ a:hover {
   color: var(--accent-gold);
 }
 
+.stat-filter-btn {
+  border: 0;
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.2rem;
+  background: transparent;
+  color: var(--accent-gold);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stat-filter-btn:hover,
+.stat-filter-btn.active {
+  background: var(--accent-gold-dim);
+  text-decoration: underline;
+}
+
+.stat-filter-btn:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
 /* ==================== MAIN CONTENT LAYOUT ==================== */
 .main-layout {
   max-width: 1400px;

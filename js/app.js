@@ -38,6 +38,7 @@
   let selectedTaste = "all";
   let selectedGlass = "all";
   let filterOnlyMyBar = false;
+  let drinkStatusFilters = { tried: null, constructed: null };
   let inventoryRecipeFilterIds = null;
   let sortBy = "popularity-desc";
   let glossaryStockFilter = "all";
@@ -271,6 +272,14 @@
       drinks = drinks.filter(d => getDrinkStockStatus(d).canMake);
     }
 
+    if (drinkStatusFilters.tried !== null) {
+      drinks = drinks.filter(d => Boolean(getDrinkStatus(d.id).tried) === drinkStatusFilters.tried);
+    }
+
+    if (drinkStatusFilters.constructed !== null) {
+      drinks = drinks.filter(d => Boolean(getDrinkStatus(d.id).constructed) === drinkStatusFilters.constructed);
+    }
+
     if (selectedSpirit !== "all") {
       drinks = drinks.filter(d => matchesSpirit(d, selectedSpirit));
     }
@@ -391,8 +400,10 @@
     const mocktails = all.filter(d => d.category === "Mocktail").length;
     const shots = all.filter(d => d.category === "Shot").length;
     const readyToMake = all.filter(d => getDrinkStockStatus(d).canMake).length;
-    const constructed = all.filter(d => getDrinkStatus(d.id).constructed).length;
-    const tried = all.filter(d => getDrinkStatus(d.id).tried).length;
+    const progressCategory = { cocktails: "Cocktail", mocktails: "Mocktail", shots: "Shot" }[currentTab];
+    const progressDrinks = progressCategory ? all.filter(d => d.category === progressCategory) : all;
+    const constructed = progressDrinks.filter(d => getDrinkStatus(d.id).constructed).length;
+    const tried = progressDrinks.filter(d => getDrinkStatus(d.id).tried).length;
 
     const inStockBottles = inventory.filter(i => i.inStock && (i.quantity === undefined || i.quantity > 0)).length;
     const totalBottles = inventory.length;
@@ -407,8 +418,16 @@
         <div class="stat-pill stat-pill-ready">
           ✨ Ready to Make Now: <strong>${readyToMake}</strong>
         </div>
-        <div class="stat-pill">⚗ Constructed: <strong>${constructed} / ${all.length}</strong></div>
-        <div class="stat-pill">✓ Tried: <strong>${tried} / ${all.length}</strong></div>
+        <div class="stat-pill">⚗ Constructed:
+          <button type="button" class="stat-filter-btn ${drinkStatusFilters.constructed === true ? "active" : ""}" data-status-filter="constructed" data-filter-value="true" aria-pressed="${drinkStatusFilters.constructed === true}" aria-label="Show constructed drinks">${constructed}</button>
+          /
+          <button type="button" class="stat-filter-btn ${drinkStatusFilters.constructed === false ? "active" : ""}" data-status-filter="constructed" data-filter-value="false" aria-pressed="${drinkStatusFilters.constructed === false}" aria-label="Show drinks not yet constructed" title="Show drinks not yet constructed">${progressDrinks.length}</button>
+        </div>
+        <div class="stat-pill">✓ Tried:
+          <button type="button" class="stat-filter-btn ${drinkStatusFilters.tried === true ? "active" : ""}" data-status-filter="tried" data-filter-value="true" aria-pressed="${drinkStatusFilters.tried === true}" aria-label="Show tried drinks">${tried}</button>
+          /
+          <button type="button" class="stat-filter-btn ${drinkStatusFilters.tried === false ? "active" : ""}" data-status-filter="tried" data-filter-value="false" aria-pressed="${drinkStatusFilters.tried === false}" aria-label="Show drinks not yet tried" title="Show drinks not yet tried">${progressDrinks.length}</button>
+        </div>
       `;
     }
   }
@@ -1734,6 +1753,7 @@
     selectedTaste = "all";
     selectedGlass = "all";
     filterOnlyMyBar = false;
+    drinkStatusFilters = { tried: null, constructed: null };
     sortBy = "popularity-desc";
 
     const searchInput = document.getElementById("search-input");
@@ -1767,6 +1787,20 @@
         primaryNavigation.classList.remove("open");
         mobileNavToggle.setAttribute("aria-expanded", "false");
         mobileNavToggle.querySelector(".mobile-nav-toggle-icon").textContent = "☰";
+      });
+    }
+
+    const heroStats = document.getElementById("hero-stats");
+    if (heroStats) {
+      heroStats.addEventListener("click", event => {
+        const button = event.target.closest("button[data-status-filter]");
+        if (!button) return;
+        const status = button.getAttribute("data-status-filter");
+        if (status !== "tried" && status !== "constructed") return;
+        const value = button.getAttribute("data-filter-value") === "true";
+        drinkStatusFilters[status] = drinkStatusFilters[status] === value ? null : value;
+        renderApp();
+        document.getElementById("results-count")?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     }
 
