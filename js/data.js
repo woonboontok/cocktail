@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "13 November 2026";
-const INVENTORY_SYNC_VERSION = "20261113_2";
+const INVENTORY_SYNC_VERSION = "20261113_4";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -79,6 +79,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "tomato-juice": { inStock: true, quantity: 1, unit: "carton", refrigerate: true, notes: "Tomato juice (seasoned). In stock." },
   "kagome-tomato-juice-no-salt": { inStock: true, quantity: 12, unit: "bottle", refrigerate: true, notes: "In stock: Kagome Tomato Juice No Salt Added, 12 x 200ml." },
   "fresh-rosemary": { inStock: true, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh rosemary herb leaves. In stock: 1 bunch, refrigerated." },
+  "fresh-cucumber": { inStock: true, quantity: 2, unit: "fruit", refrigerate: true, notes: "Two Japanese cucumbers received and stored cold. Good for cucumber mint cooler, Irish Maid, and gin freshies." },
   "jack-daniels-black-label": { inStock: true, incoming: false, quantity: 1.5, unit: "bottle", abv: 40, notes: "One 700ml bottle in stock plus one existing bottle about half full (1.5 bottle-equivalents total)." },
   "the-botanist-gin": { inStock: true, quantity: 1, unit: "bottle" },
   "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
@@ -494,7 +495,7 @@ const DEFAULT_INVENTORY = [
   { id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", refrigerate: true, notes: "Fresh limes for juice and wheels; core citrus for Margarita, Daiquiri, Moscow Mule, Mojito, Southside, and Gimlet." },
   { id: "fresh-oranges", name: "Fresh Navel Oranges (Juice, Slices & Peels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 3, unit: "fruit", refrigerate: true, notes: "3 fresh navel oranges total: 1 previously listed plus 2 added after the grocery run. Use for juice, slices, and fragrant peel oils in Old Fashioned, Negroni, Boulevardier, and Ward 8." },
   { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, incoming: false, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh mint leaves. In stock: 1 bunch. Keep refrigerated." },
-  { id: "fresh-cucumber", name: "Fresh Cucumber", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "Crisp cucumber slices for Cucumber Mint Cooler and Gimlet." },
+  { id: "fresh-cucumber", name: "Japanese Cucumber (Fresh Cucumber)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 2, unit: "fruit", refrigerate: true, notes: "Two Japanese cucumbers received and stored cold. Crisp slices for Cucumber Mint Cooler, Irish Maid, and Gimlet." },
   { id: "fresh-rosemary", name: "Fresh Rosemary Leaves / Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "bunch", refrigerate: true, notes: "Fresh rosemary herb leaves. In stock: 1 bunch, kept refrigerated for Rosemary Grapefruit Spritzer and savory cocktails." },
   { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: true, notes: "For Virgin Strawberry Daiquiri." },
   { id: "maraschino-cherries", name: "Maraschino Cherries", category: "fresh_garnishes", inStock: true, incoming: false, quantity: 1, unit: "jar", refrigerate: true, notes: "1 jar of maraschino cherries, added after the grocery run. Classic garnish for Manhattan, Shirley Temple, and Singapore Sling." },
