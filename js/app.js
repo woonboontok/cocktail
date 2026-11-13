@@ -408,25 +408,28 @@
     const inStockBottles = inventory.filter(i => i.inStock && (i.quantity === undefined || i.quantity > 0)).length;
     const totalBottles = inventory.length;
 
+    const notConstructed = progressDrinks.length - constructed;
+    const notTried = progressDrinks.length - tried;
     const statsEl = DOM.heroStats || document.getElementById("hero-stats");
     if (statsEl) {
       statsEl.innerHTML = `
-        <div class="stat-pill">🍸 Cocktails: <strong>${cocktails}</strong></div>
-        <div class="stat-pill">🍹 Mocktails: <strong>${mocktails}</strong></div>
-        <div class="stat-pill">🥃 Shots: <strong>${shots}</strong></div>
+        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${currentTab === "all" ? "active" : ""}" data-tab-switch="all" aria-label="Show all drinks">🍹 All: <strong>${cocktails + mocktails + shots}</strong></button></div>
+        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${currentTab === "cocktails" ? "active" : ""}" data-tab-switch="cocktails" aria-label="Show cocktails">🍸 Cocktails: <strong>${cocktails}</strong></button></div>
+        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${currentTab === "mocktails" ? "active" : ""}" data-tab-switch="mocktails" aria-label="Show mocktails">🫧 Mocktails: <strong>${mocktails}</strong></button></div>
+        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${currentTab === "shots" ? "active" : ""}" data-tab-switch="shots" aria-label="Show shots">🥃 Shots: <strong>${shots}</strong></button></div>
         <div class="stat-pill">🍾 In Bar: <strong>${inStockBottles} / ${totalBottles}</strong></div>
         <div class="stat-pill stat-pill-ready">
           ✨ Ready to Make Now: <strong>${readyToMake}</strong>
         </div>
         <div class="stat-pill">⚗ Constructed:
-          <button type="button" class="stat-filter-btn ${drinkStatusFilters.constructed === true ? "active" : ""}" data-status-filter="constructed" data-filter-value="true" aria-pressed="${drinkStatusFilters.constructed === true}" aria-label="Show constructed drinks">${constructed}</button>
+          <button type="button" class="stat-filter-btn ${drinkStatusFilters.constructed === true ? "active" : ""}" data-status-filter="constructed" data-filter-value="true" aria-pressed="${drinkStatusFilters.constructed === true}" aria-label="Show constructed drinks" title="Show constructed drinks">${constructed}</button>
           /
-          <button type="button" class="stat-filter-btn ${drinkStatusFilters.constructed === false ? "active" : ""}" data-status-filter="constructed" data-filter-value="false" aria-pressed="${drinkStatusFilters.constructed === false}" aria-label="Show drinks not yet constructed" title="Show drinks not yet constructed">${progressDrinks.length}</button>
+          <button type="button" class="stat-filter-btn ${drinkStatusFilters.constructed === false ? "active" : ""}" data-status-filter="constructed" data-filter-value="false" aria-pressed="${drinkStatusFilters.constructed === false}" aria-label="Show drinks not yet constructed" title="Show drinks not yet constructed">${notConstructed}</button>
         </div>
         <div class="stat-pill">✓ Tried:
-          <button type="button" class="stat-filter-btn ${drinkStatusFilters.tried === true ? "active" : ""}" data-status-filter="tried" data-filter-value="true" aria-pressed="${drinkStatusFilters.tried === true}" aria-label="Show tried drinks">${tried}</button>
+          <button type="button" class="stat-filter-btn ${drinkStatusFilters.tried === true ? "active" : ""}" data-status-filter="tried" data-filter-value="true" aria-pressed="${drinkStatusFilters.tried === true}" aria-label="Show tried drinks" title="Show tried drinks">${tried}</button>
           /
-          <button type="button" class="stat-filter-btn ${drinkStatusFilters.tried === false ? "active" : ""}" data-status-filter="tried" data-filter-value="false" aria-pressed="${drinkStatusFilters.tried === false}" aria-label="Show drinks not yet tried" title="Show drinks not yet tried">${progressDrinks.length}</button>
+          <button type="button" class="stat-filter-btn ${drinkStatusFilters.tried === false ? "active" : ""}" data-status-filter="tried" data-filter-value="false" aria-pressed="${drinkStatusFilters.tried === false}" aria-label="Show drinks not yet tried" title="Show drinks not yet tried">${notTried}</button>
         </div>
       `;
     }
@@ -1793,6 +1796,17 @@
     const heroStats = document.getElementById("hero-stats");
     if (heroStats) {
       heroStats.addEventListener("click", event => {
+        // Handle category tab-switch buttons (reset filters + switch tab)
+        const tabBtn = event.target.closest("button[data-tab-switch]");
+        if (tabBtn) {
+          const tab = tabBtn.getAttribute("data-tab-switch");
+          resetFilters();
+          currentTab = tab;
+          renderApp();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
+        // Handle tried/constructed status filter buttons
         const button = event.target.closest("button[data-status-filter]");
         if (!button) return;
         const status = button.getAttribute("data-status-filter");
