@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "13 November 2026";
-const INVENTORY_SYNC_VERSION = "20261113_6";
+const INVENTORY_LAST_UPDATED = "16 November 2026";
+const INVENTORY_SYNC_VERSION = "20261116_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -57,7 +57,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "pineapple-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
   "orange-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
   "lemon-lime-soda": { inStock: true, name: "Schweppes Manao Soda Mini - Lemon Lime", notes: "Lemon-lime-flavoured carbonated soda for cocktails and highballs." },
-  "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle" },
+  "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle", abv: 43.1, notes: "Tanqueray London Dry Gin, 43.1% ABV, 2 bottles in stock." },
+  "pisco": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 41.3, notes: "In stock: BarSol Pisco Primero Quebranta, 41.3% ABV, 700ml. Distilled from 100% Quebranta grapes in Ica Valley, Peru. Essential for Pisco Sour and Pisco Punch." },
   "monkey-47-dry-gin": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "teremana-tequila": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Blanco, 40% ABV, 1000ml. In stock." },
   "teremana-tequila-anejo": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Añejo, 40% ABV, 1000ml. In stock." },
@@ -386,7 +387,7 @@ const DEFAULT_INVENTORY = [
   { id: "myers-dark-rum", name: "Myers's Original Dark Rum 750ml", category: "spirits", subCategory: "Rum › Dark Jamaican", spiritFamily: "Rum", spiritStyle: "Dark Jamaican", inStock: true, quantity: 2, unit: "bottle", abv: 40, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices. 2 bottles in stock, including received spare 750ml bottle." },
   { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, premium: true, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
-  { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 47.3, notes: "Crisp, juniper-led London Dry gin for Negroni, Dry Martini, and French 75." },
+  { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 43.1, notes: "Crisp, juniper-led London Dry gin (43.1% ABV) for Negroni, Dry Martini, and French 75." },
   { id: "monkey-47-dry-gin", name: "Monkey 47 Schwarzwald Dry Gin (500ml)", category: "spirits", subCategory: "Gin › Dry Gin", spiritFamily: "Gin", spiritStyle: "Dry Gin", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 47, premium: true, notes: "In stock: 500ml bottle at 47% ABV. Complex Black Forest gin with citrus, spice, and herbal notes; especially expressive in a Bee's Knees, Gin & Tonic, or Negroni." },
   { id: "teremana-tequila", name: "Teremana Tequila Blanco 1000ml", category: "spirits", subCategory: "Agave › Tequila Blanco", spiritFamily: "Agave", spiritStyle: "Blanco Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Blanco at 40% ABV; crisp agave, citrus peel, and a clean finish ideal for margaritas, Palomas, and tequila-forward cocktails." },
   { id: "teremana-tequila-anejo", name: "Teremana Tequila Añejo 1000ml", category: "spirits", subCategory: "Agave › Tequila Añejo", spiritFamily: "Agave", spiritStyle: "Añejo Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Añejo at 40% ABV. Rich agave, toasted oak, and vanilla finish; ideal for sipping, Añejo Old Fashioned, and Anejo Margaritas." },
@@ -405,7 +406,7 @@ const DEFAULT_INVENTORY = [
   { id: "baijiu", name: "Luzhou Laojiao Black Cap Baijiu 750ml", category: "spirits", subCategory: "Baijiu", spiritFamily: "Baijiu", spiritStyle: "Chinese Strong Aroma Baijiu", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 52, notes: "Luzhou Laojiao Black Cap Baijiu, 750ml, 52% ABV. In stock." },
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
-  { id: "pisco", name: "Pisco (Peruvian / Chilean)", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: false, abv: 40, notes: "Aromatic unaged grape brandy for Pisco Sour and Pisco Punch." },
+  { id: "pisco", name: "BarSol Pisco Primero Quebranta 700ml", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 41.3, notes: "In stock: BarSol Pisco Primero Quebranta (41.3% ABV, 700ml). Artisanal Peruvian unaged grape brandy distilled from 100% Quebranta grapes in Bodega San Isidro, Ica Valley. Subtle floral, dried fruit, and citrus notes; the benchmark spirit for Pisco Sour, Pisco Punch, and Chilcano." },
   { id: "cachaca", name: "Cachaça (Generic)", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Generic cachaça placeholder. Incoming: Giffard Cachaça Thoquino (see giffard-cachaca-thoquino)." },
   { id: "giffard-cachaca-thoquino", name: "Giffard Cachaça Thoquino 700ml", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: Giffard Cachaça Thoquino, 40% ABV, 700ml. Award-winning Brazilian sugarcane agricole spirit with fresh-cut grass, floral citrus peel, and clean sweetness. The definitive premium base for Caipirinha, Batida, and Brazilian Mule." },
 
@@ -1563,7 +1564,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Always drop Angostura bitters directly onto the egg white foam rather than into the shaker. The bitters sit as aromatic art on top.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Pisco (or Tanqueray Gin / Bacardi Rum)", substitute: "Tanqueray Gin (Gin Sour) or Bacardi Rum", inventoryId: "pisco", ingredientGroup: "pisco" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "BarSol Pisco Primero Quebranta", substitute: "Tanqueray Gin (Gin Sour) or Bacardi Rum", inventoryId: "pisco", ingredientGroup: "pisco" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh key lime juice", inventoryId: "fresh-limes" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Rich simple syrup", inventoryId: "simple-syrup" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Egg White", substitute: "Aquafaba", inventoryId: "egg-white" },
@@ -1575,7 +1576,7 @@ const DEFAULT_DRINKS = [
       "Double strain into a chilled coupe glass.",
       "Carefully drop 3 drops of Angostura bitters on the dense white foam."
     ],
-    tags: ["pisco", "sour", "egg-white", "south-america", "silky"]
+    tags: ["pisco", "sour", "egg-white", "south-america", "silky", "in-stock"]
   },
   {
     id: "bramble",
@@ -1868,7 +1869,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Duncan Nichol's historic Gold Rush recipe. Shaking with rich pineapple syrup or juice creates a natural velvety foam.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Pisco (or Tanqueray Gin / Bacardi Rum)", substitute: "Bacardi Superior White Rum", inventoryId: "pisco", ingredientGroup: "pisco" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "BarSol Pisco Primero Quebranta", substitute: "Bacardi Superior White Rum", inventoryId: "pisco", ingredientGroup: "pisco" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Pineapple Juice", substitute: "Fresh pressed pineapple juice", inventoryId: "pineapple-juice" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Demerara or pineapple syrup", inventoryId: "simple-syrup" }
@@ -1879,7 +1880,7 @@ const DEFAULT_DRINKS = [
       "Strain into a chilled coupe or over fresh ice in a rocks glass.",
       "Garnish with a fresh pineapple chunk."
     ],
-    tags: ["pisco", "rum", "pineapple", "san-francisco", "historic"]
+    tags: ["pisco", "rum", "pineapple", "san-francisco", "historic", "in-stock"]
   },
   {
     id: "hemingway-daiquiri",
