@@ -15,7 +15,7 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "16 November 2026";
-const INVENTORY_SYNC_VERSION = "20261116_1";
+const INVENTORY_SYNC_VERSION = "20261116_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -57,7 +57,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "pineapple-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
   "orange-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true, notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
   "lemon-lime-soda": { inStock: true, name: "Schweppes Manao Soda Mini - Lemon Lime", notes: "Lemon-lime-flavoured carbonated soda for cocktails and highballs." },
-  "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle", abv: 43.1, notes: "Tanqueray London Dry Gin, 43.1% ABV, 2 bottles in stock." },
+  "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle", abv: 41.3, notes: "Tanqueray London Dry Gin, 41.3% ABV, 2 bottles in stock." },
   "pisco": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 41.3, notes: "In stock: BarSol Pisco Primero Quebranta, 41.3% ABV, 700ml. Distilled from 100% Quebranta grapes in Ica Valley, Peru. Essential for Pisco Sour and Pisco Punch." },
   "monkey-47-dry-gin": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
   "teremana-tequila": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Blanco, 40% ABV, 1000ml. In stock." },
@@ -387,7 +387,7 @@ const DEFAULT_INVENTORY = [
   { id: "myers-dark-rum", name: "Myers's Original Dark Rum 750ml", category: "spirits", subCategory: "Rum › Dark Jamaican", spiritFamily: "Rum", spiritStyle: "Dark Jamaican", inStock: true, quantity: 2, unit: "bottle", abv: 40, notes: "Rich Jamaican 100% pot-still dark rum with molasses and baking spices. 2 bottles in stock, including received spare 750ml bottle." },
   { id: "mount-gay-black-barrel", name: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", category: "spirits", subCategory: "Rum › Aged Barbados", spiritFamily: "Rum", spiritStyle: "Aged Barbados", inStock: true, quantity: 1, unit: "bottle", abv: 43, premium: true, notes: "Aged Barbados rum finished in charred bourbon casks; a polished alternative for dark rum cocktails." },
   { id: "goslings-black-seal-151", name: "Goslings Black Seal 151 Overproof Rum", category: "spirits", subCategory: "Rum › Overproof 151", spiritFamily: "Rum", spiritStyle: "Overproof 151", inStock: true, quantity: 1, unit: "bottle", proof: "75.5% ABV", abv: 75.5, notes: "High-proof Bermuda dark rum for Zombie floats and other overproof-rum recipes." },
-  { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 43.1, notes: "Crisp, juniper-led London Dry gin (43.1% ABV) for Negroni, Dry Martini, and French 75." },
+  { id: "tanqueray-gin", name: "Tanqueray London Dry Gin", category: "spirits", subCategory: "Gin › London Dry", spiritFamily: "Gin", spiritStyle: "London Dry", inStock: true, abv: 41.3, notes: "Crisp, juniper-led London Dry gin (41.3% ABV) for Negroni, Dry Martini, and French 75." },
   { id: "monkey-47-dry-gin", name: "Monkey 47 Schwarzwald Dry Gin (500ml)", category: "spirits", subCategory: "Gin › Dry Gin", spiritFamily: "Gin", spiritStyle: "Dry Gin", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 47, premium: true, notes: "In stock: 500ml bottle at 47% ABV. Complex Black Forest gin with citrus, spice, and herbal notes; especially expressive in a Bee's Knees, Gin & Tonic, or Negroni." },
   { id: "teremana-tequila", name: "Teremana Tequila Blanco 1000ml", category: "spirits", subCategory: "Agave › Tequila Blanco", spiritFamily: "Agave", spiritStyle: "Blanco Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Blanco at 40% ABV; crisp agave, citrus peel, and a clean finish ideal for margaritas, Palomas, and tequila-forward cocktails." },
   { id: "teremana-tequila-anejo", name: "Teremana Tequila Añejo 1000ml", category: "spirits", subCategory: "Agave › Tequila Añejo", spiritFamily: "Agave", spiritStyle: "Añejo Tequila", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: 1000ml Teremana Tequila Añejo at 40% ABV. Rich agave, toasted oak, and vanilla finish; ideal for sipping, Añejo Old Fashioned, and Anejo Margaritas." },
