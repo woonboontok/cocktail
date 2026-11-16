@@ -97,25 +97,45 @@
   color: var(--text-muted);
 }
 
-/* 2. AFTERNOON (12:00 - 16:59): Solar blue, lime pulse, high visibility */
+/* 2. AFTERNOON (12:00 - 16:59): Warm pastel sunlit amber & apricot glow */
 [data-theme="afternoon"] {
-  --bg-primary: #0d2027;
-  --bg-secondary: #12343d;
-  --bg-card: #17434a;
-  --bg-card-hover: #1d5558;
-  --bg-glass-heavy: rgba(13, 32, 39, 0.95);
-  --accent-gold: #c9f05b;
-  --accent-gold-hover: #e3ff8e;
-  --accent-gold-dim: rgba(201, 240, 91, 0.15);
-  --accent-copper: #ff9a62;
-  --accent-amber: #f7c948;
-  --text-primary: #f3ffe6;
-  --text-secondary: #b7d8c7;
-  --text-muted: #7fa99b;
-  --text-gold: #dfff76;
-  --border-subtle: rgba(201, 240, 91, 0.14);
-  --border-active: rgba(201, 240, 91, 0.5);
-  --border-gold: #c9f05b;
+  color-scheme: light;
+  --bg-primary: #fcf6ef;
+  --bg-secondary: #f4e8dc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fef9f5;
+  --bg-glass: rgba(255, 255, 255, 0.86);
+  --bg-glass-heavy: rgba(252, 246, 239, 0.96);
+  --accent-gold: #d97736;
+  --accent-gold-hover: #bf6022;
+  --accent-gold-dim: rgba(217, 119, 54, 0.14);
+  --accent-copper: #e06d53;
+  --accent-amber: #dd9b36;
+  --text-primary: #2e2118;
+  --text-secondary: #6e5544;
+  --text-muted: #967d6c;
+  --text-gold: #c66624;
+  --border-subtle: rgba(142, 98, 70, 0.15);
+  --border-active: rgba(217, 119, 54, 0.5);
+  --border-gold: #d97736;
+  --shadow-sm: 0 2px 8px rgba(92, 58, 33, 0.07);
+  --shadow-md: 0 8px 24px rgba(92, 58, 33, 0.1);
+  --shadow-lg: 0 16px 40px rgba(92, 58, 33, 0.15);
+  --shadow-glow: 0 0 25px rgba(217, 119, 54, 0.18);
+}
+[data-theme="afternoon"] body {
+  background-image: 
+    radial-gradient(circle at 18% 12%, rgba(246, 178, 107, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 82% 58%, rgba(244, 143, 115, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 45% 85%, rgba(249, 213, 147, 0.1) 0%, transparent 45%);
+}
+[data-theme="afternoon"] .search-input,
+[data-theme="afternoon"] .admin-search-input {
+  color: var(--text-primary);
+}
+[data-theme="afternoon"] .search-input::placeholder,
+[data-theme="afternoon"] .admin-search-input::placeholder {
+  color: var(--text-muted);
 }
 
 /* 3. TWILIGHT (17:00 - 18:59): Coral horizon, blue hour, soft signal lights */
@@ -1483,7 +1503,35 @@ a:hover {
 [data-theme="morning"] .specs-table td,
 [data-theme="morning"] .ing-name,
 [data-theme="morning"] .inv-name,
-[data-theme="morning"] .form-control { color: var(--text-primary); }
+[data-theme="morning"] .ingredient-option-name,
+[data-theme="morning"] .item-title-text,
+[data-theme="morning"] .form-control,
+[data-theme="morning"] .form-label-checkbox,
+[data-theme="morning"] .drinks-grid-empty-title,
+[data-theme="afternoon"] .logo-text h1,
+[data-theme="afternoon"] .drink-name,
+[data-theme="afternoon"] .modal-drink-title,
+[data-theme="afternoon"] .specs-table td,
+[data-theme="afternoon"] .ing-name,
+[data-theme="afternoon"] .inv-name,
+[data-theme="afternoon"] .ingredient-option-name,
+[data-theme="afternoon"] .item-title-text,
+[data-theme="afternoon"] .form-control,
+[data-theme="afternoon"] .form-label-checkbox,
+[data-theme="afternoon"] .drinks-grid-empty-title { color: var(--text-primary); }
+
+[data-theme="morning"] .pill-btn:hover,
+[data-theme="afternoon"] .pill-btn:hover,
+[data-theme="morning"] .btn-secondary:hover,
+[data-theme="afternoon"] .btn-secondary:hover,
+[data-theme="morning"] .unit-switch-btn:hover,
+[data-theme="afternoon"] .unit-switch-btn:hover { color: var(--text-primary); border-color: var(--border-active); }
+
+[data-theme="morning"] .qty-step-btn:hover,
+[data-theme="afternoon"] .qty-step-btn:hover { color: var(--text-primary); background: var(--accent-gold-dim); }
+
+[data-theme="morning"] .qty-number-input,
+[data-theme="afternoon"] .qty-number-input { color: var(--text-primary); }
 
 .modal-body {
   padding: 1.8rem 2rem;
