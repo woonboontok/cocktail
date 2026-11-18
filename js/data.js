@@ -15,13 +15,13 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "18 November 2026";
-const INVENTORY_SYNC_VERSION = "20261118_2";
+const INVENTORY_SYNC_VERSION = "20261118_3";
 
-const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year", "cachaca"];
+const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year", "cachaca", "gio-prosecco", "zonin-prosecco-brut", "bottega-spumante-venezia"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "absolut-citron": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: Absolut Citron Lemon Flavored Vodka 1000ml (40% ABV). Natural lemon and lime peel infusion; iconic base for Cosmopolitan and Lemon Drop Martini." },
-  "gio-prosecco": { inStock: false, incoming: false, quantity: 0, unit: "bottle", notes: "Out of stock. Restock Gio Prosecco Spumante Extra Dry, or use in-stock Zonin Prosecco Brut / Bottega Spumante Venezia." },
+  "prosecco": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 11, refrigerate: true, notes: "In stock: Crisp dry Prosecco / Italian Sparkling Wine (750ml, ~11% ABV). Refrigerate and keep chilled for spritzes and sparkling cocktails." },
   "coarse-salt": { inStock: true, quantity: 1, unit: "pack" },
   "black-pepper": { inStock: true, quantity: 1, unit: "grinder", notes: "Freshly ground black pepper for savory cocktails and Bloody Mary." },
   "agave-syrup": { inStock: true, quantity: 1, unit: "bottle", refrigerate: true },
@@ -106,7 +106,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
 const INGREDIENT_GROUPS = {
   "prosecco": {
     label: "Prosecco",
-    inventoryIds: ["gio-prosecco", "zonin-prosecco-brut", "bottega-spumante-venezia"]
+    inventoryIds: ["prosecco"]
   },
   "white-rum": {
     label: "White Rum",
@@ -451,10 +451,8 @@ const DEFAULT_INVENTORY = [
   { id: "amaro-averna", name: "Averna Amaro Siciliano", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 29, refrigerate: true, notes: "Bittersweet Sicilian amaro with orange peel, herbs, and pomegranate. Smooth and versatile digestif." },
   { id: "amaro-montenegro", name: "Amaro Montenegro", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 23, refrigerate: true, notes: "Elegant Bologna amaro with 40 botanicals. Balanced, floral, and approachable digestif." },
 
-  // --- SPARKLING WINE (User In Stock & Shopping List) ---
-  { id: "gio-prosecco", name: "Gio Prosecco Spumante Extra Dry", category: "sparkling", subCategory: "Sparkling Wine", inStock: false, abv: 11.5, refrigerate: true, notes: "Out of stock. Crisp Italian Prosecco with fine bubbles for Aperol Spritz, French 75, Bellini, and Mimosa." },
-  { id: "bottega-spumante-venezia", name: "Bottega Spumante Venezia", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, refrigerate: true, notes: "Elegant, smooth Italian sparkling blend of Glera & Chardonnay; crisp notes of apple, peach, and almond—ideal premium base for an Aperol Spritz or Mimosa." },
-  { id: "zonin-prosecco-brut", name: "Zonin Prosecco Brut", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, abv: 11, refrigerate: true, notes: "Crisp, dry authentic Italian Prosecco DOC with lively bubbles and bright notes of green apple and citrus—the ultimate classic base for any Spritz, Bellini, or Mimosa." },
+  // --- SPARKLING WINE (User In Stock) ---
+  { id: "prosecco", name: "Prosecco / Italian Sparkling Wine", category: "sparkling", subCategory: "Sparkling Wine", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 11, refrigerate: true, notes: "Crisp, effervescent dry Italian Prosecco / Spumante (~11% ABV). The essential sparkling wine foundation for Aperol Spritz, French 75, Bellini, Mimosa, and Kir Royale." },
 
   // --- BITTERS & SYRUPS (User In Stock & Shopping List) ---
   { id: "angostura-bitters", name: "Angostura Bitters", category: "bitters_syrups", subCategory: "Bitters", inStock: true, notes: "Trinidad's world-famous aromatic cocktail bitters for Old Fashioned and Manhattan." },
@@ -765,7 +763,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Remember the 3-2-1 rule: 3 parts Prosecco, 2 parts Aperol, 1 splash of soda. Always add Prosecco before Aperol to avoid settling at the bottom.",
     ingredients: [
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Any crisp dry sparkling wine or Champagne", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Any crisp dry sparkling wine or Champagne", inventoryId: "prosecco", ingredientGroup: "prosecco" },
       { amountOz: "2 oz", amountMl: "60 ml", item: "Aperol", substitute: "Campari (for a bolder, bitter Spritz)", inventoryId: "aperol", ingredientGroup: "aperol" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Chang Soda Water", substitute: "Club soda", inventoryId: "chang-soda-water", ingredientGroup: "soda-water" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Slice & Green Olive", substitute: "Orange wheel", inventoryId: "fresh-oranges" }
@@ -778,7 +776,7 @@ const DEFAULT_DRINKS = [
       "Stir gently once with a bar spoon so you do not break the bubbles.",
       "Garnish with a fresh orange slice."
     ],
-    tags: ["aperol", "prosecco", "spritz", "summer", "bubbly", "italian"]
+    tags: ["aperol", "prosecco", "spritz", "summer", "bubbly", "italian", "in-stock"]
   },
   {
     id: "daiquiri",
@@ -997,7 +995,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "London Dry Gin", substitute: "Jim Beam Black Bourbon (French 95) or Hennessy VSOP Cognac", inventoryId: "tanqueray-gin", ingredientGroup: "french-75-spirit" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "prosecco", ingredientGroup: "prosecco" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Long Lemon Spiral Twist", substitute: "Lemon peel", inventoryId: "fresh-lemons" }
     ],
     instructions: [
@@ -2039,7 +2037,7 @@ const DEFAULT_DRINKS = [
     proTip: "Giuseppe Cipriani named it after painter Giovanni Bellini because the pink peach color reminded him of a saint's toga in a Bellini painting.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "White Peach Puree (or Hoffmann Peach Liqueur)", substitute: "Hoffmann Peach Liqueur + splash peach juice", inventoryId: "hoffmann-peach", ingredientGroup: "peach-liqueur" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Prosecco", substitute: "Any dry sparkling wine or Champagne", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" }
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Prosecco", substitute: "Any dry sparkling wine or Champagne", inventoryId: "prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Chill a champagne flute.",
@@ -2048,7 +2046,7 @@ const DEFAULT_DRINKS = [
       "Stir very gently with a long spoon to incorporate.",
       "Garnish with a fresh peach slice if in season."
     ],
-    tags: ["prosecco", "peach", "venice", "brunch", "sparkling", "sweet"]
+    tags: ["prosecco", "peach", "venice", "brunch", "sparkling", "sweet", "in-stock"]
   },
   {
     id: "mimosa",
@@ -2064,7 +2062,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Always pour Prosecco first, then orange juice! The bubbles will naturally mix with the juice without requiring a spoon that can deflate the bubbles.",
     ingredients: [
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry sparkling wine / Champagne", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry sparkling wine / Champagne", inventoryId: "prosecco", ingredientGroup: "prosecco" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Fresh Orange Juice", substitute: "Strained fresh orange juice", inventoryId: "orange-juice" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Grand Marnier (Optional Luxury Float)", substitute: "Cointreau", inventoryId: "grand-marnier", ingredientGroup: "triple-sec" }
     ],
@@ -2075,7 +2073,7 @@ const DEFAULT_DRINKS = [
       "Optionally float a splash of Grand Marnier for a Grand Mimosa.",
       "Garnish with a strawberry or small orange wedge on the rim."
     ],
-    tags: ["prosecco", "orange", "brunch", "sparkling", "effortless"]
+    tags: ["prosecco", "orange", "brunch", "sparkling", "effortless", "in-stock"]
   },
   {
     id: "kir-royale",
@@ -2092,7 +2090,7 @@ const DEFAULT_DRINKS = [
     proTip: "A little cassis goes a long way. Just half an ounce creates a deep ruby sparkle without burying the crisp wine acidity.",
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Cassis (Blackcurrant)", substitute: "Raspberry Rhapsody syrup or Peter Heering", inventoryId: "creme-de-cassis", ingredientGroup: "creme-de-cassis" },
-      { amountOz: "4.5 oz", amountMl: "135 ml", item: "Prosecco", substitute: "Brut Champagne or dry sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" }
+      { amountOz: "4.5 oz", amountMl: "135 ml", item: "Prosecco", substitute: "Brut Champagne or dry sparkling wine", inventoryId: "prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Pour crème de cassis (or raspberry liqueur) into the bottom of a chilled champagne flute.",
@@ -2100,7 +2098,7 @@ const DEFAULT_DRINKS = [
       "The dark liqueur will swirl upward, turning the drink into a sparkling jewel.",
       "Garnish with a fresh raspberry or blackberry dropped into the glass."
     ],
-    tags: ["prosecco", "champagne", "berry", "bubbly", "france", "elegant"]
+    tags: ["prosecco", "champagne", "berry", "bubbly", "france", "elegant", "in-stock"]
   },
   {
     id: "paloma-mezcal",
@@ -2420,7 +2418,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bourbon Whiskey", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "bourbon" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Demerara or sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "prosecco", ingredientGroup: "prosecco" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Twist & Maraschino Cherry", substitute: "Lemon peel", inventoryId: "fresh-lemons" }
     ],
     instructions: [
@@ -2430,7 +2428,7 @@ const DEFAULT_DRINKS = [
       "Top with chilled Prosecco.",
       "Garnish with a lemon peel spiral and drop in a cherry."
     ],
-    tags: ["bourbon", "prosecco", "french-75", "bubbly", "celebration"]
+    tags: ["bourbon", "prosecco", "french-75", "bubbly", "celebration", "in-stock"]
   },
   {
     id: "blue-lagoon",
@@ -2857,7 +2855,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Passion Fruit Puree (or Peach Liqueur)", substitute: "Hoffmann Peach Liqueur", inventoryId: "hoffmann-peach", ingredientGroup: "peach-liqueur" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup (or Vanilla syrup)", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
-      { amountOz: "1 oz Chaser", amountMl: "30 ml Chaser", item: "Prosecco", substitute: "Chilled dry sparkling wine or Champagne", inventoryId: "gio-prosecco", ingredientGroup: "prosecco" }
+      { amountOz: "1 oz Chaser", amountMl: "30 ml Chaser", item: "Prosecco", substitute: "Chilled dry sparkling wine or Champagne", inventoryId: "prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Shake vodka, passion fruit (or peach), lime juice, and syrup with ice for 10 seconds.",
@@ -2865,7 +2863,7 @@ const DEFAULT_DRINKS = [
       "Pour 1 oz of cold Prosecco into a side shot or mini flute.",
       "Shoot the fruity vodka shooter, followed immediately by the bubbly Prosecco."
     ],
-    tags: ["shot", "prosecco", "party", "modern", "chaser"]
+    tags: ["shot", "prosecco", "party", "modern", "chaser", "in-stock"]
   },
   {
     id: "flatliner",
@@ -4431,7 +4429,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Mount Gay Barbados Rum Black Barrel", substitute: "Bacardi Carta Blanca Superior White Rum", inventoryId: "mount-gay-black-barrel", ingredientGroup: "air-mail-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime juice", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Honey Syrup (3:1)", substitute: "Premium Simple Syrup", inventoryId: "honey-syrup" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Zonin Prosecco Brut or dry sparkling wine", inventoryId: "zonin-prosecco-brut", ingredientGroup: "prosecco" }
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Any crisp dry sparkling wine or Champagne", inventoryId: "prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Chill a champagne flute or coupe glass.",
@@ -5142,11 +5140,11 @@ const DEFAULT_DRINKS = [
     proTip: "Invented by Ernest Hemingway in 1935: 'Pour one jigger absinthe into a Champagne glass. Add iced Champagne until it attains the proper opalescent milkiness. Drink three to five of these slowly.' The Prosecco activates the louche effect instantly, clouding into a magical green-gold shimmer.",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Père Kermann's Absinthe", substitute: "White Sambuca for sweeter profile", inventoryId: "pere-kermanns-absinthe" },
-      { amountOz: "4 oz", amountMl: "120 ml", item: "Zonin Prosecco Brut (or Bottega Spumante)", substitute: "Crisp dry sparkling wine", inventoryId: "zonin-prosecco-brut", ingredientGroup: "prosecco" }
+      { amountOz: "4 oz", amountMl: "120 ml", item: "Prosecco", substitute: "Crisp dry sparkling wine or Champagne", inventoryId: "prosecco", ingredientGroup: "prosecco" }
     ],
     instructions: [
       "Pour Père Kermann's Absinthe into a chilled champagne flute or coupe glass.",
-      "Slowly top up with icy cold Zonin Prosecco Brut.",
+      "Slowly top up with icy cold Prosecco.",
       "Watch the sparkling wine trigger the milky opalescent louche effect.",
       "Do not stir; serve immediately."
     ],
@@ -5463,7 +5461,7 @@ const DEFAULT_DRINKS = [
     proTip: "The Melon Spritz is a modern Japanese-inspired aperitivo, born from the global love of Midori melon liqueur and the spritz cocktail trend that swept East Asian bars in the 2010s. This vivid emerald-green cocktail is a popular order across Tokyo izakayas, Singapore cocktail bars, and Korean craft cocktail spots. Keep everything ice-cold and pour the Prosecco gently to preserve the bubbles. Chang Lime Soda makes an excellent lower-ABV variant with a tangy citrus lift.",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
-      { amountOz: "3 oz", amountMl: "90 ml", item: "Zonin Prosecco Brut", substitute: "Bottega Spumante Venezia", inventoryId: "zonin-prosecco-brut", ingredientGroup: "prosecco" },
+      { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Any crisp dry sparkling wine", inventoryId: "prosecco", ingredientGroup: "prosecco" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Lemon juice", inventoryId: "fresh-limes" },
       { amountOz: "Splash", amountMl: "Splash", item: "Chang Lime Soda (optional top)", substitute: "Chang Soda Water", inventoryId: "chang-lime-soda" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wheel", substitute: "Fresh mint sprig", inventoryId: "fresh-limes" }
