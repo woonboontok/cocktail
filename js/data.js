@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "16 November 2026";
-const INVENTORY_SYNC_VERSION = "20261116_3";
+const INVENTORY_LAST_UPDATED = "18 November 2026";
+const INVENTORY_SYNC_VERSION = "20261118_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
 
@@ -99,8 +99,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "maraschino-cherries": { inStock: true, incoming: false, quantity: 1, unit: "jar", refrigerate: true, notes: "1 jar of maraschino cherries, added after the grocery run." },
   "cola": { inStock: true, quantity: 6, unit: "can" },
   "demerara-syrup": { inStock: true, quantity: 1, unit: "bottle" },
-  "giffard-cachaca-thoquino": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: Giffard Cachaça Thoquino, 40% ABV, 700ml. Brazilian fresh-cut sugarcane agricole spirit; grassy, floral, and clean — the premium base for Caipirinha and Brazilian cocktails." },
-  "fernet-branca": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 39, refrigerate: true, notes: "Incoming: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter and backbone of Hanky Panky, Toronto, and Fernet con Coca." }
+  "giffard-cachaca-thoquino": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: Giffard Cachaça Thoquino, 40% ABV, 700ml. Brazilian fresh-cut sugarcane agricole spirit; grassy, floral, and clean — the premium base for Caipirinha and Brazilian cocktails." },
+  "fernet-branca": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 39, refrigerate: true, notes: "In stock: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter and backbone of Hanky Panky, Toronto, and Fernet con Coca." }
 };
 
 const INGREDIENT_GROUPS = {
@@ -407,8 +407,8 @@ const DEFAULT_INVENTORY = [
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
   { id: "pisco", name: "BarSol Pisco Primero Quebranta 700ml", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 41.3, notes: "In stock: BarSol Pisco Primero Quebranta (41.3% ABV, 700ml). Artisanal Peruvian unaged grape brandy distilled from 100% Quebranta grapes in Bodega San Isidro, Ica Valley. Subtle floral, dried fruit, and citrus notes; the benchmark spirit for Pisco Sour, Pisco Punch, and Chilcano." },
-  { id: "cachaca", name: "Cachaça (Generic)", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Generic cachaça placeholder. Incoming: Giffard Cachaça Thoquino (see giffard-cachaca-thoquino)." },
-  { id: "giffard-cachaca-thoquino", name: "Giffard Cachaça Thoquino 700ml", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 40, notes: "Incoming: Giffard Cachaça Thoquino, 40% ABV, 700ml. Award-winning Brazilian sugarcane agricole spirit with fresh-cut grass, floral citrus peel, and clean sweetness. The definitive premium base for Caipirinha, Batida, and Brazilian Mule." },
+  { id: "cachaca", name: "Cachaça (Generic)", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Generic cachaça placeholder. In stock: Giffard Cachaça Thoquino (see giffard-cachaca-thoquino)." },
+  { id: "giffard-cachaca-thoquino", name: "Giffard Cachaça Thoquino 700ml", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: Giffard Cachaça Thoquino, 40% ABV, 700ml. Award-winning Brazilian sugarcane agricole spirit with fresh-cut grass, floral citrus peel, and clean sweetness. The definitive premium base for Caipirinha, Batida, and Brazilian Mule." },
 
   // --- LIQUEURS (User In Stock) ---
   { id: "disaronno-amaretto", name: "Disaronno Originale Amaretto Liqueur 700ml", category: "liqueurs", subCategory: "Nut & Spice", inStock: true, incoming: true, quantity: 1, unit: "bottle", abv: 28, notes: "In stock: 1 bottle. Incoming spare: Disaronno Originale Amaretto 700ml (28% ABV)." },
@@ -448,7 +448,7 @@ const DEFAULT_INVENTORY = [
   { id: "aperol", name: "Aperol", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 11, refrigerate: true, notes: "Bittersweet orange, rhubarb, and gentian aperitivo for Aperol Spritz and Paper Plane." },
   { id: "campari", name: "Campari", category: "fortified", subCategory: "Aperitifs / Bitters", inStock: true, abv: 25, refrigerate: true, notes: "Iconic red bitter aperitif with chinotto citrus and herbs for Negroni and Boulevardier." },
   { id: "amaro-nonino", name: "Amaro Nonino Quintessentia", category: "fortified", subCategory: "Digestifs / Amaro", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 35, refrigerate: true, notes: "In stock: 700ml bottle at 35% ABV. Grappa-infused alpine herbal amaro with bitter orange and alpine herbs. Essential key component for the Paper Plane." },
-  { id: "fernet-branca", name: "Fernet-Branca Bitters Liqueur 700ml", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 39, refrigerate: true, notes: "Incoming: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter; backbone of the Hanky Panky, Toronto, and Fernet con Coca." },
+  { id: "fernet-branca", name: "Fernet-Branca Bitters Liqueur 700ml", category: "fortified", subCategory: "Digestifs / Amaro", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 39, refrigerate: true, notes: "In stock: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter; backbone of the Hanky Panky, Toronto, and Fernet con Coca." },
   { id: "amaro-averna", name: "Averna Amaro Siciliano", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 29, refrigerate: true, notes: "Bittersweet Sicilian amaro with orange peel, herbs, and pomegranate. Smooth and versatile digestif." },
   { id: "amaro-montenegro", name: "Amaro Montenegro", category: "fortified", subCategory: "Digestifs / Amaro", inStock: false, abv: 23, refrigerate: true, notes: "Elegant Bologna amaro with 40 botanicals. Balanced, floral, and approachable digestif." },
 
@@ -1493,7 +1493,7 @@ const DEFAULT_DRINKS = [
       "Pour in cachaça (or Bacardi white rum).",
       "Stir thoroughly from the bottom up to integrate and serve with short straws."
     ],
-    tags: ["cachaca", "rum", "lime", "brazil", "refreshing"]
+    tags: ["cachaca", "rum", "lime", "brazil", "refreshing", "in-stock"]
   },
   {
     id: "mint-julep",
@@ -5780,7 +5780,7 @@ const DEFAULT_DRINKS = [
       "Strain into a chilled coupe or Nick & Nora glass.",
       "Express an orange peel twist over the surface to release fragrant citrus oils, and drop it into the glass."
     ],
-    tags: ["gin", "vermouth", "fernet", "savoy", "classic", "spirit-forward", "bittersweet"]
+    tags: ["gin", "vermouth", "fernet", "savoy", "classic", "spirit-forward", "bittersweet", "in-stock"]
   },
   {
     id: "fernet-con-coca",
@@ -5807,7 +5807,7 @@ const DEFAULT_DRINKS = [
       "Gently give one light lift with a bar spoon to combine without extinguishing the fizz.",
       "Garnish with a fresh lemon or lime wedge."
     ],
-    tags: ["fernet", "cola", "argentina", "highball", "low-effort", "refreshing"]
+    tags: ["fernet", "cola", "argentina", "highball", "low-effort", "refreshing", "in-stock"]
   },
   {
     id: "montenegroni",
@@ -5863,7 +5863,7 @@ const DEFAULT_DRINKS = [
       "Strain into a chilled coupe or Nick & Nora glass.",
       "Express an orange peel twist over the surface to release fragrant oils, and drop it in."
     ],
-    tags: ["whiskey", "rye", "fernet", "classic", "spirit-forward", "bittersweet", "stirred"]
+    tags: ["whiskey", "rye", "fernet", "classic", "spirit-forward", "bittersweet", "stirred", "in-stock"]
   },
   {
     id: "fernet-shot",
@@ -5886,7 +5886,7 @@ const DEFAULT_DRINKS = [
       "Serve neat, slightly chilled (from the fridge), or over a single small ice cube.",
       "Sip slowly as a digestif — traditionally served after a heavy meal."
     ],
-    tags: ["fernet", "digestif", "shot", "herbal", "bitter", "italian", "neat"]
+    tags: ["fernet", "digestif", "shot", "herbal", "bitter", "italian", "neat", "in-stock"]
   },
   {
     id: "fernet-and-mint",
@@ -5914,7 +5914,7 @@ const DEFAULT_DRINKS = [
       "Top gently with a splash of soda water.",
       "Garnish with a fresh sprig of mint and serve with a straw."
     ],
-    tags: ["fernet", "mint", "digestif", "argentina", "herbal", "refreshing", "low-effort"]
+    tags: ["fernet", "mint", "digestif", "argentina", "herbal", "refreshing", "low-effort", "in-stock"]
   },
   {
     id: "brazilian-mule",
@@ -5943,7 +5943,7 @@ const DEFAULT_DRINKS = [
       "Top with chilled Fever-Tree Ginger Beer and stir gently once from the bottom.",
       "Garnish with a fresh lime wedge and a sprig of mint."
     ],
-    tags: ["cachaca", "ginger-beer", "lime", "brazil", "mule", "tropical", "refreshing", "low-effort"]
+    tags: ["cachaca", "ginger-beer", "lime", "brazil", "mule", "tropical", "refreshing", "low-effort", "in-stock"]
   },
   {
     id: "batida-de-limao",
@@ -5969,7 +5969,7 @@ const DEFAULT_DRINKS = [
       "Strain into a rocks glass filled with fresh ice.",
       "Garnish with a fresh lime wheel on the rim and serve immediately."
     ],
-    tags: ["cachaca", "lime", "brazil", "creamy", "tropical", "refreshing", "low-effort"]
+    tags: ["cachaca", "lime", "brazil", "creamy", "tropical", "refreshing", "low-effort", "in-stock"]
   }
 ];
 
