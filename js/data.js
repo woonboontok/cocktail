@@ -15,9 +15,9 @@ const INVENTORY_CATEGORIES = {
 };
 
 const INVENTORY_LAST_UPDATED = "18 November 2026";
-const INVENTORY_SYNC_VERSION = "20261118_1";
+const INVENTORY_SYNC_VERSION = "20261118_2";
 
-const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year"];
+const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year", "cachaca"];
 
 const INVENTORY_UPDATE_OVERRIDES = {
   "absolut-citron": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: Absolut Citron Lemon Flavored Vodka 1000ml (40% ABV). Natural lemon and lime peel infusion; iconic base for Cosmopolitan and Lemon Drop Martini." },
@@ -134,7 +134,7 @@ const INGREDIENT_GROUPS = {
   },
   "cachaca": {
     label: "Cachaça",
-    inventoryIds: ["giffard-cachaca-thoquino", "cachaca"]
+    inventoryIds: ["giffard-cachaca-thoquino"]
   },
   "gin": {
     label: "Dry & Botanical Gin",
@@ -407,7 +407,6 @@ const DEFAULT_INVENTORY = [
 
   // --- BASE SPIRITS (Shopping List / Expansion) ---
   { id: "pisco", name: "BarSol Pisco Primero Quebranta 700ml", category: "spirits", subCategory: "Brandy › Pisco", spiritFamily: "Brandy", spiritStyle: "Pisco", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 41.3, notes: "In stock: BarSol Pisco Primero Quebranta (41.3% ABV, 700ml). Artisanal Peruvian unaged grape brandy distilled from 100% Quebranta grapes in Bodega San Isidro, Ica Valley. Subtle floral, dried fruit, and citrus notes; the benchmark spirit for Pisco Sour, Pisco Punch, and Chilcano." },
-  { id: "cachaca", name: "Cachaça (Generic)", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: false, abv: 40, notes: "Generic cachaça placeholder. In stock: Giffard Cachaça Thoquino (see giffard-cachaca-thoquino)." },
   { id: "giffard-cachaca-thoquino", name: "Giffard Cachaça Thoquino 700ml", category: "spirits", subCategory: "Rum › Cachaça", spiritFamily: "Rum", spiritStyle: "Cachaça", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: Giffard Cachaça Thoquino, 40% ABV, 700ml. Award-winning Brazilian sugarcane agricole spirit with fresh-cut grass, floral citrus peel, and clean sweetness. The definitive premium base for Caipirinha, Batida, and Brazilian Mule." },
 
   // --- LIQUEURS (User In Stock) ---
