@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "18 November 2026";
-const INVENTORY_SYNC_VERSION = "20261118_3";
+const INVENTORY_LAST_UPDATED = "19 November 2026";
+const INVENTORY_SYNC_VERSION = "20261119_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year", "cachaca", "gio-prosecco", "zonin-prosecco-brut", "bottega-spumante-venezia"];
 
@@ -100,7 +100,9 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "cola": { inStock: true, quantity: 6, unit: "can" },
   "demerara-syrup": { inStock: true, quantity: 1, unit: "bottle" },
   "giffard-cachaca-thoquino": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: Giffard Cachaça Thoquino, 40% ABV, 700ml. Brazilian fresh-cut sugarcane agricole spirit; grassy, floral, and clean — the premium base for Caipirinha and Brazilian cocktails." },
-  "fernet-branca": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 39, refrigerate: true, notes: "In stock: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter and backbone of Hanky Panky, Toronto, and Fernet con Coca." }
+  "fernet-branca": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 39, refrigerate: true, notes: "In stock: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter and backbone of Hanky Panky, Toronto, and Fernet con Coca." },
+  "creme-de-mure": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 16, refrigerate: true, notes: "Incoming: Giffard Crème de Mûre (Blackberry Liqueur) 700ml (70cl), 16% ABV. Rich wild blackberry liqueur for Bramble and berry cocktails. Refrigerate after opening." },
+  "creme-de-violette": { inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 16, refrigerate: false, notes: "Incoming: Giffard Crème de Violette Liqueur 700ml (70cl), 16% ABV. Fragrant violet blossom liqueur for classic Aviation, Blue Moon, and floral cocktails." }
 };
 
 const INGREDIENT_GROUPS = {
@@ -427,9 +429,9 @@ const DEFAULT_INVENTORY = [
   // --- LIQUEURS (Shopping List / Expansion) ---
   { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, abv: 17, refrigerate: true, notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
   { id: "maraschino-liqueur", name: "Luxardo Maraschino Liqueur 750ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 32, notes: "In stock: 750ml bottle at 32% ABV. Dry cherry pit and herbal liqueur for Aviation, Last Word, and Hemingway Daiquiri." },
-  { id: "creme-de-violette", name: "Crème de Violette", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Violet flower liqueur that gives Aviation its sky-blue tint." },
+  { id: "creme-de-violette", name: "Giffard Crème de Violette Liqueur 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 16, refrigerate: false, notes: "Incoming: Giffard Crème de Violette Liqueur 700ml (70cl), 16% ABV. Fragrant violet blossom liqueur that gives Aviation and Blue Moon their signature floral aroma and periwinkle hue." },
   { id: "creme-de-cassis", name: "L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: true, notes: "In stock: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml, 15% ABV. Classic French blackcurrant liqueur for Kir Royale, Kir, and berry-forward cocktails. Refrigerate after opening." },
-  { id: "creme-de-mure", name: "Crème de Mûre (Blackberry)", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, abv: 15, notes: "Blackberry liqueur drizzled on the Bramble." },
+  { id: "creme-de-mure", name: "Giffard Crème de Mûre (Blackberry Liqueur) 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: false, incoming: true, quantity: 1, unit: "bottle", abv: 16, refrigerate: true, notes: "Incoming: Giffard Crème de Mûre (Blackberry Liqueur) 700ml (70cl), 16% ABV. Rich wild blackberry liqueur essential for drizzling over the Bramble and elevating berry cocktails. Refrigerate after opening." },
   { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, refrigerate: false, notes: "In stock: 700ml bottle at 40% ABV. Aged Scotch whisky, Scottish heather honey, herbs, and spices. Backbone of the classic Rusty Nail." },
   { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, refrigerate: false, notes: "130-herb French monk elixir for Last Word." },
   { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 40, refrigerate: false, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
@@ -1531,11 +1533,11 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Floral, Tart, Cherry Pit & Sky Blue",
     difficulty: 3,
     popularity: 9.4,
-    proTip: "Go easy on the Crème de Violette—just a quarter ounce is enough to impart the signature pale periwinkle sky color without making it taste like soap.",
+    proTip: "Go easy on the Crème de Violette—just a quarter ounce is enough to impart the signature pale periwinkle sky color without making it taste like soap. With Giffard Crème de Violette incoming, this aviation-age marvel will soon be fully ready in your bar.",
     ingredients: [
       { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Maraschino Liqueur", substitute: "Peter Heering Cherry + touch of dry vermouth", inventoryId: "maraschino-liqueur", ingredientGroup: "maraschino" },
-      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Crème de Violette", substitute: "St-Germain Elderflower (Aviation riff)", inventoryId: "creme-de-violette", ingredientGroup: "creme-de-violette" },
+      { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Crème de Violette", substitute: "Giffard Crème de Violette", inventoryId: "creme-de-violette", ingredientGroup: "creme-de-violette" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" }
     ],
     instructions: [
@@ -1587,12 +1589,12 @@ const DEFAULT_DRINKS = [
     tasteProfile: "Tart Blackberry, Fresh Lemon, Botanical & Crushed Ice",
     difficulty: 2,
     popularity: 9.6,
-    proTip: "Drizzle the berry liqueur (or Raspberry Rhapsody) over the crushed ice *after* straining the gin sour base so it bleeds beautifully through the ice.",
+    proTip: "Drizzle the Giffard Crème de Mûre over the crushed ice *after* straining the gin sour base so it bleeds beautifully through the ice into a dramatic ruby crown.\n\nTwist: Swap the gin for bourbon to make a decadent Bourbon Bramble (Blackberry Bourbon Smash).",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Crème de Mûre (or Raspberry Rhapsody)", substitute: "Raspberry Rhapsody Flavored Syrup / Peter Heering", inventoryId: "creme-de-mure", ingredientGroup: "creme-de-mure" }
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Giffard Crème de Mûre", substitute: "Blackberry liqueur or Crème de Cassis", inventoryId: "creme-de-mure", ingredientGroup: "creme-de-mure" }
     ],
     instructions: [
       "Combine Tanqueray gin, lemon juice, and simple syrup in a shaker with ice.",
@@ -5967,6 +5969,113 @@ const DEFAULT_DRINKS = [
       "Garnish with a fresh lime wheel on the rim and serve immediately."
     ],
     tags: ["cachaca", "lime", "brazil", "creamy", "tropical", "refreshing", "low-effort", "in-stock"]
+  },
+  {
+    id: "water-lily",
+    name: "Water Lily",
+    otherNames: "Boccato's Violette Sour",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe / Nick & Nora",
+    alcoholLevel: "Medium-High (~24% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Floral Violet, Bright Citrus, Orange Zest & Delicate Botanical",
+    difficulty: 1,
+    popularity: 9.3,
+    proTip: "Created in 2007 by Richard Boccato at Little Branch in NYC. Built on the harmonious equal-parts quadrilateral architecture (like the Last Word and Corpse Reviver No. 2), it balances the intense floral sweetness of Crème de Violette with crisp dry gin, Cointreau orange brightness, and fresh lemon. Express an orange peel over the surface for aromatic oils.",
+    ingredients: [
+      {
+        amountOz: "0.75 oz",
+        amountMl: "22.5 ml",
+        item: "Tanqueray London Dry Gin",
+        substitute: "The Botanist Islay Dry Gin",
+        inventoryId: "tanqueray-gin",
+        ingredientGroup: "gin",
+        preferNonPremium: false
+      },
+      {
+        amountOz: "0.75 oz",
+        amountMl: "22.5 ml",
+        item: "Cointreau",
+        substitute: "Lumina Triple Sec or Grand Marnier",
+        inventoryId: "cointreau",
+        ingredientGroup: "triple-sec",
+        preferNonPremium: false
+      },
+      {
+        amountOz: "0.75 oz",
+        amountMl: "22.5 ml",
+        item: "Giffard Crème de Violette",
+        substitute: "Violet floral liqueur",
+        inventoryId: "creme-de-violette",
+        ingredientGroup: "creme-de-violette",
+        preferNonPremium: false
+      },
+      {
+        amountOz: "0.75 oz",
+        amountMl: "22.5 ml",
+        item: "Fresh Lemon Juice",
+        substitute: "Fresh lemon juice",
+        inventoryId: "fresh-lemons"
+      }
+    ],
+    instructions: [
+      "Chill a coupe or Nick & Nora glass.",
+      "Add gin, Cointreau, Giffard Crème de Violette, and freshly squeezed lemon juice into a cocktail shaker with ice.",
+      "Shake vigorously for 12 seconds until thoroughly chilled and frosted.",
+      "Fine strain into the chilled coupe glass to achieve a translucent periwinkle hue.",
+      "Express essential oils from an orange peel over the surface and discard or rest on the rim."
+    ],
+    tags: ["gin", "cointreau", "violette", "floral", "sour", "modern-classic", "equal-parts"]
+  },
+  {
+    id: "blue-moon",
+    name: "Blue Moon",
+    otherNames: "Vintage Violette Sour",
+    category: "Cocktail",
+    baseSpirit: "Gin",
+    glassware: "Coupe",
+    alcoholLevel: "Medium-High (~25% ABV)",
+    alcoholScore: 4,
+    tasteProfile: "Crisp Botanical Gin, Fragrant Violet Bloom & Sharp Lemon",
+    difficulty: 1,
+    popularity: 9.1,
+    proTip: "The classic mid-century sour sibling to the Aviation—stripping away the Maraschino liqueur so that the pairing between botanical dry gin and floral Crème de Violette shines cleanly against tart lemon. A splash (0.25 oz) of simple syrup can be added if your palate prefers a gentler sour balance.",
+    ingredients: [
+      {
+        amountOz: "2 oz",
+        amountMl: "60 ml",
+        item: "Tanqueray London Dry Gin",
+        substitute: "The Botanist Islay Dry Gin",
+        inventoryId: "tanqueray-gin",
+        ingredientGroup: "gin",
+        preferNonPremium: false
+      },
+      {
+        amountOz: "0.5 oz",
+        amountMl: "15 ml",
+        item: "Giffard Crème de Violette",
+        substitute: "Violet floral liqueur",
+        inventoryId: "creme-de-violette",
+        ingredientGroup: "creme-de-violette",
+        preferNonPremium: false
+      },
+      {
+        amountOz: "0.75 oz",
+        amountMl: "22.5 ml",
+        item: "Fresh Lemon Juice",
+        substitute: "Fresh lemon juice",
+        inventoryId: "fresh-lemons"
+      }
+    ],
+    instructions: [
+      "Chill a cocktail coupe glass.",
+      "Add Tanqueray gin, Giffard Crème de Violette, and fresh lemon juice to a cocktail shaker filled with ice.",
+      "Shake vigorously for 10 to 12 seconds until frosted.",
+      "Fine strain into the chilled coupe.",
+      "Garnish with a lemon twist or brandied maraschino cherry."
+    ],
+    tags: ["gin", "violette", "floral", "sour", "vintage", "classic"]
   }
 ];
 
