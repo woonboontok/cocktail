@@ -215,6 +215,10 @@ const INGREDIENT_GROUPS = {
     label: "Cognac / French Brandy",
     inventoryIds: ["hennessy-vsop-cognac", "otard-xo-gold-cognac", "premier-french-brandy-napoleon-special-reserve"]
   },
+  "french-connection-base": {
+    label: "Cognac / French Brandy (or Bourbon)",
+    inventoryIds: ["hennessy-vsop-cognac", "otard-xo-gold-cognac", "premier-french-brandy-napoleon-special-reserve", "jim-beam-black"]
+  },
   "sidecar-base": {
     label: "Sidecar Base Spirit",
     inventoryIds: ["hennessy-vsop-cognac", "otard-xo-gold-cognac", "premier-french-brandy-napoleon-special-reserve", "tanqueray-gin", "bacardi-superior", "jim-beam-black"]
@@ -1618,8 +1622,8 @@ const DEFAULT_DRINKS = [
     popularity: 9.3,
     proTip: "Equal parts or 1.5 : 1 ratio. Disaronno's sweet almond marries gorgeously with the rich oak and vanilla of Cognac (or Jim Beam Black Bourbon).",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Cognac / French Brandy (or Bourbon)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Disaronno Originale Amaretto", substitute: "Walcher Amaretto", inventoryId: "disaronno-amaretto" }
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Cognac / French Brandy (or Bourbon)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "hennessy-vsop-cognac", ingredientGroup: "french-connection-base", preferNonPremium: true },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Disaronno Originale Amaretto", inventoryId: "disaronno-amaretto" }
     ],
     instructions: [
       "Fill a rocks glass or brandy snifter with ice cubes.",
