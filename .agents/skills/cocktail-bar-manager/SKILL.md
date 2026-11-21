@@ -16,104 +16,203 @@ This skill guides AI coding assistants through managing the inventory and recipe
 
 | File | Role | Key Considerations |
 |---|---|---|
-| [`index.html`](../../index.html) | Semantic shell, modals, static navigation | Uses accessible modal dialogs, responsive nav toggle, SVG icons |
-| [`css/style.css`](../../css/style.css) | All styling, 7 dynamic time-of-day themes, CSS grid | Dynamic themes via `data-theme` on `<html>`. Font display: `--font-display`. Accent colors: `--accent-gold`, `--accent-copper`. |
-| [`js/data.js`](../../js/data.js) | **Single Source of Truth** for inventory & recipes | Must remain valid ES/CommonJS (consumable by Node.js validation scripts) |
+| [`index.html`](../../index.html) | Semantic shell, modals, static navigation | Accessible modal dialogs, responsive nav toggle, SVG icons |
+| [`css/style.css`](../../css/style.css) | All styling, 7 dynamic time-of-day themes, CSS grid | Dynamic themes via `data-theme` on `<html>`. CSS vars: `--accent-gold`, `--accent-copper`, `--bg-primary`, `--bg-card`, `--text-primary`. |
+| [`js/data.js`](../../js/data.js) | **Single Source of Truth** for inventory & recipes | Must remain valid ES/CommonJS (consumable by Node.js validation scripts). **Never read more than the minimum lines needed.** |
 | [`js/app.js`](../../js/app.js) | State machine, stock resolution, rendering engine | Caches core DOM nodes on `init()`, modular helpers hoisted to file scope |
 
 ### Core Data Contracts (`js/data.js`)
 - `INVENTORY_LAST_UPDATED`: Current date string (e.g. `"22 October 2026"`).
-- `INVENTORY_SYNC_VERSION`: Increment this on every inventory update (e.g. `"20261022_1"`).
-- `INVENTORY_UPDATE_OVERRIDES`: Live stock flags, quantities, units, and notes mapped by item `id`.
+- `INVENTORY_SYNC_VERSION`: Format `YYYYMMDD_N`. **Always bump on every inventory edit.** Auto-handled by the patcher script.
+- `INVENTORY_UPDATE_OVERRIDES`: Live stock flags, quantities, units, notes — keyed by item `id`. **This is the primary target for all stock updates.**
 - `INGREDIENT_GROUPS`: Multi-spirit groupings (e.g., `"sake"`, `"tequila"`, `"gin"`, `"amaro"`, `"prosecco"`).
-- `DEFAULT_INVENTORY`: Array of full bottle and ingredient definitions.
+- `DEFAULT_INVENTORY`: Array of full bottle and ingredient definitions (rarely edited directly).
 - `DEFAULT_DRINKS`: Array of cocktail/mocktail/shot recipes.
 
 ---
 
-## 2. Inventory Update Runbook
+## 2. ⚡ Efficient Inventory Updates — Use the Patcher Script
+
+> [!IMPORTANT]
+> **Always use the patcher script for INVENTORY_UPDATE_OVERRIDES edits.** Do NOT use `edit_file` to change override entries — it fails on unicode characters (accents, em-dashes, smart quotes) and wastes many tool calls. The script handles versioning and line editing atomically in one command.
+
+### The Patcher Command
+
+```bash
+# Working directory: /Users/tokwoonboon/workspace/cocktail
+node .agents/skills/cocktail-bar-manager/scripts/patch-inventory.js \
+  --id "<item-id>" field1=value1 field2=value2 ...
+```
+
+**Value encoding rules:**
+| Value type | Example | Result |
+|---|---|---|
+| Boolean | `inStock=true` | `true` |
+| Number | `quantity=2` or `abv=16` | `2` / `16` |
+| String | `unit=bottle` | `"bottle"` |
+| String with spaces | Use shell quotes: `notes="In stock: ..."` | `"In stock: ..."` |
+| Refrigerate must | `refrigerate=must` | `"must"` |
+| Refrigerate preferred | `refrigerate=preferred` | `"preferred"` |
+
+**The script automatically:**
+- Finds the `"item-id": { ... }` line in `INVENTORY_UPDATE_OVERRIDES`
+- Merges only the fields you pass (preserves all other fields unchanged)
+- Updates `INVENTORY_LAST_UPDATED` to today
+- Bumps `INVENTORY_SYNC_VERSION` (format `YYYYMMDD_N`)
+
+### Common Inventory Scenarios
+
+**Mark a bottle as received (was `incoming: true`):**
+```bash
+node .agents/skills/cocktail-bar-manager/scripts/patch-inventory.js \
+  --id "creme-de-mure" inStock=true incoming=false
+```
+
+**Mark a bottle as depleted:**
+```bash
+node .agents/skills/cocktail-bar-manager/scripts/patch-inventory.js \
+  --id "tanqueray-gin" inStock=false quantity=0
+```
+
+**Update quantity:**
+```bash
+node .agents/skills/cocktail-bar-manager/scripts/patch-inventory.js \
+  --id "chang-soda-water" quantity=24
+```
+
+**Two bottles at once — run two patcher calls:**
+```bash
+node .agents/skills/cocktail-bar-manager/scripts/patch-inventory.js \
+  --id "creme-de-mure" inStock=true incoming=false
+node .agents/skills/cocktail-bar-manager/scripts/patch-inventory.js \
+  --id "creme-de-violette" inStock=true incoming=false
+```
+
+### When to use `edit_file` directly
+
+Only use `edit_file` for:
+1. **New entries in `DEFAULT_INVENTORY`** (full schema object — no unicode in the target anchor, use a unique string like the `id:` field as the target).
+2. **New cocktail recipes in `DEFAULT_DRINKS`**.
+3. **`INGREDIENT_GROUPS` additions** (pure ASCII structure, safe to target).
+4. **`js/app.js` or `css/style.css`** code/style changes.
+
+> [!TIP]
+> When you must use `edit_file`, **target the shortest unique ASCII substring possible** — e.g. target only `"item-id":` or a field name that has no accented characters. Never target a full line that contains unicode (accented names, em-dashes, curly quotes) — these will never match.
+
+---
+
+## 3. Full Inventory Update Runbook
 
 When a user mentions receiving, purchasing, or running out of bottles:
 
-1. **Locate or Add the Inventory Item**:
-   - Check if an entry already exists in `DEFAULT_INVENTORY`.
-   - If present, set `inStock: true` or `inStock: false` (with `quantity: 0` if depleted), and verify `abv`, `unit`, and bottle size.
-   - If new, create an entry with a slugified `id`, descriptive `name`, appropriate `category`, `subCategory`, `abv`, and tasting notes.
+### Step 1 — Run the patcher for INVENTORY_UPDATE_OVERRIDES
+Use the patcher script above. This handles versioning automatically.
 
-2. **Update Overrides & Versioning**:
-   - In `INVENTORY_UPDATE_OVERRIDES`, add/update the entry with:
-     ```javascript
-     "item-id": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: ..., notes: "..." }
-     ```
-   - Bump `INVENTORY_SYNC_VERSION` and update `INVENTORY_LAST_UPDATED`.
+### Step 2 — Check DEFAULT_INVENTORY (lines 1–300 max)
+Only read DEFAULT_INVENTORY if:
+- The item might not exist there yet (new bottle).
+- You need to verify the `abv` or `category` for a recipe addition.
 
-3. **Check Ingredient Groups & Reserve Classification**:
-   - If the item belongs to an existing spirit family (e.g. sake, tequila, gin, amaro, whiskey, prosecco), ensure its `id` is listed under the matching `INGREDIENT_GROUPS` entry.
-   - **Reserve Tag (`premium: true`)**: See Section 3 for strict classification rules.
-   - **Refrigerate Tag (`refrigerate: true`)**: Set `refrigerate: true` for perishable items, wine bases, unfortified juice, syrups (vermouths, amari, simple/agave/honey syrups, fresh citrus), and carbonated sodas/tonics/ginger beers/beers (user rotates <6 cans/bottles into the fridge for icy temperature and peak effervescence).
+If the item is **new** (not in DEFAULT_INVENTORY), append a full entry:
+```javascript
+{
+  id: "slugified-name",
+  name: "Full Brand Name (Style)",
+  category: "liqueurs", // spirits | liqueurs | fortified | sparkling | mixers_sodas | bitters_syrups | fresh_garnishes
+  subCategory: "Berry & Fruit",
+  spiritFamily: "Liqueur",
+  spiritStyle: "Blackberry",
+  inStock: true,
+  incoming: false,
+  quantity: 1,
+  unit: "bottle",
+  abv: 16,
+  premium: false,
+  refrigerate: "preferred", // See refrigeration rules in Section 3B
+  notes: "In stock: Brand Name, 700ml, 16% ABV. Tasting notes and usage."
+}
+```
 
-4. **Adjust Cocktails & Preserve Reserve Spirits**:
-   - Review cocktails that use the item or previously used substitutes (e.g., Rusty Nail for Drambuie, Paper Plane for Amaro Nonino).
-   - If recipes previously pointed to substitute `inventoryId`s, update them to point directly to the newly in-stock bottle.
-   - **Preserving Reserve Spirits (`preferNonPremium: true`)**:
-     - Follow the strict matrix in Section 3 below.
-   - If new classic/signature drinks are unlocked by the addition, add them to `DEFAULT_DRINKS` with dual volume units (`amountOz` & `amountMl`), tags (`"in-stock"`), and helpful `proTip`s.
+### Step 3 — Check INGREDIENT_GROUPS (lines 108–350 ish)
+If the new bottle belongs to an existing spirit family (gin, rum, tequila, sake, amaro, etc.), add its `id` to the matching group. Use `edit_file` targeting the group's `inventoryIds` array — these lines are ASCII-safe.
 
----
+### Step 4 — Reserve & Refrigeration classification
 
-## 3. Reserve Spirit Decision Framework (`✦ Reserve` & `preferNonPremium`)
+**Reserve (`premium`):** See Section 4.
 
-### A. When to Tag an Inventory Bottle as `premium: true` (✦ Reserve)
-Reserve status is primarily about **rarity and replacement cost**. Mark `premium: true` only when the bottle meets at least two of these signals:
-1. **Rare or hard to replace**: limited availability, unusual provenance, or difficulty sourcing a replacement.
-2. **High replacement cost**: materially more expensive to replace than an everyday bottle in the same ingredient group.
-3. **Distinctive profile worth preserving**: complex craft, meaningful aging, or sipping qualities that would be lost if masked in a heavily modified drink.
+**Refrigeration (`refrigerate`):** Use a string value — **never boolean `true`**:
 
-Rarity and replacement cost are the main signals; a distinctive sipping profile supports the classification. Craft, age, or brand prestige by itself does not make a bottle Reserve. This is why an ordinary Añejo does not qualify automatically, while *Código 1530 Reposado Cristalino* is an explicit Reserve example: it is distinctive, costly, and harder to replace than a workhorse tequila.
-
-#### What NOT to Tag as `premium: true`:
-- **High ABV / Overproof alone is NOT premium**: High proof or high ABV (e.g., *Goslings Black Seal 151* at 75.5% ABV, *Topanito Mezcal Artesanal* at 52% ABV, *Jack Daniel's Bonded Rye* at 50% ABV) is a **functional specification** for Tiki floats, flaming serves, or high-proof backbone—not a designation of delicate top-shelf rarity. Goslings 151 is designed specifically as a high-proof utility mixer/float for Zombies and flaming drinks; marking it reserve would discourage its core intended usage.
-- **Reliable Workhorse / Well Spirits**: Bottles intended for high-volume, everyday mixing (*Tanqueray London Dry*, *Bacardi Superior*, *Smirnoff Red*, *Jim Beam Black*, *Teremana Blanco*) should remain `premium: false`.
-
-### B. When to Set `preferNonPremium: true` in Drink Recipes
-When a drink ingredient references an `ingredientGroup` (e.g., `gin`, `tequila`, `dark-rum`, `brandy-cognac`) that contains both everyday workhorses and `premium: true` bottles:
-
-| Drink Characteristic | `preferNonPremium` Setting | Example Drinks | Rationale |
+| Value | Meaning | Renders as | Use for |
 |---|---|---|---|
-| **Heavily modified / Sugary / Creamy / High-Mixer** | **`true`** | Singapore Sling, Long Island Iced Tea, Tom Collins, Brandy Alexander, Alabama Slammer, Flatliner, Barbados Rum Punch, Monkey Gland, Floradora, Ramos Gin Fizz, Peach Sake Fizz, Sake Bomb, Tonight Not Going Home and its shot, heavily sweetened tiki drinks | Heavy syrup or liqueur, cream, large amounts of juice, cola, intense spice, or several competing spirits can overpower the reserved bottle's profile and waste it. Displays advisory: *"Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity."* |
-| **Spirit-Forward / Minimal Modifier / Dry Showcase** | **`false` (leave falsy)** | Dry Martini, Saketini, Obituary, Vesper, Classic Gimlet, French 75, Classic Margarita, Paloma, Old Fashioned | The base spirit is the deliberate star of the glass. Reserve spirits elevate the cocktail and should be readily recommended. |
+| `"must"` | Will spoil/degrade significantly without cold | ❄ **solid bright blue badge** + solid left border | Fresh produce & herbs, fresh-pressed juices, dairy/cream/egg white, Yakult, Makgeolli, coconut cream/water, grenadine syrups |
+| `"preferred"` | Quality & serving temperature preservation; shelf-stable if needed | ❄ **muted blue dashed badge** + dashed left border | Fruit liqueurs (Cassis, Mûre, Tequila Rose), vermouths & aperitifs (Lillet, Martini, Aperol, Campari), amaros (Nonino, Fernet, Averna), all syrups, all sodas/tonics/beers/Prosecco, Baileys |
+| `false` / omit | No refrigeration needed | *(no badge)* | All base spirits, most herbal/botanical liqueurs (Violette, Frangelico, Drambuie, Sambuca), fortified wines above ~18% ABV |
 
----
+> [!IMPORTANT]
+> **Never set `refrigerate: true` (boolean).** Always use `"must"` or `"preferred"`. The app handles legacy `true` as `"preferred"` for safety, but all new and edited entries must use string values.
 
-## 4. UI & Codebase Patterns (`js/app.js` & `css/style.css`)
-
-When modifying app behavior or styles, adhere to these established patterns:
-
-1. **Shared SVG Constants**: Reusable iconography (like `SNOWFLAKE_SVG`) should be defined at the top of `js/app.js` rather than duplicated inline inside template strings.
-2. **DOM Caching**: Primary structural containers (`catalogView`, `glossaryView`, `adminView`, `heroStats`, `drinksGrid`, `resultsCount`) are cached in `DOM` during `init()` to minimize redundant `getElementById` calls across render passes.
-3. **Pill Filtering Pattern**: Filter sets (spirit, difficulty, taste) use the shared `setupFilterPills(selector, getter, setter)` helper to maintain uniform active state toggles and reset behaviors.
-4. **Theme Awareness**: Use CSS variables for theming (`--bg-primary`, `--bg-card`, `--text-primary`, `--accent-gold`, etc.). Do not hardcode fixed hex colors (like `#fff` or `#f3f4f6`) inside body or card typography, as this breaks contrast in light themes (e.g., Morning theme).
-5. **Quantity Updates**: Modifying stock numbers should route through `setItemQuantityDirect(id, newQty)` to ensure `inStock` sync, storage persistence, and header stat updates occur atomically.
-6. **Drink Preparation Tools (`getDrinkTools`)**:
-   - In `js/app.js`, `getDrinkTools(drink)` dynamically infers required bar equipment and ice for the recipe modal.
-   - **Bottle Opener**: Automatically included whenever a drink uses bottled mixers (e.g. Chang Soda Water, Chang Lime Soda, Fever-Tree Indian Tonic, Fever-Tree Ginger Beer, Bundaberg Ginger Beer). Keep this check updated if new glass-bottled mixers or beers are added.
-
----
-
-## 5. Automated Verification & Quality Checklist
-
-Before completing any task, always execute these checks:
-
+### Step 5 — Cocktail recipe review (targeted read)
+Search for the item id in drink recipes using grep rather than reading the whole file:
 ```bash
-# 1. Syntax check for all JS files
+grep -n "item-id\|SubstituteName" js/data.js | head -40
+```
+Only read the relevant recipe blocks. Update `inventoryId` or `ingredientGroup` references where needed. Add new classic cocktails unlocked by the new bottle.
+
+### Step 6 — Verify (always last)
+```bash
 node -e "
 const fs = require('fs'), vm = require('vm');
 new vm.Script(fs.readFileSync('js/data.js', 'utf8'));
 new vm.Script(fs.readFileSync('js/app.js', 'utf8'));
-console.log('✓ JS syntax valid');
+console.log('JS syntax valid');
+"
+```
+
+---
+
+## 4. Reserve Spirit Decision Framework (`✦ Reserve` & `preferNonPremium`)
+
+### A. When to Tag an Inventory Bottle as `premium: true` (✦ Reserve)
+Reserve status is primarily about **rarity and replacement cost**. Mark `premium: true` only when the bottle meets at least two of:
+1. **Rare or hard to replace**: limited availability, unusual provenance, or difficulty sourcing.
+2. **High replacement cost**: materially more expensive than everyday bottles in the same group.
+3. **Distinctive profile worth preserving**: complex craft, meaningful aging, sipping qualities lost when masked.
+
+**NOT Reserve:** High ABV/overproof alone (*Goslings 151*, *Topanito Mezcal*, *JD Bonded Rye*) — these are functional specs. Workhorse mixers (*Tanqueray*, *Bacardi Superior*, *Smirnoff Red*, *Jim Beam Black*, *Teremana Blanco*) are not Reserve.
+### B. When to Set `preferNonPremium: true` in Drink Recipes
+
+| Drink Characteristic | Setting | Example Drinks |
+|---|---|---|
+| **Heavily modified / Sugary / Creamy / High-Mixer** | `true` | Singapore Sling, Long Island Iced Tea, Tom Collins, Brandy Alexander, Alabama Slammer, Flatliner, Barbados Rum Punch, Monkey Gland, Floradora, Ramos Gin Fizz, Peach Sake Fizz, Sake Bomb, Tonight Not Going Home |
+| **Spirit-Forward / Dry / Minimal Modifier** | `false` (leave falsy) | Dry Martini, Saketini, Obituary, Vesper, Classic Gimlet, French 75, Classic Margarita, Paloma, Old Fashioned |
+
+---
+
+## 5. UI & Codebase Patterns (`js/app.js` & `css/style.css`)
+
+1. **Shared SVG Constants**: Reusable icons (like `SNOWFLAKE_SVG`) defined at top of `js/app.js`, never duplicated inline.
+2. **DOM Caching**: Primary containers cached in `DOM` during `init()`.
+3. **Pill Filtering Pattern**: Use shared `setupFilterPills(selector, getter, setter)` helper.
+4. **Theme Awareness**: Use CSS variables only — never hardcode hex colors like `#fff` or `#f3f4f6`.
+5. **Quantity Updates**: Route through `setItemQuantityDirect(id, newQty)` for atomic sync.
+6. **Drink Preparation Tools**: `getDrinkTools(drink)` in `js/app.js` infers equipment. Update the bottle-opener check when new glass-bottled mixers are added.
+
+---
+
+## 6. Verification & Quality Checklist
+
+Run after every change:
+
+```bash
+# Syntax check (fast, always run)
+node -e "
+const fs = require('fs'), vm = require('vm');
+new vm.Script(fs.readFileSync('js/data.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/app.js', 'utf8'));
+console.log('JS syntax valid');
 "
 
-# 2. Data integrity check (IDs, duplicate keys, groups)
+# Data integrity check (run when recipes or groups were edited)
 node -e "
 const data = require('./js/data.js');
 const invIds = new Set(data.DEFAULT_INVENTORY.map(i => i.id));
@@ -131,11 +230,7 @@ data.DEFAULT_DRINKS.forEach(d => {
     }
   });
 });
-if (errors === 0) console.log('✓ All inventory, groups, and drinks validated cleanly.');
+if (errors === 0) console.log('All inventory, groups, and drinks validated cleanly.');
 else process.exit(1);
 "
-
-# 3. Test local serving
-python3 -m http.server 8089 &
-PID=$!; sleep 1.5; curl -s http://localhost:8089/index.html | head -n 10; kill $PID
 ```

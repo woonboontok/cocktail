@@ -599,9 +599,22 @@
     return Boolean(item && item.refrigerate);
   }
 
+  function getRefrigerateLevel(item) {
+    // Returns "must", "preferred", or falsy
+    if (!item) return false;
+    if (item.refrigerate === "must") return "must";
+    if (item.refrigerate === "preferred") return "preferred";
+    if (item.refrigerate === true) return "preferred"; // legacy boolean fallback
+    return false;
+  }
+
   function renderRefrigerateBadge(item) {
-    if (!itemNeedsRefrigeration(item)) return "";
-    return `<span class="inv-badge-refrigerate" title="Keep Refrigerated" aria-label="Keep Refrigerated">${SNOWFLAKE_SVG}</span>`;
+    const level = getRefrigerateLevel(item);
+    if (!level) return "";
+    if (level === "must") {
+      return `<span class="inv-badge-refrigerate inv-badge-refrigerate--must" title="Must Refrigerate — will spoil without cold" aria-label="Must Refrigerate">${SNOWFLAKE_SVG}</span>`;
+    }
+    return `<span class="inv-badge-refrigerate inv-badge-refrigerate--preferred" title="Preferred Cold — best kept refrigerated for quality &amp; serving temperature" aria-label="Preferred Cold">${SNOWFLAKE_SVG}</span>`;
   }
 
 
@@ -689,7 +702,8 @@
         <div class="inventory-table-wrapper">
           <div class="inventory-stock-key">
             <span><i class="stock-key-dot shelf"></i>Shelf-Stable Bottles</span>
-            <span><span class="stock-key-refrigerate-icon">${SNOWFLAKE_SVG}</span>Keep Refrigerated</span>
+            <span><span class="stock-key-refrigerate-icon stock-key-refrigerate-icon--must">${SNOWFLAKE_SVG}</span>Must Refrigerate</span>
+            <span><span class="stock-key-refrigerate-icon stock-key-refrigerate-icon--preferred">${SNOWFLAKE_SVG}</span>Preferred Cold</span>
           </div>
           <table class="inventory-table">
             <thead><tr>
@@ -707,7 +721,7 @@
               const usableRecipes = getRecipesUsingItem(item.id);
               const readyCount = usableRecipes.filter(drink => getDrinkStockStatus(drink).canMake).length;
               const linkLabel = readyCount > 0 ? `${readyCount} ready` : `${usableRecipes.length} recipes`;
-              return `<tr class="${itemNeedsRefrigeration(item) ? 'needs-refrigeration' : ''}">
+              return `<tr class="${getRefrigerateLevel(item) === 'must' ? 'needs-refrigeration--must' : getRefrigerateLevel(item) === 'preferred' ? 'needs-refrigeration--preferred' : ''}">
                 <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${escapeHTML(item.id)}" ${item.inStock ? "checked" : ""}><span>${escapeHTML(item.name)}</span>${renderPremiumBadge(item)}${renderRefrigerateBadge(item)}</label></td>
                 <td>${escapeHTML(INVENTORY_CATEGORIES[item.category] || item.category || "—")}</td>
                 <td>${escapeHTML(item.subCategory || "—")}</td>
