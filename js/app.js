@@ -21,7 +21,7 @@
   const THEME_COOKIE = "speakeasy_theme";
   const inventoryStore = window.BoonBarInventoryStore;
   const { getDefaultUnit, getDefaultQuantity } = inventoryStore;
-  const { escapeHTML } = window.BoonBarUIUtils;
+  const { escapeHTML, normalizeSearchText } = window.BoonBarUIUtils;
   const { getDrinkVolume, getAbv, getDrinkAbvValue, parseAbvText, getInventoryAbv } = window.BoonBarRecipeUtils;
   const { showModal, hideModal, keepFocusInOpenModal } = window.BoonBarModal;
 
@@ -252,7 +252,7 @@
     if (spiritVal === "Rum") {
       return /rum|cachaça|cachaca/i.test(base);
     }
-    return base.toLowerCase().includes(spiritVal.toLowerCase());
+    return normalizeSearchText(base).includes(normalizeSearchText(spiritVal));
   }
 
   function getFilteredAndSortedDrinks() {
@@ -289,11 +289,11 @@
     }
 
     if (selectedGlass !== "all") {
-      drinks = drinks.filter(d => d.glassware && d.glassware.toLowerCase().includes(selectedGlass.toLowerCase()));
+      drinks = drinks.filter(d => d.glassware && normalizeSearchText(d.glassware).includes(normalizeSearchText(selectedGlass)));
     }
 
     if (selectedTaste !== "all") {
-      drinks = drinks.filter(d => d.tasteProfile && d.tasteProfile.toLowerCase().includes(selectedTaste.toLowerCase()));
+      drinks = drinks.filter(d => d.tasteProfile && normalizeSearchText(d.tasteProfile).includes(normalizeSearchText(selectedTaste)));
     }
 
     if (inventoryRecipeFilterIds) {
@@ -302,7 +302,7 @@
 
     // Search query
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
+      const q = normalizeSearchText(searchQuery.trim());
       const tokens = q.split(/\s+/).filter(t => t.length > 0);
 
       drinks = drinks.filter(d => {
@@ -314,6 +314,7 @@
           d.tasteProfile || "",
           ...(d.tags || []),
           ...d.ingredients.map(ing => ing.item),
+          ...d.ingredients.map(ing => ing.substitute || ""),
           ...d.ingredients.map(ing => {
             if (!ing.inventoryId) return "";
             const inv = getInventoryItem(ing.inventoryId);
@@ -323,7 +324,7 @@
             if (!ing.ingredientGroup || !INGREDIENT_GROUPS[ing.ingredientGroup]) return "";
             return INGREDIENT_GROUPS[ing.ingredientGroup].label;
           })
-        ].map(s => s.toLowerCase());
+        ].map(s => normalizeSearchText(s));
 
         return tokens.every(token => searchableFields.some(field => field.includes(token)));
       });
@@ -338,9 +339,9 @@
           return b.name.localeCompare(a.name);
         case "popularity-desc": {
           if (searchQuery.trim()) {
-            const q = searchQuery.toLowerCase().trim();
-            const aNameMatch = a.name.toLowerCase().includes(q) || (a.otherNames && a.otherNames.toLowerCase().includes(q));
-            const bNameMatch = b.name.toLowerCase().includes(q) || (b.otherNames && b.otherNames.toLowerCase().includes(q));
+            const q = normalizeSearchText(searchQuery.trim());
+            const aNameMatch = normalizeSearchText(a.name).includes(q) || (a.otherNames && normalizeSearchText(a.otherNames).includes(q));
+            const bNameMatch = normalizeSearchText(b.name).includes(q) || (b.otherNames && normalizeSearchText(b.otherNames).includes(q));
             if (aNameMatch && !bNameMatch) return -1;
             if (!aNameMatch && bNameMatch) return 1;
           }
@@ -963,13 +964,19 @@
     }
 
     if (adminSearchQuery.trim()) {
-      const q = adminSearchQuery.toLowerCase().trim();
-      items = items.filter(i => 
-        i.name.toLowerCase().includes(q) || 
-        (i.subCategory && i.subCategory.toLowerCase().includes(q)) ||
-        (i.notes && i.notes.toLowerCase().includes(q)) ||
-        (i.brand && i.brand.toLowerCase().includes(q))
-      );
+      const q = normalizeSearchText(adminSearchQuery.trim());
+      const tokens = q.split(/\s+/).filter(t => t.length > 0);
+      items = items.filter(i => {
+        const searchableFields = [
+          i.name || "",
+          i.subCategory || "",
+          i.notes || "",
+          i.brand || "",
+          i.spiritFamily || "",
+          i.spiritStyle || ""
+        ].map(s => normalizeSearchText(s));
+        return tokens.every(token => searchableFields.some(field => field.includes(token)));
+      });
     }
 
     if (items.length === 0) {

@@ -12,6 +12,17 @@
     })[char]);
   }
 
-  root.BoonBarUIUtils = { escapeHTML };
+  function normalizeSearchText(value) {
+    if (!value) return "";
+    return String(value)
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/œ/g, "oe")
+      .replace(/æ/g, "ae")
+      .replace(/ß/g, "ss");
+  }
+
+  root.BoonBarUIUtils = { escapeHTML, normalizeSearchText };
   if (typeof module !== "undefined" && module.exports) module.exports = root.BoonBarUIUtils;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "21 November 2026";
-const INVENTORY_SYNC_VERSION = "20261121_2";
+const INVENTORY_LAST_UPDATED = "24 November 2026";
+const INVENTORY_SYNC_VERSION = "20261124_2";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year", "cachaca", "gio-prosecco", "zonin-prosecco-brut", "bottega-spumante-venezia"];
 
@@ -102,7 +102,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "giffard-cachaca-thoquino": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "In stock: Giffard Cachaça Thoquino, 40% ABV, 700ml. Brazilian fresh-cut sugarcane agricole spirit; grassy, floral, and clean — the premium base for Caipirinha and Brazilian cocktails." },
   "fernet-branca": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 39, refrigerate: "preferred", notes: "In stock: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter and backbone of Hanky Panky, Toronto, and Fernet con Coca." },
   "creme-de-mure": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: "preferred", notes: "In stock: Giffard Crème de Mûre (Blackberry Liqueur) 700ml (70cl), 16% ABV. Rich wild blackberry liqueur for Bramble and berry cocktails. Refrigerate after opening." },
-  "creme-de-violette": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: false, notes: "In stock: Giffard Crème de Violette Liqueur 700ml (70cl), 16% ABV. Fragrant violet blossom liqueur for classic Aviation, Blue Moon, and floral cocktails. No refrigeration needed unless opened." }
+  "creme-de-violette": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: false, notes: "In stock: Giffard Crème de Violette Liqueur 700ml (70cl), 16% ABV. Fragrant violet blossom liqueur for classic Aviation, Blue Moon, and floral cocktails. No refrigeration needed unless opened." },
+  "coconut-cream": { inStock: true, incoming: false, quantity: 1, unit: "can", refrigerate: "must", notes: "In stock: Sweet rich cream of coconut / coconut cream for Piña Colada and tropical drinks. Refrigerate after opening." }
 };
 
 const INGREDIENT_GROUPS = {
@@ -433,9 +434,9 @@ const DEFAULT_INVENTORY = [
   // --- LIQUEURS (Shopping List / Expansion) ---
   { id: "baileys-irish-cream", name: "Baileys Irish Cream Liqueur", category: "liqueurs", subCategory: "Cream Liqueurs", inStock: true, abv: 17, refrigerate: "preferred", notes: "Irish cream for B-52, Blowjob shot, Slippery Nipple, and Nutty Irishman." },
   { id: "maraschino-liqueur", name: "Luxardo Maraschino Liqueur 750ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 32, notes: "In stock: 750ml bottle at 32% ABV. Dry cherry pit and herbal liqueur for Aviation, Last Word, and Hemingway Daiquiri." },
-  { id: "creme-de-violette", name: "Giffard Crème de Violette Liqueur 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: false, notes: "Incoming: Giffard Crème de Violette Liqueur 700ml (70cl), 16% ABV. Fragrant violet blossom liqueur that gives Aviation and Blue Moon their signature floral aroma and periwinkle hue." },
+  { id: "creme-de-violette", name: "Giffard Crème de Violette Liqueur 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: false, notes: "In stock: Giffard Crème de Violette Liqueur 700ml (70cl), 16% ABV. Fragrant violet blossom liqueur that gives Aviation and Blue Moon their signature floral aroma and periwinkle hue." },
   { id: "creme-de-cassis", name: "L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 15, refrigerate: "preferred", notes: "In stock: L'Heritier Guyot Crème de Cassis de Dijon Blackcurrants Liqueur 700ml, 15% ABV. Classic French blackcurrant liqueur for Kir Royale, Kir, and berry-forward cocktails. Refrigerate after opening." },
-  { id: "creme-de-mure", name: "Giffard Crème de Mûre (Blackberry Liqueur) 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: "preferred", notes: "Incoming: Giffard Crème de Mûre (Blackberry Liqueur) 700ml (70cl), 16% ABV. Rich wild blackberry liqueur essential for drizzling over the Bramble and elevating berry cocktails. Refrigerate after opening." },
+  { id: "creme-de-mure", name: "Giffard Crème de Mûre (Blackberry Liqueur) 700ml", category: "liqueurs", subCategory: "Fruit & Floral", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: "preferred", notes: "In stock: Giffard Crème de Mûre (Blackberry Liqueur) 700ml (70cl), 16% ABV. Rich wild blackberry liqueur essential for drizzling over the Bramble and elevating berry cocktails. Refrigerate after opening." },
   { id: "drambuie", name: "Drambuie (Honeyed Scotch Liqueur)", category: "liqueurs", subCategory: "Herbal & Spice", inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, refrigerate: false, notes: "In stock: 700ml bottle at 40% ABV. Aged Scotch whisky, Scottish heather honey, herbs, and spices. Backbone of the classic Rusty Nail." },
   { id: "green-chartreuse", name: "Green Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 55, refrigerate: false, notes: "130-herb French monk elixir for Last Word." },
   { id: "yellow-chartreuse", name: "Yellow Chartreuse", category: "liqueurs", subCategory: "Herbal & Botanical", inStock: false, abv: 40, refrigerate: false, notes: "Honey-saffron herbal liqueur for Naked and Famous and Sunflower." },
@@ -494,7 +495,7 @@ const DEFAULT_INVENTORY = [
   { id: "mango-juice", name: "Mango Puree / Juice", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: "must", notes: "Lush tropical puree for Mango Mule." },
   { id: "tomato-juice", name: "Tomato Juice (Seasoned)", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 1, unit: "carton", refrigerate: "must", notes: "Savory juice for Bloody Mary, Virgin Mary, and Red Snapper." },
   { id: "kagome-tomato-juice-no-salt", name: "Kagome Tomato Juice No Salt Added (12 × 200ml)", category: "mixers_sodas", subCategory: "Juices", inStock: true, quantity: 12, unit: "bottle", refrigerate: "must", notes: "In stock: 12 x 200ml bottles of Kagome Tomato Juice No Salt Added for Bloody Mary, Virgin Mary, and savory mixes." },
-  { id: "coconut-cream", name: "Coconut Cream (Cream of Coconut)", category: "mixers_sodas", subCategory: "Juices & Creams", inStock: false, refrigerate: "must", notes: "Sweet rich coconut cream for Piña Colada and Coconut Lime Mocktail." },
+  { id: "coconut-cream", name: "Coconut Cream (Cream of Coconut)", category: "mixers_sodas", subCategory: "Juices & Creams", inStock: true, incoming: false, quantity: 1, unit: "can", refrigerate: "must", notes: "In stock: Sweet rich cream of coconut / coconut cream for Piña Colada and tropical drinks. Refrigerate after opening." },
   { id: "coconut-water", name: "Pure Coconut Water", category: "mixers_sodas", subCategory: "Juices", inStock: false, refrigerate: "must", notes: "Hydrating tropical water for Coconut Lime Mocktail." },
   { id: "whipping-heavy-cream", name: "Heavy Whipping Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: "must", notes: "Thick liquid cream for floating atop White Russian and Irish Coffee." },
   { id: "whipped-cream", name: "Whipped Cream", category: "mixers_sodas", subCategory: "Dairy & Cream", inStock: true, refrigerate: "must", notes: "Fluffy crown for the Blowjob shot and dessert-style drinks." },
@@ -894,7 +895,7 @@ const DEFAULT_DRINKS = [
       "Float Myers's Dark Rum gently on top using the back of a spoon.",
       "Garnish with a pineapple wedge, maraschino cherry, and cocktail umbrella."
     ],
-    tags: ["rum", "tiki", "tropical", "coconut", "pineapple", "summer"]
+    tags: ["rum", "tiki", "tropical", "coconut", "pineapple", "summer", "in-stock"]
   },
   {
     id: "cosmopolitan",
@@ -1606,7 +1607,7 @@ const DEFAULT_DRINKS = [
       "Slowly drizzle the blackberry liqueur (or Raspberry Rhapsody) over the crown of crushed ice.",
       "Garnish with a lemon half-wheel and fresh blackberries or raspberries."
     ],
-    tags: ["gin", "berry", "bramble", "crushed-ice", "london", "modern-classic"]
+    tags: ["gin", "berry", "bramble", "crushed-ice", "london", "modern-classic", "in-stock"]
   },
   {
     id: "french-connection",
@@ -3660,7 +3661,7 @@ const DEFAULT_DRINKS = [
       "Pour into a chilled hurricane glass.",
       "Garnish with a fresh pineapple slice, maraschino cherry, and cocktail umbrella."
     ],
-    tags: ["mocktail", "coconut", "pineapple", "frozen", "tropical", "resort"]
+    tags: ["mocktail", "coconut", "pineapple", "frozen", "tropical", "resort", "in-stock"]
   },
   {
     id: "virgin-strawberry-daiquiri",
