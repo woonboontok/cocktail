@@ -2182,7 +2182,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "If you don't have mezcal, split Teremana tequila with a drop of smoky peated Johnnie Walker Black Scotch or use smoked sea salt on the rim!",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Artisanal Mezcal (or Teremana Tequila)", substitute: "Teremana Tequila + splash of smoky Scotch", inventoryId: "teremana-tequila" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Topanito Mezcal Artesanal Espadín", substitute: "Teremana Tequila or Código 1530 Reposado", inventoryId: "topanito-mezcal-artesanal-espadin", ingredientGroup: "mezcal" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Agave Syrup", substitute: "Simple syrup", inventoryId: "agave-syrup" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Grapefruit Juice", substitute: "Pink grapefruit soda", inventoryId: "grapefruit-juice" },
@@ -2196,7 +2196,7 @@ const DEFAULT_DRINKS = [
       "Add grapefruit juice and top with Chang Soda Water.",
       "Stir gently and garnish with a charred grapefruit wheel."
     ],
-    tags: ["mezcal", "tequila", "smoky", "grapefruit", "mexico"]
+    tags: ["mezcal", "tequila", "smoky", "grapefruit", "mexico", "in-stock"]
   },
   {
     id: "el-diablo",
