@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "24 November 2026";
-const INVENTORY_SYNC_VERSION = "20261124_2";
+const INVENTORY_LAST_UPDATED = "25 November 2026";
+const INVENTORY_SYNC_VERSION = "20261125_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year", "cachaca", "gio-prosecco", "zonin-prosecco-brut", "bottega-spumante-venezia"];
 
@@ -366,17 +366,50 @@ const INGREDIENT_GROUPS = {
   "makgeolli": { label: "Makgeolli", inventoryIds: ["makgeolli"] }
 };
 
-const INGREDIENT_GROUP_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
-  group.inventoryIds.forEach(inventoryId => {
-    if (!groups[inventoryId]) groups[inventoryId] = groupId;
+const RECIPE_SPECIFIC_GROUPS = new Set([
+  "old-fashioned-base",
+  "old-fashioned-sweetener",
+  "french-75-spirit",
+  "french-connection-base",
+  "sidecar-base",
+  "tonight-rum",
+  "tonight-whiskey",
+  "air-mail-rum",
+  "casa-blanca-rum",
+  "irish-coffee-whiskey",
+  "long-island-topper"
+]);
+
+const INGREDIENT_GROUP_BY_INVENTORY_ID = (() => {
+  const groups = {};
+  // Primary pass: canonical single-spirit/single-type ingredient groups
+  Object.entries(INGREDIENT_GROUPS).forEach(([groupId, group]) => {
+    if (!RECIPE_SPECIFIC_GROUPS.has(groupId)) {
+      (group.inventoryIds || []).forEach(inventoryId => {
+        if (!groups[inventoryId]) groups[inventoryId] = groupId;
+      });
+    }
+  });
+  // Fallback pass: recipe-specific composite groups for items not covered above
+  Object.entries(INGREDIENT_GROUPS).forEach(([groupId, group]) => {
+    if (RECIPE_SPECIFIC_GROUPS.has(groupId)) {
+      (group.inventoryIds || []).forEach(inventoryId => {
+        if (!groups[inventoryId]) groups[inventoryId] = groupId;
+      });
+    }
   });
   return groups;
-}, {});
-// Optimized multi-group mapping configuration
+})();
+
+// Optimized multi-group mapping configuration (canonical groups first)
 const INGREDIENT_GROUPS_BY_INVENTORY_ID = Object.entries(INGREDIENT_GROUPS).reduce((groups, [groupId, group]) => {
   group.inventoryIds.forEach(inventoryId => {
     if (!groups[inventoryId]) groups[inventoryId] = [];
-    groups[inventoryId].push(groupId);
+    if (RECIPE_SPECIFIC_GROUPS.has(groupId)) {
+      groups[inventoryId].push(groupId);
+    } else {
+      groups[inventoryId].unshift(groupId);
+    }
   });
   return groups;
 }, {});
@@ -611,7 +644,35 @@ const DEFAULT_DRINKS = [
       "Double strain into the prepared coupe (or over fresh ice in a rocks glass).",
       "Garnish with a fresh lime wheel on the rim."
     ],
-    tags: ["tequila", "cointreau", "citrus", "sour", "party", "classic"]
+    tags: ["tequila", "reposado", "cointreau", "citrus", "sour", "party", "classic", "in-stock"]
+  },
+  {
+    id: "oaxaca-old-fashioned",
+    name: "Oaxaca Old Fashioned",
+    otherNames: "Phil Ward Agave Old Fashioned, Mezcal Old Fashioned",
+    category: "Cocktail",
+    baseSpirit: "Tequila/Mezcal",
+    glassware: "Rocks / Old Fashioned",
+    alcoholLevel: "High (~34% ABV)",
+    alcoholScore: 5,
+    tasteProfile: "Smoky Agave, Warm Oak & Vanilla, Rich Bittersweet Herbal",
+    difficulty: 1,
+    popularity: 9.8,
+    proTip: "Created in 2007 by Phil Ward at Death & Co in NYC, this modern classic ignited the global agave cocktail revolution. The split base of reposado tequila and artisanal mezcal bridges rich oak and vanilla with earthy campfire smoke. Always flame the orange twist over the surface to caramelize the citrus oils before dropping it in.",
+    ingredients: [
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Codigo 1530 Reposado Cristalino Tequila", substitute: "Teremana Tequila Añejo or Teremana Blanco", inventoryId: "codigo-1530-reposado-cristalino", ingredientGroup: "tequila", preferNonPremium: false },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Topanito Mezcal Artesanal Espadín", substitute: "Artisanal Espadín Mezcal", inventoryId: "topanito-mezcal-artesanal-espadin", ingredientGroup: "mezcal", preferNonPremium: false },
+      { amountOz: "1 barspoon (0.25 oz)", amountMl: "7.5 ml", item: "Agave Syrup", substitute: "Demerara syrup or rich simple syrup", inventoryId: "agave-syrup", ingredientGroup: "simple-syrup" },
+      { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" },
+      { amountOz: "Garnish", amountMl: "Garnish", item: "Flamed Fresh Orange Peel", substitute: "Grapefruit twist", inventoryId: "fresh-oranges" }
+    ],
+    instructions: [
+      "Add reposado tequila, mezcal, agave syrup, and 2 dashes of Angostura bitters into a mixing glass filled with ice.",
+      "Stir smoothly for 25 to 30 seconds until well chilled and properly diluted.",
+      "Strain into a rocks glass over a large clear ice cube or fresh ice.",
+      "Cut a wide strip of fresh orange peel, express its essential oils across a lit flame over the glass to toast the oils, and drop it onto the ice."
+    ],
+    tags: ["tequila", "reposado", "mezcal", "agave", "classic", "modern-classic", "spirit-forward", "in-stock"]
   },
   {
     id: "negroni",
@@ -1087,7 +1148,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "A tiny pinch of sea salt directly inside the drink cuts through the bitterness of the grapefruit and heightens the sweet agave notes of Teremana. Salt only half the rim so you have the choice of salted or crisp sips.\n\nClassic 1-Ingredient Variants:\n• Añejo Paloma: Use 1.5 oz Teremana Añejo plus 0.5 oz blanco tequila; the oak and vanilla make the grapefruit feel richer and more layered while keeping the drink bright.\n• Cristalino Paloma: Use Código 1530 Reposado Cristalino for a smooth, lightly oaked variation that stays visually clear and lets the grapefruit remain bright.\n• Smoky Mezcal Paloma: Swap Teremana Tequila for 2 oz Topanito Mezcal Artesanal Espadín (52% ABV) for an incredible earthy campfire smoke and mineral depth that cuts through the tart grapefruit.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Código 1530 Reposado Cristalino, Topanito Mezcal, or Teremana Añejo", inventoryId: "teremana-tequila" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Código 1530 Reposado Cristalino, Topanito Mezcal, or Teremana Añejo", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime", inventoryId: "fresh-limes" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Agave Syrup", substitute: "Simple syrup", inventoryId: "agave-syrup" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Pink Grapefruit Juice", substitute: "Grapefruit soda (Jarritos / Squirt)", inventoryId: "grapefruit-juice" },
@@ -1101,7 +1162,7 @@ const DEFAULT_DRINKS = [
       "Add grapefruit juice and top with Chang Soda Water.",
       "Stir gently to combine, and garnish with a fresh grapefruit slice."
     ],
-    tags: ["tequila", "mezcal", "grapefruit", "mexico", "refreshing", "summer", "in-stock"]
+    tags: ["tequila", "reposado", "mezcal", "grapefruit", "mexico", "refreshing", "summer", "in-stock"]
   },
   {
     id: "dark-n-stormy",
@@ -1348,7 +1409,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Do not stir after pouring the grenadine! Because grenadine has high sugar density, it sinks directly to the base and creates the iconic red-to-golden sunrise gradient.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Any blanco or reposado tequila", inventoryId: "teremana-tequila" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Teremana Tequila", substitute: "Any blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Fresh Orange Juice", substitute: "Sweet orange juice", inventoryId: "orange-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Orange Slice & Maraschino Cherry", substitute: "Cherry on pick", inventoryId: "fresh-oranges" }
@@ -1360,7 +1421,7 @@ const DEFAULT_DRINKS = [
       "Watch it settle at the bottom and gradually rise into a radiant gradient.",
       "Garnish with an orange wheel and a maraschino cherry on a skewer."
     ],
-    tags: ["tequila", "orange", "grenadine", "tropical", "visual", "sweet"]
+    tags: ["tequila", "reposado", "orange", "grenadine", "tropical", "visual", "sweet"]
   },
   {
     id: "amaretto-sour",
@@ -3166,7 +3227,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "A historic 1930s cocktail transformed into a potent shooter. Teremana tequila, fresh lime, pomegranate grenadine, and aromatic bitters.",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Teremana Tequila", substitute: "100% blue agave blanco tequila", inventoryId: "teremana-tequila" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Teremana Tequila", substitute: "100% blue agave blanco tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" },
       { amountOz: "2 dashes", amountMl: "2 dashes", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" }
@@ -3444,7 +3505,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.0,
     proTip: "The classic Alexander is built from equal parts spirit, cacao, and cream; Frangelico replaces the cacao liqueur for a toasted hazelnut finish.",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Otard XO Gold Cognac", substitute: "Hennessy VSOP Cognac", inventoryId: "otard-xo-gold-cognac", preferNonPremium: true },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Otard XO Gold Cognac", substitute: "Hennessy VSOP Cognac", inventoryId: "otard-xo-gold-cognac", ingredientGroup: "brandy-cognac", preferNonPremium: true },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Frangelico Hazelnut Liqueur", substitute: "Disaronno Amaretto", inventoryId: "frangelico" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Heavy Whipping Cream", substitute: "Baileys Irish Cream for a sweeter variation", inventoryId: "whipping-heavy-cream" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Freshly Grated Nutmeg", substitute: "Cocoa powder", inventoryId: "fresh-oranges" }
@@ -4323,7 +4384,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Fill equal parts Teremana Tequila and Schweppes Ginger Soda. Cover the top of the glass with your hand or a folded napkin, SLAM the glass down firmly on the bar mat, and drink immediately while the liquid erupts into dense white fizz!",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Teremana Tequila", substitute: "Any 100% blue agave tequila", inventoryId: "teremana-tequila" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Teremana Tequila", substitute: "Any 100% blue agave tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Schweppes Ginger Soda", substitute: "Lemon-lime soda (Sprite) or Chang Soda", inventoryId: "schweppes-ginger-soda" }
     ],
     instructions: [
@@ -4600,7 +4661,7 @@ const DEFAULT_DRINKS = [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Vaccari Sambuca", substitute: "White Sambuca", inventoryId: "sambuca" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", ingredientGroup: "ginger-beer" },
       { amountOz: "5 drops", amountMl: "5 drops", item: "Tabasco Hot Sauce", substitute: "Spicy red chili sauce", inventoryId: "tabasco-sauce" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Topanito Mezcal", inventoryId: "teremana-tequila" }
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Teremana Tequila", substitute: "Topanito Mezcal", inventoryId: "teremana-tequila", ingredientGroup: "tequila" }
     ],
     instructions: [
       "Pour your sweet Vaccari Sambuca directly into the base of a heavy shot glass.",

@@ -303,17 +303,38 @@
     // Search query
     if (searchQuery.trim()) {
       const q = normalizeSearchText(searchQuery.trim());
-      const tokens = q.split(/\s+/).filter(t => t.length > 0);
+      const rawTokens = q.split(/\s+/).filter(t => t.length > 0);
+      const SEARCH_STOP_WORDS = new Set([
+        "drinks", "drink", "cocktails", "cocktail", "shots", "shot",
+        "to", "make", "with", "using", "for", "in", "a", "an", "the",
+        "can", "i", "how", "recipes", "recipe"
+      ]);
+      const nonStopTokens = rawTokens.filter(t => !SEARCH_STOP_WORDS.has(t));
+      const tokens = nonStopTokens.length > 0 ? nonStopTokens : rawTokens;
 
       drinks = drinks.filter(d => {
+        const candidateBottleFields = [];
+        d.ingredients.forEach(ing => {
+          const candidateIds = getIngredientCandidates(ing);
+          candidateIds.forEach(cid => {
+            const inv = getInventoryItem(cid);
+            if (inv) {
+              if (inv.name) candidateBottleFields.push(inv.name);
+              if (inv.subCategory) candidateBottleFields.push(inv.subCategory);
+              if (inv.spiritStyle) candidateBottleFields.push(inv.spiritStyle);
+            }
+          });
+        });
+
         const searchableFields = [
           d.name,
           d.otherNames || "",
           d.baseSpirit || "",
           d.category || "",
           d.tasteProfile || "",
+          d.proTip || "",
           ...(d.tags || []),
-          ...d.ingredients.map(ing => ing.item),
+          ...d.ingredients.map(ing => ing.item || ""),
           ...d.ingredients.map(ing => ing.substitute || ""),
           ...d.ingredients.map(ing => {
             if (!ing.inventoryId) return "";
@@ -323,7 +344,8 @@
           ...d.ingredients.map(ing => {
             if (!ing.ingredientGroup || !INGREDIENT_GROUPS[ing.ingredientGroup]) return "";
             return INGREDIENT_GROUPS[ing.ingredientGroup].label;
-          })
+          }),
+          ...candidateBottleFields
         ].map(s => normalizeSearchText(s));
 
         return tokens.every(token => searchableFields.some(field => field.includes(token)));
