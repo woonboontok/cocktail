@@ -18,6 +18,9 @@ for (const item of data.DEFAULT_INVENTORY) {
   else inventoryIds.add(item.id);
   if (!item.name || typeof item.name !== "string") error(`Inventory item ${item.id || "<unknown>"} is missing a name`);
   if (!categories.has(item.category)) error(`Invalid category for inventory item ${item.id}: ${item.category}`);
+  if (![undefined, false, "must", "preferred"].includes(item.refrigerate)) {
+    error(`Invalid refrigeration level for inventory item ${item.id}: ${item.refrigerate}`);
+  }
 }
 
 for (const [groupId, group] of Object.entries(data.INGREDIENT_GROUPS)) {

@@ -19,36 +19,28 @@
   const STORAGE_KEY_THEME = "speakeasy_theme_pref_v1";
   const STORAGE_KEY_FILTERS_COLLAPSED = "speakeasy_filters_collapsed_v1";
   const THEME_COOKIE = "speakeasy_theme";
+  const VALID_THEMES = new Set(["auto", "morning", "afternoon", "twilight", "evening", "night", "latenight", "graveyard"]);
   const inventoryStore = window.BoonBarInventoryStore;
+  const appBackup = window.BoonBarAppBackup;
   const { getDefaultUnit, getDefaultQuantity } = inventoryStore;
-  const { escapeHTML, normalizeSearchText } = window.BoonBarUIUtils;
+  const { escapeHTML, normalizeSearchText, announceStatus } = window.BoonBarUIUtils;
+  const appStorage = window.BoonBarAppStorage.create({
+    getStorage: () => window.localStorage,
+    onUnavailable: () => window.setTimeout(() => announceStatus("A browser storage operation failed. The app will continue; some changes may only last for this session. Export a backup before leaving."), 100)
+  });
+  const savedUnitPreference = appStorage.getItem(STORAGE_KEY_UNIT);
   const { getDrinkVolume, getAbv, getDrinkAbvValue, parseAbvText, getInventoryAbv } = window.BoonBarRecipeUtils;
+  const { filterAndSortDrinks, getDiscoveryFilterOptions } = window.BoonBarDrinkCatalog;
   const { showModal, hideModal, keepFocusInOpenModal } = window.BoonBarModal;
 
   let inventory = loadInventory();
   let customDrinks = loadCustomDrinks();
   let drinkStatuses = loadDrinkStatuses();
-  let unitPreference = localStorage.getItem(STORAGE_KEY_UNIT) || "both"; // "both", "oz", "ml"
-  let filtersCollapsed = localStorage.getItem(STORAGE_KEY_FILTERS_COLLAPSED) !== "false"; // default to collapsed to save space
-
-  let currentTab = "all"; // "all", "cocktails", "mocktails", "shots", "glossary"
-  let searchQuery = "";
-  let selectedSpirit = "all";
-  let selectedDifficulty = "all";
-  let selectedTaste = "all";
-  let selectedGlass = "all";
-  let filterOnlyMyBar = false;
-  let drinkStatusFilters = { tried: null, constructed: null };
-  let inventoryRecipeFilterIds = null;
-  let sortBy = "popularity-desc";
-  let glossaryStockFilter = "all";
-  let glossaryView = "list";
-  let glossarySort = { column: "category", direction: "asc" };
 
   // ==================== STORAGE HELPERS ====================
   function loadInventory() {
     return inventoryStore.loadInventory({
-      storage: localStorage,
+      storage: appStorage,
       storageKey: STORAGE_KEY_INVENTORY,
       updateKey: STORAGE_KEY_INVENTORY_UPDATE,
       defaultInventory: DEFAULT_INVENTORY,
@@ -59,55 +51,131 @@
   }
 
   function saveInventory() {
-    inventoryStore.saveInventory(localStorage, STORAGE_KEY_INVENTORY, inventory);
+    return inventoryStore.saveInventory(appStorage, STORAGE_KEY_INVENTORY, inventory);
   }
 
   function loadCustomDrinks() {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY_CUSTOM_DRINKS);
+      const saved = appStorage.getItem(STORAGE_KEY_CUSTOM_DRINKS);
       const parsed = saved ? JSON.parse(saved) : [];
       if (!Array.isArray(parsed)) return [];
-      return parsed.filter(drink =>
-        drink && typeof drink.id === "string" && typeof drink.name === "string" &&
-        ["Cocktail", "Mocktail", "Shot"].includes(drink.category) &&
-        ["otherNames", "baseSpirit", "glassware", "alcoholLevel", "tasteProfile", "proTip"].every(key => drink[key] === undefined || drink[key] === null || typeof drink[key] === "string") &&
-        Array.isArray(drink.ingredients) && drink.ingredients.every(ing => ing && typeof ing.item === "string" &&
-          ["amountOz", "amountMl", "substitute", "inventoryId", "ingredientGroup"].every(key => ing[key] === undefined || ing[key] === null || typeof ing[key] === "string")) &&
-        Array.isArray(drink.instructions) && drink.instructions.every(step => typeof step === "string") &&
-        (drink.tags === undefined || (Array.isArray(drink.tags) && drink.tags.every(tag => typeof tag === "string")))
-      ).map(drink => ({
-        ...drink,
-        difficulty: Math.max(1, Math.min(5, Number(drink.difficulty) || 2)),
-        popularity: Number.isFinite(Number(drink.popularity)) ? Number(drink.popularity) : 5,
-        tools: Array.isArray(drink.tools) ? drink.tools.filter(tool => typeof tool === "string") : undefined
-      }));
+      return normalizeCustomDrinks(parsed);
     } catch (e) {
       return [];
     }
   }
 
+  function isValidCustomDrink(drink) {
+    return Boolean(drink && typeof drink === "object" && !Array.isArray(drink) &&
+      typeof drink.id === "string" && drink.id.trim() && typeof drink.name === "string" && drink.name.trim() &&
+      ["Cocktail", "Mocktail", "Shot"].includes(drink.category) &&
+      ["otherNames", "baseSpirit", "glassware", "alcoholLevel", "tasteProfile", "proTip"].every(key => drink[key] === undefined || drink[key] === null || typeof drink[key] === "string") &&
+      Array.isArray(drink.ingredients) && drink.ingredients.every(ing => ing && typeof ing.item === "string" &&
+        ["amountOz", "amountMl", "substitute", "inventoryId", "ingredientGroup"].every(key => ing[key] === undefined || ing[key] === null || typeof ing[key] === "string")) &&
+      Array.isArray(drink.instructions) && drink.instructions.every(step => typeof step === "string") &&
+      (drink.tags === undefined || (Array.isArray(drink.tags) && drink.tags.every(tag => typeof tag === "string"))) &&
+      (drink.difficulty === undefined || Number.isFinite(Number(drink.difficulty))) &&
+      (drink.popularity === undefined || Number.isFinite(Number(drink.popularity))) &&
+      (drink.tools === undefined || (Array.isArray(drink.tools) && drink.tools.every(tool => typeof tool === "string"))));
+  }
+
+  function normalizeCustomDrinks(drinks) {
+    return drinks.filter(isValidCustomDrink).map(drink => ({
+        ...drink,
+        difficulty: Math.max(1, Math.min(5, Math.round(Number(drink.difficulty) || 2))),
+        popularity: Number.isFinite(Number(drink.popularity)) ? Number(drink.popularity) : 5,
+        tools: Array.isArray(drink.tools) ? drink.tools.filter(tool => typeof tool === "string") : undefined
+      }));
+  }
+
   function saveCustomDrinks() {
     try {
-      localStorage.setItem(STORAGE_KEY_CUSTOM_DRINKS, JSON.stringify(customDrinks));
+      return appStorage.setItem(STORAGE_KEY_CUSTOM_DRINKS, JSON.stringify(customDrinks));
     } catch (e) {
       console.warn("Error saving custom drinks", e);
+      return false;
     }
   }
 
   function loadDrinkStatuses() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY_DRINK_STATUS)) || {}; }
+    try { return normalizeDrinkStatuses(JSON.parse(appStorage.getItem(STORAGE_KEY_DRINK_STATUS))); }
     catch (e) { return {}; }
+  }
+
+  function normalizeDrinkStatuses(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+    return Object.fromEntries(Object.entries(value).flatMap(([drinkId, status]) => {
+      if (!status || typeof status !== "object" || Array.isArray(status)) return [];
+      const normalized = {};
+      ["tried", "constructed"].forEach(key => {
+        if (typeof status[key] === "boolean") normalized[key] = status[key];
+      });
+      return Object.keys(normalized).length ? [[drinkId, normalized]] : [];
+    }));
   }
 
   function toggleDrinkStatus(drinkId, status) {
     const current = drinkStatuses[drinkId] || {};
     current[status] = !current[status];
     drinkStatuses[drinkId] = current;
-    localStorage.setItem(STORAGE_KEY_DRINK_STATUS, JSON.stringify(drinkStatuses));
+    appStorage.setItem(STORAGE_KEY_DRINK_STATUS, JSON.stringify(drinkStatuses));
     renderApp();
   }
 
   function getDrinkStatus(drinkId) { return drinkStatuses[drinkId] || {}; }
+
+  function getBackupSnapshot() {
+    return appBackup.createBackup({
+      inventory,
+      customDrinks,
+      drinkStatuses,
+      preferences: {
+        unitPreference: appState.unitPreference,
+        theme: getThemePreference(),
+        filtersCollapsed: appState.filtersCollapsed
+      }
+    });
+  }
+
+  function restoreBackupPayload(payload) {
+    const parsed = appBackup.parseBackup(payload, {
+      isValidInventoryRecord: item => inventoryStore.isValidInventoryRecord(item, INVENTORY_CATEGORIES),
+      normalizeInventoryRecord: inventoryStore.normalizeInventoryRecord,
+      isValidCustomDrink: drink => isValidCustomDrink(drink) && !DEFAULT_DRINKS.some(defaultDrink => defaultDrink.id === drink.id),
+      normalizeCustomDrinks
+    });
+    if (!parsed.ok) return parsed;
+
+    const mergedInventory = inventoryStore.mergeInventoryRecords(
+      parsed.data.inventory, DEFAULT_INVENTORY, INVENTORY_UPDATE_REMOVE_IDS
+    );
+    inventory.splice(0, inventory.length, ...mergedInventory);
+    saveInventory();
+
+    if (!parsed.legacy) {
+      customDrinks.splice(0, customDrinks.length, ...parsed.data.customDrinks);
+      drinkStatuses = parsed.data.drinkStatuses;
+      appState.unitPreference = parsed.data.preferences.unitPreference;
+      appState.filtersCollapsed = parsed.data.preferences.filtersCollapsed;
+      const unitToggleButton = document.getElementById("btn-unit-toggle");
+      if (unitToggleButton) unitToggleButton.innerHTML = `⚖ Units: <strong>${appState.unitPreference.toUpperCase()}</strong>`;
+      appStorage.setItem(STORAGE_KEY_CUSTOM_DRINKS, JSON.stringify(customDrinks));
+      appStorage.setItem(STORAGE_KEY_DRINK_STATUS, JSON.stringify(drinkStatuses));
+      appStorage.setItem(STORAGE_KEY_UNIT, appState.unitPreference);
+      appStorage.setItem(STORAGE_KEY_THEME, parsed.data.preferences.theme);
+      appStorage.setItem(STORAGE_KEY_FILTERS_COLLAPSED, appState.filtersCollapsed);
+      try {
+        document.cookie = `${THEME_COOKIE}=${encodeURIComponent(parsed.data.preferences.theme)}; max-age=31536000; path=/; SameSite=Lax`;
+      } catch (error) {
+        console.warn("Unable to restore the theme cookie", error);
+      }
+      renderDiscoveryFilters();
+      resetFilters();
+      applyTheme(parsed.data.preferences.theme);
+    }
+
+    return { ...parsed, persistent: appStorage.isPersistent() };
+  }
 
   function getRecipesUsingItem(itemId) {
     return getAllDrinks().filter(drink =>
@@ -121,8 +189,12 @@
   }
 
   function getCookie(name) {
-    const entry = document.cookie.split("; ").find(row => row.startsWith(`${name}=`));
-    return entry ? decodeURIComponent(entry.split("=")[1]) : "";
+    try {
+      const entry = document.cookie.split("; ").find(row => row.startsWith(`${name}=`));
+      return entry ? decodeURIComponent(entry.split("=")[1]) : "";
+    } catch (error) {
+      return "";
+    }
   }
 
   function autoThemeForHour(hour) {
@@ -135,7 +207,8 @@
   }
 
   function getThemePreference() {
-    return getCookie(THEME_COOKIE) || localStorage.getItem(STORAGE_KEY_THEME) || "auto";
+    const preference = appStorage.getItem(STORAGE_KEY_THEME) || getCookie(THEME_COOKIE) || "auto";
+    return VALID_THEMES.has(preference) ? preference : "auto";
   }
 
   function applyTheme(preferredTheme) {
@@ -227,167 +300,88 @@
     };
   }
 
-  // ==================== FILTER & SORT LOGIC ====================
-  function matchesSpirit(drink, spiritVal) {
-    if (!spiritVal || spiritVal === "all") return true;
-    const base = String(drink.baseSpirit || "");
-    if (spiritVal === "Whiskey/Bourbon") {
-      return /whiskey|bourbon|scotch|rye/i.test(base);
-    }
-    if (spiritVal === "Tequila/Mezcal") {
-      return /tequila|mezcal/i.test(base);
-    }
-    if (spiritVal === "Liqueur/Wine") {
-      return /liqueur|wine|brandy|cognac|champagne|pisco|amaro|vermouth/i.test(base);
-    }
-    if (spiritVal === "Non-Alcoholic") {
-      return base === "Non-Alcoholic" || drink.category === "Mocktail";
-    }
-    if (spiritVal === "Gin") {
-      return /gin/i.test(base);
-    }
-    if (spiritVal === "Vodka") {
-      return /vodka/i.test(base);
-    }
-    if (spiritVal === "Rum") {
-      return /rum|cachaça|cachaca/i.test(base);
-    }
-    return normalizeSearchText(base).includes(normalizeSearchText(spiritVal));
-  }
-
+  // ==================== CATALOG QUERY ADAPTER ====================
   function getFilteredAndSortedDrinks() {
-    let drinks = getAllDrinks();
-
-    // Tab filter
-    if (currentTab === "cocktails") {
-      drinks = drinks.filter(d => d.category === "Cocktail");
-    } else if (currentTab === "mocktails") {
-      drinks = drinks.filter(d => d.category === "Mocktail");
-    } else if (currentTab === "shots") {
-      drinks = drinks.filter(d => d.category === "Shot");
-    }
-
-    // Secondary filters
-    if (filterOnlyMyBar) {
-      drinks = drinks.filter(d => getDrinkStockStatus(d).canMake);
-    }
-
-    if (drinkStatusFilters.tried !== null) {
-      drinks = drinks.filter(d => Boolean(getDrinkStatus(d.id).tried) === drinkStatusFilters.tried);
-    }
-
-    if (drinkStatusFilters.constructed !== null) {
-      drinks = drinks.filter(d => Boolean(getDrinkStatus(d.id).constructed) === drinkStatusFilters.constructed);
-    }
-
-    if (selectedSpirit !== "all") {
-      drinks = drinks.filter(d => matchesSpirit(d, selectedSpirit));
-    }
-
-    if (selectedDifficulty !== "all") {
-      drinks = drinks.filter(d => String(d.difficulty) === String(selectedDifficulty));
-    }
-
-    if (selectedGlass !== "all") {
-      drinks = drinks.filter(d => d.glassware && normalizeSearchText(d.glassware).includes(normalizeSearchText(selectedGlass)));
-    }
-
-    if (selectedTaste !== "all") {
-      drinks = drinks.filter(d => d.tasteProfile && normalizeSearchText(d.tasteProfile).includes(normalizeSearchText(selectedTaste)));
-    }
-
-    if (inventoryRecipeFilterIds) {
-      drinks = drinks.filter(d => inventoryRecipeFilterIds.includes(d.id));
-    }
-
-    // Search query
-    if (searchQuery.trim()) {
-      const q = normalizeSearchText(searchQuery.trim());
-      const rawTokens = q.split(/\s+/).filter(t => t.length > 0);
-      const SEARCH_STOP_WORDS = new Set([
-        "drinks", "drink", "cocktails", "cocktail", "shots", "shot",
-        "to", "make", "with", "using", "for", "in", "a", "an", "the",
-        "can", "i", "how", "recipes", "recipe"
-      ]);
-      const nonStopTokens = rawTokens.filter(t => !SEARCH_STOP_WORDS.has(t));
-      const tokens = nonStopTokens.length > 0 ? nonStopTokens : rawTokens;
-
-      drinks = drinks.filter(d => {
-        const candidateBottleFields = [];
-        d.ingredients.forEach(ing => {
-          const candidateIds = getIngredientCandidates(ing);
-          candidateIds.forEach(cid => {
-            const inv = getInventoryItem(cid);
-            if (inv) {
-              if (inv.name) candidateBottleFields.push(inv.name);
-              if (inv.subCategory) candidateBottleFields.push(inv.subCategory);
-              if (inv.spiritStyle) candidateBottleFields.push(inv.spiritStyle);
-            }
-          });
-        });
-
-        const searchableFields = [
-          d.name,
-          d.otherNames || "",
-          d.baseSpirit || "",
-          d.category || "",
-          d.tasteProfile || "",
-          d.proTip || "",
-          ...(d.tags || []),
-          ...d.ingredients.map(ing => ing.item || ""),
-          ...d.ingredients.map(ing => ing.substitute || ""),
-          ...d.ingredients.map(ing => {
-            if (!ing.inventoryId) return "";
-            const inv = getInventoryItem(ing.inventoryId);
-            return inv ? inv.name : "";
-          }),
-          ...d.ingredients.map(ing => {
-            if (!ing.ingredientGroup || !INGREDIENT_GROUPS[ing.ingredientGroup]) return "";
-            return INGREDIENT_GROUPS[ing.ingredientGroup].label;
-          }),
-          ...candidateBottleFields
-        ].map(s => normalizeSearchText(s));
-
-        return tokens.every(token => searchableFields.some(field => field.includes(token)));
-      });
-    }
-
-    // Sorting
-    drinks.sort((a, b) => {
-      switch (sortBy) {
-        case "name-asc":
-          return a.name.localeCompare(b.name);
-        case "name-desc":
-          return b.name.localeCompare(a.name);
-        case "popularity-desc": {
-          if (searchQuery.trim()) {
-            const q = normalizeSearchText(searchQuery.trim());
-            const aNameMatch = normalizeSearchText(a.name).includes(q) || (a.otherNames && normalizeSearchText(a.otherNames).includes(q));
-            const bNameMatch = normalizeSearchText(b.name).includes(q) || (b.otherNames && normalizeSearchText(b.otherNames).includes(q));
-            if (aNameMatch && !bNameMatch) return -1;
-            if (!aNameMatch && bNameMatch) return 1;
-          }
-          return (b.popularity || 0) - (a.popularity || 0);
-        }
-        case "difficulty-asc":
-          return (a.difficulty || 1) - (b.difficulty || 1);
-        case "difficulty-desc":
-          return (b.difficulty || 1) - (a.difficulty || 1);
-        case "alcohol-desc": {
-          const aAbv = getDrinkAbvValue(a);
-          const bAbv = getDrinkAbvValue(b);
-          if (aAbv !== null && bAbv !== null && aAbv !== bAbv) return bAbv - aAbv;
-          return (b.alcoholScore || 0) - (a.alcoholScore || 0) || (b.popularity || 0) - (a.popularity || 0);
-        }
-        case "ingredients-asc":
-          return a.ingredients.length - b.ingredients.length;
-        default:
-          return 0;
-      }
+    return filterAndSortDrinks({
+      drinks: getAllDrinks(),
+      currentTab: appState.currentTab,
+      filterOnlyMyBar: appState.filterOnlyMyBar,
+      drinkStatusFilters: appState.drinkStatusFilters,
+      selectedSpirit: appState.selectedSpirit,
+      selectedDifficulty: appState.selectedDifficulty,
+      selectedGlass: appState.selectedGlass,
+      selectedTaste: appState.selectedTaste,
+      inventoryRecipeFilterIds: appState.inventoryRecipeFilterIds,
+      searchQuery: appState.searchQuery,
+      sortBy: appState.sortBy
+    }, {
+      getDrinkStockStatus,
+      getDrinkStatus,
+      getIngredientCandidates,
+      getInventoryItem,
+      ingredientGroups: INGREDIENT_GROUPS,
+      normalizeSearchText,
+      getDrinkAbvValue
     });
-
-    return drinks;
   }
+
+  function renderDiscoveryFilters() {
+    const optionsByFilter = getDiscoveryFilterOptions(getAllDrinks(), normalizeSearchText);
+    const selectedByFilter = {
+      spirit: appState.selectedSpirit,
+      difficulty: appState.selectedDifficulty,
+      taste: appState.selectedTaste,
+      glass: appState.selectedGlass
+    };
+
+    Object.entries(optionsByFilter).forEach(([filter, options]) => {
+      const container = document.querySelector(`.filter-pills[data-filter="${filter}"]`);
+      if (!container) return;
+      container.innerHTML = options.map(option => `
+        <button type="button" class="pill-btn ${selectedByFilter[filter] === option.value ? "active" : ""}"
+          data-val="${escapeHTML(option.value)}" aria-pressed="${selectedByFilter[filter] === option.value}">
+          ${escapeHTML(option.label)} <span class="filter-option-count">${option.count}</span>
+        </button>
+      `).join("");
+    });
+  }
+
+  // ==================== SHARED APP STATE ====================
+  const appState = window.BoonBarAppState.create({
+    unitPreference: ["both", "oz", "ml"].includes(savedUnitPreference) ? savedUnitPreference : "both",
+    filtersCollapsed: appStorage.getItem(STORAGE_KEY_FILTERS_COLLAPSED) !== "false"
+  });
+
+  // ==================== RECIPE DETAIL / MODAL MODULE ====================
+  const drinkModal = window.BoonBarDrinkModal.create({
+    getUnitPreference: () => appState.unitPreference,
+    setUnitPreference: value => { appState.unitPreference = value; },
+    storage: appStorage,
+    storageKeyUnit: STORAGE_KEY_UNIT,
+    getAllDrinks, getDrinkStockStatus, getDrinkStatus, isItemInStock,
+    getIngredientInventoryOptions, getInventoryOptionStatus, getDefaultUnit,
+    getInventoryAbv, getDifficultyStars, getAbv, getDrinkVolume,
+    ingredientGroups: INGREDIENT_GROUPS, escapeHTML, toggleDrinkStatus,
+    showModal, hideModal
+  });
+  const { openDrinkModal, closeDrinkModal } = drinkModal;
+
+  // ==================== INVENTORY / ADMIN MODULE ====================
+  const inventoryAdmin = window.BoonBarInventoryAdmin.create({
+    inventory, SNOWFLAKE_SVG, INVENTORY_CATEGORIES, INVENTORY_LAST_UPDATED,
+    STORAGE_KEY_INVENTORY,
+    storage: appStorage,
+    getBackupSnapshot, restoreBackupPayload,
+    getDefaultUnit, getDefaultQuantity, getInventoryAbv, parseAbvText,
+    escapeHTML, normalizeSearchText, getDrinkStockStatus, getRecipesUsingItem,
+    navigateToRecipesForItem, saveInventory, loadInventory,
+    renderHeroStats, announceStatus, showModal, hideModal
+  });
+  const {
+    renderGlossary, renderAdminView, openAddItemModal, closeAdminItemModal,
+    handleSaveAdminItem, exportFullBackup, importBackupFile,
+    resetInventoryToDefault
+  } = inventoryAdmin;
 
   // ==================== RENDERING UI ====================
   function renderApp() {
@@ -396,12 +390,12 @@
 
     const { catalogView, glossaryView, adminView } = DOM;
 
-    if (currentTab === "glossary") {
+    if (appState.currentTab === "glossary") {
       if (catalogView) catalogView.style.display = "none";
       if (glossaryView) glossaryView.style.display = "block";
       if (adminView) adminView.style.display = "none";
       renderGlossary();
-    } else if (currentTab === "admin") {
+    } else if (appState.currentTab === "admin") {
       if (catalogView) catalogView.style.display = "none";
       if (glossaryView) glossaryView.style.display = "none";
       if (adminView) {
@@ -423,7 +417,7 @@
     const mocktails = all.filter(d => d.category === "Mocktail").length;
     const shots = all.filter(d => d.category === "Shot").length;
     const readyToMake = all.filter(d => getDrinkStockStatus(d).canMake).length;
-    const progressCategory = { cocktails: "Cocktail", mocktails: "Mocktail", shots: "Shot" }[currentTab];
+    const progressCategory = { cocktails: "Cocktail", mocktails: "Mocktail", shots: "Shot" }[appState.currentTab];
     const progressDrinks = progressCategory ? all.filter(d => d.category === progressCategory) : all;
     const constructed = progressDrinks.filter(d => getDrinkStatus(d.id).constructed).length;
     const tried = progressDrinks.filter(d => getDrinkStatus(d.id).tried).length;
@@ -436,23 +430,23 @@
     const statsEl = DOM.heroStats || document.getElementById("hero-stats");
     if (statsEl) {
       statsEl.innerHTML = `
-        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${currentTab === "all" ? "active" : ""}" data-tab-switch="all" aria-label="Show all drinks">🍹 All: <strong>${cocktails + mocktails + shots}</strong></button></div>
-        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${currentTab === "cocktails" ? "active" : ""}" data-tab-switch="cocktails" aria-label="Show cocktails">🍸 Cocktails: <strong>${cocktails}</strong></button></div>
-        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${currentTab === "mocktails" ? "active" : ""}" data-tab-switch="mocktails" aria-label="Show mocktails">🫧 Mocktails: <strong>${mocktails}</strong></button></div>
-        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${currentTab === "shots" ? "active" : ""}" data-tab-switch="shots" aria-label="Show shots">🥃 Shots: <strong>${shots}</strong></button></div>
+        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${appState.currentTab === "all" ? "active" : ""}" data-tab-switch="all" aria-pressed="${appState.currentTab === "all"}" aria-label="Show all drinks">🍹 All: <strong>${cocktails + mocktails + shots}</strong></button></div>
+        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${appState.currentTab === "cocktails" ? "active" : ""}" data-tab-switch="cocktails" aria-pressed="${appState.currentTab === "cocktails"}" aria-label="Show cocktails">🍸 Cocktails: <strong>${cocktails}</strong></button></div>
+        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${appState.currentTab === "mocktails" ? "active" : ""}" data-tab-switch="mocktails" aria-pressed="${appState.currentTab === "mocktails"}" aria-label="Show mocktails">🫧 Mocktails: <strong>${mocktails}</strong></button></div>
+        <div class="stat-pill"><button type="button" class="stat-filter-btn stat-tab-btn ${appState.currentTab === "shots" ? "active" : ""}" data-tab-switch="shots" aria-pressed="${appState.currentTab === "shots"}" aria-label="Show shots">🥃 Shots: <strong>${shots}</strong></button></div>
         <div class="stat-pill">🍾 In Bar: <strong>${inStockBottles} / ${totalBottles}</strong></div>
         <div class="stat-pill stat-pill-ready">
           ✨ Ready to Make Now: <strong>${readyToMake}</strong>
         </div>
         <div class="stat-pill">⚗ Constructed:
-          <button type="button" class="stat-filter-btn ${drinkStatusFilters.constructed === true ? "active" : ""}" data-status-filter="constructed" data-filter-value="true" aria-pressed="${drinkStatusFilters.constructed === true}" aria-label="Show constructed drinks" title="Show constructed drinks">${constructed}</button>
+          <button type="button" class="stat-filter-btn ${appState.drinkStatusFilters.constructed === true ? "active" : ""}" data-status-filter="constructed" data-filter-value="true" aria-pressed="${appState.drinkStatusFilters.constructed === true}" aria-label="Show constructed drinks" title="Show constructed drinks">${constructed}</button>
           /
-          <button type="button" class="stat-filter-btn ${drinkStatusFilters.constructed === false ? "active" : ""}" data-status-filter="constructed" data-filter-value="false" aria-pressed="${drinkStatusFilters.constructed === false}" aria-label="Show drinks not yet constructed" title="Show drinks not yet constructed">${notConstructed}</button>
+          <button type="button" class="stat-filter-btn ${appState.drinkStatusFilters.constructed === false ? "active" : ""}" data-status-filter="constructed" data-filter-value="false" aria-pressed="${appState.drinkStatusFilters.constructed === false}" aria-label="Show drinks not yet constructed" title="Show drinks not yet constructed">${notConstructed}</button>
         </div>
         <div class="stat-pill">✓ Tried:
-          <button type="button" class="stat-filter-btn ${drinkStatusFilters.tried === true ? "active" : ""}" data-status-filter="tried" data-filter-value="true" aria-pressed="${drinkStatusFilters.tried === true}" aria-label="Show tried drinks" title="Show tried drinks">${tried}</button>
+          <button type="button" class="stat-filter-btn ${appState.drinkStatusFilters.tried === true ? "active" : ""}" data-status-filter="tried" data-filter-value="true" aria-pressed="${appState.drinkStatusFilters.tried === true}" aria-label="Show tried drinks" title="Show tried drinks">${tried}</button>
           /
-          <button type="button" class="stat-filter-btn ${drinkStatusFilters.tried === false ? "active" : ""}" data-status-filter="tried" data-filter-value="false" aria-pressed="${drinkStatusFilters.tried === false}" aria-label="Show drinks not yet tried" title="Show drinks not yet tried">${notTried}</button>
+          <button type="button" class="stat-filter-btn ${appState.drinkStatusFilters.tried === false ? "active" : ""}" data-status-filter="tried" data-filter-value="false" aria-pressed="${appState.drinkStatusFilters.tried === false}" aria-label="Show drinks not yet tried" title="Show drinks not yet tried">${notTried}</button>
         </div>
       `;
     }
@@ -462,7 +456,10 @@
     const navBtns = document.querySelectorAll(".nav-btn[data-tab]");
     navBtns.forEach(btn => {
       const tab = btn.getAttribute("data-tab");
-      btn.classList.toggle("active", tab === currentTab);
+      const active = tab === appState.currentTab;
+      btn.classList.toggle("active", active);
+      if (active) btn.setAttribute("aria-current", "page");
+      else btn.removeAttribute("aria-current");
     });
   }
 
@@ -506,7 +503,11 @@
     const countEl = DOM.resultsCount || document.getElementById("results-count");
 
     if (countEl) {
-      countEl.innerHTML = `Showing <strong>${drinks.length}</strong> drink${drinks.length === 1 ? "" : "s"}`;
+      const allDrinks = getAllDrinks();
+      const category = { cocktails: "Cocktail", mocktails: "Mocktail", shots: "Shot" }[appState.currentTab];
+      const scopeTotal = category ? allDrinks.filter(drink => drink.category === category).length : allDrinks.length;
+      const scopeLabel = category ? `${category.toLowerCase()}${scopeTotal === 1 ? "" : "s"}` : "drinks";
+      countEl.textContent = `Showing ${drinks.length} of ${scopeTotal} ${scopeLabel}`;
     }
 
     if (!container) return;
@@ -516,7 +517,7 @@
         <div class="drinks-grid-empty">
           <div class="drinks-grid-empty-icon">🍸</div>
           <h3 class="drinks-grid-empty-title">No drinks found</h3>
-          <p class="drinks-grid-empty-text">Try clearing some filters or searching for a different spirit, cocktail name, or ingredient.</p>
+          <p class="drinks-grid-empty-text">No recipes match this combination. Clear the filters to see the full catalog, or try another spirit, flavor, glass, or ingredient.</p>
           <button class="btn-primary" id="btn-reset-filters">Clear All Filters</button>
         </div>
       `;
@@ -617,1034 +618,16 @@
     });
   }
 
-  // ==================== GLOSSARY & INVENTORY ====================
-  function itemNeedsRefrigeration(item) {
-    return Boolean(item && item.refrigerate);
-  }
-
-  function getRefrigerateLevel(item) {
-    // Returns "must", "preferred", or falsy
-    if (!item) return false;
-    if (item.refrigerate === "must") return "must";
-    if (item.refrigerate === "preferred") return "preferred";
-    if (item.refrigerate === true) return "preferred"; // legacy boolean fallback
-    return false;
-  }
-
-  function renderRefrigerateBadge(item) {
-    const level = getRefrigerateLevel(item);
-    if (!level) return "";
-    if (level === "must") {
-      return `<span class="inv-badge-refrigerate inv-badge-refrigerate--must" title="Must Refrigerate — will spoil without cold" aria-label="Must Refrigerate">${SNOWFLAKE_SVG}</span>`;
-    }
-    return `<span class="inv-badge-refrigerate inv-badge-refrigerate--preferred" title="Preferred Cold — best kept refrigerated for quality &amp; serving temperature" aria-label="Preferred Cold">${SNOWFLAKE_SVG}</span>`;
-  }
-
-
-  function renderPremiumBadge(item) {
-    if (!item || !item.premium) return "";
-    return `<span class="inv-badge-premium" title="Reserve spirit — best enjoyed in spirit-forward or lightly modified cocktails where its complexity can shine">✦ Reserve</span>`;
-  }
-
-  function getInventoryStatus(item) {
-    return item.inStock ? "in-stock" : item.incoming ? "incoming" : "to-buy";
-  }
-
-  function sortInventoryItems(items) {
-    const statusOrder = { "in-stock": 0, incoming: 1, "to-buy": 2 };
-    const { column, direction } = glossarySort;
-    const multiplier = direction === "asc" ? 1 : -1;
-    return [...items].sort((a, b) => {
-      let left, right;
-      if (column === "status") {
-        left = statusOrder[getInventoryStatus(a)];
-        right = statusOrder[getInventoryStatus(b)];
-      } else if (column === "quantity") {
-        left = a.quantity !== undefined ? a.quantity : getDefaultQuantity(a);
-        right = b.quantity !== undefined ? b.quantity : getDefaultQuantity(b);
-      } else if (column === "type") {
-        left = a.subCategory || "";
-        right = b.subCategory || "";
-      } else if (column === "category") {
-        left = INVENTORY_CATEGORIES[a.category] || a.category || "";
-        right = INVENTORY_CATEGORIES[b.category] || b.category || "";
-      } else if (column === "abv") {
-        left = parseAbvText(a.abv || a.proof || a.name);
-        right = parseAbvText(b.abv || b.proof || b.name);
-        if (left === null) left = -1;
-        if (right === null) right = -1;
-      } else {
-        left = a.name || "";
-        right = b.name || "";
-      }
-      return typeof left === "number" ? multiplier * (left - right) : multiplier * String(left).localeCompare(String(right));
-    });
-  }
-
-  function renderGlossary() {
-    const container = document.getElementById("glossary-categories");
-    if (!container) return;
-
-    const lastUpdated = document.getElementById("inventory-last-updated");
-    if (lastUpdated) lastUpdated.textContent = `Inventory data last updated: ${INVENTORY_LAST_UPDATED}`;
-
-    // Count stats
-    const inStock = inventory.filter(i => i.inStock).length;
-    const incoming = inventory.filter(i => i.incoming && !i.inStock).length;
-    const shoppingList = inventory.filter(i => !i.inStock && !i.incoming).length;
-
-    const statsEl = document.getElementById("inv-live-stats");
-    if (statsEl) {
-      statsEl.innerHTML = `
-        <div class="inv-stat-item">
-          <div class="inv-stat-num text-status-success">${inStock}</div>
-          <div class="inv-stat-label">In My Bar</div>
-        </div>
-        <div class="inv-stat-item">
-          <div class="inv-stat-num text-status-warning">${shoppingList}</div>
-          <div class="inv-stat-label">Shopping List</div>
-        </div>
-        ${incoming ? `<div class="inv-stat-item">
-          <div class="inv-stat-num text-status-info">${incoming}</div>
-          <div class="inv-stat-label">Incoming</div>
-        </div>` : ""}
-      `;
-    }
-
-    const visibleItems = sortInventoryItems(inventory.filter(item =>
-      glossaryStockFilter === "all" || getInventoryStatus(item) === glossaryStockFilter
-    ));
-
-    if (glossaryView === "table") {
-      const sortHeader = (label, column) => {
-        const active = glossarySort.column === column;
-        return `<button class="inventory-sort-btn ${active ? "active" : ""}" data-inventory-sort="${column}">${label}${active ? (glossarySort.direction === "asc" ? " ↑" : " ↓") : ""}</button>`;
-      };
-      const statusLabel = status => status === "in-stock" ? "In Stock" : status === "incoming" ? "Incoming" : "To Buy";
-      container.innerHTML = visibleItems.length ? `
-        <div class="inventory-table-wrapper">
-          <div class="inventory-stock-key">
-            <span><i class="stock-key-dot shelf"></i>Shelf-Stable Bottles</span>
-            <span><span class="stock-key-refrigerate-icon stock-key-refrigerate-icon--must">${SNOWFLAKE_SVG}</span>Must Refrigerate</span>
-            <span><span class="stock-key-refrigerate-icon stock-key-refrigerate-icon--preferred">${SNOWFLAKE_SVG}</span>Preferred Cold</span>
-          </div>
-          <table class="inventory-table">
-            <thead><tr>
-              <th>${sortHeader("Item", "name")}</th>
-              <th>${sortHeader("Category", "category")}</th>
-              <th>${sortHeader("Type", "type")}</th>
-              <th>${sortHeader("Status", "status")}</th>
-              <th>${sortHeader("ABV", "abv")}</th>
-              <th>${sortHeader("Quantity", "quantity")}</th>
-              <th>Makeable drinks</th>
-            </tr></thead>
-            <tbody>${visibleItems.map(item => {
-              const status = getInventoryStatus(item);
-              const quantity = item.quantity !== undefined ? item.quantity : getDefaultQuantity(item);
-              const usableRecipes = getRecipesUsingItem(item.id);
-              const readyCount = usableRecipes.filter(drink => getDrinkStockStatus(drink).canMake).length;
-              const linkLabel = readyCount > 0 ? `${readyCount} ready` : `${usableRecipes.length} recipes`;
-              return `<tr class="${getRefrigerateLevel(item) === 'must' ? 'needs-refrigeration--must' : getRefrigerateLevel(item) === 'preferred' ? 'needs-refrigeration--preferred' : ''}">
-                <td><label class="inventory-table-item"><input type="checkbox" class="inv-checkbox" data-id="${escapeHTML(item.id)}" ${item.inStock ? "checked" : ""}><span>${escapeHTML(item.name)}</span>${renderPremiumBadge(item)}${renderRefrigerateBadge(item)}</label></td>
-                <td>${escapeHTML(INVENTORY_CATEGORIES[item.category] || item.category || "—")}</td>
-                <td>${escapeHTML(item.subCategory || "—")}</td>
-                <td><span class="inv-badge-stock ${status === "in-stock" ? "stock" : status === "incoming" ? "incoming" : "needed"}">${statusLabel(status)}</span></td>
-                <td>${getInventoryAbv(item)}</td>
-                <td>${quantity} ${escapeHTML(item.unit || getDefaultUnit(item))}</td>
-                <td>${usableRecipes.length ? `<button class="inventory-drink-link" data-inventory-item-id="${escapeHTML(item.id)}">${linkLabel}</button>` : "—"}</td>
-              </tr>`;
-            }).join("")}</tbody>
-          </table>
-        </div>` : `<div class="inventory-empty-state">No inventory items match this filter.</div>`;
-    } else {
-    // Group visible inventory by category for the list view.
-    const grouped = Object.create(null);
-    Object.keys(INVENTORY_CATEGORIES).forEach(cat => {
-      grouped[cat] = [];
-    });
-
-    visibleItems.forEach(item => {
-      const cat = item.category || "spirits";
-      if (!grouped[cat]) grouped[cat] = [];
-      grouped[cat].push(item);
-    });
-
-    container.innerHTML = Object.keys(INVENTORY_CATEGORIES).map(catKey => {
-      const items = grouped[catKey] || [];
-      if (items.length === 0) return "";
-
-      const title = INVENTORY_CATEGORIES[catKey];
-      const storageLabel = catKey === "fresh_garnishes" ? "Perishables" : "Shelf-Stable Bottles";
-
-      const renderItemCard = item => {
-        const stockLabel = item.inStock ? "In Stock" : item.incoming ? "Incoming" : "To Buy";
-        const quantity = item.quantity !== undefined ? item.quantity : getDefaultQuantity(item);
-        const unit = item.unit || getDefaultUnit(item);
-        const abvDisplay = getInventoryAbv(item);
-        const showAbv = abvDisplay !== "—" && (item.category === "spirits" || item.category === "liqueurs" || item.category === "fortified" || item.category === "sparkling");
-        return `
-          <div class="inventory-item-card ${item.inStock ? "in-stock" : "shopping-list"}" data-item-id="${escapeHTML(item.id)}">
-            <input type="checkbox" class="inv-checkbox" data-id="${escapeHTML(item.id)}" ${item.inStock ? "checked" : ""}>
-            <div class="inv-content">
-              <div class="inv-name-row">
-                <span class="inv-name">${escapeHTML(item.name)}</span>
-                <div class="inv-badges-wrap">
-                  ${renderPremiumBadge(item)}
-                  ${renderRefrigerateBadge(item)}
-                  <span class="inv-badge-stock ${item.inStock ? "stock" : item.incoming ? "incoming" : "needed"}">
-                    ${stockLabel}
-                  </span>
-                </div>
-              </div>
-              <div class="inv-meta">${escapeHTML(item.subCategory || "")}${showAbv ? " • " + escapeHTML(abvDisplay) : ""}${item.inStock ? " • " + quantity + " " + escapeHTML(unit) : ""}${item.proof ? " • " + escapeHTML(item.proof) : ""}</div>
-              ${item.notes ? `<div class="inv-notes">${escapeHTML(item.notes)}</div>` : ""}
-              <button class="inv-used-in-btn" data-filter-ing="${escapeHTML(item.id)}">See drinks using this →</button>
-            </div>
-          </div>
-        `;
-      };
-
-      // Group items by subCategory for categories that benefit from it
-      const groupBySubCategory = (items) => {
-        const groups = Object.create(null);
-        items.forEach(item => {
-          const sub = item.subCategory || "Other";
-          if (!groups[sub]) groups[sub] = [];
-          groups[sub].push(item);
-        });
-        return groups;
-      };
-
-      let itemCards;
-      if (catKey === "spirits") {
-        itemCards = Object.entries(items.reduce((families, item) => {
-            const family = item.spiritFamily || "Other Spirits";
-            const style = item.spiritStyle || item.subCategory || "Other";
-            if (!Object.prototype.hasOwnProperty.call(families, family)) families[family] = Object.create(null);
-            if (!Object.prototype.hasOwnProperty.call(families[family], style)) families[family][style] = [];
-            families[family][style].push(item);
-            return families;
-          }, Object.create(null))).map(([family, styles]) => `
-            <section class="spirit-family-group">
-              <h4>${escapeHTML(family)}</h4>
-              ${Object.entries(styles).map(([style, styleItems]) => `
-                <div class="spirit-style-group">
-                  <h5>${escapeHTML(style)}</h5>
-                  <div class="inventory-grid inventory-list-grid">${styleItems.map(renderItemCard).join("")}</div>
-                </div>
-              `).join("")}
-            </section>
-          `).join("");
-      } else if (catKey === "liqueurs" || catKey === "fortified" || catKey === "mixers_sodas") {
-        const subGroups = groupBySubCategory(items);
-        itemCards = Object.entries(subGroups).map(([subCat, subItems]) => `
-          <div class="spirit-style-group">
-            <h5>${escapeHTML(subCat)}</h5>
-            <div class="inventory-grid inventory-list-grid">${subItems.map(renderItemCard).join("")}</div>
-          </div>
-        `).join("");
-      } else {
-        itemCards = `<div class="inventory-grid inventory-list-grid">${items.map(renderItemCard).join("")}</div>`;
-      }
-
-      return `
-        <div class="inventory-category-group">
-          <div class="category-header-title">
-            <h3>${escapeHTML(title)} (${items.filter(i => i.inStock).length}/${items.length} In Stock)</h3>
-            <span class="inventory-storage-label ${catKey === "fresh_garnishes" ? "perishable" : "shelf-stable"}">${storageLabel}</span>
-          </div>
-          ${itemCards}
-        </div>
-      `;
-    }).join("") || `<div class="inventory-empty-state">No inventory items match this filter.</div>`;
-    }
-
-    // Add checkbox toggle handlers
-    container.querySelectorAll(".inv-checkbox").forEach(cb => {
-      cb.addEventListener("change", (e) => {
-        const id = e.target.getAttribute("data-id");
-        const checked = e.target.checked;
-        const item = inventory.find(i => i.id === id);
-        if (item) {
-          item.inStock = checked;
-          // Recipe availability requires both the stock flag and a positive quantity.
-          // Restore a usable quantity when an item is checked back into stock.
-          if (checked && (item.quantity === undefined || item.quantity <= 0)) {
-            item.quantity = 1;
-          }
-          saveInventory();
-          renderGlossary();
-          renderHeroStats();
-        }
-      });
-    });
-
-    container.querySelectorAll(".inventory-sort-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const column = btn.getAttribute("data-inventory-sort");
-        glossarySort = {
-          column,
-          direction: glossarySort.column === column && glossarySort.direction === "asc" ? "desc" : "asc"
-        };
-        renderGlossary();
-      });
-    });
-
-    container.querySelectorAll(".inventory-drink-link").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const itemId = btn.getAttribute("data-inventory-item-id");
-        if (inventory.find(i => i.id === itemId)) navigateToRecipesForItem(itemId);
-      });
-    });
-
-    // Add "See drinks using this" click handlers
-    container.querySelectorAll(".inv-used-in-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const ingId = btn.getAttribute("data-filter-ing");
-        if (inventory.find(i => i.id === ingId)) navigateToRecipesForItem(ingId);
-      });
-    });
-
-    const stockFilter = document.getElementById("inventory-stock-filter");
-    if (stockFilter) {
-      stockFilter.value = glossaryStockFilter;
-      stockFilter.onchange = e => {
-        glossaryStockFilter = e.target.value;
-        renderGlossary();
-      };
-    }
-    document.querySelectorAll(".inventory-view-btn").forEach(btn => {
-      btn.classList.toggle("active", btn.getAttribute("data-inventory-view") === glossaryView);
-      btn.onclick = () => {
-        glossaryView = btn.getAttribute("data-inventory-view");
-        renderGlossary();
-      };
-    });
-  }
-
   function navigateToRecipesForItem(itemId) {
     const recipes = getRecipesUsingItem(itemId);
-    currentTab = "all";
-    inventoryRecipeFilterIds = recipes.map(drink => drink.id);
-    searchQuery = "";
+    appState.currentTab = "all";
+    appState.inventoryRecipeFilterIds = recipes.map(drink => drink.id);
+    appState.searchQuery = "";
     const searchInput = document.getElementById("search-input");
     if (searchInput) searchInput.value = "";
     renderApp();
     window.scrollTo({ top: 300, behavior: "smooth" });
-  }
-
-  // ==================== ADMINISTRATION & QUANTITY MANAGER ====================
-  let adminSearchQuery = "";
-  let adminCategoryFilter = "all";
-  let adminStockFilter = "all";
-
-  function renderAdminView() {
-    const tableBody = document.getElementById("admin-inventory-table-body");
-    const kpisEl = document.getElementById("admin-kpis");
-    if (!tableBody) return;
-
-    // Compute KPIs
-    const totalItems = inventory.length;
-    const inStockItems = inventory.filter(i => i.inStock && (i.quantity === undefined || i.quantity > 0)).length;
-    const shoppingListItems = totalItems - inStockItems;
-    const lowStockItems = inventory.filter(i => i.inStock && i.quantity !== undefined && i.quantity <= 1).length;
-
-    if (kpisEl) {
-      kpisEl.innerHTML = `
-        <div class="admin-kpi-pill">
-          <div class="admin-kpi-num">${totalItems}</div>
-          <div class="admin-kpi-label">Catalog Items</div>
-        </div>
-        <div class="admin-kpi-pill">
-          <div class="admin-kpi-num text-status-success">${inStockItems}</div>
-          <div class="admin-kpi-label">In Stock</div>
-        </div>
-        <div class="admin-kpi-pill">
-          <div class="admin-kpi-num text-status-warning">${shoppingListItems}</div>
-          <div class="admin-kpi-label">Shopping List</div>
-        </div>
-        <div class="admin-kpi-pill${lowStockItems > 0 ? " admin-kpi-pill-alert" : ""}">
-          <div class="admin-kpi-num text-status-danger">${lowStockItems}</div>
-          <div class="admin-kpi-label">Low Stock (≤1)</div>
-        </div>
-      `;
-    }
-
-    // Filter items for table
-    let items = [...inventory];
-
-    if (adminCategoryFilter !== "all") {
-      items = items.filter(i => i.category === adminCategoryFilter);
-    }
-
-    if (adminStockFilter === "in-stock") {
-      items = items.filter(i => i.inStock && (i.quantity === undefined || i.quantity > 0));
-    } else if (adminStockFilter === "out-of-stock") {
-      items = items.filter(i => !i.inStock || i.quantity === 0);
-    } else if (adminStockFilter === "low-stock") {
-      items = items.filter(i => i.inStock && i.quantity !== undefined && i.quantity <= 1);
-    }
-
-    if (adminSearchQuery.trim()) {
-      const q = normalizeSearchText(adminSearchQuery.trim());
-      const tokens = q.split(/\s+/).filter(t => t.length > 0);
-      items = items.filter(i => {
-        const searchableFields = [
-          i.name || "",
-          i.subCategory || "",
-          i.notes || "",
-          i.brand || "",
-          i.spiritFamily || "",
-          i.spiritStyle || ""
-        ].map(s => normalizeSearchText(s));
-        return tokens.every(token => searchableFields.some(field => field.includes(token)));
-      });
-    }
-
-    if (items.length === 0) {
-      tableBody.innerHTML = `
-        <tr>
-          <td colspan="6" class="inventory-empty-cell">
-            No inventory items match the current search or filters.
-          </td>
-        </tr>
-      `;
-      return;
-    }
-
-    tableBody.innerHTML = items.map(item => {
-      const isStocked = item.inStock && (item.quantity === undefined || item.quantity > 0);
-      const qty = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
-      const unit = item.unit || getDefaultUnit(item);
-      const isLowStock = isStocked && qty <= 1;
-
-      return `
-        <tr data-id="${escapeHTML(item.id)}" class="${itemNeedsRefrigeration(item) ? 'needs-refrigeration' : ''}">
-          <td class="inventory-action-cell">
-            <label class="switch-container" title="${isStocked ? "In Stock (Click to mark Out of Stock)" : "Out of Stock (Click to mark In Stock)"}">
-              <input type="checkbox" class="admin-stock-toggle" data-id="${escapeHTML(item.id)}" ${isStocked ? "checked" : ""}>
-              <span class="switch-slider"></span>
-            </label>
-          </td>
-
-          <td>
-            <div class="item-meta-cell">
-              <div class="item-title-row">
-                <span class="item-title-text">${escapeHTML(item.name)}</span>
-                ${renderRefrigerateBadge(item)}
-              </div>
-              <span class="item-subtext">${escapeHTML(item.subCategory || "")} ${item.brand ? "• " + escapeHTML(item.brand) : ""}</span>
-            </div>
-          </td>
-
-          <td>
-            <span class="admin-category-chip">
-              ${escapeHTML(INVENTORY_CATEGORIES[item.category] || item.category)}
-            </span>
-          </td>
-
-          <td>
-            <div class="admin-quantity-cell">
-              <div class="admin-qty-stepper">
-                <button class="qty-step-btn btn-qty-minus" data-id="${escapeHTML(item.id)}" title="Decrease quantity">−</button>
-                <input type="number" class="qty-number-input" data-id="${escapeHTML(item.id)}" value="${qty}" min="0" step="1">
-                <button class="qty-step-btn btn-qty-plus" data-id="${escapeHTML(item.id)}" title="Increase quantity">＋</button>
-              </div>
-              <span class="qty-unit-label">${escapeHTML(unit)}</span>
-              ${isLowStock ? `<span class="warning-badge" title="Low stock alert!">Low</span>` : ""}
-            </div>
-          </td>
-
-          <td>
-            <span class="admin-notes-cell" title="${escapeHTML(item.notes || "")}">
-              ${escapeHTML(item.notes || "—")}
-            </span>
-          </td>
-
-          <td class="inventory-action-cell">
-            <div class="inventory-row-actions">
-              <button class="btn-edit-outline btn-admin-edit" data-id="${escapeHTML(item.id)}" title="Edit item details">Edit</button>
-              <button class="btn-danger-outline btn-admin-delete" data-id="${escapeHTML(item.id)}" title="Delete item">✕</button>
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join("");
-
-    // Hook up table event listeners
-    tableBody.querySelectorAll(".admin-stock-toggle").forEach(cb => {
-      cb.addEventListener("change", (e) => {
-        const id = cb.getAttribute("data-id");
-        toggleItemStock(id);
-      });
-    });
-
-    tableBody.querySelectorAll(".btn-qty-minus").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-id");
-        updateItemQuantity(id, -1);
-      });
-    });
-
-    tableBody.querySelectorAll(".btn-qty-plus").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-id");
-        updateItemQuantity(id, 1);
-      });
-    });
-
-    tableBody.querySelectorAll(".qty-number-input").forEach(input => {
-      input.addEventListener("change", (e) => {
-        const id = input.getAttribute("data-id");
-        const val = parseFloat(input.value) || 0;
-        setItemQuantity(id, val);
-      });
-    });
-
-    tableBody.querySelectorAll(".btn-admin-edit").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-id");
-        openEditItemModal(id);
-      });
-    });
-
-    tableBody.querySelectorAll(".btn-admin-delete").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-id");
-        deleteAdminItem(id);
-      });
-    });
-  }
-
-  function setItemQuantityDirect(id, newQty) {
-    const item = inventory.find(i => i.id === id);
-    if (!item) return;
-    item.quantity = Math.max(0, newQty);
-    item.inStock = item.quantity > 0;
-    saveInventory();
-    renderAdminView();
-    renderHeroStats();
-  }
-
-  function updateItemQuantity(id, delta) {
-    const item = inventory.find(i => i.id === id);
-    if (!item) return;
-    const current = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
-    setItemQuantityDirect(id, current + delta);
-  }
-
-  function setItemQuantity(id, val) {
-    setItemQuantityDirect(id, val);
-  }
-
-  function toggleItemStock(id) {
-    const item = inventory.find(i => i.id === id);
-    if (!item) return;
-    const willBeStocked = !item.inStock;
-    item.inStock = willBeStocked;
-    if (willBeStocked) {
-      if (item.quantity === undefined || item.quantity <= 0) item.quantity = 1;
-    } else {
-      item.quantity = 0;
-    }
-    saveInventory();
-    renderAdminView();
-    renderHeroStats();
-  }
-
-  function openAddItemModal() {
-    document.getElementById("admin-item-modal-title").innerText = "Add New Inventory Item";
-    document.getElementById("form-item-id").value = "";
-    document.getElementById("form-item-name").value = "";
-    document.getElementById("form-item-category").value = "spirits";
-    document.getElementById("form-item-subcategory").value = "";
-    document.getElementById("form-item-quantity").value = "1";
-    document.getElementById("form-item-unit").value = "bottle";
-    document.getElementById("form-item-notes").value = "";
-    document.getElementById("form-item-in-stock").checked = true;
-    const refrigEl = document.getElementById("form-item-refrigerate");
-    if (refrigEl) refrigEl.checked = false;
-
-    const modal = document.getElementById("admin-item-modal-backdrop");
-    showModal(modal, "#form-item-name");
-  }
-
-  function openEditItemModal(id) {
-    const item = inventory.find(i => i.id === id);
-    if (!item) return;
-
-    document.getElementById("admin-item-modal-title").innerText = `Edit: ${item.name}`;
-    document.getElementById("form-item-id").value = item.id;
-    document.getElementById("form-item-name").value = item.name;
-    document.getElementById("form-item-category").value = item.category || "spirits";
-    document.getElementById("form-item-subcategory").value = item.subCategory || "";
-    document.getElementById("form-item-quantity").value = item.quantity !== undefined ? item.quantity : (item.inStock ? 1 : 0);
-    document.getElementById("form-item-unit").value = item.unit || getDefaultUnit(item);
-    document.getElementById("form-item-notes").value = item.notes || "";
-    document.getElementById("form-item-in-stock").checked = item.inStock !== false && (item.quantity === undefined || item.quantity > 0);
-    const refrigEl = document.getElementById("form-item-refrigerate");
-    if (refrigEl) refrigEl.checked = Boolean(item.refrigerate);
-
-    const modal = document.getElementById("admin-item-modal-backdrop");
-    showModal(modal, "#form-item-name");
-  }
-
-  function closeAdminItemModal() {
-    const modal = document.getElementById("admin-item-modal-backdrop");
-    hideModal(modal);
-  }
-
-  function handleSaveAdminItem(e) {
-    e.preventDefault();
-    const id = document.getElementById("form-item-id").value.trim();
-    const name = document.getElementById("form-item-name").value.trim();
-    if (!name) return alert("Please enter an item name");
-
-    const category = document.getElementById("form-item-category").value;
-    const subCategory = document.getElementById("form-item-subcategory").value.trim();
-    const quantity = parseFloat(document.getElementById("form-item-quantity").value) || 0;
-    const unit = document.getElementById("form-item-unit").value;
-    const notes = document.getElementById("form-item-notes").value.trim();
-    const inStock = document.getElementById("form-item-in-stock").checked && quantity > 0;
-    const refrigEl = document.getElementById("form-item-refrigerate");
-    const refrigerate = refrigEl ? refrigEl.checked : false;
-
-    if (id) {
-      // Edit existing
-      const item = inventory.find(i => i.id === id);
-      if (item) {
-        item.name = name;
-        item.category = category;
-        item.subCategory = subCategory;
-        item.quantity = quantity;
-        item.unit = unit;
-        item.notes = notes;
-        item.inStock = inStock;
-        item.refrigerate = refrigerate;
-      }
-    } else {
-      // Add new
-      const newId = "custom-inv-" + Date.now();
-      inventory.push({
-        id: newId,
-        name: name,
-        category: category,
-        subCategory: subCategory || INVENTORY_CATEGORIES[category] || "Custom",
-        quantity: quantity,
-        unit: unit,
-        notes: notes,
-        inStock: inStock,
-        refrigerate: refrigerate
-      });
-    }
-
-    saveInventory();
-    closeAdminItemModal();
-    renderAdminView();
-    renderHeroStats();
-  }
-
-  function deleteAdminItem(id) {
-    const item = inventory.find(i => i.id === id);
-    if (!item) return;
-    if (!confirm(`Are you sure you want to remove "${item.name}" from your inventory?`)) return;
-
-    inventory = inventory.filter(i => i.id !== id);
-    saveInventory();
-    renderAdminView();
-    renderHeroStats();
-  }
-
-  function exportInventoryJSON() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(inventory, null, 2));
-    const downloadAnchor = document.createElement("a");
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `speakeasy_bar_inventory_${new Date().toISOString().slice(0, 10)}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-  }
-
-  function importInventoryJSON(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      try {
-        const imported = JSON.parse(evt.target.result);
-        if (Array.isArray(imported) && imported.length && imported.every(item => inventoryStore.isValidInventoryRecord(item, INVENTORY_CATEGORIES))) {
-          const importedIds = imported.map(item => item.id.trim());
-          if (new Set(importedIds).size !== importedIds.length) {
-            alert("Invalid inventory backup: item IDs must be unique.");
-            return;
-          }
-          const normalized = imported.map(inventoryStore.normalizeInventoryRecord);
-          inventory = inventoryStore.mergeInventoryRecords(normalized, DEFAULT_INVENTORY, INVENTORY_UPDATE_REMOVE_IDS);
-          saveInventory();
-          renderAdminView();
-          renderHeroStats();
-          alert("Inventory successfully restored from backup!");
-        } else {
-          alert("Invalid inventory backup: expected a non-empty array of items with valid IDs, names, categories, stock flags, quantities, and units.");
-        }
-      } catch (err) {
-        alert("Error parsing backup file: " + err.message);
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = "";
-  }
-
-  function resetInventoryToDefault() {
-    if (!confirm("Reset all inventory items and quantities to the factory default bar setup? Any custom-added bottles will be reset.")) return;
-    localStorage.removeItem(STORAGE_KEY_INVENTORY);
-    inventory = loadInventory();
-    saveInventory();
-    renderAdminView();
-    renderHeroStats();
-    alert("Inventory reset to default setup!");
-  }
-
-  // ==================== INGREDIENT FORMATTING HELPERS ====================
-  function formatMeasurement(ing) {
-    if (!ing.amountOz && !ing.amountMl) return "";
-    if (unitPreference === "oz") {
-      return ing.amountOz || ing.amountMl;
-    } else if (unitPreference === "ml") {
-      return ing.amountMl || ing.amountOz;
-    } else {
-      if (ing.amountOz && ing.amountMl && ing.amountOz !== ing.amountMl) {
-        return `${escapeHTML(ing.amountOz)} <span class="measurement-secondary">(${escapeHTML(ing.amountMl)})</span>`;
-      }
-      return escapeHTML(ing.amountOz || ing.amountMl);
-    }
-  }
-
-  function splitPreferenceList(value) {
-    if (!value) return [];
-    return String(value)
-      .split(/[\/|]/)
-      .flatMap(part => part.split(/\s+or\s+/i))
-      .map(part => part.replace(/^\[|\]$/g, "").trim())
-      .filter(Boolean);
-  }
-
-  function preferredSubstituteText(ing) {
-    const list = splitPreferenceList(ing.substitute);
-    if (!list.length) return "";
-    return `<span class="ing-substitute"><strong>Substitute order:</strong> ${list.map(item => `[${escapeHTML(item)}]`).join(" → ")}</span>`;
-  }
-
-  // ==================== DRINK DETAIL MODAL ====================
-  function getDrinkTools(drink) {
-    if (Array.isArray(drink.tools)) return drink.tools;
-
-    const method = (drink.instructions || []).join(" ").toLowerCase();
-    const ingredients = (drink.ingredients || [])
-      .filter(ing => String(ing.amountOz || "").toLowerCase() !== "garnish")
-      .map(ing => String(ing.item || "").toLowerCase());
-    const glassware = String(drink.glassware || "").toLowerCase();
-    const drinkName = String(drink.name || "").toLowerCase();
-    const tools = ["Jigger or measuring cup"];
-
-    const isLayeredShot = drink.category === "Shot" && Array.isArray(drink.tags) && drink.tags.includes("layered");
-    if (isLayeredShot || /bar spoon|back of (a )?spoon|spoon back|over a spoon/.test(method)) tools.push("Bar spoon");
-    const activelyShakes = /\b(?:dry |wet |flash )?(?:shake|shakes|shaken|shaking)\b/.test(method) && !/\bshake\s+\d+\s+dashes\b/.test(method);
-    const mixesInShaker = /\b(?:add|pour|combine|place|put|muddle)\b.{0,100}\b(?:into|in|to)\s+(?:a\s+)?(?:cocktail\s+)?shaker\b|\bshaker\s+(?:filled|with)\s+ice\b/.test(method);
-    const usesCocktailShaker = activelyShakes || mixesInShaker;
-    if (usesCocktailShaker) tools.push("Cocktail shaker");
-    if (/\bwhip\b/.test(method) && /\b(?:shaker or bowl|bowl or shaker)\b/.test(method)) tools.push("Small shaker or mixing bowl");
-    if (/\bmixing glass\b/.test(method)) tools.push("Mixing glass");
-    if (/\bstir(?:s|red|ring)?\b/.test(method)) tools.push("Bar spoon");
-    if (/strain/.test(method)) tools.push("Hawthorne strainer" + (/fine strain/.test(method) ? " and fine-mesh strainer" : ""));
-    if (/muddle/.test(method)) tools.push("Muddler");
-    if (/blend|blender/.test(method)) tools.push("Blender");
-    if (/\bpress\b|squeeze|fresh juice/.test(method) || ingredients.some(item => /lemon|lime|orange|grapefruit/.test(item) && /juice/.test(item))) tools.push("Citrus juicer or hand press");
-    if (/zest|peel|express/.test(method) || /peel|zest/.test(ingredients)) tools.push("Peeler or channel knife");
-    const bottledMixerIds = new Set([
-      "chang-soda-water",
-      "chang-lime-soda",
-      "fever-tree-indian-tonic",
-      "tonic-water",
-      "fever-tree-ginger-beer",
-      "bundaberg-ginger-beer",
-      "ginger-beer",
-      "beer-lager"
-    ]);
-    const bottledMixerGroups = new Set(["soda-water", "lime-soda", "tonic-water", "ginger-beer", "beer"]);
-    const usesBottledMixer = (drink.ingredients || []).some(ing => {
-      const invId = String(ing.inventoryId || "");
-      const grp = String(ing.ingredientGroup || "");
-      const item = String(ing.item || "").toLowerCase();
-      return bottledMixerIds.has(invId) ||
-        bottledMixerGroups.has(grp) ||
-        /\b(?:soda water|lime soda|tonic(?: water)?|ginger beer|beer|lager)\b/.test(item);
-    });
-    if (usesBottledMixer) tools.push("Bottle opener");
-    if (/copper mug|moscow mule/.test(glassware) || /mule/.test(drinkName)) tools.push("500 ml Moscow Mule mug");
-    else if (/champagne|flute|coupe|martini|nick & nora/.test(glassware)) tools.push(`Chilled ${drink.glassware || "cocktail glass"}`);
-    else tools.push(drink.glassware || "Serving glass");
-
-    if (/highball|collins|copa|hurricane|mug|tiki/.test(glassware)) tools.push("Straight or bent 304 stainless steel straw");
-    const crushedIceServe = /crushed|swizzle|tiki|julep/.test(method + " " + glassware);
-    const rocksServe = /rocks|old fashioned|snifter/.test(glassware);
-    const tallServe = /highball|collins|copa|hurricane|mug|tiki/.test(glassware);
-    const shakesWithIce = usesCocktailShaker && /\bice\b/.test(method);
-    const stirsWithIce = /\bmixing glass\b/.test(method) && /\bice\b/.test(method);
-    if (crushedIceServe) {
-      tools.push("Serving ice: crushed ice");
-    } else if (rocksServe) {
-      tools.push("Serving ice: clear ice cube or sphere");
-    } else if (tallServe) {
-      tools.push("Serving ice: clear ice cubes");
-    }
-    if (shakesWithIce) tools.push("Shaker ice: small or medium cubes");
-    else if (stirsWithIce) tools.push("Mixing ice: medium or large cubes");
-    return [...new Set(tools)];
-  }
-
-  function openDrinkModal(drinkId) {
-    const all = getAllDrinks();
-    const drink = all.find(d => d.id === drinkId);
-    if (!drink) return;
-
-    const modalBackdrop = document.getElementById("drink-modal-backdrop");
-    const modalContent = document.getElementById("drink-modal-content");
-    if (!modalBackdrop || !modalContent) return;
-
-    const categoryClass = escapeHTML(drink.category.toLowerCase());
-    const stock = getDrinkStockStatus(drink);
-    const status = getDrinkStatus(drink.id);
-
-
-
-    const listableIngredients = drink.ingredients.filter(ing => String(ing.amountOz || "").toLowerCase() !== "garnish");
-    const garnishEntries = drink.ingredients.filter(ing => String(ing.amountOz || "").toLowerCase() === "garnish");
-    const garnishText = garnishEntries.length
-      ? garnishEntries.map(ing => escapeHTML(ing.item)).join("; ")
-      : (drink.garnish ? escapeHTML(drink.garnish) : "");
-
-    const ingredientsHtml = listableIngredients.map((ing, index) => {
-      const inStock = isItemInStock(ing.inventoryId, ing);
-      const hasInventoryLink = Boolean(ing.inventoryId || (ing.ingredientGroup && Object.prototype.hasOwnProperty.call(INGREDIENT_GROUPS, ing.ingredientGroup)));
-      const stockBadge = hasInventoryLink
-        ? (inStock
-            ? `<span class="ing-stock-badge status-ready">✓ In Bar</span>`
-            : `<span class="ing-stock-badge status-missing">Need to Buy</span>`)
-        : "";
-
-      const inventoryOptions = hasInventoryLink ? getIngredientInventoryOptions(ing) : [];
-      const optionsId = escapeHTML(`ingredient-options-${drink.id}-${index}`);
-      const inventoryOptionsHtml = inventoryOptions.length ? `
-        <div class="ingredient-options" id="${optionsId}" hidden>
-          <div class="ingredient-options-heading">Your inventory options</div>
-          <div class="ingredient-option-header" aria-hidden="true">
-            <span>Name</span>
-            <span>ABV</span>
-            <span>Qty</span>
-            <span>Status</span>
-          </div>
-          <ul class="ingredient-options-list">
-            ${inventoryOptions.map(item => {
-              const optionStatus = getInventoryOptionStatus(item);
-              const quantity = item.quantity !== undefined ? `${item.quantity} ${escapeHTML(item.unit || getDefaultUnit(item))}` : "Quantity not tracked";
-              const alcoholLevel = getInventoryAbv(item).replace(/\s*ABV$/i, "");
-              const reserveBadge = (item.premium && ing.preferNonPremium)
-                ? `<span class="ingredient-option-reserve" title="Save for cocktails where it can shine — the modifiers in this recipe tend to mask its complexity">✦ Reserve</span>`
-                : "";
-              return `
-                <li class="ingredient-option${item.premium && ing.preferNonPremium ? " ingredient-option-premium" : ""}">
-                  <span class="ingredient-option-name">${escapeHTML(item.name)} ${reserveBadge}</span>
-                  <span class="ingredient-option-alcohol">${alcoholLevel}</span>
-                  <span class="ingredient-option-meta">${quantity}</span>
-                  <span class="ingredient-option-status ${optionStatus.className}">${optionStatus.label}</span>
-                </li>
-              `;
-            }).join("")}
-          </ul>
-          ${inventoryOptions.some(item => item.premium && ing.preferNonPremium) ? `<p class="ingredient-options-reserve-note">✦ <em>Reserve spirits shine best in spirit-forward or lightly modified cocktails — this recipe\'s bold modifiers may mask their character.</em></p>` : ""}
-        </div>
-      ` : "";
-
-      const rowContent = `
-        <div class="ing-measure-item">
-          <span class="ing-measure">${formatMeasurement(ing)}</span>
-          <div class="ing-details">
-            <span class="ing-name">${escapeHTML(ing.item)}</span>
-            ${preferredSubstituteText(ing)}
-          </div>
-        </div>
-        <div class="ingredient-row-actions">
-          ${stockBadge}
-          ${inventoryOptions.length ? `<span class="ingredient-options-trigger">Options <span aria-hidden="true">⌄</span></span>` : ""}
-        </div>
-      `;
-
-      return `
-        <li class="ingredient-row ${inventoryOptions.length ? "ingredient-row-expandable" : ""}">
-          ${inventoryOptions.length ? `<button type="button" class="ingredient-row-toggle" aria-expanded="false" aria-controls="${optionsId}">${rowContent}</button>` : rowContent}
-          ${inventoryOptionsHtml}
-        </li>
-      `;
-    }).join("");
-
-    const garnishHtml = garnishText ? `
-      <li class="ingredient-row garnish-row">
-        <div class="ing-measure-item">
-          <span class="ing-measure">Garnish</span>
-          <div class="ing-details">
-            <span class="ing-name">${garnishText}</span>
-          </div>
-        </div>
-      </li>
-    ` : "";
-
-    const instructionsHtml = drink.instructions.map(step => {
-      return `
-        <li class="instruction-step">
-          <span class="instruction-text">${escapeHTML(step)}</span>
-        </li>
-      `;
-    }).join("");
-    const toolsHtml = getDrinkTools(drink).map(tool => `<li class="drink-tool-item">${escapeHTML(tool)}</li>`).join("");
-
-    modalContent.innerHTML = `
-      <button class="modal-close-btn" id="modal-close-x" title="Close (Esc)" aria-label="Close recipe">✕</button>
-      <div class="modal-header">
-        <div class="modal-pretitle">
-          <span class="drink-category-badge badge-${categoryClass}">${escapeHTML(drink.category)}</span>
-          <span class="spec-val gold modal-base-label">Base: ${escapeHTML(drink.baseSpirit || "Cocktail")}</span>
-          ${stock.canMake 
-            ? `<span class="bar-stock-indicator status-ready">✓ Ready to Make with Your Bar</span>` 
-            : stock.untrackedItems.length
-              ? `<span class="bar-stock-indicator status-missing">${stock.missingCount ? `Missing ${stock.missingCount} · ` : ""}Check ${stock.untrackedItems.length} unlinked Ingredients</span>`
-              : `<span class="bar-stock-indicator status-missing">Missing ${stock.missingCount} Ingredients</span>`}
-        </div>
-        <h2 class="modal-drink-title" id="modal-drink-title">${escapeHTML(drink.name)}</h2>
-        ${drink.otherNames ? `<div class="modal-drink-aliases">Also known as: ${escapeHTML(drink.otherNames)}</div>` : ""}
-        <div class="drink-actions"><button class="status-action ${status.tried ? "active" : ""}" data-status="tried">${status.tried ? "✓ Tried it" : "Mark as tried"}</button><button class="status-action ${status.constructed ? "active" : ""}" data-status="constructed">${status.constructed ? "⚗ Constructed" : "Mark as constructed"}</button></div>
-      </div>
-
-      <div class="modal-body">
-        <!-- Specs Table -->
-        <div class="specs-table-container">
-          <div class="specs-table-title">Cocktail Specifications & Profile</div>
-          <table class="specs-table">
-            <tbody>
-              <tr>
-                <th>Glassware</th>
-                <td>${escapeHTML(drink.glassware || "Cocktail Glass")}</td>
-              </tr>
-              <tr>
-                <th>Alcohol by Volume</th>
-                <td><strong class="gold">${getAbv(drink)}</strong> · ${escapeHTML(drink.alcoholLevel || "Standard")}</td>
-              </tr>
-              <tr>
-                <th>Serving Volume</th>
-                <td>${getDrinkVolume(drink)} <span class="spec-note">before ice dilution</span></td>
-              </tr>
-              <tr>
-                <th>Taste Profile</th>
-                <td>${escapeHTML(drink.tasteProfile || "Balanced & Refreshing")}</td>
-              </tr>
-              <tr>
-                <th>Difficulty Level</th>
-                <td>${getDifficultyStars(drink.difficulty)} (${drink.difficulty}/5 Scale)</td>
-              </tr>
-              <tr>
-                <th>Popularity Rating</th>
-                <td><strong class="gold">★ ${drink.popularity ? drink.popularity.toFixed(1) : "9.5"} / 10</strong> (World Ranking)</td>
-              </tr>
-              <tr>
-                <th>Category</th>
-                <td>${escapeHTML(drink.category)}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Ingredients with Dual Measurements & Substitutes -->
-        <div>
-          <div class="modal-section-title">
-            <span>Ingredients & Substitutions</span>
-            <div class="unit-toggle-pills" id="modal-unit-pills">
-              <button class="unit-pill ${unitPreference === "both" ? "active" : ""}" data-unit="both">Both (oz & ml)</button>
-              <button class="unit-pill ${unitPreference === "oz" ? "active" : ""}" data-unit="oz">oz</button>
-              <button class="unit-pill ${unitPreference === "ml" ? "active" : ""}" data-unit="ml">ml</button>
-            </div>
-          </div>
-          <ul class="ingredients-list">
-            ${ingredientsHtml}${garnishHtml}
-          </ul>
-        </div>
-
-        <!-- Preparation tools -->
-        <div>
-          <div class="modal-section-title"><span>Tools</span></div>
-          <ul class="drink-tools-list">${toolsHtml}</ul>
-        </div>
-
-        <!-- Detailed Step-by-Step Instructions -->
-        <div>
-          <div class="modal-section-title">
-            <span>Preparation Instructions</span>
-          </div>
-          <ol class="instructions-list">
-            ${instructionsHtml}
-          </ol>
-        </div>
-
-        <!-- Pro-Tip Section -->
-        ${drink.proTip ? `
-          <div class="pro-tip-box">
-            <div class="pro-tip-icon">💡</div>
-            <div>
-              <div class="pro-tip-title">Speakeasy Pro-Tip & Bar Secret</div>
-              <div class="pro-tip-content">${escapeHTML(drink.proTip)}</div>
-            </div>
-          </div>
-        ` : ""}
-      </div>
-    `;
-
-    // Add unit toggle in modal
-    const unitPills = modalContent.querySelectorAll("#modal-unit-pills .unit-pill");
-    unitPills.forEach(pill => {
-      pill.addEventListener("click", (e) => {
-        const u = pill.getAttribute("data-unit");
-        unitPreference = u;
-        localStorage.setItem(STORAGE_KEY_UNIT, u);
-        openDrinkModal(drinkId); // refresh modal view
-      });
-    });
-
-    modalContent.querySelectorAll(".status-action").forEach(button => {
-      button.addEventListener("click", () => {
-        toggleDrinkStatus(drinkId, button.dataset.status);
-        openDrinkModal(drinkId);
-      });
-    });
-
-    modalContent.querySelectorAll(".ingredient-row-toggle").forEach(button => {
-      button.addEventListener("click", () => {
-        const options = document.getElementById(button.getAttribute("aria-controls"));
-        if (!options) return;
-        const expanded = button.getAttribute("aria-expanded") === "true";
-        button.setAttribute("aria-expanded", String(!expanded));
-        options.hidden = expanded;
-      });
-    });
-
-    const closeBtn = document.getElementById("modal-close-x");
-    if (closeBtn) closeBtn.addEventListener("click", closeDrinkModal);
-
-    showModal(modalBackdrop, "#modal-close-x");
-  }
-
-  function closeDrinkModal() {
-    const modalBackdrop = document.getElementById("drink-modal-backdrop");
-    hideModal(modalBackdrop);
+    DOM.resultsCount?.focus();
   }
 
   // ==================== ADD CUSTOM RECIPE ====================
@@ -1724,7 +707,9 @@
 
     customDrinks.unshift(newDrink);
     saveCustomDrinks();
+    announceStatus(`Added ${name} to the current recipe guide.`);
     closeAddRecipeModal();
+    renderDiscoveryFilters();
     renderApp();
     openDrinkModal(newDrink.id);
   }
@@ -1738,7 +723,7 @@
 
     if (!container || !toggleBtn) return;
 
-    if (filtersCollapsed) {
+    if (appState.filtersCollapsed) {
       container.classList.add("collapsed");
       if (controlPanel) controlPanel.classList.add("filters-collapsed");
       toggleBtn.setAttribute("aria-expanded", "false");
@@ -1749,10 +734,15 @@
     }
 
     let activeCount = 0;
-    if (selectedSpirit !== "all") activeCount++;
-    if (selectedDifficulty !== "all") activeCount++;
-    if (selectedTaste !== "all") activeCount++;
-    if (selectedGlass !== "all") activeCount++;
+    if (appState.selectedSpirit !== "all") activeCount++;
+    if (appState.selectedDifficulty !== "all") activeCount++;
+    if (appState.selectedTaste !== "all") activeCount++;
+    if (appState.selectedGlass !== "all") activeCount++;
+    if (appState.searchQuery.trim()) activeCount++;
+    if (appState.inventoryRecipeFilterIds?.length) activeCount++;
+    if (appState.filterOnlyMyBar) activeCount++;
+    if (appState.drinkStatusFilters.tried !== null) activeCount++;
+    if (appState.drinkStatusFilters.constructed !== null) activeCount++;
 
     if (badge) {
       if (activeCount > 0) {
@@ -1792,15 +782,20 @@
 
   // ==================== FILTER RESET ====================
   function resetFilters() {
-    searchQuery = "";
-    inventoryRecipeFilterIds = null;
-    selectedSpirit = "all";
-    selectedDifficulty = "all";
-    selectedTaste = "all";
-    selectedGlass = "all";
-    filterOnlyMyBar = false;
-    drinkStatusFilters = { tried: null, constructed: null };
-    sortBy = "popularity-desc";
+    appState.searchQuery = "";
+    appState.inventoryRecipeFilterIds = null;
+    appState.selectedSpirit = "all";
+    appState.selectedDifficulty = "all";
+    appState.selectedTaste = "all";
+    appState.selectedGlass = "all";
+    appState.filterOnlyMyBar = false;
+    appState.drinkStatusFilters = { tried: null, constructed: null };
+    appState.sortBy = "popularity-desc";
+    const myBarToggleBtn = document.getElementById("btn-my-bar-toggle");
+    if (myBarToggleBtn) {
+      myBarToggleBtn.classList.remove("active");
+      myBarToggleBtn.setAttribute("aria-pressed", "false");
+    }
 
     const searchInput = document.getElementById("search-input");
     if (searchInput) searchInput.value = "";
@@ -1809,273 +804,30 @@
     if (sortSelect) sortSelect.value = "popularity-desc";
 
     document.querySelectorAll(".pill-btn").forEach(p => {
-      p.classList.remove("active");
-      if (p.getAttribute("data-val") === "all") p.classList.add("active");
+      const active = p.hasAttribute("data-val") && p.getAttribute("data-val") === "all";
+      p.classList.toggle("active", active);
+      if (p.hasAttribute("data-val")) p.setAttribute("aria-pressed", String(active));
     });
 
     renderApp();
     updateFilterCollapseState();
   }
 
-  // ==================== EVENT LISTENERS ====================
-  function setupEventListeners() {
-    const mobileNavToggle = document.getElementById("mobile-nav-toggle");
-    const primaryNavigation = document.getElementById("primary-navigation");
-    if (mobileNavToggle && primaryNavigation) {
-      mobileNavToggle.addEventListener("click", () => {
-        const isOpen = primaryNavigation.classList.toggle("open");
-        mobileNavToggle.setAttribute("aria-expanded", String(isOpen));
-        mobileNavToggle.querySelector(".mobile-nav-toggle-icon").textContent = isOpen ? "×" : "☰";
-      });
-
-      primaryNavigation.addEventListener("click", event => {
-        if (!event.target.closest(".nav-btn")) return;
-        primaryNavigation.classList.remove("open");
-        mobileNavToggle.setAttribute("aria-expanded", "false");
-        mobileNavToggle.querySelector(".mobile-nav-toggle-icon").textContent = "☰";
-      });
-    }
-
-    const heroStats = document.getElementById("hero-stats");
-    if (heroStats) {
-      heroStats.addEventListener("click", event => {
-        // Handle category tab-switch buttons (reset filters + switch tab)
-        const tabBtn = event.target.closest("button[data-tab-switch]");
-        if (tabBtn) {
-          const tab = tabBtn.getAttribute("data-tab-switch");
-          resetFilters();
-          currentTab = tab;
-          renderApp();
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          return;
-        }
-        // Handle tried/constructed status filter buttons
-        const button = event.target.closest("button[data-status-filter]");
-        if (!button) return;
-        const status = button.getAttribute("data-status-filter");
-        if (status !== "tried" && status !== "constructed") return;
-        const value = button.getAttribute("data-filter-value") === "true";
-        drinkStatusFilters[status] = drinkStatusFilters[status] === value ? null : value;
-        renderApp();
-        document.getElementById("results-count")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-
-    // Navigation tabs
-    document.querySelectorAll(".nav-btn[data-tab]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        currentTab = btn.getAttribute("data-tab");
-        renderApp();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-    });
-
-    // Toggle collapsible filters button
-    const toggleFiltersBtn = document.getElementById("btn-toggle-filters");
-    if (toggleFiltersBtn) {
-      toggleFiltersBtn.addEventListener("click", () => {
-        filtersCollapsed = !filtersCollapsed;
-        localStorage.setItem(STORAGE_KEY_FILTERS_COLLAPSED, filtersCollapsed);
-        updateFilterCollapseState();
-      });
-    }
-
-    // Setup Back to top button listener
-    setupBackToTop();
-
-    // Search input
-    const searchInput = document.getElementById("search-input");
-    if (searchInput) {
-      searchInput.addEventListener("input", (e) => {
-        inventoryRecipeFilterIds = null;
-        searchQuery = e.target.value;
-        renderDrinkCards();
-      });
-    }
-
-    // Sort select
-    const sortSelect = document.getElementById("sort-select");
-    if (sortSelect) {
-      sortSelect.addEventListener("change", (e) => {
-        sortBy = e.target.value;
-        renderDrinkCards();
-      });
-    }
-
-    function setupFilterPills(selector, getValue, setValue) {
-      document.querySelectorAll(`${selector} .pill-btn`).forEach(btn => {
-        btn.addEventListener("click", () => {
-          inventoryRecipeFilterIds = null;
-          const val = btn.getAttribute("data-val");
-          const current = getValue();
-          if (current === val && val !== "all") {
-            setValue("all");
-            document.querySelectorAll(`${selector} .pill-btn`).forEach(b => {
-              b.classList.toggle("active", b.getAttribute("data-val") === "all");
-            });
-          } else {
-            document.querySelectorAll(`${selector} .pill-btn`).forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            setValue(val);
-          }
-          renderDrinkCards();
-          updateFilterCollapseState();
-        });
-      });
-    }
-
-    // Filter pills (Spirit)
-    setupFilterPills(".filter-pills[data-filter='spirit']", () => selectedSpirit, v => { selectedSpirit = v; });
-    document.querySelectorAll(".filter-pills[data-filter='spirit'] .pill-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        if (selectedSpirit === "Non-Alcoholic" && currentTab === "cocktails") {
-          currentTab = "mocktails";
-          renderTabButtons();
-        } else if (selectedSpirit !== "all" && selectedSpirit !== "Non-Alcoholic" && currentTab === "mocktails") {
-          currentTab = "all";
-          renderTabButtons();
-        }
-      });
-    });
-
-    // Filter pills (Difficulty)
-    setupFilterPills(".filter-pills[data-filter='difficulty']", () => selectedDifficulty, v => { selectedDifficulty = v; });
-
-    // Filter pills (Taste)
-    setupFilterPills(".filter-pills[data-filter='taste']", () => selectedTaste, v => { selectedTaste = v; });
-
-    // "Only In Stock" toggle button
-    const myBarToggleBtn = document.getElementById("btn-my-bar-toggle");
-    if (myBarToggleBtn) {
-      myBarToggleBtn.addEventListener("click", () => {
-        filterOnlyMyBar = !filterOnlyMyBar;
-        myBarToggleBtn.classList.toggle("active", filterOnlyMyBar);
-        renderDrinkCards();
-      });
-    }
-
-    // Clear filters button
-    const clearBtn = document.getElementById("btn-clear-filters");
-    if (clearBtn) clearBtn.addEventListener("click", resetFilters);
-
-    // Unit toggle button (header)
-    const unitToggleBtn = document.getElementById("btn-unit-toggle");
-    if (unitToggleBtn) {
-      unitToggleBtn.addEventListener("click", () => {
-        if (unitPreference === "both") unitPreference = "oz";
-        else if (unitPreference === "oz") unitPreference = "ml";
-        else unitPreference = "both";
-        localStorage.setItem(STORAGE_KEY_UNIT, unitPreference);
-        unitToggleBtn.innerHTML = `⚖ Units: <strong>${unitPreference.toUpperCase()}</strong>`;
-        renderDrinkCards();
-      });
-      unitToggleBtn.innerHTML = `⚖ Units: <strong>${unitPreference.toUpperCase()}</strong>`;
-    }
-
-    const themeSelect = document.getElementById("theme-select");
-    if (themeSelect) themeSelect.addEventListener("change", () => {
-      const choice = themeSelect.value;
-      // The cookie is the hosted-site preference. localStorage mirrors it so previews
-      // opened as local files still respond when browsers reject file:// cookies.
-      document.cookie = `${THEME_COOKIE}=${encodeURIComponent(choice)}; max-age=31536000; path=/; SameSite=Lax`;
-      localStorage.setItem(STORAGE_KEY_THEME, choice);
-      applyTheme(choice);
-    });
-
-    // Modal backdrop click to close
-    const modalBackdrop = document.getElementById("drink-modal-backdrop");
-    if (modalBackdrop) {
-      modalBackdrop.addEventListener("click", (e) => {
-        if (e.target === modalBackdrop) closeDrinkModal();
-      });
-    }
-
-    // Add recipe modal triggers
-    const btnAddRecipe = document.getElementById("btn-add-recipe");
-    if (btnAddRecipe) btnAddRecipe.addEventListener("click", openAddRecipeModal);
-
-    const btnCloseAddRecipe = document.getElementById("btn-close-add-recipe");
-    if (btnCloseAddRecipe) btnCloseAddRecipe.addEventListener("click", closeAddRecipeModal);
-    const btnCancelAddRecipe = document.getElementById("btn-cancel-add-recipe");
-    if (btnCancelAddRecipe) btnCancelAddRecipe.addEventListener("click", closeAddRecipeModal);
-
-    const addRecipeBackdrop = document.getElementById("add-recipe-modal-backdrop");
-    if (addRecipeBackdrop) {
-      addRecipeBackdrop.addEventListener("click", (e) => {
-        if (e.target === addRecipeBackdrop) closeAddRecipeModal();
-      });
-    }
-
-    const formAddRecipe = document.getElementById("form-add-recipe");
-    if (formAddRecipe) formAddRecipe.addEventListener("submit", handleSaveCustomRecipe);
-
-    // ==================== ADMIN VIEW LISTENERS ====================
-    const adminSearch = document.getElementById("admin-search-input");
-    if (adminSearch) {
-      adminSearch.addEventListener("input", (e) => {
-        adminSearchQuery = e.target.value;
-        renderAdminView();
-      });
-    }
-
-    const adminCatFilter = document.getElementById("admin-category-filter");
-    if (adminCatFilter) {
-      adminCatFilter.addEventListener("change", (e) => {
-        adminCategoryFilter = e.target.value;
-        renderAdminView();
-      });
-    }
-
-    const adminStockFilterEl = document.getElementById("admin-stock-filter");
-    if (adminStockFilterEl) {
-      adminStockFilterEl.addEventListener("change", (e) => {
-        adminStockFilter = e.target.value;
-        renderAdminView();
-      });
-    }
-
-    const btnAdminAdd = document.getElementById("btn-admin-add-item");
-    if (btnAdminAdd) btnAdminAdd.addEventListener("click", openAddItemModal);
-
-    const btnCloseAdminItem = document.getElementById("btn-close-admin-item");
-    if (btnCloseAdminItem) btnCloseAdminItem.addEventListener("click", closeAdminItemModal);
-    const btnCancelAdminItem = document.getElementById("btn-cancel-admin-item");
-    if (btnCancelAdminItem) btnCancelAdminItem.addEventListener("click", closeAdminItemModal);
-
-    const formAdminItem = document.getElementById("form-admin-item");
-    if (formAdminItem) formAdminItem.addEventListener("submit", handleSaveAdminItem);
-
-    const btnAdminExport = document.getElementById("btn-admin-export");
-    if (btnAdminExport) btnAdminExport.addEventListener("click", exportInventoryJSON);
-
-    const btnAdminImport = document.getElementById("btn-admin-import");
-    const adminImportFile = document.getElementById("admin-import-file");
-    if (btnAdminImport && adminImportFile) {
-      btnAdminImport.addEventListener("click", () => adminImportFile.click());
-      adminImportFile.addEventListener("change", importInventoryJSON);
-    }
-
-    const btnAdminReset = document.getElementById("btn-admin-reset");
-    if (btnAdminReset) btnAdminReset.addEventListener("click", resetInventoryToDefault);
-
-    const adminItemBackdrop = document.getElementById("admin-item-modal-backdrop");
-    if (adminItemBackdrop) {
-      adminItemBackdrop.addEventListener("click", (e) => {
-        if (e.target === adminItemBackdrop) closeAdminItemModal();
-      });
-    }
-
-    // Keyboard shortcuts (Escape closes modals)
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeDrinkModal();
-        closeAddRecipeModal();
-        closeAdminItemModal();
-      } else if (e.key === "Tab") {
-        keepFocusInOpenModal(e);
-      }
-    });
-  }
+  // ==================== APP EVENT MODULE ====================
+  const appEvents = window.BoonBarAppEvents.create({
+    state: appState,
+    actions: {
+      resetFilters, renderApp, setupBackToTop, renderDrinkCards,
+      updateFilterCollapseState, renderTabButtons, applyTheme,
+      openAddRecipeModal, closeAddRecipeModal, handleSaveCustomRecipe, announceStatus
+    },
+    drinkModal, inventoryAdmin,
+    storage: appStorage,
+    storageKeys: {
+      STORAGE_KEY_FILTERS_COLLAPSED, STORAGE_KEY_UNIT, STORAGE_KEY_THEME, THEME_COOKIE
+    },
+    modalUtils: { keepFocusInOpenModal }
+  });
 
   // ==================== INITIALIZATION ====================
   function init() {
@@ -2087,7 +839,8 @@
     DOM.resultsCount = document.getElementById("results-count");
 
     applyTheme();
-    setupEventListeners();
+    renderDiscoveryFilters();
+    appEvents.setupEventListeners();
     renderApp();
     setInterval(() => { if (getThemePreference() === "auto") applyTheme(); }, 60000);
   }

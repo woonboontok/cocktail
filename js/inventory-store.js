@@ -28,6 +28,13 @@
   }
 
   function isValidInventoryRecord(item, categories) {
+    const validRefrigeration = item && (
+      item.refrigerate === undefined ||
+      item.refrigerate === false ||
+      item.refrigerate === true || // Legacy saved-data compatibility; normalized below.
+      item.refrigerate === "must" ||
+      item.refrigerate === "preferred"
+    );
     return Boolean(item && typeof item === "object" && !Array.isArray(item) &&
       typeof item.id === "string" && item.id.trim() &&
       typeof item.name === "string" && item.name.trim() &&
@@ -36,7 +43,7 @@
       (item.inStock === undefined || typeof item.inStock === "boolean") &&
       (item.incoming === undefined || typeof item.incoming === "boolean") &&
       (item.premium === undefined || typeof item.premium === "boolean") &&
-      (item.refrigerate === undefined || typeof item.refrigerate === "boolean") &&
+      validRefrigeration &&
       (item.abv === undefined || typeof item.abv === "number" || typeof item.abv === "string") &&
       (item.quantity === undefined || (Number.isFinite(Number(item.quantity)) && Number(item.quantity) >= 0)) &&
       (item.unit === undefined || typeof item.unit === "string"));
@@ -50,7 +57,8 @@
       inStock: item.inStock === true,
       incoming: item.incoming === true,
       quantity: item.quantity === undefined ? (item.inStock ? 1 : 0) : Math.max(0, Number(item.quantity)),
-      unit: typeof item.unit === "string" && item.unit.trim() ? item.unit.trim() : getDefaultUnit(item)
+      unit: typeof item.unit === "string" && item.unit.trim() ? item.unit.trim() : getDefaultUnit(item),
+      refrigerate: item.refrigerate === true ? "preferred" : item.refrigerate === false ? false : item.refrigerate
     };
   }
 
@@ -118,9 +126,10 @@
 
   function saveInventory(storage, storageKey, inventory) {
     try {
-      storage.setItem(storageKey, JSON.stringify(inventory));
+      return storage.setItem(storageKey, JSON.stringify(inventory));
     } catch (error) {
       console.warn("Error saving inventory", error);
+      return false;
     }
   }
 

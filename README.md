@@ -4,14 +4,14 @@ A polished, browser-based cocktail guide and personal home-bar inventory manager
 
 ## Highlights
 
-- 152 built-in recipes: 101 cocktails, 23 mocktails, and 28 shots
-- Search, sort, and filter by base spirit, difficulty, flavour profile, and availability
+- 191 built-in recipes: 133 cocktails, 24 mocktails, and 34 shots
+- Search, sort, and filter by catalog-supported base spirits, difficulty, flavor, glassware, and availability
 - Detailed recipes with method, glassware, substitutions, pro tips, and both oz/ml measurements
 - Inventory availability filter for recipes makeable with current stock
 - Inventory glossary and admin area for stock status, quantities, custom items, and low-stock checks
 - Add and save personal recipe experiments
 - Mark recipes as tried or constructed
-- Export and import inventory backups as JSON
+- Export and import full app backups as JSON, with legacy inventory backup support
 - Automatic time-of-day themes, with a manual theme selector
 
 ## Run locally
@@ -34,7 +34,7 @@ Then visit [http://localhost:8000](http://localhost:8000).
 
 ## How it works
 
-All data stays in the browser. Inventory changes, custom recipes, drink statuses, measurement preferences, and theme preference are stored with `localStorage`. Use **Export Backup** in Inventory Admin before clearing browser data or moving to another device, and **Import Backup** to restore it.
+All data stays in the browser. Inventory changes, custom recipes, drink statuses, measurement preferences, theme preference, and filter display preference are stored through a guarded Web Storage adapter. If browser storage is blocked or full, the app continues with an in-memory session fallback and announces that changes will not persist after the session. Inventory Admin exports a versioned full backup containing inventory, custom recipes, tried/constructed progress, and preferences. It also imports older inventory-only JSON arrays without changing recipes, progress, or preferences.
 
 ## Updating the inventory
 
@@ -62,6 +62,9 @@ The inventory page displays `INVENTORY_LAST_UPDATED` so users can see when the d
 - `unit`: bottle, fruit, carton, pack, and so on
 - `abv`: numeric alcohol by volume for alcoholic products
 - `notes`: optional usage or style notes
+- `refrigerate`: `false` (no special guidance), `"preferred"` (quality/serving temperature), or `"must"` (perishable without cold storage). Legacy browser values `true`/`false` are normalized when loaded.
+
+Recipe `difficulty` is an integer from 1 to 5. Built-in recipes currently use levels 1 to 4; level 5 is available for custom recipes and future entries.
 
 Use a stable ID because recipes refer to it through `inventoryId`. If an ID changes, update every matching recipe reference.
 
@@ -113,6 +116,11 @@ node --check js/data.js
 node --check js/inventory-store.js
 node --check js/ui-utils.js
 node --check js/recipe-utils.js
+node --check js/drink-catalog.js
+node --check js/inventory-admin.js
+node --check js/drink-modal.js
+node --check js/app-state.js
+node --check js/app-events.js
 node --check js/modal.js
 node scripts/validate-data.js
 git diff --check
@@ -138,9 +146,18 @@ git push origin main
     ├── inventory-store.js  # Inventory persistence, validation, and migrations
     ├── ui-utils.js         # Safe HTML rendering helper
     ├── recipe-utils.js     # Pure recipe measurement and ABV helpers
-    ├── modal.js            # Accessible modal focus handling
-    └── app.js              # Rendering, filtering, and interaction state
+    ├── drink-catalog.js   # Pure drink filtering, search, and sorting
+    ├── inventory-admin.js # Inventory glossary and admin workflows
+    ├── drink-modal.js     # Recipe detail rendering and modal interactions
+    ├── app-state.js       # Shared transient navigation and filter state
+    ├── modal.js           # Accessible modal focus handling
+    ├── app-events.js      # General page event wiring
+    └── app.js             # App orchestration and catalog cards
 ```
+
+## Maintenance roadmap
+
+The multi-session refactor review, work sequence, acceptance criteria, and session log are tracked in [docs/refactor-roadmap.md](docs/refactor-roadmap.md).
 
 ## Customising the collection
 

@@ -11,6 +11,8 @@
 </head>
 <body>
 
+  <div id="app-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
   <!-- ==================== HEADER ==================== -->
   <header class="site-header">
     <div class="header-container">
@@ -28,7 +30,7 @@
       </button>
 
       <nav class="nav-links" id="primary-navigation" aria-label="Primary navigation">
-        <button class="nav-btn active" data-tab="all">All Drinks</button>
+        <button class="nav-btn active" data-tab="all" aria-current="page">All Drinks</button>
         <button class="nav-btn" data-tab="cocktails">Cocktails</button>
         <button class="nav-btn" data-tab="mocktails">Mocktails</button>
         <button class="nav-btn" data-tab="shots">Shots</button>
@@ -73,12 +75,12 @@
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input type="text" id="search-input" class="search-input" placeholder="Search by drink name, alternate name, spirit, or ingredient (e.g. Cointreau, Bourbon, Mint)...">
+            <input type="text" id="search-input" class="search-input" aria-label="Search drinks" placeholder="Search by drink name, alternate name, spirit, or ingredient (e.g. Cointreau, Bourbon, Mint)...">
           </div>
 
           <div class="sort-group">
-            <span class="sort-label">Sort:</span>
-            <select id="sort-select" class="custom-select">
+            <label class="sort-label" for="sort-select">Sort:</label>
+            <select id="sort-select" class="custom-select" aria-label="Sort drinks">
               <option value="popularity-desc">Popularity (Highest First)</option>
               <option value="name-asc">Name (A → Z)</option>
               <option value="name-desc">Name (Z → A)</option>
@@ -89,7 +91,7 @@
             </select>
           </div>
 
-          <button class="pill-btn pill-my-bar" id="btn-my-bar-toggle">
+          <button class="pill-btn pill-my-bar" id="btn-my-bar-toggle" aria-pressed="false">
             ✓ In My Bar Only
           </button>
 
@@ -109,15 +111,7 @@
           <!-- Spirit Filter -->
           <div class="filter-row">
             <span class="filter-row-title">Base Spirit</span>
-            <div class="filter-pills" data-filter="spirit">
-              <button class="pill-btn active" data-val="all">All</button>
-              <button class="pill-btn" data-val="Whiskey/Bourbon">Bourbon & Whiskey</button>
-              <button class="pill-btn" data-val="Gin">Gin</button>
-              <button class="pill-btn" data-val="Rum">Rum</button>
-              <button class="pill-btn" data-val="Tequila/Mezcal">Tequila & Mezcal</button>
-              <button class="pill-btn" data-val="Vodka">Vodka</button>
-              <button class="pill-btn" data-val="Liqueur/Wine">Liqueur & Wine</button>
-              <button class="pill-btn" data-val="Non-Alcoholic">Non-Alcoholic</button>
+            <div class="filter-pills" data-filter="spirit" role="group" aria-label="Filter by base spirit">
             </div>
             <button class="clear-filters-btn" id="btn-clear-filters">Reset Filters</button>
           </div>
@@ -125,36 +119,28 @@
           <!-- Difficulty Filter -->
           <div class="filter-row">
             <span class="filter-row-title">Difficulty</span>
-            <div class="filter-pills" data-filter="difficulty">
-              <button class="pill-btn active" data-val="all">All Levels</button>
-              <button class="pill-btn" data-val="1">★☆☆☆☆ Beginner (Build/Pour)</button>
-              <button class="pill-btn" data-val="2">★★☆☆☆ Easy (Standard Shake/Stir)</button>
-              <button class="pill-btn" data-val="3">★★★☆☆ Moderate (Layering/Infusions)</button>
-              <button class="pill-btn" data-val="4">★★★★☆ Advanced (Tiki / Multi-step)</button>
-              <button class="pill-btn" data-val="5">★★★★★ Master</button>
+            <div class="filter-pills" data-filter="difficulty" role="group" aria-label="Filter by difficulty">
             </div>
           </div>
 
           <!-- Taste Profile Filter -->
           <div class="filter-row">
             <span class="filter-row-title">Taste Profile</span>
-            <div class="filter-pills" data-filter="taste">
-              <button class="pill-btn active" data-val="all">All Flavors</button>
-              <button class="pill-btn" data-val="Citrus">Citrus & Tart</button>
-              <button class="pill-btn" data-val="Spirit-Forward">Spirit-Forward</button>
-              <button class="pill-btn" data-val="Sweet">Sweet & Fruity</button>
-              <button class="pill-btn" data-val="Bittersweet">Bittersweet & Herbal</button>
-              <button class="pill-btn" data-val="Coffee">Coffee & Cream</button>
-              <button class="pill-btn" data-val="Tropical">Tropical & Tiki</button>
-              <button class="pill-btn" data-val="Ginger">Ginger & Spicy</button>
+            <div class="filter-pills" data-filter="taste" role="group" aria-label="Filter by taste profile">
             </div>
+          </div>
+
+          <!-- Glassware Filter -->
+          <div class="filter-row">
+            <span class="filter-row-title">Glassware</span>
+            <div class="filter-pills" data-filter="glass" role="group" aria-label="Filter by glassware"></div>
           </div>
         </div>
       </section>
 
       <!-- RESULTS COUNT -->
       <div class="results-header">
-        <div class="results-count" id="results-count">Loading drinks...</div>
+        <div class="results-count" id="results-count" tabindex="-1" aria-live="polite" aria-atomic="true">Loading drinks...</div>
       </div>
 
       <!-- DRINKS GRID -->
@@ -179,7 +165,7 @@
       <div class="inventory-glossary-toolbar" aria-label="Inventory display controls">
         <div class="inventory-filter-group">
           <label for="inventory-stock-filter">Show</label>
-          <select id="inventory-stock-filter" class="custom-select">
+        <select id="inventory-stock-filter" class="custom-select" aria-label="Filter inventory by stock status">
             <option value="all">All items</option>
             <option value="in-stock">In stock</option>
             <option value="to-buy">To buy</option>
@@ -212,8 +198,8 @@
       <!-- Admin Toolbar -->
       <div class="admin-toolbar">
         <div class="admin-toolbar-left">
-          <input type="text" id="admin-search-input" class="admin-search-input" placeholder="Search bottles or ingredients...">
-          <select id="admin-category-filter" class="custom-select admin-filter-select">
+          <input type="text" id="admin-search-input" class="admin-search-input" aria-label="Search inventory items" placeholder="Search bottles or ingredients...">
+          <select id="admin-category-filter" class="custom-select admin-filter-select" aria-label="Filter inventory by category">
             <option value="all">All Categories</option>
             <option value="spirits">Base Spirits</option>
             <option value="liqueurs">Liqueurs & Cordials</option>
@@ -223,7 +209,7 @@
             <option value="bitters_syrups">Bitters & Syrups</option>
             <option value="fresh_garnishes">Fresh Garnishes</option>
           </select>
-          <select id="admin-stock-filter" class="custom-select admin-filter-select">
+          <select id="admin-stock-filter" class="custom-select admin-filter-select" aria-label="Filter inventory by stock level">
             <option value="all">All Stock Status</option>
             <option value="in-stock">In Stock Only</option>
             <option value="out-of-stock">Shopping List / Out of Stock</option>
@@ -233,12 +219,13 @@
 
         <div class="admin-toolbar-actions">
           <button class="btn-primary" id="btn-admin-add-item">＋ Add New Bottle / Item</button>
-          <button class="btn-secondary" id="btn-admin-export" title="Export bar data as JSON file">📥 Export Backup</button>
-          <button class="btn-secondary" id="btn-admin-import" title="Restore bar data from JSON file">📤 Import Backup</button>
+          <button class="btn-secondary" id="btn-admin-export" title="Export inventory, custom recipes, drink progress, and preferences as JSON">📥 Export Full Backup</button>
+          <button class="btn-secondary" id="btn-admin-import" title="Restore a full backup or an older inventory-only backup from JSON">📤 Import Backup</button>
           <input type="file" id="admin-import-file" class="hidden-file-input" accept=".json">
           <button class="btn-secondary btn-danger-text" id="btn-admin-reset" title="Reset inventory to initial bar setup">↺ Reset Defaults</button>
         </div>
       </div>
+      <p class="backup-scope-note">Full backups include inventory, custom recipes, tried/constructed progress, and display preferences. Older inventory-only backups are still supported.</p>
 
       <!-- Inventory Table -->
       <div class="admin-table-wrapper">
@@ -263,17 +250,17 @@
   </main>
 
   <!-- ==================== DRINK DETAIL MODAL ==================== -->
-  <div class="modal-backdrop" id="drink-modal-backdrop">
+  <div class="modal-backdrop" id="drink-modal-backdrop" aria-hidden="true" inert>
     <div class="modal-dialog" id="drink-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-drink-title">
       <!-- Populated dynamically by openDrinkModal() in app.js -->
     </div>
   </div>
 
   <!-- ==================== ADD RECIPE / EXPERIMENT MODAL ==================== -->
-  <div class="modal-backdrop" id="add-recipe-modal-backdrop">
+  <div class="modal-backdrop" id="add-recipe-modal-backdrop" aria-hidden="true" inert>
     <div class="modal-dialog modal-dialog-lg" role="dialog" aria-modal="true" aria-labelledby="add-recipe-title">
       <div class="modal-header">
-        <button class="modal-close-btn" id="btn-close-add-recipe" title="Close">✕</button>
+        <button type="button" class="modal-close-btn" id="btn-close-add-recipe" title="Close" aria-label="Close recipe form">✕</button>
         <h2 class="modal-drink-title" id="add-recipe-title">🧪 Log a Drink Experiment</h2>
         <div class="modal-drink-aliases">Document your personal cocktail, mocktail, or shot inventions</div>
       </div>
@@ -353,10 +340,10 @@
   </div>
 
   <!-- ==================== ADD / EDIT INVENTORY ITEM MODAL ==================== -->
-  <div class="modal-backdrop" id="admin-item-modal-backdrop">
+  <div class="modal-backdrop" id="admin-item-modal-backdrop" aria-hidden="true" inert>
     <div class="modal-dialog modal-dialog-md" role="dialog" aria-modal="true" aria-labelledby="admin-item-modal-title">
       <div class="modal-header">
-        <button class="modal-close-btn" id="btn-close-admin-item" title="Close">✕</button>
+        <button type="button" class="modal-close-btn" id="btn-close-admin-item" title="Close" aria-label="Close inventory item form">✕</button>
         <h2 class="modal-drink-title" id="admin-item-modal-title">Add Inventory Item</h2>
         <div class="modal-drink-aliases">Manage your bottles, mixers, and fresh stock</div>
       </div>
@@ -415,6 +402,15 @@
           <label for="form-item-in-stock" class="form-label-checkbox">Mark as In Stock</label>
         </div>
 
+        <div class="form-group">
+          <label for="form-item-refrigerate">Refrigeration</label>
+          <select id="form-item-refrigerate" class="form-control">
+            <option value="false">No special refrigeration</option>
+            <option value="preferred">Preferred cold</option>
+            <option value="must">Must refrigerate</option>
+          </select>
+        </div>
+
         <div class="modal-form-actions-admin">
           <button type="button" class="pill-btn" id="btn-cancel-admin-item">Cancel</button>
           <button type="submit" class="btn-primary">Save Item</button>
@@ -440,10 +436,17 @@
 
   <!-- App Scripts -->
   <script src="js/data.js"></script>
+  <script src="js/app-storage.js"></script>
+  <script src="js/app-backup.js"></script>
   <script src="js/inventory-store.js"></script>
   <script src="js/ui-utils.js"></script>
   <script src="js/recipe-utils.js"></script>
+  <script src="js/drink-catalog.js"></script>
+  <script src="js/inventory-admin.js"></script>
+  <script src="js/drink-modal.js"></script>
+  <script src="js/app-state.js"></script>
   <script src="js/modal.js"></script>
+  <script src="js/app-events.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

@@ -23,6 +23,13 @@
       .replace(/ß/g, "ss");
   }
 
-  root.BoonBarUIUtils = { escapeHTML, normalizeSearchText };
+  function announceStatus(message) {
+    const region = document.getElementById("app-status");
+    if (!region) return;
+    region.textContent = "";
+    root.setTimeout(() => { region.textContent = String(message); }, 20);
+  }
+
+  root.BoonBarUIUtils = { escapeHTML, normalizeSearchText, announceStatus };
   if (typeof module !== "undefined" && module.exports) module.exports = root.BoonBarUIUtils;
 })(typeof window !== "undefined" ? window : globalThis);

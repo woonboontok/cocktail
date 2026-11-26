@@ -12,7 +12,14 @@ This guide instructs AI coding assistants (Antigravity, Claude, ChatGPT/Codex, C
 - [`index.html`](file:///Users/tokwoonboon/workspace/cocktail/index.html): Semantic layout, navigation tabs, modal dialogs, and UI shell.
 - [`css/style.css`](file:///Users/tokwoonboon/workspace/cocktail/css/style.css): Responsive styles, mobile navbar, theme definitions, and card layouts.
 - [`js/data.js`](file:///Users/tokwoonboon/workspace/cocktail/js/data.js): **Single Source of Truth** for inventory catalogs, ingredient groups, and recipe databases.
-- [`js/app.js`](file:///Users/tokwoonboon/workspace/cocktail/js/app.js): State management, stock calculations, filtering, dynamic rendering, and `localStorage` synchronization.
+- [`js/drink-catalog.js`](file:///Users/tokwoonboon/workspace/cocktail/js/drink-catalog.js): Pure drink filtering, search, and sorting operations, with inventory and state lookups passed in by the app.
+- [`js/inventory-admin.js`](file:///Users/tokwoonboon/workspace/cocktail/js/inventory-admin.js): Inventory glossary and admin rendering and workflows; receives shared app state and services through a context object.
+- [`js/drink-modal.js`](file:///Users/tokwoonboon/workspace/cocktail/js/drink-modal.js): Recipe detail rendering, preparation tools, ingredient options, and drink modal interactions; receives app state and services through a context object.
+- [`js/app-state.js`](file:///Users/tokwoonboon/workspace/cocktail/js/app-state.js): Shared transient navigation, filter, and unit preference state.
+- [`js/app-events.js`](file:///Users/tokwoonboon/workspace/cocktail/js/app-events.js): General page event wiring connected to explicit app and view module actions.
+- [`js/app-storage.js`](file:///Users/tokwoonboon/workspace/cocktail/js/app-storage.js): Guarded browser-storage adapter with an in-memory fallback and persistence-failure notification.
+- [`js/app-backup.js`](file:///Users/tokwoonboon/workspace/cocktail/js/app-backup.js): Versioned full-app backup validation and legacy inventory-array compatibility.
+- [`js/app.js`](file:///Users/tokwoonboon/workspace/cocktail/js/app.js): App orchestration, catalog cards, navigation rendering, and persistence coordination through `app-storage.js`.
 
 ---
 
@@ -66,7 +73,7 @@ Schema for items in `DEFAULT_INVENTORY`:
   unit: "bottle",
   abv: 40,
   premium: false,      // Set true for top-shelf / Reserve bottles (e.g. Otard XO, Monkey 47, The Botanist, Codigo Cristalino)
-  refrigerate: false,  // Set true for perishables, vermouths, fortified wines, syrups, dairy, and juices
+  refrigerate: false,  // false | "preferred" | "must"
   notes: "..."
 }
 ```
@@ -77,9 +84,16 @@ Schema for items in `DEFAULT_INVENTORY`:
   - Examples include *The Botanist Islay Dry Gin*, *Monkey 47 Dry Gin*, *Código 1530 Reposado Cristalino*, *Otard XO Gold Cognac*, and *Mount Gay Black Barrel*.
   - Renders the `✦ Reserve` badge in the inventory table.
   - The badge identifies a bottle worth protecting; recipe-level `preferNonPremium` decides when a drink's other ingredients would overpower it. Do not confuse “good in a spirit-forward drink” with the reason a bottle qualifies as Reserve.
-- **`refrigerate: true` (❄ Refrigerate Tag)**:
-  - Must be set on all vermouths (*Martini Extra Dry*, *Martini Rosso*), aperitifs/amari with wine bases (*Lillet Blanc*, *Aperol*, *Campari*, *Amaro Nonino*), syrups (*simple*, *demerara*, *agave*, *orgeat*, *honey*), dairy/creams, fresh citrus/herbs, opened juices, and carbonated sodas/tonics/ginger beers/beers (where <6 are kept chilled in fridge for effervescence & temperature control).
-  - Renders the snowflake icon badge in the inventory table.
+- **`refrigerate: "preferred"` or `"must"` (❄ Refrigerate Tag)**:
+  - Use `"must"` for perishables that spoil without cold storage, including fresh citrus/herbs, dairy, and opened fresh juices.
+  - Use `"preferred"` for quality and serving temperature, including vermouths, aperitifs/amari with wine bases, syrups, and carbonated sodas/tonics/ginger beers/beers.
+  - Use `false` or omit the field when no refrigeration guidance is needed. Legacy saved values `true` and `false` are accepted and normalized when loaded.
+
+### F. Browser Storage and Backups
+- Route browser storage reads, writes, and removals through `js/app-storage.js`; do not access `localStorage` directly from app modules.
+- The adapter keeps writes in memory if browser storage is blocked or full and announces that they will not survive the current session.
+- Inventory Admin full backups use format `boons-home-bar-backup`, version `1`, and include inventory, custom recipes, tried/constructed progress, unit preference, theme, and filter-collapse preference.
+- Keep import compatibility for legacy inventory-only JSON arrays. Importing one must leave recipes, progress, and preferences unchanged.
 
 ### E. Cocktail & Drink Recipes (`DEFAULT_DRINKS`)
 Schema for recipes:
@@ -94,7 +108,7 @@ Schema for recipes:
   alcoholLevel: "High (~28% ABV)",
   alcoholScore: 4,      // 1 to 5 scale
   tasteProfile: "Delicate, Silky Rice Umami, Crisp Botanical & Clean",
-  difficulty: 1,        // 1 to 3 scale
+  difficulty: 1,        // Integer from 1 to 5
   popularity: 9.3,      // Out of 10
   proTip: "...",
   ingredients: [
@@ -140,7 +154,7 @@ Schema for recipes:
 - Always link each ingredient to a valid `inventoryId` (matching an `id` in `DEFAULT_INVENTORY`).
 - If variants exist (e.g. swapping base spirits), document them in `proTip` and assign an `ingredientGroup`.
 - If the cocktail can now be made with in-stock bottles, include `"in-stock"` in the `tags` array.
-- Preparation tools are inferred dynamically via `getDrinkTools(drink)` in `js/app.js` (including automatically adding a **Bottle opener** for drinks featuring bottled carbonated mixers like Chang Soda Water, Chang Lime Soda, Fever-Tree Tonic Water, and ginger beers).
+- Preparation tools are inferred dynamically via `getDrinkTools(drink)` in `js/drink-modal.js` (including automatically adding a **Bottle opener** for drinks featuring bottled carbonated mixers like Chang Soda Water, Chang Lime Soda, Fever-Tree Tonic Water, and ginger beers).
 
 ---
 
@@ -154,6 +168,13 @@ node -e "
 const fs = require('fs'), vm = require('vm');
 new vm.Script(fs.readFileSync('js/data.js', 'utf8'));
 new vm.Script(fs.readFileSync('js/app.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/app-storage.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/app-backup.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/drink-catalog.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/inventory-admin.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/drink-modal.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/app-state.js', 'utf8'));
+new vm.Script(fs.readFileSync('js/app-events.js', 'utf8'));
 console.log('JS syntax valid');
 "
 

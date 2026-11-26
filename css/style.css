@@ -401,7 +401,6 @@ a:hover {
 .theme-picker select {
   appearance: none;
   border: 0;
-  outline: 0;
   background: transparent;
   color: var(--text-primary);
   cursor: pointer;
@@ -784,6 +783,18 @@ a:hover {
   border-color: var(--accent-gold);
   color: var(--accent-gold);
   font-weight: 600;
+}
+
+.filter-option-count {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+}
+
+.pill-btn.active .filter-option-count {
+  color: currentColor;
+  opacity: 0.8;
 }
 
 .pill-btn.pill-my-bar {
@@ -1966,6 +1977,34 @@ a:hover {
   border-color: var(--accent-gold);
 }
 
+/* Keep a clear keyboard indicator on every control, including controls whose
+   visual focus state is otherwise expressed only as a border colour. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2205,6 +2244,12 @@ a:hover {
   display: flex;
   gap: 0.6rem;
   flex-wrap: wrap;
+}
+
+.backup-scope-note {
+  margin: -0.75rem 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
 }
 
 .btn-secondary {
@@ -2659,4 +2704,10 @@ input:checked + .switch-slider:before {
 .modal-base-label {
   font-size: 0.85rem;
   font-weight: 600;
+}
+
+/* Keep keyboard focus visible even for controls with later reset rules. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
 }
