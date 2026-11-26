@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "25 November 2026";
-const INVENTORY_SYNC_VERSION = "20261125_1";
+const INVENTORY_LAST_UPDATED = "26 November 2026";
+const INVENTORY_SYNC_VERSION = "20261126_1";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year", "cachaca", "gio-prosecco", "zonin-prosecco-brut", "bottega-spumante-venezia"];
 
@@ -103,7 +103,8 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "fernet-branca": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 39, refrigerate: "preferred", notes: "In stock: Fernet-Branca Bitters Liqueur, 39% ABV, 700ml. Intensely herbal Italian digestif with 27 botanicals: mint, saffron, bitter myrrh, gentian, and rhubarb. The classic after-dinner bitter and backbone of Hanky Panky, Toronto, and Fernet con Coca." },
   "creme-de-mure": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: "preferred", notes: "In stock: Giffard Crème de Mûre (Blackberry Liqueur) 700ml (70cl), 16% ABV. Rich wild blackberry liqueur for Bramble and berry cocktails. Refrigerate after opening." },
   "creme-de-violette": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 16, refrigerate: false, notes: "In stock: Giffard Crème de Violette Liqueur 700ml (70cl), 16% ABV. Fragrant violet blossom liqueur for classic Aviation, Blue Moon, and floral cocktails. No refrigeration needed unless opened." },
-  "coconut-cream": { inStock: true, incoming: false, quantity: 1, unit: "can", refrigerate: "must", notes: "In stock: Sweet rich cream of coconut / coconut cream for Piña Colada and tropical drinks. Refrigerate after opening." }
+  "coconut-cream": { inStock: true, incoming: false, quantity: 1, unit: "can", refrigerate: "must", notes: "In stock: Sweet rich cream of coconut / coconut cream for Piña Colada and tropical drinks. Refrigerate after opening." },
+  "fresh-strawberries": { inStock: true, incoming: false, quantity: 1, unit: "pack", refrigerate: "must", notes: "Fresh strawberries; short shelf life; replenish during weekly grocery shopping. Keep refrigerated." }
 };
 
 const INGREDIENT_GROUPS = {
@@ -542,7 +543,7 @@ const DEFAULT_INVENTORY = [
   { id: "fresh-mint", name: "Fresh Spearmint", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, incoming: false, quantity: 1, unit: "bunch", refrigerate: "must", notes: "Fresh mint leaves. In stock: 1 bunch. Keep refrigerated." },
   { id: "fresh-cucumber", name: "Japanese Cucumber (Fresh Cucumber)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 2, unit: "fruit", refrigerate: "must", notes: "Two Japanese cucumbers received and stored cold. Crisp slices for Cucumber Mint Cooler, Irish Maid, and Gimlet." },
   { id: "fresh-rosemary", name: "Fresh Rosemary Leaves / Sprigs", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "bunch", refrigerate: "must", notes: "Fresh rosemary herb leaves. In stock: 1 bunch, kept refrigerated for Rosemary Grapefruit Spritzer and savory cocktails." },
-  { id: "fresh-strawberries", name: "Fresh / Frozen Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: false, refrigerate: "must", notes: "For Virgin Strawberry Daiquiri." },
+  { id: "fresh-strawberries", name: "Fresh Strawberries", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, incoming: false, quantity: 1, unit: "pack", refrigerate: "must", notes: "Fresh strawberries have a short shelf life; replenish during weekly grocery shopping. Keep refrigerated. For Virgin Strawberry Daiquiri." },
   { id: "maraschino-cherries", name: "Maraschino Cherries", category: "fresh_garnishes", inStock: true, incoming: false, quantity: 1, unit: "jar", refrigerate: "preferred", notes: "1 jar of maraschino cherries, added after the grocery run. Classic garnish for Manhattan, Shirley Temple, and Singapore Sling." },
   { id: "fresh-espresso", name: "Fresh Espresso Shots (made to order)", category: "fresh_garnishes", subCategory: "Coffee & Fresh", inStock: true, quantity: 1, unit: "on demand", notes: "Readily available fresh espresso for dense crema on Espresso Martinis and coffee drinks." },
   { id: "coffee-beans", name: "Whole Roasted Coffee Beans", category: "fresh_garnishes", subCategory: "Garnishes", inStock: true, quantity: 1, unit: "pack", notes: "Three floated beans for Espresso Martini and coffee cocktail garnishes." },

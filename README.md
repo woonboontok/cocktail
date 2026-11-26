@@ -1,170 +1,102 @@
 # Boon's Home Bar
 
-A polished, browser-based cocktail guide and personal home-bar inventory manager. Browse curated cocktails, mocktails, and shots; see which recipes your current stock can make; and keep quantities, notes, and backups for every item on your shelf.
+Boon's Home Bar is a zero-dependency, browser-based portal for managing a home-bar inventory and browsing cocktails, mocktails, and shots. This guide describes the current app and the practical workflows for running and maintaining it, especially updating inventory and recipes.
 
-## Highlights
+## Run the portal
 
-- 191 built-in recipes: 133 cocktails, 24 mocktails, and 34 shots
-- Search, sort, and filter by catalog-supported base spirits, difficulty, flavor, glassware, and availability
-- Detailed recipes with method, glassware, substitutions, pro tips, and both oz/ml measurements
-- Inventory availability filter for recipes makeable with current stock
-- Inventory glossary and admin area for stock status, quantities, custom items, and low-stock checks
-- Add and save personal recipe experiments
-- Mark recipes as tried or constructed
-- Export and import full app backups as JSON, with legacy inventory backup support
-- Automatic time-of-day themes, with a manual theme selector
-
-## Run locally
-
-This is a dependency-free static site. Clone the repository and open `index.html` in a modern browser:
-
-```bash
-git clone <your-repository-url>
-cd cocktail
-open index.html
-```
-
-Or serve it locally (useful if your browser restricts local-file behaviour):
+The app is a static site with no build step or package installation.
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then visit [http://localhost:8000](http://localhost:8000).
+Open [http://localhost:8000](http://localhost:8000). You can also open `index.html` directly in a browser, though serving it locally gives a more representative environment.
 
-## How it works
+## Update inventory
 
-All data stays in the browser. Inventory changes, custom recipes, drink statuses, measurement preferences, theme preference, and filter display preference are stored through a guarded Web Storage adapter. If browser storage is blocked or full, the app continues with an in-memory session fallback and announces that changes will not persist after the session. Inventory Admin exports a versioned full backup containing inventory, custom recipes, tried/constructed progress, and preferences. It also imports older inventory-only JSON arrays without changing recipes, progress, or preferences.
+Built-in inventory data lives in `js/data.js`. The app saves each user's current inventory in browser storage, so changing a default item does not automatically replace their saved stock choices. Use the versioned override mechanism to apply intended changes to existing browsers without wiping their unrelated edits.
 
-## Updating the inventory
+### Change stock for an existing item
 
-Inventory maintenance uses one data file: `js/data.js`. Edit the data there, increment the sync version, and the app will migrate existing browser storage without deleting custom items or unrelated quantities.
+1. Find the item's stable `id` in `DEFAULT_INVENTORY` and check its existing override in `INVENTORY_UPDATE_OVERRIDES`.
+2. Use the inventory patcher to update or add the override. It preserves existing override fields and updates `INVENTORY_LAST_UPDATED` and `INVENTORY_SYNC_VERSION` for you. Pass all fields for one item in the same command:
 
-### Quick update checklist
+   ```bash
+   node .agents/skills/cocktail-bar-manager/scripts/patch-inventory.js \
+     --id "tanqueray-gin" inStock=true incoming=false quantity=1 unit=bottle
+   ```
 
-1. Edit or add the item in `DEFAULT_INVENTORY`.
-2. Update `INVENTORY_LAST_UPDATED`.
-3. Increment `INVENTORY_SYNC_VERSION`, for example from `20260912_1` to `20260913_1`.
-4. Add the saved-browser change to `INVENTORY_UPDATE_OVERRIDES` when needed.
-5. Run the validation commands below, then commit and push `main`.
+3. Update the item's entry in `DEFAULT_INVENTORY` too when the new values should apply to fresh installs or a manual reset.
+4. Review recipes that use the item, then run the validation commands below.
 
-The inventory page displays `INVENTORY_LAST_UPDATED` so users can see when the default stock information was last reviewed.
+The override only changes the fields it lists. This preserves the user's other saved choices. Never reuse a sync version: each browser applies a given version's overrides only once. Use `INVENTORY_UPDATE_REMOVE_IDS` when an item is being removed and should not return as a custom item in older saved inventories.
 
-### Inventory item fields
+### Add a new bottle or ingredient
 
-- `id`: stable unique key used by recipes and browser storage
-- `name`: product or ingredient name shown in the UI
-- `category`: such as `spirits`, `liqueurs`, `fortified`, `sparkling`, or `fresh_garnishes`
-- `subCategory`: product type, such as `Rum › White` or `Fresh Citrus & Herbs`
-- `inStock`: whether it is currently on hand
-- `incoming`: true for items ordered but not yet received
-- `quantity`: stock count
-- `unit`: bottle, fruit, carton, pack, and so on
-- `abv`: numeric alcohol by volume for alcoholic products
-- `notes`: optional usage or style notes
-- `refrigerate`: `false` (no special guidance), `"preferred"` (quality/serving temperature), or `"must"` (perishable without cold storage). Legacy browser values `true`/`false` are normalized when loaded.
+1. Add an item to `DEFAULT_INVENTORY` with a unique, stable `id`, display `name`, valid `category`, `subCategory`, stock fields, quantity, unit, notes, and ABV when applicable. Follow nearby entries for the full schema.
+2. Add its ID to the appropriate `INGREDIENT_GROUPS` entry if recipes can use it as an interchangeable option (for example, gin, rum, tequila, or sake).
+3. If existing users should receive its initial stock state, add an override with the patcher. For a new ID, the patcher creates the override and bumps `INVENTORY_SYNC_VERSION` and `INVENTORY_LAST_UPDATED`:
 
-Recipe `difficulty` is an integer from 1 to 5. Built-in recipes currently use levels 1 to 4; level 5 is available for custom recipes and future entries.
+   ```bash
+   node .agents/skills/cocktail-bar-manager/scripts/patch-inventory.js \
+     --id "new-bottle-id" inStock=true incoming=false quantity=1 unit=bottle
+   ```
 
-Use a stable ID because recipes refer to it through `inventoryId`. If an ID changes, update every matching recipe reference.
+   When changing defaults or removal IDs without using the patcher, update the date and sync version manually.
+4. Review whether existing recipes should reference it and whether it unlocks useful recipes.
+5. Run validation and inspect the inventory and recipe availability in the app.
 
-### Add or update an item
+Use `premium: true` for Reserve bottles that are rare, costly to replace, or worth preserving for their distinctive profile. Set `refrigerate` to `"must"` for perishables, `"preferred"` for quality or serving temperature, and omit it or use `false` when no guidance is needed.
 
-```js
-{ id: "brand-item-name", name: "Brand Item Name", category: "spirits", subCategory: "Rum › White", inStock: true, abv: 37.5, quantity: 1, unit: "bottle", notes: "Short note about use or style." }
-```
+## Update recipes
 
-For fresh produce, record the actual purchase unit:
+Built-in recipes live in `DEFAULT_DRINKS` in `js/data.js`. Keep recipe edits there so catalog data remains in one place.
 
-```js
-{ id: "fresh-limes", name: "Fresh Limes (Juice & Wheels)", category: "fresh_garnishes", subCategory: "Fresh Citrus & Herbs", inStock: true, quantity: 1, unit: "fruit", notes: "Fresh purchase." }
-```
+1. Give each recipe a unique, stable `id`, a name, and the correct category (`Cocktail`, `Mocktail`, or `Shot`).
+2. For each ingredient, provide clear `amountOz` and `amountMl` measurements, a human-readable `item`, and an `inventoryId` that matches an ID in `DEFAULT_INVENTORY`.
+3. Add `ingredientGroup` when equivalent bottles can satisfy the ingredient. Ensure all IDs in that group exist in inventory.
+4. Include preparation instructions, glassware, base spirit, taste profile, difficulty, and useful tags. Update `"in-stock"` tags when appropriate; availability is also calculated from current inventory.
+5. Use `preferNonPremium: true` when strong modifiers are likely to mask a Reserve spirit and an everyday alternative exists. Leave it unset for spirit-forward or delicate drinks where the spirit is the focus.
+6. Check affected recipes in the portal and run the validation commands below.
 
-For incoming bottles, use `inStock: false`, `incoming: true`, and a quantity of `1`.
+When adding or changing a recipe ingredient, verify its `inventoryId`, ingredient group, substitute text, measurements, and preparation method together. Do not change an inventory ID casually; recipes, groups, saved stock, and migration rules may refer to it.
 
-### ABV sourcing
+## Verify changes
 
-Prefer the producer’s official product page, brand factsheet, or verified distillery/winery technical sheet. Store the exact ABV as a number, such as `40`, `47.3`, or `75.5`.
-
-### Saved-browser synchronization
-
-The app stores live inventory in `localStorage`, so changing `DEFAULT_INVENTORY` alone does not overwrite an existing browser’s stock choices. `INVENTORY_UPDATE_OVERRIDES` is the one-time migration list for changes that should reach saved inventories.
-
-When removing a generic or duplicate item, also add its ID to `INVENTORY_UPDATE_REMOVE_IDS`. Otherwise older browsers may preserve it as a custom item after it disappears from `DEFAULT_INVENTORY`.
-
-```js
-const INVENTORY_SYNC_VERSION = "20260913_1";
-const INVENTORY_UPDATE_REMOVE_IDS = ["old-generic-item-id"];
-
-const INVENTORY_UPDATE_OVERRIDES = {
-    "fresh-limes": { inStock: true, quantity: 1, unit: "fruit" },
-    "new-bottle": { inStock: true, quantity: 1, unit: "bottle" }
-};
-```
-
-When the version changes, each browser applies the overrides once. Existing custom items and unrelated saved quantities are preserved. Never reuse an old version after changing the override list; create a new version instead.
-
-To restore the complete defaults manually, use **Inventory Admin → Reset Inventory to Defaults**. Export a backup first if the current browser inventory must be preserved.
-
-### Validate and publish
-
-From the project directory, run:
+Run these checks from the repository root after editing inventory, recipes, or app code:
 
 ```bash
-node --check js/app.js
-node --check js/data.js
-node --check js/inventory-store.js
-node --check js/ui-utils.js
-node --check js/recipe-utils.js
-node --check js/drink-catalog.js
-node --check js/inventory-admin.js
-node --check js/drink-modal.js
-node --check js/app-state.js
-node --check js/app-events.js
-node --check js/modal.js
+# Check JavaScript syntax for the app's browser scripts.
+node -e '
+const fs = require("fs"), vm = require("vm");
+for (const file of [
+  "js/data.js", "js/app-storage.js", "js/app-backup.js", "js/inventory-store.js",
+  "js/ui-utils.js", "js/recipe-utils.js", "js/drink-catalog.js", "js/inventory-admin.js",
+  "js/drink-modal.js", "js/app-state.js", "js/modal.js", "js/app-events.js", "js/app.js"
+]) new vm.Script(fs.readFileSync(file, "utf8"), { filename: file });
+console.log("JavaScript syntax valid");
+'
+
+# Check inventory, recipe, and ingredient-group data.
 node scripts/validate-data.js
+
+# Check whitespace errors in changed files.
 git diff --check
 ```
 
-Then refresh the app and check the inventory date, item status, ABV column, and inventory availability filter. Publish with:
+For a browser smoke check, start the local server, load the portal, open the inventory and recipe views, and confirm the edited item or recipe appears with the expected stock availability. Stop the server with Ctrl-C when finished.
 
-```bash
-git add js/data.js js/app.js README.md
-git commit -m "Update inventory"
-git push origin main
-```
+## How user data works
 
-## Project structure
+Inventory, custom recipes, tried/constructed progress, measurement preference, theme, and filter display preference are stored in the browser. Storage access goes through `js/app-storage.js`; if browser storage is blocked or full, the app continues with a session-only in-memory fallback and announces that changes may not persist. In Inventory Admin, **Export Full Backup** downloads inventory, custom recipes, progress, and preferences as JSON. **Import Backup** accepts that versioned format and older inventory-only JSON arrays. Legacy inventory imports leave recipes, progress, and preferences unchanged.
 
-```text
-.
-├── index.html     # App markup, navigation, dialogs, and forms
-├── css/
-│   └── style.css  # Responsive speakeasy design and time-based themes
-└── js/
-    ├── data.js    # Built-in recipes and default inventory
-    ├── inventory-store.js  # Inventory persistence, validation, and migrations
-    ├── ui-utils.js         # Safe HTML rendering helper
-    ├── recipe-utils.js     # Pure recipe measurement and ABV helpers
-    ├── drink-catalog.js   # Pure drink filtering, search, and sorting
-    ├── inventory-admin.js # Inventory glossary and admin workflows
-    ├── drink-modal.js     # Recipe detail rendering and modal interactions
-    ├── app-state.js       # Shared transient navigation and filter state
-    ├── modal.js           # Accessible modal focus handling
-    ├── app-events.js      # General page event wiring
-    └── app.js             # App orchestration and catalog cards
-```
+## Current code layout
 
-## Maintenance roadmap
-
-The multi-session refactor review, work sequence, acceptance criteria, and session log are tracked in [docs/refactor-roadmap.md](docs/refactor-roadmap.md).
-
-## Customising the collection
-
-- Update `DEFAULT_DRINKS` in `js/data.js` to change the curated recipe catalog.
-- Update `DEFAULT_INVENTORY` in `js/data.js` to alter the starting bar setup.
-- Use **Log Experiment** and **Add New Bottle / Item** in the app for changes that should remain local to a browser.
-
-## Tech
-
-Vanilla HTML, CSS, and JavaScript. No build step, package manager, or server is required.
+- `index.html` — page structure, dialogs, navigation, and browser script loading order.
+- `css/style.css` — responsive layout, components, and themes.
+- `js/data.js` — built-in inventory, ingredient groups, migration overrides, and recipes.
+- `js/app.js` — app startup, orchestration, catalog rendering, and persistence coordination.
+- `js/app-storage.js`, `js/inventory-store.js`, `js/app-backup.js` — guarded persistence, inventory loading/migration, and backup format handling.
+- `js/drink-catalog.js`, `js/drink-modal.js`, `js/inventory-admin.js` — catalog operations, recipe details, and inventory/admin workflows.
+- `js/app-state.js`, `js/app-events.js`, `js/modal.js`, `js/ui-utils.js`, `js/recipe-utils.js` — shared UI state, event wiring, modal behavior, rendering helpers, and recipe calculations.
+- `scripts/validate-data.js` — data-integrity checks for inventory, groups, and recipes.
