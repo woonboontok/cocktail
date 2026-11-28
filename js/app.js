@@ -69,7 +69,7 @@
     return Boolean(drink && typeof drink === "object" && !Array.isArray(drink) &&
       typeof drink.id === "string" && drink.id.trim() && typeof drink.name === "string" && drink.name.trim() &&
       ["Cocktail", "Mocktail", "Shot"].includes(drink.category) &&
-      ["otherNames", "baseSpirit", "glassware", "alcoholLevel", "tasteProfile", "proTip"].every(key => drink[key] === undefined || drink[key] === null || typeof drink[key] === "string") &&
+      ["otherNames", "baseSpirit", "glassware", "alcoholLevel", "tasteProfile", "bestMoment", "proTip"].every(key => drink[key] === undefined || drink[key] === null || typeof drink[key] === "string") &&
       Array.isArray(drink.ingredients) && drink.ingredients.every(ing => ing && typeof ing.item === "string" &&
         ["amountOz", "amountMl", "substitute", "inventoryId", "ingredientGroup"].every(key => ing[key] === undefined || ing[key] === null || typeof ing[key] === "string")) &&
       Array.isArray(drink.instructions) && drink.instructions.every(step => typeof step === "string") &&
@@ -651,6 +651,7 @@
     const glassware = document.getElementById("form-glassware").value;
     const difficulty = parseInt(document.getElementById("form-difficulty").value, 10) || 2;
     const tasteProfile = document.getElementById("form-taste-profile").value.trim();
+    const bestMoment = document.getElementById("form-best-moment").value.trim();
     const proTip = document.getElementById("form-pro-tip").value.trim();
     const ingredientsRaw = document.getElementById("form-ingredients").value.trim();
     const instructionsRaw = document.getElementById("form-instructions").value.trim();
@@ -697,6 +698,7 @@
       alcoholLevel: category === "Mocktail" ? "Zero-Proof (0% ABV)" : "Medium (~18% ABV)",
       alcoholScore: category === "Mocktail" ? 0 : 3,
       tasteProfile: tasteProfile || "Custom Blend",
+      bestMoment: bestMoment,
       difficulty: difficulty,
       popularity: 10.0,
       proTip: proTip,

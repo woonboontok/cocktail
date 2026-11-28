@@ -55,9 +55,11 @@ Built-in recipes live in `DEFAULT_DRINKS` in `js/data.js`. Keep recipe edits the
 1. Give each recipe a unique, stable `id`, a name, and the correct category (`Cocktail`, `Mocktail`, or `Shot`).
 2. For each ingredient, provide clear `amountOz` and `amountMl` measurements, a human-readable `item`, and an `inventoryId` that matches an ID in `DEFAULT_INVENTORY`.
 3. Add `ingredientGroup` when equivalent bottles can satisfy the ingredient. Ensure all IDs in that group exist in inventory.
-4. Include preparation instructions, glassware, base spirit, taste profile, difficulty, and useful tags. Update `"in-stock"` tags when appropriate; availability is also calculated from current inventory.
+4. Include preparation instructions, glassware, base spirit, taste profile, difficulty, `bestMoment`, and useful tags. Update `"in-stock"` tags when appropriate; availability is also calculated from current inventory.
 5. Use `preferNonPremium: true` when strong modifiers are likely to mask a Reserve spirit and an everyday alternative exists. Leave it unset for spirit-forward or delicate drinks where the spirit is the focus.
 6. Check affected recipes in the portal and run the validation commands below.
+
+Every drink's `bestMoment` should help the user decide whether it suits the moment. Mention a fitting occasion or time, the mood it suits, and how to serve or savor it. Tie the suggestion to the drink's actual flavor and method: for example, a lively sparkling drink for a warm afternoon should be served before it loses its bubbles, while a spirit-forward drink may suit a quiet evening and slow sipping. Keep practical technique, ingredient variants or substitutions, and any verified history in `proTip`; use separate paragraphs so the detail view can present them in labeled sections. Avoid inventing historical claims.
 
 When adding or changing a recipe ingredient, verify its `inventoryId`, ingredient group, substitute text, measurements, and preparation method together. Do not change an inventory ID casually; recipes, groups, saved stock, and migration rules may refer to it.
 

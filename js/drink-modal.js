@@ -41,6 +41,41 @@
     return `<span class="ing-substitute"><strong>Substitute order:</strong> ${list.map(item => `[${escapeHTML(item)}]`).join(" → ")}</span>`;
   }
 
+  function renderProTip(drink) {
+    const paragraphs = String(drink.proTip || "")
+      .split(/\n\s*\n/)
+      .map(part => part.trim())
+      .filter(Boolean);
+    if (!paragraphs.length) return "";
+
+    const sections = { tip: [], variants: [], story: [] };
+    paragraphs.forEach(paragraph => {
+      const isVariant = /\b(variants?|substitut(?:e|ion|ions)|swap|alternative)\b/i.test(paragraph) || /^[-•]/m.test(paragraph);
+      const isStory = /\b(created|invented|origin|named after|tradition|ritual|means |first (?:made|served|recorded)|dating back|popularized|history)\b/i.test(paragraph);
+      sections[isVariant ? "variants" : isStory ? "story" : "tip"].push(paragraph);
+    });
+
+    const renderParagraph = text => {
+      const lines = text.split("\n").map(line => line.trim()).filter(Boolean);
+      const listLines = lines.filter(line => /^[-•]/.test(line));
+      const plainLines = lines.filter(line => !/^[-•]/.test(line));
+      return `${plainLines.length ? `<p>${plainLines.map(escapeHTML).join(" ")}</p>` : ""}${listLines.length ? `<ul>${listLines.map(line => `<li>${escapeHTML(line.replace(/^[-•]\s*/, ""))}</li>`).join("")}</ul>` : ""}`;
+    };
+
+    const blocks = [];
+    if (sections.tip.length) blocks.push(`<section class="pro-tip-section"><h4>Bar tip</h4>${sections.tip.map(renderParagraph).join("")}</section>`);
+    if (sections.variants.length) blocks.push(`<section class="pro-tip-section"><h4>Variants &amp; substitutions</h4>${sections.variants.map(renderParagraph).join("")}</section>`);
+    if (sections.story.length) blocks.push(`<section class="pro-tip-section pro-tip-story"><h4>A little backstory</h4>${sections.story.map(renderParagraph).join("")}</section>`);
+
+    const swaps = [...new Set((drink.ingredients || [])
+      .filter(ing => ing.substitute && !/^(?:none|n\/a|no substitute)$/i.test(ing.substitute.trim()))
+      .map(ing => `${ing.item}: ${ing.substitute}`))].slice(0, 4);
+    if (swaps.length && !sections.variants.length) {
+      blocks.push(`<section class="pro-tip-section"><h4>Easy swaps</h4><ul>${swaps.map(swap => `<li>${escapeHTML(swap)}</li>`).join("")}</ul></section>`);
+    }
+    return blocks.join("");
+  }
+
   // ==================== DRINK DETAIL MODAL ====================
   function getDrinkTools(drink) {
     if (Array.isArray(drink.tools)) return drink.tools;
@@ -301,13 +336,23 @@
           </ol>
         </div>
 
+        ${drink.bestMoment ? `
+          <aside class="best-moment-box" aria-label="When and how to enjoy this drink">
+            <div class="best-moment-icon" aria-hidden="true">✦</div>
+            <div>
+              <div class="best-moment-title">Best enjoyed when</div>
+              <p>${escapeHTML(drink.bestMoment)}</p>
+            </div>
+          </aside>
+        ` : ""}
+
         <!-- Pro-Tip Section -->
         ${drink.proTip ? `
           <div class="pro-tip-box">
             <div class="pro-tip-icon">💡</div>
             <div>
-              <div class="pro-tip-title">Speakeasy Pro-Tip & Bar Secret</div>
-              <div class="pro-tip-content">${escapeHTML(drink.proTip)}</div>
+              <div class="pro-tip-title">A little more about this drink</div>
+              <div class="pro-tip-content">${renderProTip(drink)}</div>
             </div>
           </div>
         ` : ""}

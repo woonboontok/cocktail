@@ -1916,6 +1916,40 @@ a:hover {
   line-height: 1.5;
 }
 
+.best-moment-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--border-active);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+}
+
+.best-moment-icon {
+  flex: 0 0 auto;
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.best-moment-title {
+  margin-bottom: 0.3rem;
+  color: var(--accent-gold);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.best-moment-box p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 /* Pro-Tip Box */
 .pro-tip-box {
   background: linear-gradient(135deg, rgba(229, 169, 60, 0.12) 0%, rgba(200, 109, 59, 0.08) 100%);
@@ -1945,6 +1979,45 @@ a:hover {
   font-size: 0.88rem;
   color: var(--text-primary);
   line-height: 1.48;
+}
+
+.pro-tip-content {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.pro-tip-section {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.pro-tip-section h4 {
+  margin: 0 0 0.35rem;
+  color: var(--accent-copper);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pro-tip-section p {
+  margin: 0;
+}
+
+.pro-tip-section ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.pro-tip-section li {
+  padding-left: 0.15rem;
+}
+
+.pro-tip-story {
+  color: var(--text-secondary);
+  font-style: italic;
 }
 
 /* ==================== ADD RECIPE MODAL ==================== */

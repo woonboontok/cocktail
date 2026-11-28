@@ -108,6 +108,7 @@ Schema for recipes:
   alcoholLevel: "High (~28% ABV)",
   alcoholScore: 4,      // 1 to 5 scale
   tasteProfile: "Delicate, Silky Rice Umami, Crisp Botanical & Clean",
+  bestMoment: "Best for a calm evening ... Serve very cold and sip slowly as the aromas open.",
   difficulty: 1,        // Integer from 1 to 5
   popularity: 9.3,      // Out of 10
   proTip: "...",
@@ -130,6 +131,8 @@ Schema for recipes:
 }
 ```
 
+Every built-in drink must include a non-empty `bestMoment`. Write it to help someone choose a drink for the moment: mention a fitting occasion or time, the mood it suits, and how to serve or savor it (for example, a sunny lunch with friends; serve immediately while sparkling, or a quiet after-dinner sip; enjoy slowly as the aromas open). Make the note specific to the drink's flavor profile and preparation. Avoid generic claims or unsupported historical trivia; put verified history and drink variants in `proTip`.
+
 #### Preserving Reserve Spirits in Drink Recipes (`preferNonPremium: true`):
 - When a recipe has an `ingredientGroup` that includes both everyday workhorse spirits and `premium: true` reserve spirits (for instance, `gin` containing both *Tanqueray* and *Monkey 47* / *The Botanist*; or `tequila` containing both *Teremana Blanco* and *Código 1530 Cristalino*):
   - **Set `preferNonPremium: true`** when the recipe's strong modifiers are likely to waste or mask the rare spirit's flavor and an everyday alternative is available. Common examples are heavy syrup or liqueur, cream, large amounts of fruit juice, cola, intense spice, or several competing spirits. Drinks such as Long Island Iced Tea, Singapore Sling, Tom Collins, Brandy Alexander, Alabama Slammer, Flatliner, Barbados Rum Punch, Monkey Gland, Floradora, Ramos Gin Fizz, Peach Sake Fizz, Sake Bomb, Tonight Not Going Home (including its shot), and heavily sweetened tiki mixes are common cases.
@@ -151,6 +154,8 @@ Schema for recipes:
 
 ### 2. Updating Cocktails or Recipes
 - Use clear ratios in both ounces (`amountOz`) and millilitres (`amountMl`).
+- Include a tailored `bestMoment` for every new or revised drink: an occasion, a mood, and a serving or savoring cue. This appears as the **Best enjoyed when** card in the recipe detail view.
+- Use `proTip` for practical technique, useful ingredient substitutions or variants, and a short verified backstory where one is known. Keep separate ideas in separate paragraphs; the modal presents them in labeled sections.
 - Always link each ingredient to a valid `inventoryId` (matching an `id` in `DEFAULT_INVENTORY`).
 - If variants exist (e.g. swapping base spirits), document them in `proTip` and assign an `ingredientGroup`.
 - If the cocktail can now be made with in-stock bottles, include `"in-stock"` in the `tags` array.
