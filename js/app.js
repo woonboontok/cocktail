@@ -29,7 +29,7 @@
     onUnavailable: () => window.setTimeout(() => announceStatus("A browser storage operation failed. The app will continue; some changes may only last for this session. Export a backup before leaving."), 100)
   });
   const savedUnitPreference = appStorage.getItem(STORAGE_KEY_UNIT);
-  const { getDrinkVolume, getAbv, getDrinkAbvValue, parseAbvText, getInventoryAbv } = window.BoonBarRecipeUtils;
+  const { getDrinkVolume, getGlasswareCapacity, getAbv, getDrinkAbvValue, parseAbvText, getInventoryAbv } = window.BoonBarRecipeUtils;
   const { filterAndSortDrinks, getDiscoveryFilterOptions } = window.BoonBarDrinkCatalog;
   const { showModal, hideModal, keepFocusInOpenModal } = window.BoonBarModal;
 
@@ -360,7 +360,7 @@
     storageKeyUnit: STORAGE_KEY_UNIT,
     getAllDrinks, getDrinkStockStatus, getDrinkStatus, isItemInStock,
     getIngredientInventoryOptions, getInventoryOptionStatus, getDefaultUnit,
-    getInventoryAbv, getDifficultyStars, getAbv, getDrinkVolume,
+    getInventoryAbv, getDifficultyStars, getAbv, getDrinkVolume, getGlasswareCapacity,
     ingredientGroups: INGREDIENT_GROUPS, escapeHTML, toggleDrinkStatus,
     showModal, hideModal
   });
@@ -472,12 +472,27 @@
   function getDrinkVisual(drink) {
     const glassware = String(drink.glassware || "").toLowerCase();
     const name = drink.name.toLowerCase();
+    const primaryGlass = glassware.split(/\s*(?:\/|\bor\b)\s*/i)[0];
     let glassShape = "coupe";
-    if (glassware.includes("shot")) glassShape = "shot";
-    else if (glassware.includes("snifter") || glassware.includes("rocks") || glassware.includes("old fashioned")) glassShape = "rocks";
-    else if (glassware.includes("hurricane") || glassware.includes("highball") || glassware.includes("collins") || glassware.includes("tiki") || glassware.includes("mug")) glassShape = "highball";
-    else if (glassware.includes("champagne") || glassware.includes("flute")) glassShape = "flute";
-    else if (glassware.includes("coupe") || glassware.includes("martini") || glassware.includes("nick & nora")) glassShape = "coupe";
+    if (/shot glass.*(?:pint|flute chaser)|pint.*shot glass/.test(glassware)) glassShape = "shot-chaser";
+    else if (/shot glass.*side shot/.test(glassware)) glassShape = "shot-trio";
+    else if (/shot glass\s*(?:\+|&)|two shot glasses/.test(glassware)) glassShape = "shot-pair";
+    else if (/rocks glass\s*\+\s*shot/.test(glassware)) glassShape = "bomb-set";
+    else if (/weizen/.test(primaryGlass)) glassShape = "weizen";
+    else if (/beer|pint|stein/.test(primaryGlass)) glassShape = "beer";
+    else if (/tiki/.test(primaryGlass)) glassShape = "tiki";
+    else if (/hurricane/.test(primaryGlass)) glassShape = "hurricane";
+    else if (/irish coffee|copper mug|\bmug\b/.test(primaryGlass)) glassShape = "mug";
+    else if (/julep/.test(primaryGlass)) glassShape = "julep";
+    else if (/bowl/.test(primaryGlass)) glassShape = "bowl";
+    else if (/wine|copa|spritz/.test(primaryGlass)) glassShape = "wine";
+    else if (/champagne|flute/.test(primaryGlass)) glassShape = "flute";
+    else if (/shot/.test(primaryGlass) || drink.category === "Shot") glassShape = "shot";
+    else if (/snifter/.test(primaryGlass)) glassShape = "snifter";
+    else if (/rocks|old fashioned|lowball|snifter/.test(primaryGlass)) glassShape = "rocks";
+    else if (/highball|collins|tumbler/.test(primaryGlass)) glassShape = "highball";
+    else if (/martini/.test(primaryGlass)) glassShape = "martini";
+    else if (/coupe|nick & nora/.test(primaryGlass)) glassShape = "coupe";
 
     let color = "var(--accent-gold)";
     if (name.includes("aperol") || name.includes("sunrise")) color = "#ff9f43";
@@ -486,15 +501,31 @@
     else if (drink.category === "Shot") color = "#ff7a9d";
     else if (drink.baseSpirit === "Rum") color = "#e6b35a";
 
-    const glassIcons = {
-      coupe: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Coupe glass")}"><path d="M20 20h56L64 42c-4 8-11 13-16 14v17h12v5H36v-5h12V56c-5-1-12-6-16-14L20 20Z"/><path d="M28 27h40"/></svg>`,
-      rocks: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Rocks glass")}"><path d="M23 25h50l-5 46H28l-5-46Z"/><path d="M28 35h40M34 52h28"/></svg>`,
-      highball: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Highball glass")}"><path d="M29 15h38l-5 64H34l-5-64Z"/><path d="M31 27h34M34 58h28"/></svg>`,
-      flute: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Flute glass")}"><path d="M31 15h34L58 48c-2 6-5 10-10 12-5-2-8-6-10-12L31 15Z"/><path d="M48 60v18M38 82h20M35 23h26"/></svg>`,
-      shot: `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Shot glass")}"><path d="M30 29h36l-4 40H34l-4-40Z"/><path d="M32 37h32"/></svg>`
+    const iconShapes = {
+      coupe: `<path class="glass-liquid" d="M24 22h48c-5 14-13 22-24 25-11-3-19-11-24-25Z"/><path class="glass-outline" d="M17 16h62c-5 20-16 31-31 35-15-4-26-15-31-35ZM48 51v27M35 82h26"/><path class="glass-detail" d="M29 22h38"/>`,
+      martini: `<path class="glass-liquid" d="M29 20h38L48 43Z"/><path class="glass-outline" d="M20 15h56L48 49 20 15ZM48 49v29M35 82h26"/><path class="glass-detail" d="M30 20h36"/>`,
+      rocks: `<path class="glass-liquid" d="M27 43h42l-3 30H30Z"/><path class="glass-outline" d="M22 22h52l-5 56H27Z"/><path class="glass-detail" d="M27 36h42M32 54l10-9 11 10 9-8"/>`,
+      highball: `<path class="glass-liquid" d="M31 35h34l-4 43H35Z"/><path class="glass-outline" d="M27 13h42l-5 68H32Z"/><path class="glass-detail" d="M30 29h36M36 46l8-8 10 11 9-9"/>`,
+      flute: `<path class="glass-liquid" d="M36 23h24l-4 28c-2 5-5 8-8 10-3-2-6-5-8-10Z"/><path class="glass-outline" d="M33 15h30l-5 37c-2 6-5 10-10 12-5-2-8-6-10-12ZM48 64v15M37 82h22"/><path class="glass-detail" d="M36 22h24"/>`,
+      shot: `<path class="glass-liquid" d="M33 44h30l-3 27H36Z"/><path class="glass-outline" d="M29 28h38l-4 49H33Z"/><path class="glass-detail" d="M31 40h34"/>`,
+      wine: `<path class="glass-liquid" d="M27 31h42c-2 13-9 22-21 25-12-3-19-12-21-25Z"/><path class="glass-outline" d="M23 17h50c-1 24-8 36-25 41-17-5-24-17-25-41ZM48 58v21M36 82h24"/><path class="glass-detail" d="M27 30h42"/>`,
+      snifter: `<path class="glass-liquid" d="M30 41c1-12 8-18 18-18s17 6 18 18c-1 12-8 20-18 20s-17-8-18-20Z"/><path class="glass-outline" d="M25 39c0-16 9-25 23-25s23 9 23 25c0 17-9 28-23 28S25 56 25 39ZM48 67v12M38 82h20"/><path class="glass-detail" d="M30 39h36"/>`,
+      hurricane: `<path class="glass-liquid" d="M32 38h32l-3 35H35Z"/><path class="glass-outline" d="M28 16h40l-3 12 8 9-8 42H31l-8-42 8-9ZM48 79v3M37 84h22"/><path class="glass-detail" d="M31 32h34M34 47h28"/>`,
+      mug: `<path class="glass-liquid" d="M28 37h39v37H31Z"/><path class="glass-outline" d="M25 22h45v58H29ZM70 35h7c12 0 12 28 0 28h-7"/><path class="glass-detail" d="M28 34h39M33 48l8-8 10 12 10-10"/>`,
+      tiki: `<path class="glass-liquid" d="M29 38h38l-3 36H32Z"/><path class="glass-outline" d="M26 19h44l-4 61H30Z"/><path class="glass-detail" d="M30 32h36M37 45h5M54 45h5M39 60c6 5 12 5 18 0M35 25l7 5M61 25l-7 5"/>`,
+      beer: `<path class="glass-liquid" d="M29 32h38l-4 46H33Z"/><path class="glass-foam" d="M29 31c-7-2-5-11 2-11 1-8 12-8 15-2 5-8 17-5 17 3 8-1 11 9 4 11Z"/><path class="glass-outline" d="M27 28h42l-5 53H32Z"/><path class="glass-detail" d="M31 42h34"/>`,
+      weizen: `<path class="glass-liquid" d="M33 35h30l-5 44H38Z"/><path class="glass-foam" d="M31 34c-6-3-3-11 3-11 1-7 10-8 14-2 5-7 15-5 15 3 7 0 8 8 2 10Z"/><path class="glass-outline" d="M29 28h38c-1 20-4 41-8 54H37c-4-13-7-34-8-54Z"/><path class="glass-detail" d="M32 39h32"/>`,
+      julep: `<path class="glass-liquid" d="M29 39h38l-6 37H35Z"/><path class="glass-outline" d="M25 26h46L65 81H31Z"/><path class="glass-detail" d="M28 36h40M37 48l8-8 9 10 8-8"/>`,
+      bowl: `<path class="glass-liquid" d="M23 48h50c-4 12-12 19-25 19s-21-7-25-19Z"/><path class="glass-outline" d="M17 37h62c-4 22-16 35-31 35S21 59 17 37ZM48 72v7M36 82h24"/><path class="glass-detail" d="M24 45h48"/>`,
+      "shot-pair": `<path class="glass-liquid" d="M17 48h22l-2 24H19Z M56 48h22l-2 24H58Z"/><path class="glass-outline" d="M14 31h28l-3 47H17Z M53 31h28l-3 47H56Z"/><path class="glass-detail" d="M16 44h24M55 44h24"/>`,
+      "shot-trio": `<path class="glass-liquid" d="M12 49h18l-2 22h-14Z M39 49h18l-2 22H41Z M66 49h18l-2 22H68Z"/><path class="glass-outline" d="M9 33h24l-3 46H12Z M36 33h24l-3 46H39Z M63 33h24l-3 46H66Z"/><path class="glass-detail" d="M11 45h20M38 45h20M65 45h20"/>`,
+      "shot-chaser": `<path class="glass-liquid" d="M17 49h20l-2 22H19Z M54 33h26l-4 45H58Z"/><path class="glass-outline" d="M14 34h26l-3 45H17Z M51 17h32l-5 64H56Z"/><path class="glass-detail" d="M16 45h22M54 28h27"/>`,
+      "shot-pint": `<path class="glass-liquid" d="M16 37h30l-4 42H20Z M57 49h24l-3 28H60Z"/><path class="glass-foam" d="M15 36c-4-5 2-10 6-7 3-8 12-8 15-2 5-6 13-2 12 6Z"/><path class="glass-outline" d="M12 31h38l-5 51H17Z M54 32h30l-4 48H58Z"/><path class="glass-detail" d="M15 44h33M57 44h24"/>`,
+      "bomb-set": `<path class="glass-liquid" d="M14 43h44l-3 34H17Z M66 54h17l-2 22h-13Z"/><path class="glass-outline" d="M11 20h50l-5 60H16Z M64 42h21l-3 36H67Z"/><path class="glass-detail" d="M14 38h44M66 51h17"/>`
     };
-
-    return { icon: glassIcons[glassShape], color };
+    if (/shot glass.*pint|pint.*shot glass/.test(glassware)) glassShape = "shot-pint";
+    const icon = `<svg class="glass-icon" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(drink.glassware || "Cocktail glass")}">${iconShapes[glassShape] || iconShapes.coupe}</svg>`;
+    return { icon, color };
   }
 
   function renderDrinkCards() {

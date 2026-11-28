@@ -61,6 +61,8 @@ Built-in recipes live in `DEFAULT_DRINKS` in `js/data.js`. Keep recipe edits the
 
 Every drink's `bestMoment` should help the user decide whether it suits the moment. Mention a fitting occasion or time, the mood it suits, and how to serve or savor it. Tie the suggestion to the drink's actual flavor and method: for example, a lively sparkling drink for a warm afternoon should be served before it loses its bubbles, while a spirit-forward drink may suit a quiet evening and slow sipping. Keep practical technique, ingredient variants or substitutions, and any verified history in `proTip`; use separate paragraphs so the detail view can present them in labeled sections. Avoid inventing historical claims.
 
+Choose glassware that fits the finished serving, including ice, foam, and garnish. List the best default vessel first and keep alternatives practical. The recipe detail view shows typical capacity ranges from `getGlasswareCapacity()` in `js/recipe-utils.js`; treat them as estimates because different glass designs have different brim capacities. Planning ranges include Nick & Nora 120–180 ml; coupe 150–220 ml; rocks 180–300 ml (double rocks 300–400 ml); highball 250–350 ml; Collins 300–410 ml; flute 150–240 ml; wine/Copa 350–500 ml; hurricane/Tiki 400–600 ml; shot 30–60 ml; and shooter 60–90 ml. Keep the drink-card SVG in `js/app.js` matched to the primary vessel, and show paired glassware when a drink uses a chaser or separate shot glass.
+
 When adding or changing a recipe ingredient, verify its `inventoryId`, ingredient group, substitute text, measurements, and preparation method together. Do not change an inventory ID casually; recipes, groups, saved stock, and migration rules may refer to it.
 
 ## Verify changes

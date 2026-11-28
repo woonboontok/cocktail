@@ -7,7 +7,7 @@
       getUnitPreference, setUnitPreference, storageKeyUnit, storage, getAllDrinks,
       getDrinkStockStatus, getDrinkStatus, isItemInStock,
       getIngredientInventoryOptions, getInventoryOptionStatus, getDefaultUnit,
-      getInventoryAbv, getDifficultyStars, getAbv, getDrinkVolume,
+      getInventoryAbv, getDifficultyStars, getAbv, getDrinkVolume, getGlasswareCapacity,
       ingredientGroups, escapeHTML, toggleDrinkStatus, showModal, hideModal
     } = context;
     let unitPreference = getUnitPreference();
@@ -126,10 +126,10 @@
     else if (/champagne|flute|coupe|martini|nick & nora/.test(glassware)) tools.push(`Chilled ${drink.glassware || "cocktail glass"}`);
     else tools.push(drink.glassware || "Serving glass");
 
-    if (/highball|collins|copa|hurricane|mug|tiki/.test(glassware)) tools.push("Straight or bent 304 stainless steel straw");
+    if (/highball|collins|copa|hurricane|copper mug|tiki/.test(glassware)) tools.push("Straight or bent 304 stainless steel straw");
     const crushedIceServe = /crushed|swizzle|tiki|julep/.test(method + " " + glassware);
     const rocksServe = /rocks|old fashioned|snifter/.test(glassware);
-    const tallServe = /highball|collins|copa|hurricane|mug|tiki/.test(glassware);
+    const tallServe = /highball|collins|copa|hurricane|copper mug|tiki/.test(glassware);
     const shakesWithIce = usesCocktailShaker && /\bice\b/.test(method);
     const stirsWithIce = /\bmixing glass\b/.test(method) && /\bice\b/.test(method);
     if (crushedIceServe) {
@@ -275,7 +275,7 @@
             <tbody>
               <tr>
                 <th>Glassware</th>
-                <td>${escapeHTML(drink.glassware || "Cocktail Glass")}</td>
+                <td>${escapeHTML(drink.glassware || "Cocktail Glass")}<span class="spec-note">Typical capacity: ${escapeHTML(getGlasswareCapacity(drink.glassware))}. Capacities vary by glass model; leave headroom for ice and garnish.</span></td>
               </tr>
               <tr>
                 <th>Alcohol by Volume</th>
