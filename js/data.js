@@ -14,8 +14,8 @@ const INVENTORY_CATEGORIES = {
   fresh_garnishes: "Fresh Produce, Dairy & Garnishes"
 };
 
-const INVENTORY_LAST_UPDATED = "26 November 2026";
-const INVENTORY_SYNC_VERSION = "20261126_1";
+const INVENTORY_LAST_UPDATED = "28 November 2026";
+const INVENTORY_SYNC_VERSION = "20261128_3";
 
 const INVENTORY_UPDATE_REMOVE_IDS = ["irish-whiskey", "absinthe", "laphroaig-10-year", "cachaca", "gio-prosecco", "zonin-prosecco-brut", "bottega-spumante-venezia"];
 
@@ -57,9 +57,9 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "pineapple-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: "must", notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
   "orange-juice": { inStock: true, quantity: 1, unit: "bottle", refrigerate: "must", notes: "Freshly pressed with the food press and stored in a bottle before use. Keep refrigerated." },
   "lemon-lime-soda": { inStock: true, name: "Schweppes Manao Soda Mini - Lemon Lime", notes: "Lemon-lime-flavoured carbonated soda for cocktails and highballs." },
-  "tanqueray-gin": { inStock: true, quantity: 2, unit: "bottle", abv: 43.1, notes: "Tanqueray London Dry Gin, 43.1% ABV, 2 bottles in stock." },
+  "tanqueray-gin": { inStock: true, quantity: 1, unit: "bottle", abv: 43.1, notes: "Tanqueray London Dry Gin, 43.1% ABV, 1 bottle in stock." },
   "pisco": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 41.3, notes: "In stock: BarSol Pisco Primero Quebranta, 41.3% ABV, 700ml. Distilled from 100% Quebranta grapes in Ica Valley, Peru. Essential for Pisco Sour and Pisco Punch." },
-  "monkey-47-dry-gin": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
+  "monkey-47-dry-gin": { inStock: true, incoming: true, quantity: 1, unit: "bottle", notes: "In stock: 1 x 500ml bottle at 47% ABV (plus 1 new bottle incoming). Complex Black Forest gin with citrus, spice, and herbal notes; especially expressive in a Bee's Knees, Gin & Tonic, or Negroni." },
   "teremana-tequila": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Blanco, 40% ABV, 1000ml. In stock." },
   "teremana-tequila-anejo": { inStock: true, incoming: false, quantity: 1, unit: "bottle", abv: 40, notes: "Teremana Tequila Añejo, 40% ABV, 1000ml. In stock." },
   "codigo-1530-reposado-cristalino": { inStock: true, incoming: false, quantity: 1, unit: "bottle" },
@@ -81,7 +81,7 @@ const INVENTORY_UPDATE_OVERRIDES = {
   "kagome-tomato-juice-no-salt": { inStock: true, quantity: 12, unit: "bottle", refrigerate: "must", notes: "In stock: Kagome Tomato Juice No Salt Added, 12 x 200ml." },
   "fresh-rosemary": { inStock: true, quantity: 1, unit: "bunch", refrigerate: "must", notes: "Fresh rosemary herb leaves. In stock: 1 bunch, refrigerated." },
   "fresh-cucumber": { inStock: true, quantity: 2, unit: "fruit", refrigerate: "must", notes: "Two Japanese cucumbers received and stored cold. Good for cucumber mint cooler, Irish Maid, and gin freshies." },
-  "jack-daniels-black-label": { inStock: true, incoming: false, quantity: 1.5, unit: "bottle", abv: 40, notes: "One 700ml bottle in stock plus one existing bottle about half full (1.5 bottle-equivalents total)." },
+  "jack-daniels-black-label": { inStock: false, incoming: false, quantity: 0, unit: "bottle", abv: 40, notes: "Out of stock." },
   "the-botanist-gin": { inStock: true, quantity: 1, unit: "bottle" },
   "pere-kermanns-absinthe": { inStock: true, quantity: 1, unit: "bottle" },
   "kawashima-sake": { inStock: true, quantity: 1, unit: "bottle" },
@@ -148,6 +148,10 @@ const INGREDIENT_GROUPS = {
     label: "Vodka",
     inventoryIds: ["absolut-blue", "absolut-citron", "smirnoff-red"]
   },
+  "neutral-vodka": {
+    label: "Neutral Vodka (Unflavored)",
+    inventoryIds: ["absolut-blue", "smirnoff-red"]
+  },
   "bourbon": {
     label: "Bourbon Whiskey",
     inventoryIds: ["jim-beam-black"]
@@ -158,7 +162,11 @@ const INGREDIENT_GROUPS = {
   },
   "rye-bourbon": {
     label: "Rye / Bourbon Whiskey",
-    inventoryIds: ["jd-bonded-rye", "jim-beam-black"]
+    inventoryIds: ["jd-bonded-rye", "jim-beam-black", "jack-daniels-black-label"]
+  },
+  "shot-whiskey": {
+    label: "Shot & Mixer Whiskey",
+    inventoryIds: ["jameson-irish-whiskey", "jim-beam-black", "jack-daniels-black-label", "jd-bonded-rye"]
   },
   "tonight-whiskey": {
     label: "Tonight Not Going Home Whiskey",
@@ -573,7 +581,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Shaking aggressively aerates the pineapple juice, producing a luxuriant pink froth head without needing egg whites.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", preferNonPremium: true },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Peter Heering Cherry Liqueur", substitute: "Cherry brandy or Maraschino + Grenadine", inventoryId: "cherry-heering" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "D.O.M. Bénédictine (or St-Germain)", substitute: "St-Germain Elderflower or herbal amaro", inventoryId: "st-germain" },
@@ -689,7 +697,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "The golden equal-parts rule: 1:1:1. Use one dense crystal-clear ice block so dilution is slow, allowing the herbal layers to evolve as you sip.",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin, including Monkey 47", inventoryId: "tanqueray-gin" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Monkey 47 Schwarzwald Dry Gin", substitute: "Tanqueray London Dry Gin | The Botanist Islay Dry Gin", inventoryId: "monkey-47-dry-gin", ingredientGroup: "gin" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Campari", substitute: "Aperol (for a milder, sweeter Contessa)", inventoryId: "campari" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel", substitute: "Orange slice", inventoryId: "fresh-oranges" }
@@ -716,7 +724,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Pre-chill both the glass and your mixing vessel in the freezer. A lukewarm Martini is an unforgivable cocktail sin; it must be ice cold.",
     ingredients: [
-      { amountOz: "2.5 oz", amountMl: "75 ml", item: "Tanqueray London Dry Gin", substitute: "Smirnoff Red / Absolut Blue (for Vodka Martini)", inventoryId: "tanqueray-gin" },
+      { amountOz: "2.5 oz", amountMl: "75 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin | Monkey 47 Schwarzwald Dry Gin", inventoryId: "the-botanist-gin", ingredientGroup: "gin" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Martini Extra Dry Vermouth", substitute: "Lillet Blanc (for delicate floral dryness)", inventoryId: "martini-extra-dry" },
       { amountOz: "1 dash", amountMl: "1 dash", item: "Orange Bitters (Optional)", substitute: "Angostura orange bitters", inventoryId: "angostura-bitters" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lemon Peel Twist or Spanish Green Olive", substitute: "Cocktail onion (Gibson)", inventoryId: "fresh-lemons" }
@@ -745,7 +753,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Freshly pulled hot espresso produces the thickest crema! The temperature contrast against ice shocks the oils into creating a luxuriant, velvety froth. Float 3 coffee beans for health, wealth, and happiness.\n\nClassic 1-Ingredient Variants:\n• Hazelnut Espresso Martini: Add or swap 0.75 oz of Frangelico Hazelnut Liqueur for a toasted nutty, Nutella-like finish.\n• Mezcal Espresso Martini: Swap vodka for Topanito Mezcal for an astonishing pairing of smoke, roasted agave, and espresso.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "neutral-vodka" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Frangelico Hazelnut Liqueur (Hazelnut Martini) or Walcher Coffee", inventoryId: "kahlua" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Espresso (Hot or Room Temp)", substitute: "Strong cold brew concentrate", inventoryId: "fresh-espresso" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup", substitute: "Agave or Demerara syrup", inventoryId: "simple-syrup" },
@@ -803,7 +811,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Perform a 'dry shake' (shake all liquid ingredients without ice first) to emulsify the egg white, followed by a 'wet shake' with ice. Drop 2-3 drops of Angostura bitters atop the white foam.\n\nClassic 1-Ingredient Sour Variants:\n• Rum Sour: Swap bourbon for 2 oz Mount Gay Black Barrel Barbados Rum (or Bacardi Superior) for a bright, tropical, sugarcane-rich sour.\n• New York Sour: Gently float 0.5 oz of dry red wine over the top of the foam.\n• Amaretto Sour: Swap bourbon for Disaronno Amaretto (or use 1.5 oz amaretto + 0.75 oz bourbon).",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Bourbon (or JD Bonded Rye)", substitute: "Mount Gay Black Barrel Rum (for Rum Sour) or Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Bourbon (or JD Bonded Rye)", substitute: "Mount Gay Black Barrel Rum (for Rum Sour) or Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "rye-bourbon" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh pressed lemon or lime juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Agave or honey syrup", inventoryId: "simple-syrup" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (or Aquafaba)", substitute: "Omit for classic non-foamy sour", inventoryId: "egg-white" },
@@ -916,7 +924,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "A copper mug conducts cold immediately, frosting the rim so every sip is shockingly refreshing. Both in-stock ginger beers shine here: Fever-Tree brings a dry, punchy fiery snap, while Bundaberg offers a richer, sweet craft-brewed depth.\n\nClassic 1-Ingredient Mule / Buck Variants:\n• Kentucky Mule (Bourbon & Ginger): Swap vodka for 2 oz Jim Beam Black Bourbon with an expressed orange peel for warm oak, caramel, and spicy ginger heat.\n• Dark 'n' Stormy (Bermuda Mule): Swap vodka for Myers's Original Dark Rum.\n• London Mule (Gin Buck): Swap vodka for Tanqueray London Dry Gin.\n• Mexican Mule: Swap vodka for Teremana Tequila or Topanito Mezcal.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime juice", inventoryId: "fresh-limes" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer (or Bundaberg)", substitute: "Bundaberg Ginger Beer or Schweppes Ginger Ale", inventoryId: "fever-tree-ginger-beer", ingredientGroup: "ginger-beer" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Lime Wheel & Mint Sprig", substitute: "Candied ginger", inventoryId: "fresh-limes" }
@@ -944,11 +952,11 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Float a dark rum cap (Myers's Dark Rum) over the top just before serving for a rich, aromatic molasses aroma on your first sip.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Superior White Rum", substitute: "Malibu Coconut Rum for sweeter profile", inventoryId: "bacardi-superior" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Superior White Rum", substitute: "Malibu Coconut Rum for sweeter profile", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Coconut Cream (Cream of Coconut)", substitute: "Coconut milk + simple syrup", inventoryId: "coconut-cream" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Pineapple Juice", substitute: "Fresh crushed pineapple", inventoryId: "pineapple-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
-      { amountOz: "0.5 oz float", amountMl: "15 ml float", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Aged dark rum float", inventoryId: "myers-dark-rum" }
+      { amountOz: "0.5 oz float", amountMl: "15 ml float", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Aged dark rum float", inventoryId: "myers-dark-rum", ingredientGroup: "dark-rum", preferNonPremium: true }
     ],
     instructions: [
       "Add white rum, coconut cream, pineapple juice, lime juice, and a cup of crushed ice into a blender (or shaker).",
@@ -1031,7 +1039,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Do not shake hard with ice! Shaking thins out the tomato juice and makes it watery. 'Roll' it gently between shaker tins 4-5 times.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "neutral-vodka" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Tomato Juice", substitute: "Clamato juice (Bloody Caesar)", inventoryId: "tomato-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "3 dashes", amountMl: "3 dashes", item: "Worcestershire Sauce", substitute: "Soy sauce + balsamic", inventoryId: "worcestershire-sauce" },
@@ -1061,7 +1069,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Named after the French 75mm field artillery cannon because it hits with surprising punch! Chill the flute beforehand and pour the cold Prosecco slowly down a spiral bar spoon to keep the carbonation lively.\n\nFamous 1-Ingredient Bubbly Variants:\n• French 95: Swap London Dry Gin for 1.5 oz Jim Beam Black Bourbon for a richer, oaky, caramel-and-vanilla sparkling cocktail.\n• French 76: Swap Gin for Absolut Vodka for a crisp, citrus-driven sparkling cocktail.\n• French 75 (Cognac Style): Swap Gin for Hennessy VSOP Cognac for the historic 1915 Paris original.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "London Dry Gin", substitute: "Jim Beam Black Bourbon (French 95) or Hennessy VSOP Cognac", inventoryId: "tanqueray-gin", ingredientGroup: "french-75-spirit" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin | Monkey 47 Schwarzwald Dry Gin", inventoryId: "the-botanist-gin", ingredientGroup: "gin" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Sugar syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Prosecco", substitute: "Dry Champagne or sparkling wine", inventoryId: "prosecco", ingredientGroup: "prosecco" },
@@ -1091,8 +1099,8 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Mai Tai means 'Out of this world - the best' in Tahitian. Authentic 1944 Mai Tai contains zero pineapple juice or orange juice—only rum, lime, curacao, and almond orgeat.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum", substitute: "Aged amber rum", inventoryId: "bacardi-superior" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Jamaican pot still dark rum", inventoryId: "myers-dark-rum" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum", substitute: "Aged amber rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Jamaican pot still dark rum", inventoryId: "myers-dark-rum", ingredientGroup: "dark-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau (or Grand Marnier)", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Orgeat Syrup", substitute: "Disaronno Amaretto + drop of simple syrup", inventoryId: "orgeat-syrup" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" }
@@ -1121,7 +1129,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Try a 1.5 : 1 : 1 ratio (1.5 oz Bourbon to 1 oz Campari and 1 oz Sweet Vermouth) so the whiskey shines through the assertive bitterness of Campari.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "rye-bourbon" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Campari", substitute: "Aperol (sweeter, lower ABV)", inventoryId: "campari" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel Twist", substitute: "Brandied cherry", inventoryId: "fresh-oranges" }
@@ -1179,7 +1187,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Pour ginger beer and fresh lime juice first, then gently float Myers's Dark Rum (or Mount Gay Black Barrel) over the back of a spoon to create the ominous dark storm-cloud layer. Fever-Tree's 3-ginger blend provides the fiery ginger snap that balances the sweet molasses of the dark rum. For a lighter, sweeter highball, substitute with Schweppes Ginger Ale.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Mount Gay Barbados Rum Black Barrel", inventoryId: "myers-dark-rum" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Mount Gay Barbados Rum Black Barrel", inventoryId: "myers-dark-rum", ingredientGroup: "dark-rum", preferNonPremium: true },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer (or Bundaberg)", substitute: "Bundaberg Ginger Beer or Schweppes Ginger Ale", inventoryId: "fever-tree-ginger-beer", ingredientGroup: "ginger-beer" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime wedge squeezed", inventoryId: "fresh-limes" }
     ],
@@ -1235,7 +1243,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Fresh lime juice paired with simple syrup produces a far crisper, brighter cocktail than artificial bottled lime cordial. Shake hard with plenty of ice for 12 seconds to achieve proper chilling and dilution.\n\nClassic 1-Ingredient Variants:\n• Vodka Gimlet: Swap Tanqueray London Dry Gin for 2 oz Absolut Vodka Original Blue.\n• Southside: Add 6–8 fresh mint leaves directly to the shaker for Al Capone's classic.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Absolut Vodka (for a Vodka Gimlet)", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin | Monkey 47 Schwarzwald Dry Gin | Absolut Vodka (for a Vodka Gimlet)", inventoryId: "the-botanist-gin", ingredientGroup: "gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh squeezed lime only", inventoryId: "fresh-limes", ingredientGroup: "fresh-lime" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Agave syrup", inventoryId: "simple-syrup", ingredientGroup: "simple-syrup" }
     ],
@@ -1262,7 +1270,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Serve neat in a thoroughly chilled glass with no ice. The absinthe rinse should coat the glass walls before being discarded, leaving an ethereal herbal aroma.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black or Cognac", inventoryId: "jd-bonded-rye" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jack Daniel's Bonded Rye", substitute: "Jim Beam Black or Cognac", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Absinthe (Rinse)", substitute: "White Sambuca or Herbsaint rinse", inventoryId: "pere-kermanns-absinthe", ingredientGroup: "absinthe" },
       { amountOz: "1 cube", amountMl: "1 cube", item: "Sugar Cube (or 0.25 oz Simple Syrup)", substitute: "Simple syrup", inventoryId: "simple-syrup" },
       { amountOz: "3 dashes", amountMl: "3 dashes", item: "Peychaud's Bitters", substitute: "Angostura bitters (2 dashes)", inventoryId: "peychaud-bitters" },
@@ -1320,7 +1328,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Johnnie Walker Black Label brings sweet malt and gentle smoke to the base. The traditional Penicillin uses a peated Scotch float, but this accessible version skips the extra bottle and lets the honey-ginger balance shine.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Any blended Scotch whisky", inventoryId: "jw-black-label" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Any blended Scotch whisky", inventoryId: "jw-black-label", ingredientGroup: "scotch" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Honey Syrup (3:1 honey/water)", substitute: "Simple syrup with honey", inventoryId: "honey-syrup" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Spicy Ginger Syrup", substitute: "Schweppes Ginger Ale reduction or muddled fresh ginger", inventoryId: "ginger-syrup" }
@@ -1439,7 +1447,7 @@ const DEFAULT_DRINKS = [
     proTip: "The Morgenthaler secret: pairing Disaronno Amaretto with high-proof bourbon (Jim Beam Black / JD Bonded Rye) cuts the sweet almond liqueur into a magnificent, balanced masterpiece.",
     ingredients: [
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Disaronno Originale Amaretto", substitute: "Almond liqueur", inventoryId: "disaronno-amaretto" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "rye-bourbon" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Simple Syrup", substitute: "Demerara or agave", inventoryId: "simple-syrup" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White", substitute: "Aquafaba or omit", inventoryId: "egg-white" }
@@ -1467,7 +1475,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Gently float heavy cream over the back of a spoon onto the vodka/Kahlúa base. Don't stir right away—admire the swirling marble cascade!\n\n1-Ingredient Variants:\n• Black Russian: Simply omit the heavy whipping cream (2 oz Absolut Vodka + 1 oz Kahlúa over ice) for the original 1949 dark, potent, coffee-forward nightcap.\n• Mudslide: Add 1 oz Baileys Irish Cream alongside the Kahlúa and cream for an ultra-rich dessert cocktail.\n• White Belgian: Swap cream for chocolate liqueur.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "vodka" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "neutral-vodka" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua", ingredientGroup: "coffee-liqueur" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Heavy Whipping Cream (or omit for Black Russian)", substitute: "Omit for Black Russian, or use whole milk / half-and-half / oat milk", inventoryId: "whipping-heavy-cream" }
     ],
@@ -1507,7 +1515,7 @@ const DEFAULT_DRINKS = [
         item: "Absolut Vodka Original Blue",
         substitute: "Smirnoff Red Vodka",
         inventoryId: "absolut-blue",
-        ingredientGroup: "vodka"
+        ingredientGroup: "neutral-vodka"
       },
       {
         amountOz: "1 oz",
@@ -1575,7 +1583,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Pack the crushed ice in high like a snowcone dome. As you hold the silver julep cup by the rim or base, frost will bloom over the exterior.",
     ingredients: [
-      { amountOz: "2.5 oz", amountMl: "75 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "2.5 oz", amountMl: "75 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "rye-bourbon" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Rich demerara syrup", inventoryId: "simple-syrup" },
       { amountOz: "8-10 leaves", amountMl: "8-10 leaves", item: "Fresh Mint Leaves", substitute: "Fresh spearmint", inventoryId: "fresh-mint" }
     ],
@@ -1710,8 +1718,8 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "'Three measures of Gordon's, one of vodka, half a measure of Kina Lillet. Shake it very well until it's ice-cold, then add a large thin slice of lemon peel.'",
     ingredients: [
-      { amountOz: "2.5 oz", amountMl: "75 ml", item: "Tanqueray London Dry Gin", substitute: "Any high-proof London dry gin", inventoryId: "tanqueray-gin" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "2.5 oz", amountMl: "75 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin | Monkey 47 Schwarzwald Dry Gin", inventoryId: "the-botanist-gin", ingredientGroup: "gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "neutral-vodka" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Lillet Blanc", substitute: "Cocchi Americano or Dry Vermouth", inventoryId: "lillet-blanc" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Wide Lemon Peel Twist", substitute: "Lemon peel", inventoryId: "fresh-lemons" }
     ],
@@ -1738,7 +1746,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Use your stocked Raspberry Rhapsody flavored syrup! It creates the radiant pink hue and lush berry backbone against Tanqueray gin.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Raspberry Rhapsody Flavored Syrup", substitute: "Fresh raspberries muddled with simple syrup", inventoryId: "raspberry-rhapsody" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (or Aquafaba)", substitute: "Omit for lighter texture", inventoryId: "egg-white" }
@@ -1766,7 +1774,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "The ultimate equal parts masterpiece: 0.75 oz Gin, 0.75 oz Green Chartreuse, 0.75 oz Maraschino, 0.75 oz Lime. None dominates; they harmonize into alchemy.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Green Chartreuse", substitute: "St-Germain or Yellow Chartreuse", inventoryId: "green-chartreuse" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Luxardo Maraschino Liqueur", substitute: "Peter Heering Cherry + Cointreau", inventoryId: "maraschino-liqueur", ingredientGroup: "maraschino" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" }
@@ -1794,7 +1802,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.8,
     proTip: "Equal parts 4-way harmony: Bourbon, Aperol, Amaro Nonino, and Lemon Juice. Shaken cold, it is one of the most celebrated modern classics of the 21st century. With Amaro Nonino Quintessentia now in stock, you can enjoy this modern classic in its purest, intended form.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "rye-bourbon" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Aperol", substitute: "Campari (for a darker, more bitter riff)", inventoryId: "aperol" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Amaro Nonino Quintessentia", substitute: "Disaronno/Campari mix or sweet vermouth", inventoryId: "amaro-nonino", ingredientGroup: "amaro" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh pressed lemon juice", inventoryId: "fresh-lemons" }
@@ -1850,9 +1858,9 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Donn Beach famously limited customers to two Zombies per night because 'it makes you walk like the dead.' Pack with crushed ice to manage dilution.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum", substitute: "Light Puerto Rican rum", inventoryId: "bacardi-superior" },
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Jamaican dark rum", inventoryId: "myers-dark-rum" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Goslings Black Seal 151 Proof Rum (Float)", substitute: "Additional Myers's Dark Rum", inventoryId: "goslings-black-seal-151" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum", substitute: "Light Puerto Rican rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Dark/Aged Rum (Myers's or Mount Gay Black Barrel)", substitute: "Jamaican dark rum", inventoryId: "myers-dark-rum", ingredientGroup: "dark-rum", preferNonPremium: true },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Goslings Black Seal 151 Proof Rum (Float)", substitute: "Additional Myers's Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "overproof-rum" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grapefruit Juice", substitute: "Pink grapefruit juice", inventoryId: "grapefruit-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" },
@@ -1880,7 +1888,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.3,
     proTip: "The ultimate beach cooler: simple, thirst-quenching, and tart. 4 parts cranberry to 3 parts grapefruit juice creates the ideal balance.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Cranberry Juice", substitute: "Tart cranberry juice", inventoryId: "cranberry-juice" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Grapefruit Juice", substitute: "Fresh pink grapefruit juice", inventoryId: "grapefruit-juice" }
     ],
@@ -1907,7 +1915,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Layer the cranberry juice on the bottom, then shake the vodka, peach schnapps, and orange juice and float gently on top for a two-toned sunset presentation.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Smirnoff Red Vodka", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Hoffmann Peach Liqueur", substitute: "Peach schnapps", inventoryId: "hoffmann-peach" },
       { amountOz: "2 oz", amountMl: "60 ml", item: "Orange Juice", substitute: "Fresh orange juice", inventoryId: "orange-juice" },
       { amountOz: "2 oz", amountMl: "60 ml", item: "Cranberry Juice", substitute: "Tart cranberry juice", inventoryId: "cranberry-juice" }
@@ -1962,7 +1970,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Ernest Hemingway drank these at El Floridita in Havana. He requested no sugar and double rum! Adding a touch of maraschino brings floral balance.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Superior White Rum", substitute: "Any dry white rum", inventoryId: "bacardi-superior" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Superior White Rum", substitute: "Any dry white rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Luxardo Maraschino Liqueur", substitute: "Peter Heering Cherry + Cointreau", inventoryId: "maraschino-liqueur", ingredientGroup: "maraschino" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grapefruit Juice", substitute: "Fresh pink grapefruit juice", inventoryId: "grapefruit-juice" },
@@ -1991,7 +1999,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Equal parts: Gin, Cointreau, Lillet Blanc, and Lemon Juice, rinsed with Absinthe. 'Four of these taken in swift succession will unrevive the corpse again.'\n\nVariant notes: The Botanist Edition swaps in The Botanist Islay gin for a more floral, herbal Islay profile; for an Añejo twist, replace the gin with 0.75 oz Teremana Añejo for vanilla, oak, and a warmer finish; for a smoky version, swap in 0.75 oz Topanito Mezcal for earthy smoke and mineral depth.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin, Teremana Añejo, or Topanito Mezcal (for variant builds)", inventoryId: "tanqueray-gin" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin | Monkey 47 Schwarzwald Dry Gin | Teremana Añejo / Topanito Mezcal (for variant builds)", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Lillet Blanc", substitute: "Cocchi Americano or dry vermouth", inventoryId: "lillet-blanc" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
@@ -2020,7 +2028,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Walter Bergeron created this at the Monteleone Carousel Bar. The split base of spicy Rye and rich Cognac/Bourbon produces unmatched sophistication.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jack Daniel's Bonded Rye", substitute: "Straight rye whiskey", inventoryId: "jd-bonded-rye" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jack Daniel's Bonded Rye", substitute: "Straight rye whiskey", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cognac / French Brandy (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jim-beam-black" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Martini Rosso Red Vermouth", substitute: "Sweet red vermouth", inventoryId: "martini-rosso" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Bénédictine (or St-Germain)", substitute: "St-Germain Elderflower Liqueur", inventoryId: "st-germain" },
@@ -2049,7 +2057,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Before the 1915 Raffles pineapple version, the 19th-century Gin Sling was a light, effervescent highball of gin, cherry liqueur, lemon, and soda water.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Peter Heering Cherry Liqueur", substitute: "Cherry brandy", inventoryId: "cherry-heering" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Simple Syrup", substitute: "Pomegranate grenadine", inventoryId: "simple-syrup" },
@@ -2379,7 +2387,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "The Japanese ritual: stir the whiskey and ice 13.5 times clockwise, then pour Chang Soda Water down the spiraled handle of the bar spoon so not a single bubble is lost.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black (or Jim Beam Black)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jw-black-label" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black (or Jim Beam Black)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jw-black-label", ingredientGroup: "scotch" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Chang Soda Water (Super Chilled)", substitute: "Extra-fizzy club soda", inventoryId: "chang-soda-water" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Lemon Twist", substitute: "Lemon wheel", inventoryId: "fresh-lemons" }
     ],
@@ -2407,7 +2415,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "The Johnnie Walker Black Label brings peat smoke, while the Disaronno Amaretto brings rich Italian marzipan. A 2:1 ratio prevents it from becoming too sweet.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Jim Beam Black Bourbon or JD Bonded Rye", inventoryId: "jw-black-label" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Johnnie Walker Black Label Scotch", substitute: "Jim Beam Black Bourbon or JD Bonded Rye", inventoryId: "jw-black-label", ingredientGroup: "scotch" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Disaronno Originale Amaretto", substitute: "Almond liqueur", inventoryId: "disaronno-amaretto" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Orange Peel Twist", substitute: "Brandied cherry", inventoryId: "fresh-oranges" }
     ],
@@ -2433,7 +2441,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.2,
     proTip: "The clean neutrality of Absolut Vodka lets the luscious Italian almond, toasted apricot stone, and vanilla notes of Disaronno shine completely unhindered.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "neutral-vodka" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Disaronno Originale Amaretto", substitute: "Almond liqueur", inventoryId: "disaronno-amaretto" }
     ],
     instructions: [
@@ -2513,7 +2521,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Your stocked French Curaçao Bleu turns this into a visual showstopper. Mix with lemon juice and clear soda for a neon aquamarine glow.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Curaçao Bleu Liqueur", substitute: "Blue Curaçao", inventoryId: "curacao-bleu" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
       { amountOz: "Top up", amountMl: "Top up", item: "Lemon-Lime Soda (or Chang Soda Water)", substitute: "Chang Soda Water for a drier finish", inventoryId: "lemon-lime-soda" }
@@ -2541,7 +2549,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Shaking pineapple juice creates a creamy natural foam head. Top with Schweppes Ginger Ale for a bubbly spicy finish.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum (or Malibu)", substitute: "Malibu Coconut Rum for extra tropical punch", inventoryId: "bacardi-superior" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Bacardi Superior White Rum (or Malibu)", substitute: "Malibu Coconut Rum for extra tropical punch", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Pineapple Juice", substitute: "Fresh pineapple juice", inventoryId: "pineapple-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime juice", inventoryId: "fresh-limes" },
       { amountOz: "Top up", amountMl: "Top up", item: "Schweppes Ginger Ale Soda", substitute: "Chang Soda Water", inventoryId: "schweppes-ginger-ale" },
@@ -2570,7 +2578,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Equal parts Gin, St-Germain, Cointreau, and Lemon juice in an absinthe-rinsed glass. St-Germain's floral sweetness replaces the dry fortified wine.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", preferNonPremium: true },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "St-Germain Elderflower Liqueur", substitute: "Elderflower cordial", inventoryId: "st-germain" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cointreau", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
@@ -2709,7 +2717,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Shake hard with plenty of ice before straining into shots. It should be icy, frosted, and smooth going down.",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Lumina Triple Sec (or Cointreau)", substitute: "Cointreau", inventoryId: "lumina-triple-sec" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh pressed lime", inventoryId: "fresh-limes" }
     ],
@@ -2737,7 +2745,7 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Baileys Irish Cream", substitute: "Disaronno + splash heavy cream", inventoryId: "baileys-irish-cream" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jim Beam Black Bourbon (or JD Rye)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" }
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jim Beam Black Bourbon (or JD Rye)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "shot-whiskey" }
     ],
     instructions: [
       "Pour Kahlúa into the bottom of the shot glass.",
@@ -2814,7 +2822,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Equal parts Whiskey, Sour Apple (or Peach) liqueur, and Cranberry juice shaken over ice until frost coats the shaker.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Bourbon (or JD Rye)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Bourbon (or JD Rye)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "shot-whiskey" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Sour Apple Liqueur (or Hoffmann Peach)", substitute: "Hoffmann Peach Liqueur", inventoryId: "hoffmann-peach" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cranberry Juice", substitute: "Tart cranberry juice", inventoryId: "cranberry-juice" }
     ],
@@ -2869,7 +2877,7 @@ const DEFAULT_DRINKS = [
     proTip: "Drink through a straw placed at the very bottom of the glass! You drink the Kahlúa first, then vodka, and finish with bubbly soda to erase the burn.",
     ingredients: [
       { amountOz: "1 oz", amountMl: "30 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "neutral-vodka" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Chang Soda Water (or Lemon-Lime Soda)", substitute: "Club soda", inventoryId: "chang-soda-water" }
     ],
     instructions: [
@@ -2895,7 +2903,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Whiskey, Disaronno Amaretto, and Cranberry Juice shaken with ice. The amaretto smooths the whiskey bite completely.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Bourbon (or JD Rye)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jim Beam Black Bourbon (or JD Rye)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "shot-whiskey" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Disaronno Originale Amaretto", substitute: "Almond liqueur", inventoryId: "disaronno-amaretto" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Cranberry Juice", substitute: "Tart cranberry juice", inventoryId: "cranberry-juice" }
     ],
@@ -3000,7 +3008,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "Equal parts Vodka, Hoffmann Peach Liqueur, and Cranberry Juice. Shaken until frosty cold, it goes down like liquid fruit candy.",
     ingredients: [
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Smirnoff Red Vodka (or Absolut Blue)", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Hoffmann Peach Liqueur", substitute: "Peach schnapps", inventoryId: "hoffmann-peach" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Cranberry Juice", substitute: "Tart cranberry juice", inventoryId: "cranberry-juice" }
     ],
@@ -3027,8 +3035,8 @@ const DEFAULT_DRINKS = [
     proTip: "Disaronno Amaretto + Bourbon + Lemon/Orange juice creates a smooth, crimson collegiate classic.",
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Disaronno Originale Amaretto", substitute: "Almond liqueur", inventoryId: "disaronno-amaretto" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jim Beam Black Bourbon (or Southern Comfort)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin (or Sloe Gin)", substitute: "Any dry gin", inventoryId: "tanqueray-gin", preferNonPremium: true },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jim Beam Black Bourbon (or Southern Comfort)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "shot-whiskey" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tanqueray London Dry Gin (or Sloe Gin)", substitute: "Any dry gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Orange Juice", substitute: "Fresh orange juice", inventoryId: "orange-juice" }
     ],
     instructions: [
@@ -3053,7 +3061,7 @@ const DEFAULT_DRINKS = [
     proTip: "Equal parts Jägermeister, Malibu Coconut Rum, and Pineapple Juice. The sweet coconut and pineapple tame the bitter herbs of Jäger into an addictive tropical shooter.",
     ingredients: [
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Jägermeister Herbal Liqueur", substitute: "Any herbal amaro (Campari riff)", inventoryId: "jagermeister" },
-      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Malibu Coconut Rum Liqueur", substitute: "Coconut rum", inventoryId: "malibu-rum" },
+      { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Malibu Coconut Rum Liqueur", substitute: "Coconut rum", inventoryId: "malibu-rum", ingredientGroup: "coconut-rum" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Pineapple Juice", substitute: "Fresh pineapple juice", inventoryId: "pineapple-juice" }
     ],
     instructions: [
@@ -3256,7 +3264,7 @@ const DEFAULT_DRINKS = [
     proTip: "Melon liqueur + Malibu Coconut Rum + Pineapple Juice + splash of heavy cream. Shaken until frosty, it tastes like melon candy ice cream.",
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Midori Melon Liqueur", substitute: "Curaçao Bleu + orange juice (green color riff)", inventoryId: "midori" },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Malibu Coconut Rum Liqueur", substitute: "Coconut rum", inventoryId: "malibu-rum" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Malibu Coconut Rum Liqueur", substitute: "Coconut rum", inventoryId: "malibu-rum", ingredientGroup: "coconut-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Pineapple Juice", substitute: "Fresh pineapple juice", inventoryId: "pineapple-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Heavy Whipping Cream", substitute: "Half-and-half or Baileys", inventoryId: "whipping-heavy-cream" }
     ],
@@ -3478,7 +3486,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.4,
     proTip: "Shake hard with fresh espresso to build the signature crema. Frangelico adds hazelnut depth without needing extra syrup.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "neutral-vodka" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Frangelico Hazelnut Liqueur", substitute: "Disaronno Amaretto", inventoryId: "frangelico" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Espresso", substitute: "Strong cold brew concentrate", inventoryId: "fresh-espresso" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Kahlúa Coffee Liqueur", substitute: "Walcher Premium Coffee Liqueur", inventoryId: "kahlua" },
@@ -3537,7 +3545,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.3,
     proTip: "Use the classic island balance: one of sour, two of sweet, three of strong, and four of weak. Mount Gay adds a dry oak and vanilla backbone.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel", ingredientGroup: "dark-rum", preferNonPremium: true },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Myers's Original Dark Rum", substitute: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", inventoryId: "myers-dark-rum", ingredientGroup: "dark-rum", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Premium Simple Syrup", substitute: "Pomegranate Grenadine", inventoryId: "simple-syrup" },
       { amountOz: "2 oz", amountMl: "60 ml", item: "Fresh Orange Juice", substitute: "Orange juice", inventoryId: "orange-juice" },
@@ -3566,7 +3574,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.1,
     proTip: "A short shake keeps the aged rum at the center. Add egg white for a silky texture when you want a richer sour.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Mount Gay Barbados Rum Black Barrel Double Cask Blend", substitute: "Myers's Original Dark Rum", inventoryId: "mount-gay-black-barrel", ingredientGroup: "dark-rum" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Premium Simple Syrup", substitute: "Honey syrup", inventoryId: "simple-syrup" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (Optional)", substitute: "Aquafaba or omit", inventoryId: "egg-white" },
@@ -4165,7 +4173,7 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "tonight-rum" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Tequila", substitute: "100% blue agave blanco or reposado", inventoryId: "teremana-tequila", ingredientGroup: "tequila", preferNonPremium: true },
-      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon or Johnnie Walker Black", inventoryId: "jd-bonded-rye", ingredientGroup: "tonight-whiskey" },
+      { amountOz: "0.5 oz", amountMl: "15 ml", item: "Jim Beam Black Aged Bourbon (or JD Bonded Rye)", substitute: "Jack Daniel's Bonded Rye or Johnnie Walker Black", inventoryId: "jim-beam-black", ingredientGroup: "tonight-whiskey" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Grand Marnier (or Cointreau)", substitute: "Cointreau or Lumina Triple Sec", inventoryId: "grand-marnier" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Ground Cinnamon (for spark flame) & Fresh Orange Peel", substitute: "Navel orange twist", inventoryId: "fresh-oranges" }
     ],
@@ -4195,7 +4203,7 @@ const DEFAULT_DRINKS = [
     ingredients: [
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Goslings Black Seal 151 Overproof Rum", substitute: "Bacardi Superior White Rum, then Myers's Original Dark Rum", inventoryId: "goslings-black-seal-151", ingredientGroup: "tonight-rum" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Tequila", substitute: "Blanco or reposado tequila", inventoryId: "teremana-tequila", ingredientGroup: "tequila", preferNonPremium: true },
-      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "0.38 oz", amountMl: "11 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "tonight-whiskey" },
       { amountOz: "0.38 oz", amountMl: "11 ml", item: "Cointreau (or Grand Marnier)", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" }
     ],
     instructions: [
@@ -4219,7 +4227,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Regarded as the Mojito's refined, high-society cousin served 'up' in a coupe glass. Shaking fresh mint leaves directly with ice bruises the herbs gently and blankets the gin in refreshing essential oils.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Fresh Lime Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-limes" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Rich simple syrup", inventoryId: "simple-syrup" },
       { amountOz: "6-8 leaves", amountMl: "6-8 leaves", item: "Fresh Spearmint Leaves", substitute: "Fresh mint sprigs", inventoryId: "fresh-mint" }
@@ -4247,7 +4255,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Make honey syrup by mixing 3 parts pure honey to 1 part warm water so it pours and dissolves easily. With this rich 3:1 syrup, use 0.75 oz for the classic, softer honey-and-juniper sour. For Monkey 47's 47% ABV and intense citrus-spice botanicals, use 0.5 oz: the drier balance keeps the gin prominent and makes a brighter, more spirit-forward Bee's Knees variant. Shake either build hard with fresh lemon; adjust the honey in small increments.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Monkey 47 Schwarzwald Dry Gin (Monkey 47 Bee's Knees, extra citrus and spice) | The Botanist Islay Dry Gin | Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Monkey 47 Schwarzwald Dry Gin", substitute: "Tanqueray London Dry Gin | The Botanist Islay Dry Gin", inventoryId: "monkey-47-dry-gin", ingredientGroup: "gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Honey Syrup (3:1 honey to warm water)", substitute: "0.5 oz for the Monkey 47 variant (balances its 47% ABV) | Simple syrup with honey", inventoryId: "honey-syrup" }
     ],
@@ -4274,7 +4282,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "Muddle whole lemon wedges (with skin on!) directly with simple syrup. Muddling the skin expresses fragrant essential oils from the peel into the bourbon that juice alone cannot match.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "rye-bourbon" },
       { amountOz: "3-4 wedges", amountMl: "3-4 wedges", item: "Fresh Lemon (Half a lemon cut into wedges)", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Simple Syrup", substitute: "Demerara syrup or sugar", inventoryId: "simple-syrup" },
       { amountOz: "8 leaves", amountMl: "8 leaves", item: "Fresh Spearmint", substitute: "Fresh mint sprigs", inventoryId: "fresh-mint" }
@@ -4302,7 +4310,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "The gin-based counterpart of the Sidecar. Dry shaking with egg white produces an ethereal porcelain-white froth cap that floats on top of the pale golden nectar.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Cointreau", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Egg White (Optional for foam)", substitute: "Aquafaba or omit", inventoryId: "egg-white" }
@@ -4330,7 +4338,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "A split-base cocktail uniting Rum and Bourbon/Cognac with Cointreau and lemon juice. Bacardi White Rum brings crisp sugarcane sweetness that elevates the rich oak of the bourbon.",
     ingredients: [
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Bacardi Superior White Rum", substitute: "Any light or aged rum", inventoryId: "bacardi-superior" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Bacardi Superior White Rum", substitute: "Any light or aged rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Jim Beam Black Bourbon (or Cognac)", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Cointreau", substitute: "Grand Marnier or Lumina Triple Sec", inventoryId: "cointreau" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lemon juice", inventoryId: "fresh-lemons" }
@@ -4411,7 +4419,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "The salt, brine, and vinegar in the pickle juice instantly and completely neutralize the heat of 100-proof Jack Daniel's Bonded Rye or Jim Beam Bourbon on your tongue! A certified bartender favorite.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jack Daniel's Bonded Rye (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon", inventoryId: "jd-bonded-rye", ingredientGroup: "rye-bourbon" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Jameson Irish Whiskey (or Jim Beam Black)", substitute: "Jim Beam Black Aged Bourbon | Jack Daniel's Bonded Rye", inventoryId: "jameson-irish-whiskey", ingredientGroup: "shot-whiskey" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Chilled Dill Pickle Brine", substitute: "Olive brine", inventoryId: "coarse-salt" }
     ],
     instructions: [
@@ -4554,7 +4562,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.9,
     proTip: "Pairing your Tanqueray London Dry with Fever-Tree Indian Tonic is an elite tier match. Rub the lime wheel along the rim of the glass before dropping it in to distribute essential citrus oils.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Monkey 47 Schwarzwald Dry Gin", substitute: "Tanqueray London Dry Gin | The Botanist Islay Dry Gin", inventoryId: "monkey-47-dry-gin", ingredientGroup: "gin" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Indian Tonic Water", substitute: "Any quality tonic water", ingredientGroup: "tonic-water" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lime Wheels", substitute: "Lemon or grapefruit twist", inventoryId: "fresh-limes" }
     ],
@@ -4581,7 +4589,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.1,
     proTip: "While vodka and gin rule the tonic world, crisp Bacardi Superior White Rum paired with Fever-Tree tonic creates a shockingly refreshing, highly underutilized beach highball.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Carta Blanca White Rum", substitute: "Mount Gay Barbados Rum", inventoryId: "bacardi-superior" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Bacardi Carta Blanca White Rum", substitute: "Mount Gay Barbados Rum", inventoryId: "bacardi-superior", ingredientGroup: "white-rum" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Indian Tonic Water", substitute: "Any quality tonic water", ingredientGroup: "tonic-water" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Lime wedge squeeze", inventoryId: "fresh-limes" }
     ],
@@ -4607,7 +4615,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "Because vodka is neutral, the quality of your tonic water is 80% of the drink. Fever-Tree's real fruit oils shine beautifully against Absolut's winter wheat base.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "vodka" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Indian Tonic Water", substitute: "Any quality tonic water", ingredientGroup: "tonic-water" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Lemon or Lime Wedge", substitute: "Lemon twist", inventoryId: "fresh-lemons" }
     ],
@@ -4633,7 +4641,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.6,
     proTip: "The rich vanilla and charred oak sweetness of Jim Beam Black acts as a beautiful counterweight to the fiery snap of Fever-Tree ginger beer.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "Jim Beam Black Aged Bourbon", substitute: "Jack Daniel's Bonded Rye", inventoryId: "jim-beam-black", ingredientGroup: "rye-bourbon" },
       { amountOz: "4 oz", amountMl: "120 ml", item: "Fever-Tree Premium Ginger Beer", substitute: "Bundaberg Ginger Beer", ingredientGroup: "ginger-beer" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Fresh Orange Peel Twist", substitute: "Lime wheel", inventoryId: "fresh-oranges" }
     ],
@@ -4743,7 +4751,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "The ultimate effortless summer highball. The neutral profile of Absolut Vodka allows the vibrant fruit notes to stretch out beautifully. Layer the orange juice carefully over the melon-vodka base to create a stunning sunset aesthetic.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "vodka" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Smirnoff Red Vodka", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "neutral-vodka" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Orange Juice", substitute: "Freshly squeezed navel oranges", inventoryId: "orange-juice" }
     ],
@@ -4769,7 +4777,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.5,
     proTip: "A staple of beach resorts and highball bars. Shaking pineapple juice with vodka and citrus creates an intensely frothy, silky textures head. Using Cointreau rather than cheap triple sec binds the orange and melon oils beautifully.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Absolut Vodka Original Blue", substitute: "Smirnoff Red Vodka", inventoryId: "absolut-blue", ingredientGroup: "vodka" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Smirnoff Red Vodka", substitute: "Absolut Vodka Original Blue", inventoryId: "smirnoff-red", ingredientGroup: "vodka" },
       { amountOz: "1 oz", amountMl: "30 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Cointreau", substitute: "Lumina Triple Sec or Grand Marnier", inventoryId: "cointreau", ingredientGroup: "triple-sec" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
@@ -4798,7 +4806,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.2,
     proTip: "White Sambuca functions exactly like a high-proof absinthe or pastis modifier here. The heavy, sweet licorice profile coats the mouth, while your high-proof Tanqueray Gin and fresh lemon juice slice cleanly through it so it never feels cloying. Shake vigorously with sharp ice to get maximum dilution.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "Any dry botanical gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Vaccari Sambuca", substitute: "White Sambuca", inventoryId: "sambuca" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Fresh Lemon Juice", substitute: "Fresh lime juice", inventoryId: "fresh-lemons" },
       { amountOz: "1 dash", amountMl: "1 dash", item: "Angostura Bitters", substitute: "Aromatic bitters", inventoryId: "angostura-bitters" }
@@ -4852,7 +4860,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.7,
     proTip: "The definitive tropical bittersweet masterpiece. While most Tiki drinks use triple sec or almond orgeat for sweetness, the Jungle Bird uses Campari. Aggressive shaking is essential because the pineapple juice transforms under high aeration into a gorgeous, frothy, velvety head.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Myers's Original Dark Rum (or Mount Gay Black Barrel)", substitute: "Mount Gay Barbados Rum Black Barrel Blend", inventoryId: "myers-dark-rum" },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Myers's Original Dark Rum (or Mount Gay Black Barrel)", substitute: "Mount Gay Barbados Rum Black Barrel Blend", inventoryId: "myers-dark-rum", ingredientGroup: "dark-rum", preferNonPremium: true },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Campari", substitute: "Aperol for a lighter, sweeter bird", inventoryId: "campari" },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Pineapple Juice", substitute: "Fresh pressed pineapple juice", inventoryId: "pineapple-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Fresh lime only", inventoryId: "fresh-limes" },
@@ -5033,7 +5041,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.2,
     proTip: "Named mockingly after a 1920s medical craze. Sweet orange juice and pomegranate grenadine soften the gin's botanical edge, so Tanqueray is the practical everyday choice here. Save The Botanist for a drier, less modified cocktail where its layered botanicals can take center stage. Père Kermann's Absinthe adds a brief herbal accent without a harsh alcohol burn.",
     ingredients: [
-      { amountOz: "1.5 oz", amountMl: "45 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin", ingredientGroup: "gin", preferNonPremium: true },
+      { amountOz: "1.5 oz", amountMl: "45 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin", inventoryId: "tanqueray-gin", ingredientGroup: "gin", preferNonPremium: true },
       { amountOz: "1.5 oz", amountMl: "45 ml", item: "Fresh Orange Juice", substitute: "Blood orange juice", inventoryId: "orange-juice" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Pomegranate Grenadine", substitute: "Raspberry Rhapsody syrup", inventoryId: "pomegranate-grenadine" },
       { amountOz: "1 tsp", amountMl: "5 ml", item: "Père Kermann's Absinthe", substitute: "Generic Absinthe", inventoryId: "pere-kermanns-absinthe" }
@@ -5061,7 +5069,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.0,
     proTip: "A legendary, spirit-forward variant of the Dry Martini. The Botanist's complex floral profile pairs spectacularly with the crisp dryness of Martini vermouth, while a precise quarter-ounce of Père Kermann's Absinthe introduces a haunting anise finish.",
     ingredients: [
-      { amountOz: "2 oz", amountMl: "60 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin", inventoryId: "the-botanist-gin" },
+      { amountOz: "2 oz", amountMl: "60 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin | Monkey 47 Schwarzwald Dry Gin", inventoryId: "the-botanist-gin", ingredientGroup: "gin" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Martini Extra Dry Vermouth", substitute: "Lillet Blanc", inventoryId: "martini-extra-dry" },
       { amountOz: "0.25 oz", amountMl: "7.5 ml", item: "Père Kermann's Absinthe", substitute: "Generic Absinthe", inventoryId: "pere-kermanns-absinthe" }
     ],
@@ -5089,7 +5097,7 @@ const DEFAULT_DRINKS = [
     popularity: 9.3,
     proTip: "A serene, silky twist on the Dry Martini that originated at New York's Nippon Club. Sake replaces or complements vermouth, imparting subtle melon, rice, and gentle floral sweetness that softens the juniper edge of gin. Choya Rokkonshojo Junmai Ginjo gives a delicate aromatic lift, while Kawashima Matsu no Hana lends dry, savory umami.",
     ingredients: [
-      { amountOz: "2.5 oz", amountMl: "75 ml", item: "Tanqueray London Dry Gin", substitute: "The Botanist Islay Dry Gin (floral) or Absolut Vodka", inventoryId: "tanqueray-gin", ingredientGroup: "gin" },
+      { amountOz: "2.5 oz", amountMl: "75 ml", item: "The Botanist Islay Dry Gin", substitute: "Tanqueray London Dry Gin | Monkey 47 Schwarzwald Dry Gin | Absolut Vodka (for Vodka Martini)", inventoryId: "the-botanist-gin", ingredientGroup: "gin" },
       { amountOz: "0.75 oz", amountMl: "22.5 ml", item: "Choya Rokkonshojo Junmai Ginjo Sake", substitute: "Kawashima Matsu no Hana Junmai Shu Sake", inventoryId: "choya-rokkonshojo-sake", ingredientGroup: "sake" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Expressed Lemon Peel Twist or Cucumber Ribbon", substitute: "Cocktail olive", inventoryId: "fresh-lemons" }
     ],
@@ -5411,7 +5419,7 @@ const DEFAULT_DRINKS = [
     proTip: "An absolute crowd-pleaser across Singapore, Australian, and Southeast Asian bars since the 1980s. The Midori Splice is essentially a tropical Colada variation that swaps rum for Malibu, making it lighter and sweeter. For a frozen version, blend all ingredients with ice for a slushy tropical split. The vivid electric-green colour makes it a visual showstopper. Serve immediately — the layers of melon and pineapple separate beautifully if left to sit.",
     ingredients: [
       { amountOz: "1 oz", amountMl: "30 ml", item: "Midori Melon Liqueur", substitute: "Any melon liqueur", inventoryId: "midori" },
-      { amountOz: "1 oz", amountMl: "30 ml", item: "Malibu Coconut Rum Liqueur", substitute: "Coconut cream + white rum", inventoryId: "malibu-rum" },
+      { amountOz: "1 oz", amountMl: "30 ml", item: "Malibu Coconut Rum Liqueur", substitute: "Coconut cream + white rum", inventoryId: "malibu-rum", ingredientGroup: "coconut-rum" },
       { amountOz: "3 oz", amountMl: "90 ml", item: "Pineapple Juice", substitute: "Mango juice", inventoryId: "pineapple-juice" },
       { amountOz: "0.5 oz", amountMl: "15 ml", item: "Fresh Lime Juice", substitute: "Lemon juice", inventoryId: "fresh-limes" },
       { amountOz: "Garnish", amountMl: "Garnish", item: "Pineapple Slice or Lime Wheel", substitute: null, inventoryId: "fresh-limes" }
