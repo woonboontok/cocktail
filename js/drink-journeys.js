@@ -88,6 +88,20 @@
       label: "Celebrate", description: "Start bright, build to a festive feature, then finish when the moment feels complete.",
       drinks: { beginner: ["americano", "french-75", "margarita", "old-fashioned", "shirley-temple", "french-connection"], advanced: ["negroni", "french-75", "last-word", "sazerac", "virgin-mojito", "hanky-panky"] }
     },
+    party: {
+      label: "Party with friends", description: "Keep the gathering lively with shareable punch and bowl-style pours, a coordinated optional shot toast, and a zero-proof refresh. Pour standard serves and let everyone set their own pace.",
+      drinks: {
+        beginner: ["barbados-rum-punch", "maksa", "kamikaze", "somaek", "shirley-temple", "bavarian-russ", "lemon-drop-shot"],
+        advanced: ["barbados-rum-punch", "maksa", "green-tea-shot", "somaek", "virgin-gin-tonic", "bavarian-russ", "washington-apple-shot"]
+      }
+    },
+    game: {
+      label: "Truth or Dare · party game", description: "Add a playful game to the gathering with globally inspired, quick-build drinks and familiar ingredients. Drinks are optional and never a forfeit; everyone chooses their own pace and can switch to a zero-proof option.",
+      drinks: {
+        beginner: ["somaek", "maksa", "bavarian-russ", "sea-breeze", "shirley-temple", "soju-tonic", "batida-de-limao"],
+        advanced: ["maksa", "somaek", "soju-tonic", "batida-de-limao", "virgin-gin-tonic", "bavarian-russ", "sea-breeze"]
+      }
+    },
     comfort: {
       label: "Looking for comfort", description: "Choose something gentle and familiar. If you are feeling low, an alcohol-free option or a conversation with someone you trust may be a kinder fit.",
       drinks: { beginner: ["shirley-temple", "tom-collins", "white-russian", "americano", "shirley-temple", "french-connection"], advanced: ["virgin-mojito", "daiquiri", "hanky-panky", "americano", "virgin-mojito", "french-connection"] }
@@ -121,6 +135,23 @@
       const selectedCourses = COURSE_PLANS[courseCount].map(index => JOURNEY_COURSES[index]);
       const planTitle = courseCount === "open" ? "Unlimited · open-ended tasting" : `${courseCount}-course journey`;
       const audienceLabel = audience === "beginner" ? "New to cocktails" : "Experienced drinker";
+      const partyGuide = purpose === "party" ? `
+        <aside class="journey-party-guide" aria-label="Sharing drinks at a party">
+          <h3>Make it a shared pour</h3>
+          <p>Scale the Barbados Rum Punch recipe evenly for a jug, or pour Maksa into small cups for the table. Keep a zero-proof jug and water nearby so everyone has an easy choice.</p>
+          <p class="journey-party-toast">Optional coordinated toast: <button type="button" class="journey-inline-drink" data-journey-drink="${audience === "beginner" ? "kamikaze" : "green-tea-shot"}">${audience === "beginner" ? "Kamikaze Shot" : "Green Tea Shot"}</button>. Make one measured serving per person who opts in; skip the round or toast with a zero-proof drink instead.</p>
+        </aside>
+      ` : "";
+      const gameGuide = purpose === "game" ? `
+        <aside class="journey-game-guide" aria-label="Truth or Dare game rules">
+          <h3>Play a few rounds</h3>
+          <p>Take turns choosing Truth or Dare. Let the group offer a light prompt, and let anyone pass or swap prompts without penalty. Keep score for completed prompts; after three rounds, the lowest scorer chooses a Truth or Dare prompt. No one owes a drink—pause for an optional sip only if each person wants one.</p>
+          <div class="journey-game-prompts">
+            <p><strong>Truth:</strong> What song always improves your mood?</p>
+            <p><strong>Dare:</strong> Give a 10-second dramatic toast to the host.</p>
+          </div>
+        </aside>
+      ` : "";
       const courseCards = selectedCourses.map((course, index) => {
         const defaultSuggestion = course[audience];
         const purposeProfile = JOURNEY_PURPOSES[purpose];
@@ -211,6 +242,8 @@
             <p>For a multi-course flight, share standard serves or reduce every ingredient in the same proportion for small tasting pours. Keep water nearby so each course gets a fresh start.</p>
           </div>
 
+          ${gameGuide}
+          ${partyGuide}
           <div class="journey-courses">${courseCards}</div>
           ${courseCount === "open" ? `
             <aside class="journey-continuation">
