@@ -66,58 +66,58 @@
   const JOURNEY_PURPOSES = {
     unwind: {
       label: "Unwind after work", description: "Ease out of the day with a slower, softer arc.",
-      drinks: { beginner: ["americano", "whiskey-sour", "old-fashioned", "white-russian", "shirley-temple", "french-connection"], advanced: ["negroni", "pisco-sour", "sazerac", "hanky-panky", "virgin-mojito", "french-connection"] }
+      drinks: { beginner: ["americano", "whiskey-sour", "old-fashioned", "manhattan", "white-russian", "cucumber-mint-cooler", "french-connection"], advanced: ["negroni", "pisco-sour", "boulevardier", "sazerac", "espresso-martini", "rosemary-grapefruit-spritzer", "hanky-panky"] }
     },
     quick: {
       label: "Quick drink", description: "A single, clear choice for a short pause. Pick one course and savour it at an easy pace.",
-      drinks: { beginner: ["tom-collins", "margarita", "old-fashioned", "shirley-temple"], advanced: ["americano", "daiquiri", "dry-martini", "virgin-mojito"] }
+      drinks: { beginner: ["aperol-spritz", "gimlet", "margarita", "whiskey-highball", "bellini", "sunset-sparkler", "godmother"], advanced: ["kir-royale", "daiquiri", "naked-and-famous", "dry-martini", "parisian-cocktail", "virgin-gin-tonic", "toronto"] }
     },
     refresh: {
       label: "Thirst-quenching", description: "Lean toward tall, bright, sparkling drinks; keep water alongside your cocktail.",
-      drinks: { beginner: ["tom-collins", "paloma", "moscow-mule", "shirley-temple"], advanced: ["americano", "french-75", "paloma", "virgin-mojito"] }
+      drinks: { beginner: ["tom-collins", "paloma", "mojito", "whiskey-highball", "virgin-strawberry-daiquiri", "raspberry-lime-rickey", "virgin-pina-colada"], advanced: ["americano", "french-75", "paloma-mezcal", "irish-whiskey-highball", "virgin-mojito", "pomegranate-ginger-spritz", "classic-gin-and-tonic"] }
     },
     solo: {
       label: "A quiet moment alone", description: "A personal tasting with room to notice aroma, texture, and how the drink changes in the glass.",
-      drinks: { beginner: ["americano", "margarita", "old-fashioned", "white-russian", "shirley-temple", "french-connection"], advanced: ["negroni", "daiquiri", "sazerac", "espresso-martini", "virgin-mojito", "hanky-panky"] }
+      drinks: { beginner: ["americano", "margarita", "whiskey-sour", "old-fashioned", "white-russian", "spiced-apple-cider", "godfather"], advanced: ["negroni", "daiquiri", "paper-plane", "sazerac", "espresso-martini", "virgin-mojito", "toronto"] }
     },
     company: {
       label: "Long conversation", description: "Choose sociable, easy-to-sip serves, and let conversation set the pace.",
-      drinks: { beginner: ["americano", "tom-collins", "margarita", "white-russian", "shirley-temple", "french-connection"], advanced: ["negroni", "french-75", "last-word", "hanky-panky", "virgin-mojito", "french-connection"] }
+      drinks: { beginner: ["americano", "tom-collins", "kir-royale", "mint-julep", "pina-colada", "cinderella", "french-connection"], advanced: ["negroni", "french-75", "aviation", "manhattan", "bellini", "virgin-gin-tonic", "hanky-panky"] }
     },
     celebrate: {
       label: "Celebrate", description: "Start bright, build to a festive feature, then finish when the moment feels complete.",
-      drinks: { beginner: ["americano", "french-75", "margarita", "old-fashioned", "shirley-temple", "french-connection"], advanced: ["negroni", "french-75", "last-word", "sazerac", "virgin-mojito", "hanky-panky"] }
+      drinks: { beginner: ["bellini", "french-75", "margarita", "whiskey-highball", "pink-russian", "sunset-sparkler", "french-connection"], advanced: ["kir-royale", "french-75", "last-word", "manhattan", "espresso-martini", "pomegranate-ginger-spritz", "vieux-carre"] }
     },
     party: {
       label: "Party with friends", description: "Keep the gathering lively with shareable punch and bowl-style pours, a coordinated optional shot toast, and a zero-proof refresh. Pour standard serves and let everyone set their own pace.",
       drinks: {
-        beginner: ["barbados-rum-punch", "maksa", "kamikaze", "somaek", "shirley-temple", "bavarian-russ", "lemon-drop-shot"],
-        advanced: ["barbados-rum-punch", "maksa", "green-tea-shot", "somaek", "virgin-gin-tonic", "bavarian-russ", "washington-apple-shot"]
+        beginner: ["barbados-rum-punch", "bavarian-russ", "maksa", "soju-tonic", "batida-de-limao", "cinderella", "somaek"],
+        advanced: ["jungle-bird", "somaek", "batida-de-limao", "whiskey-highball", "maksa", "virgin-gin-tonic", "bavarian-russ"]
       }
     },
     game: {
       label: "Truth or Dare · party game", description: "Add a playful game to the gathering with globally inspired, quick-build drinks and familiar ingredients. Drinks are optional and never a forfeit; everyone chooses their own pace and can switch to a zero-proof option.",
       drinks: {
-        beginner: ["somaek", "maksa", "bavarian-russ", "sea-breeze", "shirley-temple", "soju-tonic", "batida-de-limao"],
-        advanced: ["maksa", "somaek", "soju-tonic", "batida-de-limao", "virgin-gin-tonic", "bavarian-russ", "sea-breeze"]
+        beginner: ["mango-mule", "soju-tonic", "batida-de-limao", "sea-breeze", "cinderella", "yakult-fizz", "bavarian-russ"],
+        advanced: ["maksa", "somaek", "peach-soju", "gunner", "virgin-mojito", "virgin-gin-tonic", "bavarian-russ"]
       }
     },
     comfort: {
       label: "Looking for comfort", description: "Choose something gentle and familiar. If you are feeling low, an alcohol-free option or a conversation with someone you trust may be a kinder fit.",
-      drinks: { beginner: ["shirley-temple", "tom-collins", "white-russian", "americano", "shirley-temple", "french-connection"], advanced: ["virgin-mojito", "daiquiri", "hanky-panky", "americano", "virgin-mojito", "french-connection"] }
+      drinks: { beginner: ["shirley-temple", "cinderella", "virgin-pina-colada", "spiced-apple-cider", "coconut-lime-mocktail", "virgin-mojito", "virgin-apple-martini"], advanced: ["cucumber-mint-cooler", "virgin-strawberry-daiquiri", "faux-mopolitan", "virgin-pina-colada", "yakult-fizz", "sunset-sparkler", "spiced-apple-cider"] }
     },
     decompress: {
       label: "Wind down · measured pours", description: "Choose a familiar, balanced cocktail and take your time with a standard serve. Keep water and food nearby; this is for a relaxed pause, not to make yourself pass out.",
       drinks: {
-        beginner: ["americano", "tom-collins", "whiskey-sour", "old-fashioned", "white-russian", "shirley-temple", "french-connection"],
-        advanced: ["americano", "french-75", "negroni", "hanky-panky", "virgin-mojito", "virgin-mojito", "french-connection"]
+        beginner: ["americano", "tom-collins", "whiskey-sour", "manhattan", "white-russian", "shirley-temple", "french-connection"],
+        advanced: ["aperol-spritz", "penicillin", "boulevardier", "sazerac", "espresso-martini", "virgin-mojito", "toronto"]
       }
     },
     spiritForward: {
       label: "Spirit-forward tasting · paced", description: "For bold base-spirit character: choose aromatic, spirit-led classics and take time with each standard serve. Keep water and food alongside; this is about flavor intensity, not drinking more.",
       drinks: {
-        beginner: ["old-fashioned", "dry-martini", "negroni", "french-connection", "americano", "shirley-temple", "old-fashioned"],
-        advanced: ["sazerac", "dry-martini", "negroni", "hanky-panky", "virgin-mojito", "french-connection", "sazerac"]
+        beginner: ["negroni", "dry-martini", "old-fashioned", "sazerac", "godfather", "virgin-gin-tonic", "manhattan"],
+        advanced: ["montenegroni", "corpse-reviver-no-2", "last-word", "toronto", "hanky-panky", "virgin-mojito", "vieux-carre"]
       }
     }
   };
@@ -156,13 +156,15 @@
         const defaultSuggestion = course[audience];
         const purposeProfile = JOURNEY_PURPOSES[purpose];
         const purposeDrinks = purposeProfile.drinks[audience];
-        const purposeDrinkId = purposeDrinks[Math.min(index, purposeDrinks.length - 1)];
+        const purposeDrinkId = purposeDrinks[JOURNEY_COURSES.indexOf(course)];
+        const courseName = course.key.replace(/-/g, " ");
+        const courseArticle = /^[aeiou]/i.test(courseName) ? "An" : "A";
         const suggestion = purposeDrinkId
           ? {
             drinkId: purposeDrinkId,
             note: purposeDrinkId === defaultSuggestion.drinkId
               ? defaultSuggestion.note
-              : `A ${course.key.replace(/-/g, " ")} pick for ${purposeProfile.label.toLowerCase()}; use the recipe for its serving and tasting cues.`
+              : `${courseArticle} ${courseName} pick for ${purposeProfile.label.toLowerCase()}; use the recipe for its serving and tasting cues.`
           }
           : defaultSuggestion;
         const drink = drinksById.get(suggestion.drinkId);
@@ -178,7 +180,7 @@
           <article class="journey-course-card">
             <div class="journey-course-number" aria-hidden="true">${String(index + 1).padStart(2, "0")}</div>
             <div class="journey-course-purpose">
-              <span class="journey-course-kicker">Course ${index + 1} · ${escapeHTML(course.key.replace(/-/g, " "))}</span>
+              <span class="journey-course-kicker">Course ${index + 1} · ${escapeHTML(courseName)}</span>
               <h3>${escapeHTML(course.title)}</h3>
               <p>${escapeHTML(course.purpose)}</p>
             </div>
