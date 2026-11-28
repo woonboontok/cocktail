@@ -366,6 +366,13 @@
   });
   const { openDrinkModal, closeDrinkModal } = drinkModal;
 
+  const drinkJourneys = window.BoonBarDrinkJourneys.create({
+    getAllDrinks,
+    getDrinkStockStatus,
+    escapeHTML,
+    openDrinkModal
+  });
+
   // ==================== INVENTORY / ADMIN MODULE ====================
   const inventoryAdmin = window.BoonBarInventoryAdmin.create({
     inventory, SNOWFLAKE_SVG, INVENTORY_CATEGORIES, INVENTORY_LAST_UPDATED,
@@ -388,15 +395,23 @@
     renderTabButtons();
     renderHeroStats();
 
-    const { catalogView, glossaryView, adminView } = DOM;
+    const { catalogView, journeysView, glossaryView, adminView } = DOM;
 
-    if (appState.currentTab === "glossary") {
+    if (appState.currentTab === "journeys") {
       if (catalogView) catalogView.style.display = "none";
+      if (journeysView) journeysView.style.display = "block";
+      if (glossaryView) glossaryView.style.display = "none";
+      if (adminView) adminView.style.display = "none";
+      drinkJourneys.render();
+    } else if (appState.currentTab === "glossary") {
+      if (catalogView) catalogView.style.display = "none";
+      if (journeysView) journeysView.style.display = "none";
       if (glossaryView) glossaryView.style.display = "block";
       if (adminView) adminView.style.display = "none";
       renderGlossary();
     } else if (appState.currentTab === "admin") {
       if (catalogView) catalogView.style.display = "none";
+      if (journeysView) journeysView.style.display = "none";
       if (glossaryView) glossaryView.style.display = "none";
       if (adminView) {
         adminView.style.display = "block";
@@ -404,6 +419,7 @@
       }
     } else {
       if (catalogView) catalogView.style.display = "block";
+      if (journeysView) journeysView.style.display = "none";
       if (glossaryView) glossaryView.style.display = "none";
       if (adminView) adminView.style.display = "none";
       renderDrinkCards();
@@ -865,12 +881,14 @@
   // ==================== INITIALIZATION ====================
   function init() {
     DOM.catalogView = document.getElementById("catalog-view");
+    DOM.journeysView = document.getElementById("journeys-view");
     DOM.glossaryView = document.getElementById("glossary-view");
     DOM.adminView = document.getElementById("admin-view");
     DOM.heroStats = document.getElementById("hero-stats");
     DOM.drinksGrid = document.getElementById("drinks-grid");
     DOM.resultsCount = document.getElementById("results-count");
 
+    drinkJourneys.setup(DOM.journeysView);
     applyTheme();
     renderDiscoveryFilters();
     appEvents.setupEventListeners();

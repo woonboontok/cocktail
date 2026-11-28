@@ -65,6 +65,10 @@ Choose glassware that fits the finished serving, including ice, foam, and garnis
 
 When adding or changing a recipe ingredient, verify its `inventoryId`, ingredient group, substitute text, measurements, and preparation method together. Do not change an inventory ID casually; recipes, groups, saved stock, and migration rules may refer to it.
 
+## Guided drink journeys
+
+The **Drink Journeys** section offers 1–5-course plans and an open-ended tasting path, tailored by occasion and newcomer or experienced-drinker guidance. Occasion profiles and journey stages live in `js/drink-journeys.js` and reference recipes by stable ID from `DEFAULT_DRINKS`. Keep each stage purposeful, quick occasions concise, and the open-ended route paced with a zero-proof reset and optional close. Comfort guidance should offer alcohol-free choices and avoid presenting alcohol as a response to distress. Never design a path to encourage passing out or blacking out. Wind-down suggestions may include balanced alcoholic drinks with standard serves, pacing, water, and food. Spirit-forward recommendations can emphasize bold flavor, but should never aim to maximize alcohol intake.
+
 ## Verify changes
 
 Run these checks from the repository root after editing inventory, recipes, or app code:
@@ -75,7 +79,7 @@ node -e '
 const fs = require("fs"), vm = require("vm");
 for (const file of [
   "js/data.js", "js/app-storage.js", "js/app-backup.js", "js/inventory-store.js",
-  "js/ui-utils.js", "js/recipe-utils.js", "js/drink-catalog.js", "js/inventory-admin.js",
+  "js/ui-utils.js", "js/recipe-utils.js", "js/drink-catalog.js", "js/drink-journeys.js", "js/inventory-admin.js",
   "js/drink-modal.js", "js/app-state.js", "js/modal.js", "js/app-events.js", "js/app.js"
 ]) new vm.Script(fs.readFileSync(file, "utf8"), { filename: file });
 console.log("JavaScript syntax valid");
@@ -101,6 +105,6 @@ Inventory, custom recipes, tried/constructed progress, measurement preference, t
 - `js/data.js` — built-in inventory, ingredient groups, migration overrides, and recipes.
 - `js/app.js` — app startup, orchestration, catalog rendering, and persistence coordination.
 - `js/app-storage.js`, `js/inventory-store.js`, `js/app-backup.js` — guarded persistence, inventory loading/migration, and backup format handling.
-- `js/drink-catalog.js`, `js/drink-modal.js`, `js/inventory-admin.js` — catalog operations, recipe details, and inventory/admin workflows.
+- `js/drink-catalog.js`, `js/drink-journeys.js`, `js/drink-modal.js`, `js/inventory-admin.js` — catalog operations, guided tasting plans, recipe details, and inventory/admin workflows.
 - `js/app-state.js`, `js/app-events.js`, `js/modal.js`, `js/ui-utils.js`, `js/recipe-utils.js` — shared UI state, event wiring, modal behavior, rendering helpers, and recipe calculations.
 - `scripts/validate-data.js` — data-integrity checks for inventory, groups, and recipes.
