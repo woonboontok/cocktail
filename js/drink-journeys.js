@@ -63,6 +63,27 @@
     open: [0, 1, 2, 3, 4, 5, 6]
   };
 
+  const MOCKTAIL_ALCOHOLIC_ALTERNATIVES = {
+    "cucumber-mint-cooler": "southside",
+    "rosemary-grapefruit-spritzer": "paloma",
+    "sunset-sparkler": "cosmopolitan",
+    "virgin-gin-tonic": "classic-gin-and-tonic",
+    "virgin-strawberry-daiquiri": "daiquiri",
+    "raspberry-lime-rickey": "floradora",
+    "virgin-pina-colada": "pina-colada",
+    "virgin-mojito": "mojito",
+    "pomegranate-ginger-spritz": "el-diablo",
+    "spiced-apple-cider": "fireball-old-fashioned",
+    cinderella: "mai-tai",
+    "mango-mule": "moscow-mule",
+    "yakult-fizz": "yakult-soju",
+    gunner: "dark-n-stormy",
+    "shirley-temple": "tequila-sunrise",
+    "coconut-lime-mocktail": "batida-de-limao",
+    "virgin-apple-martini": "lemon-drop-martini",
+    "faux-mopolitan": "cosmopolitan"
+  };
+
   const JOURNEY_PURPOSES = {
     unwind: {
       label: "Unwind after work", description: "Ease out of the day with a slower, softer arc.",
@@ -169,6 +190,8 @@
           : defaultSuggestion;
         const drink = drinksById.get(suggestion.drinkId);
         if (!drink) return "";
+        const alternativeId = drink.category === "Mocktail" ? MOCKTAIL_ALCOHOLIC_ALTERNATIVES[drink.id] : null;
+        const alternative = alternativeId ? drinksById.get(alternativeId) : null;
         const stock = getDrinkStockStatus(drink);
         const stockClass = stock.canMake ? "journey-stock-ready" : "journey-stock-missing";
         const stockLabel = stock.canMake
@@ -193,6 +216,7 @@
                 <span class="journey-drink-meta">${escapeHTML(drink.glassware || "Cocktail glass")} · Difficulty ${Number(drink.difficulty) || 2}/5</span>
               </button>
               <p class="journey-tasting-note">${escapeHTML(suggestion.note)}</p>
+              ${alternative ? `<p class="journey-alcoholic-alternative">Alcoholic alternative (optional): <button type="button" class="journey-inline-drink" data-journey-drink="${escapeHTML(alternative.id)}">${escapeHTML(alternative.name)}</button></p>` : ""}
             </div>
           </article>
         `;

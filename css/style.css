@@ -1419,6 +1419,7 @@ a:hover {
 .journey-drink-meta { grid-column: 1 / -1; color: var(--text-secondary); font-size: 0.74rem; }
 .journey-drink-meta { color: var(--text-muted); }
 .journey-tasting-note { margin-top: 0.5rem; }
+.journey-alcoholic-alternative { margin: 0.45rem 0 0; color: var(--text-secondary); font-size: 0.78rem; }
 
 .journey-continuation {
   margin-top: 1rem;
